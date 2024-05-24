@@ -1,4 +1,4 @@
-import User from "../models/User.model.js ";
+import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import { createAccessToken } from "../libs/jwt.js";
 
@@ -64,4 +64,19 @@ export const logout = (req, res) => {
     expres: new Date(0),
   });
   return res.sendStatus(200);
+};
+
+export const profile = async (req, res) => {
+  const userFound = await User.findById(req.user.id)
+  if (!userFound) return res.status(404).json({ message: "User not found"});
+
+  return res.json({
+    id: userFound._id,
+    name: userFound.name,
+    lastName: userFound.lastName,
+    userName: userFound.userName,
+    createdAt: userFound.createdAt,
+    updateAt: userFound.updatedAt,
+  });
+
 };
