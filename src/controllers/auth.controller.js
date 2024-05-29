@@ -23,6 +23,8 @@ export const register = async (req, res) => {
       name: userSaved.name,
       lastName: userSaved.lastName,
       userName: userSaved.userName,
+      createdAt: userFound.createdAt,
+      updateAt: userFound.updatedAt,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -42,7 +44,7 @@ export const login = async (req, res) => {
     const isMatch = await bcryptjs.compare(password, userFound.password);
 
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Incorrect password" });
     }
 
     const token = await createAccessToken({ id: userFound._id });
@@ -53,6 +55,8 @@ export const login = async (req, res) => {
       name: userFound.name,
       lastName: userFound.lastName,
       userName: userFound.userName,
+      createdAt: userFound.createdAt,
+      updateAt: userFound.updatedAt,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -67,8 +71,8 @@ export const logout = (req, res) => {
 };
 
 export const profile = async (req, res) => {
-  const userFound = await User.findById(req.user.id)
-  if (!userFound) return res.status(404).json({ message: "User not found"});
+  const userFound = await User.findById(req.user.id);
+  if (!userFound) return res.status(404).json({ message: "User not found" });
 
   return res.json({
     id: userFound._id,
@@ -78,5 +82,4 @@ export const profile = async (req, res) => {
     createdAt: userFound.createdAt,
     updateAt: userFound.updatedAt,
   });
-
 };

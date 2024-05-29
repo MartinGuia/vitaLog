@@ -18,6 +18,18 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    department:{
+        ref: "Department",
+        type: Schema.Types.ObjectId,
+    },
+    tires:[{
+        ref: "Tire",
+        type: Schema.Types.ObjectId,
+    }],
+    clients:[{
+        ref: "Client",
+        type: Schema.Types.ObjectId,
+    }],
 },{
     timestamps: true
 })
