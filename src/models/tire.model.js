@@ -8,7 +8,7 @@ const tireSchema = new Schema({
     },
     linea:{
         type: Number,
-        required: true,
+        // required: true,
     }, 
     itemCode:{
         type: String,
@@ -16,7 +16,7 @@ const tireSchema = new Schema({
     },
     barCode:{
         type: String,
-        required: true,
+        // required: true,
     },
     helmetMeasurement:{
         type: String,
@@ -40,7 +40,7 @@ const tireSchema = new Schema({
     },
     status:{
         type: Boolean,
-        required: true,
+        // required: true,
     },
     date:{
         type: Date,
