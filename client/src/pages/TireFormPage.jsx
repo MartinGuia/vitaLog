@@ -3,22 +3,38 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useTire } from "../context/TireContext";
+import { useWorkOrder } from "../context/WorkOrderContext";
 
-function TireFormPage() {
+function TireFormPage({ orderId }) {
     const {
         register,
         handleSubmit,
         formState: { errors },
+        reset,
       } = useForm();
       const { errors: registerErrors } = useAuth();
       const navigate = useNavigate();
+      const {closeWorkOrder} = useWorkOrder()
     
       const {createTire} = useTire()
     
       const onSubmit = handleSubmit((values) => {
         createTire(values);
-        navigate("/workorders");
+        reset();
+        
       });
+
+      const handleClick = async () => {
+        try {
+          await closeWorkOrder();
+          navigate("/workorders");
+          // Puedes realizar acciones adicionales después de cerrar la orden de trabajo si es necesario
+        } catch (error) {
+          // Manejo de errores, por ejemplo, mostrar un mensaje al usuario
+          console.error('Error al cerrar la orden de trabajo:', error.message);
+        }
+        
+      };
     
       return (
         <>
@@ -173,6 +189,15 @@ function TireFormPage() {
                         type="submit"
                       >
                         Agregar
+                      </button>
+                    </div>
+                    <br />
+                    <div className="flex justify-center">
+                      <button
+                        className="bg-yellow-400 shadow-lg shadow-yellow-500/30 text-white rounded-md py-2 px-8"
+                        onClick={handleClick}
+                      >
+                        cerrar orden de trabajo
                       </button>
                     </div>
                   </article>

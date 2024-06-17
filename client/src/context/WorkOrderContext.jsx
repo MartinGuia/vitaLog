@@ -1,10 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import {
-  createWorkOrderRequest,
-  getWorkOrderRequest,
-  getWorkOrdersRequest,
-  deleteWorkOrdersRequest,
-  updateWorkOrdersRequest,
+  closeWorkOrderRequest
 } from "../api/workOrders.js";
 
 const WorkOrderContext = createContext();
@@ -18,26 +14,16 @@ export const useWorkOrder = () => {
 };
 
 export function WorkOrderProvider({ children }) {
-  const [workOrders, setWorkOrders] = useState([]);
+  // const [workOrders, setWorkOrders] = useState([]);
 
-  const getWorkOrders = async () => {
-    try {
-      const res = await getWorkOrdersRequest();
-      console.log(res);
-      setWorkOrders(res.data);
-    } catch (error) {
-        console.error(error);
-    }
-  };
-
-  const createWorkOrder = async (workOrders) => {
-    const res = await createWorkOrderRequest(workOrders);
-    console.log(res);
-  };
-
+  const closeWorkOrder = () => {
+    closeWorkOrderRequest();
+    console.log("work order closed");
+  }
+  
   return (
     <WorkOrderContext.Provider
-      value={{ workOrders, createWorkOrder, getWorkOrders }}
+      value={{ closeWorkOrder }}
     >
       {children}
     </WorkOrderContext.Provider>

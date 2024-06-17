@@ -2,6 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import authRoutes from "./routes/auth.routes.js";
 import tiresRoutes from "./routes/tires.routes.js";
+import workOrderRoutes from "./routes/workOrder.routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -17,5 +18,6 @@ app.use(cookieParser());
 
 app.use("/api", authRoutes); 
 app.use("/api", tiresRoutes)
+app.use("/api", workOrderRoutes);
 
 export default app;

@@ -1,4 +1,5 @@
 import Tire from "../models/tire.model.js";
+import WorkOrder from "../models/workOrders.model.js";
 
 export const getTires = async (req, res) => {
   const tires = await Tire.find({
@@ -20,18 +21,24 @@ export const createTire = async (req, res) => {
       helmetDesign,
       requiredBand,
       antiquityDot,
-      status,
+      state,
       date,
     } = req.body;
 
     console.log(req.user);
+    // Buscar una orden de trabajo abierta o crear una nueva si no existe
+    let workOrder = await WorkOrder.findOne({ isOpen: true }).exec();
+    if (!workOrder) {
+      workOrder = await WorkOrder.create({ isOpen: true });
+    }
+    
     // Encuentra la última llanta registrada para esta orden de trabajo
-    const ultimaLlanta = await Tire.findOne({}).sort({ linea: -1 });
+    const ultimaLlanta = await Tire.findOne({}).sort({ linea: -1 }).exec();
 
-    let nuevaLinea = 1; // Si no hay llantas registradas aún, inicia en 1
+    let nuevaLinea = 1;
 
     if (ultimaLlanta) {
-      nuevaLinea = ultimaLlanta.linea + 1; // Incrementa el número de línea
+      nuevaLinea = ultimaLlanta.linea + 1;
     }
 
     const newTire = new Tire({
@@ -43,25 +50,26 @@ export const createTire = async (req, res) => {
       helmetDesign,
       requiredBand,
       antiquityDot,
-      status,
+      state,
       date,
       user: req.user.id,
     });
 
     const savedTire = await newTire.save();
+    
+    workOrder.tires.push(savedTire);
+    await workOrder.save();
     res.json(savedTire);
   } catch (error) {
     console.error("Error al crear llantas:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Error interno del servidor" });
+    res.status(500).json({ success: false, message: "Error interno del servidor" });
   }
 };
 
 export const getTire = async (req, res) => {
   const task = await Tire.findById(req.params.id).populate({
     path: "user",
-    select: "name lastName _id", // Lista de campos que deseas poblar
+    // select: "name lastName _id", // Lista de campos que deseas poblar
   });
   if (!task) return res.status(404).json({ message: "Task not found" });
   res.json(task);

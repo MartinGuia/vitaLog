@@ -8,7 +8,7 @@ const SidebarContext = createContext();
 
 export default function Sidebar({ children, additionalContent }) {
   const [expanded, setExpanded] = useState(false);
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   return (
     <main className="flex">
@@ -44,9 +44,9 @@ export default function Sidebar({ children, additionalContent }) {
               }`}
             >
               <div className="leading-4">
-                <h4 className="font-semibold">Martin García</h4>
+                <h4 className="font-semibold">{user.name} {user.lastName}</h4>
                 <span className="text-xs text-gray-600">
-                  martin@vitabajio.com
+                  {user.userName}
                 </span>
               </div>
               <Link
@@ -99,7 +99,7 @@ export function SidebarItem({ icon, text, active, alert }) {
 
       {!expanded && (
         <div
-          className={`absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
+          className={`w-20 absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
         >
           {text}
         </div>

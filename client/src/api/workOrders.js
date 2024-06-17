@@ -1,3 +1,3 @@
-// import axios from "./axios";
+import axios from "./axios";
 
-// export const closeWorkOrder = () => axios.get('/workOrders/${}');
+export const closeWorkOrderRequest = () => axios.post("/close");

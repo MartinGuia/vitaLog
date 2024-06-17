@@ -32,7 +32,7 @@ function LoginPage() {
             </div>
           ))}
         </div>
-        <section className="bg-primary w-auto h-auto rounded-2xl shadow-lg shadow-slate-100/30 max-[912px]:w-[50%] max-[430px]:w-[70%]">
+        <section className="bg-primary w-96 h-96 rounded-2xl shadow-lg shadow-slate-100/30 max-[912px]:w-[50%] max-[430px]:w-[70%]">
           <form onSubmit={onSubmit}>
             <article className="flex justify-center">
               <img className="w-[30%] my-3" src={images.logoVB} alt="" />
@@ -47,7 +47,7 @@ function LoginPage() {
                 </label>
                 <div className="">
                   <input
-                    className="h-9 rounded-md w-96 shadow-md font-medium p-1 max-[1280px]:w-auto"
+                    className="h-9 rounded-md w-auto shadow-md font-medium p-1"
                     type="text"
                     placeholder="Usuario"
                     {...register("userName", { required: true })}
@@ -67,7 +67,7 @@ function LoginPage() {
                   <h1 className="text-white font-medium">Contraseña</h1>
                 </label>
                 <input
-                  className="h-9 rounded-md w-96 shadow-md font-medium p-1 max-[1280px]:w-auto"
+                  className="h-9 rounded-md w-auto shadow-md font-medium p-1"
                   type="password"
                   placeholder="Contraseña"
                   {...register("password", { required: true })}
