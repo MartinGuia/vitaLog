@@ -21,8 +21,8 @@ function RegisterPage() {
 
   return (
     <>
-      {/* <Nav> */}
         <main className="bg-gradient-to-br from-slate-800 to-slate-900 h-screen flex justify-center items-center flex-col">
+          <h1 className="text-3xl text-white mb-3 font-bold">Registrar usuario</h1>
           <div className="flex top-10 absolute w-[100%]">
             {registerErrors.map((error, i) => (
               <div
@@ -152,7 +152,6 @@ function RegisterPage() {
             </form>
           </section>
         </main>
-      {/* </Nav> */}
     </>
   );
 }

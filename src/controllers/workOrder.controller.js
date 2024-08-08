@@ -6,7 +6,6 @@ export const closeWorkOrder = async (req, res) => {
     // Buscar la orden de trabajo abierta más reciente
     const currentWorkOrder = await WorkOrder.findOne({ isOpen: true })
       .sort({ createdAt: -1 })
-      .exec();
 
     if (!currentWorkOrder) {
       return res.status(404).json({ success: false, message: "No hay ninguna orden de trabajo abierta." });
@@ -23,11 +22,18 @@ export const closeWorkOrder = async (req, res) => {
   }
 };
 
-// export const getWorkOrder = async (req, res) => {
-//   const workOrder = await Tire.findById(req.params.id).populate({
-//     path: "user",
-//     select: "name lastName _id", // Lista de campos que deseas poblar
-//   });
-//   if (!task) return res.status(404).json({ message: "Task not found" });
-//   res.json(task);
-// };
+export const getWorkOrders = async (req, res) => {
+  try {
+    // Buscar todas las órdenes de trabajo existentes
+    const workOrders = await WorkOrder.find({})
+      .populate({
+        path: "createdBy",  // Poblar el usuario que creó la orden de trabajo
+        select: "name lastName _id",  // Lista de campos que deseas poblar del usuario
+      })
+
+    res.json(workOrders);
+  } catch (error) {
+    console.error("Error al obtener órdenes de trabajo:", error);
+    res.status(500).json({ success: false, message: "Error interno del servidor" });
+  }
+};

@@ -27,13 +27,13 @@ export const createTire = async (req, res) => {
 
     console.log(req.user);
     // Buscar una orden de trabajo abierta o crear una nueva si no existe
-    let workOrder = await WorkOrder.findOne({ isOpen: true }).exec();
+    let workOrder = await WorkOrder.findOne({ isOpen: true })
     if (!workOrder) {
-      workOrder = await WorkOrder.create({ isOpen: true });
+      workOrder = await WorkOrder.create({ isOpen: true, createdBy: req.user.id, });
     }
     
     // Encuentra la última llanta registrada para esta orden de trabajo
-    const ultimaLlanta = await Tire.findOne({}).sort({ linea: -1 }).exec();
+    const ultimaLlanta = await Tire.findOne({}).sort({ linea: -1 })
 
     let nuevaLinea = 1;
 

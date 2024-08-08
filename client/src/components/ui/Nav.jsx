@@ -6,6 +6,7 @@ import {
   ClipboardPen,
   SquareUser,
   NotebookPen,
+  UserRoundPlus,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -34,7 +35,7 @@ function Nav({ children }) {
               />
             </Link>
             <Link to="/register">
-              <SidebarItem icon={<ClipboardPen size={20} />} text="Agregar usuario" />
+              <SidebarItem icon={<UserRoundPlus size={20} />} text="Agregar usuario" />
             </Link>
             <Link to="/add-tire">
               <SidebarItem icon={<NotebookPen size={20} />} text="Agregar llantas" />

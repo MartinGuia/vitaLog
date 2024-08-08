@@ -17,7 +17,11 @@ const workOrderSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  createdBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',  // Asumiendo que tienes un modelo de usuario
+    required: true,
+  },
 });
-
 
 export default model("WorkOrder", workOrderSchema);
