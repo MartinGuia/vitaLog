@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import {
   closeWorkOrderRequest,
+  getWorkOrdersRequest,
   getWorkOrderRequest,
 } from "../api/workOrders.js";
 
@@ -24,7 +25,7 @@ export function WorkOrderProvider({ children }) {
 
   const getWorkOrders = async () => {
     try {
-      const res = await getWorkOrderRequest();
+      const res = await getWorkOrdersRequest();
       console.log(res);
       setWorkOrders(res.data);
     } catch (error) {
@@ -32,9 +33,19 @@ export function WorkOrderProvider({ children }) {
     }
   };
 
+  const getWorkOrderById = async (id) => {
+    try {
+      const res = await getWorkOrderRequest(id);
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <WorkOrderContext.Provider
-      value={{ closeWorkOrder, getWorkOrders, workOrders }}
+      value={{ closeWorkOrder, getWorkOrders, workOrders, getWorkOrderById }}
     >
       {children}
     </WorkOrderContext.Provider>

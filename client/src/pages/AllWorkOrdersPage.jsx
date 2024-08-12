@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useWorkOrder } from "../context/WorkOrderContext";
 import { useEffect } from "react";
 
@@ -11,7 +12,7 @@ function AllWorkOrdersPage() {
   if (workOrders.length === 0) <h1>No hay Ordenes de trabajo</h1>;
   return (
     <>
-     <div className="overflow-x-auto flex justify-center max-[542px]:block">
+      <div className="overflow-x-auto flex justify-center max-[542px]:block">
         <table className="w-[90%] bg-white shadow-md rounded-lg my-6 max-[540px]:ml-2">
           <thead>
             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
@@ -24,23 +25,22 @@ function AllWorkOrdersPage() {
           <tbody className="text-gray-600 text-sm">
             {workOrders.map((order, id) => (
               <tr
-              key={id}
-              className="border-b border-gray-200 hover:bg-gray-100 hover:-translate-y-1"
-            >
-              
+                key={id}
+                className="border-b border-gray-200 hover:bg-gray-100 hover:-translate-y-1"
+              >
+                <Link className="flex" to={`/workorder/${order._id}`}>
+                  <td className="px-4 whitespace-nowrap flex justify-center items-center" >
+                    {order.createdBy.name} {order.createdBy.lastName}
+                  </td>
+                </Link>
+                <td className="py-3 px-6 text-left whitespace-nowrap">Rol</td>
                 <td className="py-3 px-6 text-left whitespace-nowrap">
-                  {order.createdBy.name} {order.createdBy.lastName}
+                  Departamento
                 </td>
-              <td className="py-3 px-6 text-left whitespace-nowrap">
-                Rol
-              </td>
-              <td className="py-3 px-6 text-left whitespace-nowrap">
-                Departamento
-              </td>
-              <td className="py-3 px-6 text-center flex justify-evenly max-[541px]:block">
-                <button className="text-red-500 hover:text-red-700 mr-2 hover:-translate-y-1">
-                  Eliminar
-                </button>
+                <td className="py-3 px-6 text-center flex justify-evenly max-[541px]:block">
+                  <button className="text-red-500 hover:text-red-700 mr-2 hover:-translate-y-1">
+                    Eliminar
+                  </button>
                   <button
                     // onClick={() => handleOpenModalEditData(item.id)}
                     className="text-blue-500 hover:text-blue-700 hover:-translate-y-1"
@@ -54,9 +54,8 @@ function AllWorkOrdersPage() {
                   >
                     Editar contraseña
                   </button>
-                
-              </td>
-            </tr>
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>
