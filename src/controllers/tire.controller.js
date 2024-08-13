@@ -11,6 +11,61 @@ export const getTires = async (req, res) => {
   res.json(tires);
 };
 
+// export const createTire = async (req, res) => {
+//   try {
+//     const {
+//       itemCode,
+//       barCode,
+//       helmetMeasurement,
+//       brand,
+//       helmetDesign,
+//       requiredBand,
+//       antiquityDot,
+//       state,
+//       date,
+//     } = req.body;
+
+//     console.log(req.user);
+//     Buscar una orden de trabajo abierta o crear una nueva si no existe
+//     let workOrder = await WorkOrder.findOne({ isOpen: true })
+//     if (!workOrder) {
+//       workOrder = await WorkOrder.create({ isOpen: true, createdBy: req.user.id, });
+//     }
+    
+//     Encuentra la última llanta registrada para esta orden de trabajo
+//     const ultimaLlanta = await Tire.findOne({}).sort({ linea: -1 })
+
+//     let nuevaLinea = 1;
+
+//     if (ultimaLlanta) {
+//       nuevaLinea = ultimaLlanta.linea + 1;
+//     }
+
+//     const newTire = new Tire({
+//       linea: nuevaLinea,
+//       itemCode,
+//       barCode,
+//       helmetMeasurement,
+//       brand,
+//       helmetDesign,
+//       requiredBand,
+//       antiquityDot,
+//       state,
+//       date,
+//       user: req.user.id,
+//     });
+
+//     const savedTire = await newTire.save();
+    
+//     workOrder.tires.push(savedTire);
+//     await workOrder.save();
+//     res.json(savedTire);
+//   } catch (error) {
+//     console.error("Error al crear llantas:", error);
+//     res.status(500).json({ success: false, message: "Error interno del servidor" });
+//   }
+// };
+
 export const createTire = async (req, res) => {
   try {
     const {
@@ -26,14 +81,21 @@ export const createTire = async (req, res) => {
     } = req.body;
 
     console.log(req.user);
+
+    // Verificar si el código de barras ya existe
+    const existingTire = await Tire.findOne({ barCode });
+    if (existingTire) {
+      return res.status(400).json({ success: false, message: "El código de barras ya está registrado" });
+    }
+
     // Buscar una orden de trabajo abierta o crear una nueva si no existe
-    let workOrder = await WorkOrder.findOne({ isOpen: true })
+    let workOrder = await WorkOrder.findOne({ isOpen: true });
     if (!workOrder) {
-      workOrder = await WorkOrder.create({ isOpen: true, createdBy: req.user.id, });
+      workOrder = await WorkOrder.create({ isOpen: true, createdBy: req.user.id });
     }
     
     // Encuentra la última llanta registrada para esta orden de trabajo
-    const ultimaLlanta = await Tire.findOne({}).sort({ linea: -1 })
+    const ultimaLlanta = await Tire.findOne({}).sort({ linea: -1 });
 
     let nuevaLinea = 1;
 
@@ -44,7 +106,7 @@ export const createTire = async (req, res) => {
     const newTire = new Tire({
       linea: nuevaLinea,
       itemCode,
-      barCode,
+      barCode,  // Código de barras que se registra aquí
       helmetMeasurement,
       brand,
       helmetDesign,

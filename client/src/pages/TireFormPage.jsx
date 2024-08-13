@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useTire } from "../context/TireContext";
 import { useWorkOrder } from "../context/WorkOrderContext";
+import { useEffect, useRef } from "react";
 
 function TireFormPage({ orderId }) {
     const {
@@ -18,11 +19,20 @@ function TireFormPage({ orderId }) {
     
       const {createTire} = useTire()
     
+      const barCodeRef = useRef(null);
+
+  useEffect(() => {
+    // Enfoca automáticamente el campo de código de barras cuando el componente se monta
+    if (barCodeRef.current) {
+      barCodeRef.current.focus();
+    }
+  }, []);
       const onSubmit = handleSubmit((values) => {
         createTire(values);
         reset();
         
       });
+
 
       const handleClick = async () => {
         try {
@@ -117,6 +127,31 @@ function TireFormPage({ orderId }) {
                           )}
                         </div>
                       </div>
+                      {/* <div className="flex justify-center mt-4">
+                <div className="mb-3">
+                  <label
+                    htmlFor="barCode"
+                    className="flex justify-center mb-2 font-medium"
+                  >
+                    <h1 className="text-white">Código de Barras</h1>
+                  </label>
+                  <div className="">
+                    <input
+                      className="h-9 rounded-md w-auto shadow-md font-medium p-1"
+                      type="text"
+                      id="barCode"
+                      placeholder="Código de Barras"
+                      {...register("barCode", { required: true })}
+                      ref={barCodeRef}  // Enlaza el campo con la referencia
+                    />
+                    {errors.barCode && (
+                      <p className="text-red-500 text-xs">
+                        Este campo es requerido
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div> */}
                       <div className="mb-3">
                         <label
                           htmlFor=""

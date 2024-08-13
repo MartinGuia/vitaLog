@@ -12,6 +12,7 @@ const workOrderSchema = new Schema({
   tires: [{
     type: Schema.Types.ObjectId,
     ref: 'Tire',
+    required: true,
   }],
   createdAt: {
     type: Date,

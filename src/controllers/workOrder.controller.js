@@ -1,4 +1,5 @@
 import WorkOrder from "../models/workOrders.model.js";
+import Tire from "../models/tire.model.js"
 
 // Este controlador cierra una orden de trabajo
 export const closeWorkOrder = async (req, res) => {
@@ -40,13 +41,20 @@ export const getWorkOrders = async (req, res) => {
 
 export const getWorkOrderById = async (req, res) => {
   try {
-    const workOrder = await WorkOrder.findById(req.params.id).populate({
+    const workOrderFound = await WorkOrder.findById(req.params.id)
+    // const workOrderTires = workOrderFound.tires;
+    // const tiresArray = [];
+
+    // for (const tire of workOrderTires) {
+    //   let tiresFound = await Tire.findById
+    // }
+    .populate({
       path: "createdBy tires",  // Poblar el usuario que creó la orden de trabajo
       select: "name lastName",
        // Lista de campos que deseas poblar del usuario
     })
-     if (!workOrder) return res.status(404).json({ success: false, message: "workorder not found"})
-     res.json(workOrder)
+     if (!workOrderFound) return res.status(404).json({ success: false, message: "workorder not found"})
+     res.json(workOrderFound)
   } catch (error) {
     return res.status(500).json({ success: false, message: "workorder not found"})
   }
