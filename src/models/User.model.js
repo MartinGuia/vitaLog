@@ -27,8 +27,12 @@ const userSchema = new Schema({
         ref: "Tire",
         type: Schema.Types.ObjectId,
     }],
-    clients:[{
-        ref: "Client",
+    // clients:[{
+    //     ref: "Client",
+    //     type: Schema.Types.ObjectId,
+    // }],
+    workOrders:[{
+        ref: "WorkOrder",
         type: Schema.Types.ObjectId,
     }],
 },{

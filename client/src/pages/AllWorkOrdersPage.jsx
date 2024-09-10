@@ -29,10 +29,11 @@ function AllWorkOrdersPage() {
                 className="border-b border-gray-200 hover:bg-gray-100 hover:-translate-y-1"
               >
                 <Link className="flex" to={`/workorder/${order._id}`}>
-                  <td className="px-4 whitespace-nowrap flex justify-center items-center" >
+                  <td className="px-4 whitespace-nowrap flex justify-center items-center">
                     {order.createdBy.name} {order.createdBy.lastName}
                   </td>
                 </Link>
+
                 <td className="py-3 px-6 text-left whitespace-nowrap">Rol</td>
                 <td className="py-3 px-6 text-left whitespace-nowrap">
                   Departamento

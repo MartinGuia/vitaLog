@@ -3,6 +3,8 @@ import {
   registerRequest,
   loginRequest,
   verifyTokenRequest,
+  getUsersRequest,
+  getUserRequest,
 } from "../api/auth.js";
 import Cookies from "js-cookie";
 
@@ -21,6 +23,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [getAllUsers, setGetAllUsers] = useState([])
 
   const signup = async (user) => {
     try {
@@ -45,6 +48,26 @@ export const AuthProvider = ({ children }) => {
         return setErrors(error.response.data);
       }
       setErrors([error.response.data.message]);
+    }
+  };
+
+  const getUsers = async () => {
+    try {
+      const res = await getUsersRequest();
+      console.log(res);
+      setGetAllUsers(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  const getUser = async (id) => {
+    try {
+      const res = await getUserRequest(id);
+      console.log(res.data)
+      return res.data;
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -100,8 +123,11 @@ export const AuthProvider = ({ children }) => {
       value={{
         signup,
         signin,
+        getUsers,
+        getUser,
         loading,
         logout,
+        getAllUsers,
         user,
         isAuthenticated,
         errors,
