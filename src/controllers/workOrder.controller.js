@@ -41,21 +41,17 @@ export const getWorkOrders = async (req, res) => {
 
 export const getWorkOrderById = async (req, res) => {
   try {
-    const workOrderFound = await WorkOrder.findById(req.params.id)
-    // const workOrderTires = workOrderFound.tires;
-    // const tiresArray = [];
+    const { id } = req.params;
 
-    // for (const tire of workOrderTires) {
-    //   let tiresFound = await Tire.findById
-    // }
-    .populate({
-      path: "createdBy tires",  // Poblar el usuario que creó la orden de trabajo
-      select: "name lastName",
-       // Lista de campos que deseas poblar del usuario
-    })
-     if (!workOrderFound) return res.status(404).json({ success: false, message: "workorder not found"})
-     res.json(workOrderFound)
+    // Buscar la orden de trabajo y "populear" las llantas asociadas
+    const workOrder = await WorkOrder.findById(id).populate('tires').populate('createdBy');
+    
+    if (!workOrder) {
+      return res.status(404).json({ message: "Orden de trabajo no encontrada" });
+    }
+
+    res.json(workOrder);
   } catch (error) {
-    return res.status(500).json({ success: false, message: "workorder not found"})
+    res.status(500).json({ message: "Error al obtener la orden de trabajo", error });
   }
 };
