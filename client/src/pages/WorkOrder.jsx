@@ -12,7 +12,7 @@ function WorkOrder() {
 
   const [tires, setTires] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 10;
+  const itemsPerPage = 10; // Mostrar 10 elementos por página
 
   useEffect(() => {
     async function loadWorkOrder() {
@@ -22,7 +22,7 @@ function WorkOrder() {
           if (workOrder) {
             setName(workOrder.createdBy.name);
             setLastName(workOrder.createdBy.lastName);
-            setTires(workOrder.tires)
+            setTires(workOrder.tires);
             // setDataWorkOrder(getWorkOrderById(workOrder.data));
           }
         }
@@ -33,18 +33,16 @@ function WorkOrder() {
     loadWorkOrder();
   }, []);
 
-  const totalPages = Math.ceil(tires.length / ordersPerPage);
+  // Calcular los elementos para la página actual
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentTires = tires.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Obtener los datos de la página actual
-  const currentOrders = tires.slice(
-    (currentPage - 1) * ordersPerPage,
-    currentPage * ordersPerPage
-  );
+  // Total de páginas
+  const totalPages = Math.ceil(tires.length / itemsPerPage);
 
-  // Cambiar de página
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+  // Función para cambiar de página
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // if (workOrders.length === 0) <h1>No hay Ordenes de trabajo</h1>;
   return (
@@ -111,129 +109,67 @@ function WorkOrder() {
               {dataWorkOrder.createdBy.name} {dataWorkOrder.createdBy.lastName}
             </span>
           </p> */}
-          <section className="mt-4 flex justify-center">
-            <div className="flex justify-between w-[95%]">
-              <article className="w-[33.3%]">
-                <h1 className="w-[90%] bg-slate-400 font-semibold text-sm py-1 pl-1">
-                  Cascos recolectados: <span>20</span>
-                </h1>
-              </article>
-              <article className="w-[33.3%]">
-                <h1 className="w-[90%] bg-slate-400 font-semibold text-sm py-1 pl-1">
-                  CasingRejected: <span>3</span>
-                </h1>
-              </article>
-              <article className="w-[33.3%]">
-                <h1 className="w-[90%] bg-slate-400 font-semibold text-sm py-1 pl-1">
-                  Esperando recolección de cascos: <span>0</span>
-                </h1>
-              </article>
-            </div>
-          </section>
-
-          <section className="mt-4 flex justify-center">
-            <div className="w-[95%]">
-              <article className="bg-slate-300 p-1">
-                <h1>
-                  Instruccion especial:<span> #</span>
-                </h1>
-              </article>
-            </div>
-          </section>
-
-          <section>
-            <div className="container mx-auto p-4">
+          <section className="mt-4">
+            <div className="p-4 w-full">
               <div className="overflow-x-auto">
                 <table className="min-w-full bg-white border border-gray-200 rounded-lg">
                   <thead>
                     <tr className="bg-gray-100 text-gray-600 text-sm uppercase text-left">
-                      <th className="py-3 px-4">Línea</th>
-                      <th className="py-3 px-4">Código de Item</th>
-                      <th className="py-3 px-4">Medida de casco</th>
-                      <th className="py-3 px-4">Marca</th>
-                      <th className="py-3 px-4">Diseño de casco</th>
-                      <th className="py-3 px-4">Banda requerida</th>
-                      <th className="py-3 px-4">DOT</th>
-                      <th className="py-3 px-4">Estado</th>
+                      <th className="py-3 px-6">Línea</th>
+                      <th className="py-3 px-6">Código de Ítem</th>
+                      <th className="py-3 px-6">Medida de Casco</th>
+                      <th className="py-3 px-6">Marca</th>
+                      <th className="py-3 px-6">Diseño de Casco</th>
+                      <th className="py-3 px-6">Banda Requerida</th>
+                      <th className="py-3 px-6">DOT</th>
+                      <th className="py-3 px-6">Estado</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {currentOrders.map((tire, index) => (
+                    {currentTires.map((tire, index) => (
                       <tr
                         key={index}
                         className="border-t border-gray-200 hover:bg-gray-50"
                       >
-                        <td className="py-3 px-6 text-sm text-gray-900">
-                          {tire.linea}
-                        </td>
-                        <td className="py-3 px-6 text-sm text-gray-900">
-                          {tire.itemCode}
-                        </td>
-                        <td className="py-3 px-6 text-sm text-gray-900">
-                          {tire.helmetMeasurement}
-                        </td>
-                        <td className="py-3 px-6 text-sm text-gray-900">
-                          {tire.brand}
-                        </td>
-                        <td className="py-3 px-6 text-sm text-gray-900">
-                        {tire.helmetDesign}
-                        </td>
-                        <td className="py-3 px-6 text-sm text-gray-900">
-                        {tire.requiredBand}
-                        </td>
-                        <td className="py-3 px-6 text-sm text-gray-900">
-                        {tire.antiquityDot}
-                        </td>
-                        <td className="py-3 px-6 text-sm text-gray-900">
-                        {/* {tire.requiredBand} */}
+                        <td className="py-3 px-6">{tire.linea}</td>
+                        <td className="py-3 px-6">{tire.itemCode}</td>
+                        <td className="py-3 px-6">{tire.helmetMeasurement}</td>
+                        <td className="py-3 px-6">{tire.brand}</td>
+                        <td className="py-3 px-6">{tire.helmetDesign}</td>
+                        <td className="py-3 px-6">{tire.requiredBand}</td>
+                        <td className="py-3 px-6">{tire.antiquityDot}</td>
+                        <td className="py-3 px-6">
+                          {tire.state ? "Activo" : "Inactivo"}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-
                 {/* Paginación */}
                 <div className="flex justify-between items-center mt-4">
-                  <div className="text-sm text-gray-600">
+                  <button
+                    onClick={() => paginate(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={`px-4 py-2 bg-gray-200 rounded-lg ${
+                      currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                  >
+                    Anterior
+                  </button>
+                  <span>
                     Página {currentPage} de {totalPages}
-                  </div>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className={`px-4 py-2 rounded-lg border ${
-                        currentPage === 1
-                          ? "text-gray-400 border-gray-200"
-                          : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                      }`}
-                    >
-                      Anterior
-                    </button>
-                    {Array.from({ length: totalPages }, (_, i) => (
-                      <button
-                        key={i + 1}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`px-4 py-2 rounded-lg border ${
-                          currentPage === i + 1
-                            ? "bg-blue-600 text-white"
-                            : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                        }`}
-                      >
-                        {i + 1}
-                      </button>
-                    ))}
-                    <button
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                      className={`px-4 py-2 rounded-lg border ${
-                        currentPage === totalPages
-                          ? "text-gray-400 border-gray-200"
-                          : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                      }`}
-                    >
-                      Siguiente
-                    </button>
-                  </div>
+                  </span>
+                  <button
+                    onClick={() => paginate(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className={`px-4 py-2 bg-gray-200 rounded-lg ${
+                      currentPage === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : ""
+                    }`}
+                  >
+                    Siguiente
+                  </button>
                 </div>
               </div>
             </div>

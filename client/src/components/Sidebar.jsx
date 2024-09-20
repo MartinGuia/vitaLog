@@ -12,7 +12,7 @@ export default function Sidebar({ children, additionalContent }) {
 
   return (
     <main className="flex">
-      <aside className={`  ${expanded ? "max-[500px]:absolute h-screen" : ""}`}>
+      <aside className={` ${expanded ? "max-[500px]:absolute h-screen" : ""}`}>
         <nav className="h-full flex flex-col bg-white border- shadow-lg">
           <div className="p-4 pb-2 flex justify-between items-center">
             <img

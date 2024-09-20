@@ -3,9 +3,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import { AuthProvider } from "./context/AuthContext";
 import WorkOrder from "./pages/WorkOrder";
-import AddWorkOrder from "./pages/AddWorkOrder";
 import Profile from "./pages/Profile";
-import AddCompany from "./pages/AddCompany";
 import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./ProtectedRoute";
 import { WorkOrderProvider } from "./context/WorkOrderContext";
@@ -14,6 +12,8 @@ import Nav from "./components/ui/Nav";
 import UsersPage from "./pages/UsersPage";
 import TireFormPage from "./pages/TireFormPage";
 import { TiresProvider } from "./context/TireContext";
+import ClientPage from "./pages/ClientPage";
+import AddClientPage from "./pages/AddClientPage";
 
 function App() {
   return (
@@ -29,11 +29,11 @@ function App() {
                   <Route path="/allusers" element={<UsersPage />} />
                   <Route path="/register" element={<RegisterPage />} />
                   <Route path="/workorders" element={<AllWorkOrdersPage />} />
-                  <Route path="/add-workorder" element={<AddWorkOrder />} />
                   <Route path="/add-tire" element={<TireFormPage />} />
                   <Route path="/workorder/:id" element={<WorkOrder />} />
                   <Route path="/profile/:id" element={<Profile />} />
-                  <Route path="/add-company" element={<AddCompany />} />
+                  <Route path="/client" element={<ClientPage />} />
+                  <Route path="/add-client" element={<AddClientPage />} />
                 </Route>
               </Routes>
             </Nav>
