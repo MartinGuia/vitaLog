@@ -61,15 +61,14 @@ function ClientPage() {
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white border border-gray-200 rounded-lg">
               <thead>
-                <tr className="bg-gray-100 text-gray-600 text-sm uppercase text-left">
-                  <th className="py-3 px-6">Línea</th>
-                  <th className="py-3 px-6">Código de Ítem</th>
-                  <th className="py-3 px-6">Medida de Casco</th>
-                  <th className="py-3 px-6">Marca</th>
-                  <th className="py-3 px-6">Diseño de Casco</th>
-                  <th className="py-3 px-6">Banda Requerida</th>
-                  <th className="py-3 px-6">DOT</th>
+                <tr className="bg-gray-100 text-gray-600 text-sm text-left">
+                  <th className="py-3 px-6">Nombre de Cuenta</th>
+                  <th className="py-3 px-6">Cuenta(Nombre corto)</th>
+                  <th className="py-3 px-6">Dirección</th>
+                  <th className="py-3 px-6">Renovador #</th>
+                  <th className="py-3 px-6">D/F</th>
                   <th className="py-3 px-6">Estado</th>
+                  <th className="py-3 px-6"></th>
                 </tr>
               </thead>
               <tbody>
@@ -84,7 +83,6 @@ function ClientPage() {
                     <td className="py-3 px-6">{tire.brand}</td>
                     <td className="py-3 px-6">{tire.helmetDesign}</td>
                     <td className="py-3 px-6">{tire.requiredBand}</td>
-                    <td className="py-3 px-6">{tire.antiquityDot}</td>
                     <td className="py-3 px-6">
                       {tire.state ? "Activo" : "Inactivo"}
                     </td>
