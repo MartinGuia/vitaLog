@@ -7,19 +7,20 @@ import { Link } from "react-router-dom";
 const SidebarContext = createContext();
 
 export default function Sidebar({ children, additionalContent }) {
+  
   const [expanded, setExpanded] = useState(false);
   const { logout, user } = useAuth();
 
   return (
     <main className="flex">
-      <aside className={` ${expanded ? "max-[500px]:absolute h-screen" : ""}`}>
+      <aside className={` ${expanded ? "max-[500px]:w-52 h-screen" : ""}`}>
         <nav className="h-full flex flex-col bg-white border- shadow-lg">
           <div className="p-4 pb-2 flex justify-between items-center">
             <img
               src={images.logoVB}
               alt=""
               className={`overflow-hidden transition-all ${
-                expanded ? "w-32" : "w-0"
+                expanded ? "w-28" : "w-0"
               }`}
             />
             <button
@@ -30,7 +31,7 @@ export default function Sidebar({ children, additionalContent }) {
             </button>
           </div>
           <SidebarContext.Provider value={{ expanded }}>
-            <ul className="flex-1">{children}</ul>
+            <ul className="flex-1 ">{children}</ul>
           </SidebarContext.Provider>
           <div className="border-t flex p-3">
             <img
@@ -62,7 +63,9 @@ export default function Sidebar({ children, additionalContent }) {
           </div>
         </nav>
       </aside>
-      <section className="w-screen h-dvh">
+      <section  className={`overflow-hidden transition-all ${
+                expanded ? "w-auto" : "w-screen h-dvh"
+              }`}>
         {/* Muestra el contenido adicional */}
         {additionalContent}
       </section>

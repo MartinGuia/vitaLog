@@ -46,7 +46,7 @@ function ClientPage() {
   return (
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto ">
       <div className="text-center my-8">
-        <h2 className="text-4xl font-semibold mb-2">Nuestros clientes</h2>
+        <h2 className="text-4xl font-semibold mb-2">Cuentas Locales</h2>
       </div>
       <div className="flex justify-end">
         <Link to="/add-client">
