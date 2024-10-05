@@ -7,14 +7,20 @@ import { Link } from "react-router-dom";
 const SidebarContext = createContext();
 
 export default function Sidebar({ children, additionalContent }) {
-  
   const [expanded, setExpanded] = useState(false);
   const { logout, user } = useAuth();
 
   return (
     <main className="flex">
-      <aside className={` ${expanded ? "max-[500px]:w-52 h-screen" : ""}`}>
-        <nav className="h-full flex flex-col bg-white border- shadow-lg">
+      {/* Condicional para que el sidebar sea sticky solo cuando no esté expandido */}
+      <aside
+        className={`sticky top-0 ${
+          expanded
+            ? "max-[500px]:w-52 h-screen" // No se mueve cuando está expandido
+            : "sticky top-0 w-20 h-screen" // Se mueve con el scroll cuando está colapsado
+        }`}
+      >
+        <nav className="h-full flex flex-col bg-white border shadow-lg">
           <div className="p-4 pb-2 flex justify-between items-center">
             <img
               src={images.logoVB}
@@ -31,7 +37,7 @@ export default function Sidebar({ children, additionalContent }) {
             </button>
           </div>
           <SidebarContext.Provider value={{ expanded }}>
-            <ul className="flex-1 ">{children}</ul>
+            <ul className="flex-1">{children}</ul>
           </SidebarContext.Provider>
           <div className="border-t flex p-3">
             <img
@@ -45,14 +51,14 @@ export default function Sidebar({ children, additionalContent }) {
               }`}
             >
               <div className="leading-4">
-                <h4 className="font-semibold">{user.name} {user.lastName}</h4>
-                <span className="text-xs text-gray-600">
-                  {user.userName}
-                </span>
+                <h4 className="font-semibold">
+                  {user.name} {user.lastName}
+                </h4>
+                <span className="text-xs text-gray-600">{user.userName}</span>
               </div>
               <Link
                 to="/"
-                className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
+                className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 duration-500 shadow-md"
                 onClick={() => {
                   logout();
                 }}
@@ -63,10 +69,13 @@ export default function Sidebar({ children, additionalContent }) {
           </div>
         </nav>
       </aside>
-      <section  className={`overflow-hidden transition-all ${
-                expanded ? "w-auto" : "w-screen h-dvh"
-              }`}>
-        {/* Muestra el contenido adicional */}
+
+      {/* Sección de contenido principal */}
+      <section
+        className={`overflow-hidden h-auto transition-all ${
+          expanded ? "w-screen" : "w-screen"
+        }`}
+      >
         {additionalContent}
       </section>
     </main>
@@ -81,8 +90,7 @@ export function SidebarItem({ icon, text, active, alert }) {
         active
           ? "bg-gradient-to-tr from-indigo-200 to-indigo-200 text-indigo-800"
           : "hover:bg-indigo-50 text-gray-600"
-      }
-      `}
+      }`}
     >
       {icon}
       <span
@@ -104,6 +112,7 @@ export function SidebarItem({ icon, text, active, alert }) {
         <div
           className={`w-20 absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
         >
+          
           {text}
         </div>
       )}
