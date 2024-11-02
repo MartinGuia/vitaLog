@@ -9,11 +9,11 @@ const clientSchema = new Schema({
     type: String,
     required: true,
   },
-  segment: {
+  adress1: {
     type: String,
     required: true,
   },
-  adress: {
+  adress2: {
     type: String,
     required: true,
   },

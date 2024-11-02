@@ -34,14 +34,14 @@ function AddClientPage() {
                 <InputField label="Alias" id="alias" />
               </div>
             </div>
-            <div className="flex items-center flex-col mt-5 sm:w-auto sm:flex-row sm:justify-between">
+            {/* <div className="flex items-center flex-col mt-5 sm:w-auto sm:flex-row sm:justify-between">
               <div className="relative md:w-5/12 w-auto">
                 <InputField label="Segmento" id="segmento" />
               </div>
               <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
                 <InputField label="N.° de clte renovador" id="numerocliente" />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div>
