@@ -14,12 +14,14 @@ import TireFormPage from "./pages/TireFormPage";
 import { TiresProvider } from "./context/TireContext";
 import ClientPage from "./pages/ClientPage";
 import AddClientPage from "./pages/AddClientPage";
+import { ClientProvider } from "./context/ClientContext";
 
 function App() {
   return (
     <AuthProvider>
       <WorkOrderProvider>
         <TiresProvider>
+          <ClientProvider>
           <BrowserRouter>
             <Nav>
               <Routes>
@@ -38,6 +40,7 @@ function App() {
               </Routes>
             </Nav>
           </BrowserRouter>
+          </ClientProvider>
         </TiresProvider>
       </WorkOrderProvider>
     </AuthProvider>

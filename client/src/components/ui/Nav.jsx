@@ -24,25 +24,31 @@ function Nav({ children }) {
           <>
             <Link to="/homepage">
               <SidebarItem
-                icon={<LayoutDashboard size={20} />}
+                icon={<LayoutDashboard size={20} color="white"/>}
                 text="Principal"
               />
             </Link>
             <Link to="/allusers">
               <SidebarItem
-                icon={<SquareUser size={20} />}
+                icon={<SquareUser size={20} color="white" />}
                 text="Usuarios"
               />
             </Link>
             <Link to="/register">
-              <SidebarItem icon={<UserRoundPlus size={20} />} text="Agregar usuario" />
+              <SidebarItem
+                icon={<UserRoundPlus size={20} color="white" />}
+                text="Agregar usuario"
+              />
             </Link>
             <Link to="/add-tire">
-              <SidebarItem icon={<NotebookPen size={20} />} text="Agregar llantas" />
+              <SidebarItem
+                icon={<NotebookPen size={20} color="white" />}
+                text="Agregar llantas"
+              />
             </Link>
             <Link to="/workorders">
               <SidebarItem
-                icon={<BookMarked size={20} />}
+                icon={<BookMarked size={20} color="white" />}
                 text="Orden de trabajo"
               />
             </Link>

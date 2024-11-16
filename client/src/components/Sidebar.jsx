@@ -20,7 +20,7 @@ export default function Sidebar({ children, additionalContent }) {
             : "sticky top-0 w-20 h-screen" // Se mueve con el scroll cuando está colapsado
         }`}
       >
-        <nav className="h-full flex flex-col bg-white border shadow-lg">
+        <nav className="h-full flex flex-col  border shadow-lg  bg-cyan-950">
           <div className="p-4 pb-2 flex justify-between items-center">
             <img
               src={images.logoVB}
@@ -42,7 +42,7 @@ export default function Sidebar({ children, additionalContent }) {
           <div className="border-t flex p-3">
             <img
               src={images.userIcon}
-              className="w-10 h-10 rounded-md"
+              className="w-10 h-10 rounded-md color filter grayscale invert"
               alt=""
             />
             <div
@@ -51,10 +51,11 @@ export default function Sidebar({ children, additionalContent }) {
               }`}
             >
               <div className="leading-4">
-                <h4 className="font-semibold">
+                <h4 className="font-semibold text-white">
                   {user.name} {user.lastName}
                 </h4>
-                <span className="text-xs text-gray-600">{user.userName}</span>
+                {/* <span className="text-xs text-gray-600 ">{user.userName}</span> */}
+                <span className="text-xs text-white">{user.userName}</span>
               </div>
               <Link
                 to="/"
@@ -89,12 +90,12 @@ export function SidebarItem({ icon, text, active, alert }) {
       className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
         active
           ? "bg-gradient-to-tr from-indigo-200 to-indigo-200 text-indigo-800"
-          : "hover:bg-indigo-50 text-gray-600"
+          : "hover:bg-sky-800 text-gray-600"
       }`}
     >
       {icon}
       <span
-        className={`overflow-hidden ${
+        className={`overflow-hidden text-white ${
           expanded ? "w-52 ml-3" : "w-0"
         } transition-all`}
       >

@@ -1,10 +1,10 @@
 import { createContext, useContext, useState } from "react";
 import {
   createTireRequest,
-  deleteTireRequest,
-  getTireRequest,
   getTiresRequest,
-  updateTireRequest,
+  // deleteTireRequest,
+  // getTireRequest,
+  // updateTireRequest,
 } from "../api/tires.js";
 
 const TiresContext = createContext();
