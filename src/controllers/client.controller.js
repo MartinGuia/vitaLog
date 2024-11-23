@@ -36,3 +36,16 @@ export const registerClient = async (req, res) => {
         res.status(404).json({message: error.message});
     }
 }
+
+export const getClients = async (req, res) =>{
+    try {
+        //Obtiene todos los clientes de la base de datos y los guarda en una constante. 
+        const clients = await Client.find({})
+
+        //Envía la lista de usuarios a la api del front en formato JSON.
+        res.status(200).json(clients)
+    } catch (error) {
+        console.error("Erros al obtener los clientes:", error);
+        res.status(500).json({succes:false, message: "Error interno del servidor"})
+    }       
+}

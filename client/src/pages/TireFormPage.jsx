@@ -48,7 +48,7 @@ function TireFormPage({ orderId }) {
     
       return (
         <>
-            <main className="bg-gradient-to-br from-slate-800 to-slate-900 h-screen flex justify-center items-center ">
+            <main className=" h-screen flex justify-center items-center ">
               <div className="flex top-10 absolute w-[100%]">
                 {registerErrors.map((error, i) => (
                   <div

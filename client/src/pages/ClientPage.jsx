@@ -1,50 +1,34 @@
 import { CirclePlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import { useWorkOrder } from "../context/WorkOrderContext";
+import { useClient } from "../context/ClientContext";
 
 function ClientPage() {
-    const { getWorkOrderById } = useWorkOrder();
-    const params = useParams();
-    // const [dataWorkOrder, setDataWorkOrder] = useState();
-    const [name, setName] = useState();
-    const [lastName, setLastName] = useState();
-  
-    const [tires, setTires] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10; // Mostrar 10 elementos por página
+  const { getClients, allClients } = useClient();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Mostrar 10 elementos por página
 
+  // Llamar a getClients una sola vez
   useEffect(() => {
-    async function loadWorkOrder() {
-      try {
-        if (params.id) {
-          const workOrder = await getWorkOrderById(params.id);
-          if (workOrder) {
-            setName(workOrder.createdBy.name);
-            setLastName(workOrder.createdBy.lastName);
-            setTires(workOrder.tires);
-            // setDataWorkOrder(getWorkOrderById(workOrder.data));
-          }
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    loadWorkOrder();
+    getClients();
   }, []);
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentTires = tires.slice(indexOfFirstItem, indexOfLastItem);
+  // Validar datos y calcular total de páginas
+  const totalPages = Math.ceil(allClients.length / itemsPerPage);
 
-  // Total de páginas
-  const totalPages = Math.ceil(tires.length / itemsPerPage);
+  // Obtener los datos de la página actual
+  const currentOrders = allClients.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+      )
 
-  // Función para cambiar de página
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // Cambiar de página
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
-    <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto ">
+    <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
       <div className="text-center my-8">
         <h2 className="text-4xl font-semibold mb-2">Cuentas Locales</h2>
       </div>
@@ -63,59 +47,81 @@ function ClientPage() {
               <thead>
                 <tr className="bg-gray-100 text-gray-600 text-sm text-left">
                   <th className="py-3 px-6">Nombre de Cuenta</th>
-                  <th className="py-3 px-6">Cuenta(Nombre corto)</th>
+                  <th className="py-3 px-6">Cuenta (Nombre corto)</th>
                   <th className="py-3 px-6">Dirección</th>
-                  <th className="py-3 px-6">Renovador #</th>
-                  <th className="py-3 px-6">D/F</th>
+                  <th className="py-3 px-6">Dirección 2</th>
+                  <th className="py-3 px-6">ciudad</th>
+                  <th className="py-3 px-6">region</th>
+                  <th className="py-3 px-6">Codigo Postal</th>
+
                   <th className="py-3 px-6">Estado</th>
-                  <th className="py-3 px-6"></th>
                 </tr>
               </thead>
               <tbody>
-                {currentTires.map((tire, index) => (
+                {currentOrders.map((client, index) => (
                   <tr
                     key={index}
                     className="border-t border-gray-200 hover:bg-gray-50"
                   >
-                    <td className="py-3 px-6">{tire.linea}</td>
-                    <td className="py-3 px-6">{tire.itemCode}</td>
-                    <td className="py-3 px-6">{tire.helmetMeasurement}</td>
-                    <td className="py-3 px-6">{tire.brand}</td>
-                    <td className="py-3 px-6">{tire.helmetDesign}</td>
-                    <td className="py-3 px-6">{tire.requiredBand}</td>
+                    <td className="py-3 px-6">{client.name}</td>
+                    <td className="py-3 px-6">{client.alias}</td>
+                    <td className="py-3 px-6">{client.address1}</td>
+                    <td className="py-3 px-6">{client.address2}</td>
+                    <td className="py-3 px-6">{client.city}</td>
+                    <td className="py-3 px-6">{client.region}</td>
+                    <td className="py-3 px-6">{client.zipCode}</td>
                     <td className="py-3 px-6">
-                      {tire.state ? "Activo" : "Inactivo"}
+                      {client.state ? "Activo" : "Inactivo"}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            {/* Paginación */}
-            <div className="flex justify-between items-center mt-4">
-              <button
-                onClick={() => paginate(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={`px-4 py-2 bg-gray-200 rounded-lg ${
-                  currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-              >
-                Anterior
-              </button>
-              <span>
-                Página {currentPage} de {totalPages}
-              </span>
-              <button
-                onClick={() => paginate(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className={`px-4 py-2 bg-gray-200 rounded-lg ${
-                  currentPage === totalPages
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-              >
-                Siguiente
-              </button>
-            </div>
+            {/* Mostrar paginación solo si hay 10 o más usuarios */}
+            {allClients.length >= 10 && (
+              <div className="flex justify-between items-center mt-4">
+                <div className="text-sm text-gray-600">
+                  Página {currentPage} de {totalPages}
+                </div>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={`px-4 py-2 rounded-lg border ${
+                      currentPage === 1
+                        ? "text-gray-400 border-gray-200"
+                        : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                    }`}
+                  >
+                    Anterior
+                  </button>
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <button
+                      key={i + 1}
+                      onClick={() => handlePageChange(i + 1)}
+                      className={`px-4 py-2 rounded-lg border ${
+                        currentPage === i + 1
+                          ? "bg-blue-600 text-white"
+                          : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className={`px-4 py-2 rounded-lg border ${
+                      currentPage === totalPages
+                        ? "text-gray-400 border-gray-200"
+                        : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                    }`}
+                  >
+                    Siguiente
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>

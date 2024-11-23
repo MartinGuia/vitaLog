@@ -8,6 +8,8 @@ function Profile() {
   const params = useParams();
   // const [getOrders, setOrders] = useState()
   const [workOrders, setWorkOrders] = useState([]);
+  const [name, setName] = useState();
+  const [lastName, setLastName] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 10;
 
@@ -18,6 +20,8 @@ function Profile() {
           const userById = await getUser(params.id);
           if (userById) {
             setWorkOrders(userById.workOrders);
+            setName(userById.name);
+            setLastName(userById.lastName);
             console.log(workOrders);
           }
         }
@@ -42,7 +46,12 @@ function Profile() {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
+      <div className="text-center my-8">
+        <h2 className="text-4xl text-stone-700 font-semibold mb-2">
+          {name} {lastName}
+        </h2>
+      </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 rounded-lg">
           <thead>
@@ -114,9 +123,11 @@ function Profile() {
             ))}
             <button
               onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
+              disabled={
+                currentPage === totalPages || workOrders.length <= ordersPerPage
+              }
               className={`px-4 py-2 rounded-lg border ${
-                currentPage === totalPages
+                currentPage === totalPages || workOrders.length <= ordersPerPage
                   ? "text-gray-400 border-gray-200"
                   : "text-blue-600 border-blue-600 hover:bg-blue-50"
               }`}

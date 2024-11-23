@@ -50,7 +50,7 @@ function WorkOrder() {
     //   <div>Hola</div>
     // </>
     <>
-      <div>
+      <div className="px-4 pt-4 lg:px-14 max-w-screen-2xl mx-auto">
         <header className="w-full mt-3 flex justify-center">
           <div className=" w-[95%] p-2 flex justify-between bg-slate-200 border-l-8 border-black rounded-md">
             <section className="ml-2">

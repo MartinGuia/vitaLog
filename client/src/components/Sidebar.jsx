@@ -20,7 +20,7 @@ export default function Sidebar({ children, additionalContent }) {
             : "sticky top-0 w-20 h-screen" // Se mueve con el scroll cuando está colapsado
         }`}
       >
-        <nav className="h-full flex flex-col  border shadow-lg  bg-cyan-950">
+        <nav className="h-full flex flex-col  border shadow-lg  bg-gradient-to-br from-slate-800 to-slate-900">
           <div className="p-4 pb-2 flex justify-between items-center">
             <img
               src={images.logoVB}
@@ -31,7 +31,7 @@ export default function Sidebar({ children, additionalContent }) {
             />
             <button
               onClick={() => setExpanded((curr) => !curr)}
-              className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
+              className="p-1.5 rounded-lg bg-yellow-400 hover:bg-yellow-500"
             >
               {expanded ? <Menu className="w-10" /> : <ChevronLast />}
             </button>
@@ -113,7 +113,6 @@ export function SidebarItem({ icon, text, active, alert }) {
         <div
           className={`w-20 absolute left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}
         >
-          
           {text}
         </div>
       )}

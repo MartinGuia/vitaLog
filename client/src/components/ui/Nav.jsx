@@ -5,6 +5,7 @@ import {
   BookMarked,
   ClipboardPen,
   SquareUser,
+  Users,
   NotebookPen,
   UserRoundPlus,
 } from "lucide-react";
@@ -34,10 +35,10 @@ function Nav({ children }) {
                 text="Usuarios"
               />
             </Link>
-            <Link to="/register">
+            <Link to="/client">
               <SidebarItem
-                icon={<UserRoundPlus size={20} color="white" />}
-                text="Agregar usuario"
+                icon={<Users size={20} color="white" />}
+                text="Clientes"
               />
             </Link>
             <Link to="/add-tire">
