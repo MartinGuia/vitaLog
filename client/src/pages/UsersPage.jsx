@@ -27,9 +27,9 @@ function UsersPage() {
 
   return (
     <>
-      <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
-        <div className="text-center my-8">
-          <h2 className="text-4xl font-semibold mb-2">Usuarios</h2>
+      <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
+        <div className="">
+          <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">Usuarios</h2>
         </div>
         <div className="flex justify-end">
           <Link to="/register">

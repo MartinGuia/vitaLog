@@ -4,6 +4,7 @@ import authRoutes from "./routes/auth.routes.js";
 import tiresRoutes from "./routes/tires.routes.js";
 import workOrderRoutes from "./routes/workOrder.routes.js";
 import clientRoutes from "./routes/client.routes.js";
+import departmentRoutes from "./routes/department.routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -21,5 +22,6 @@ app.use("/api", authRoutes);
 app.use("/api", tiresRoutes)
 app.use("/api", workOrderRoutes);
 app.use("/api", clientRoutes);
+app.use("/api", departmentRoutes);
 
 export default app;

@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
 
 export const register = async (req, res) => {
-  const { name, lastName, userName, password } = req.body;
+  const { name, lastName, userName, department, password } = req.body;
 
   try {
     const userFound = await User.findOne({ userName });
@@ -18,6 +18,7 @@ export const register = async (req, res) => {
       name,
       lastName,
       userName,
+      // department,
       password: passwordHash,
     });
 
@@ -29,6 +30,7 @@ export const register = async (req, res) => {
       name: userSaved.name,
       lastName: userSaved.lastName,
       userName: userSaved.userName,
+      // department: userSaved.department,
       createdAt: userSaved.createdAt,
       updateAt: userSaved.updatedAt,
     });

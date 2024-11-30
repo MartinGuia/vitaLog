@@ -5,7 +5,7 @@ const departmentSchema = new Schema({
         type: String,
         required: true,
     },
-    user:[{
+    users:[{
         ref: "User",
         type: Schema.Types.ObjectId,
     }],

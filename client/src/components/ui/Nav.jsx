@@ -3,6 +3,7 @@ import {
   BarChart3,
   LayoutDashboard,
   BookMarked,
+  HousePlus,
   ClipboardPen,
   SquareUser,
   Users,
@@ -23,12 +24,18 @@ function Nav({ children }) {
         <Sidebar additionalContent={children}>
           {/* Define el menú */}
           <>
-            <Link to="/homepage">
+            <Link to="/department">
+              <SidebarItem
+                icon={<LayoutDashboard size={20} color="white"/>}
+                text="Departamentos"
+              />
+            </Link>
+            {/* <Link to="/homepage">
               <SidebarItem
                 icon={<LayoutDashboard size={20} color="white"/>}
                 text="Principal"
               />
-            </Link>
+            </Link> */}
             <Link to="/allusers">
               <SidebarItem
                 icon={<SquareUser size={20} color="white" />}
@@ -53,6 +60,12 @@ function Nav({ children }) {
                 text="Orden de trabajo"
               />
             </Link>
+            {/* <Link to="/add-department">
+              <SidebarItem
+                icon={<HousePlus size={20} color="white" />}
+                text="Departamentos"
+              />
+            </Link> */}
           </>
         </Sidebar>
       ) : (

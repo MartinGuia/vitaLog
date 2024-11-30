@@ -15,7 +15,7 @@ function LoginPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated) navigate("/homepage");
+    if (isAuthenticated) navigate("/department");
   }, [isAuthenticated]);
 
   const onSubmit = handleSubmit( (data) => {

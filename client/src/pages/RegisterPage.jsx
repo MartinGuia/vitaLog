@@ -57,7 +57,7 @@ function AddClientPage() {
             <div className="mt-10">
               <div className="flex mb-3">
                 <h1 className="text-lg flex text-sky-900 font-semibold w-[50%] md:text-3xl md:w-[70%] lg:w-[25%] ">
-                  Nombre y apellido
+                  Datos de usuario
                 </h1>
                 <div className="flex items-center w-[100%]">
                   <hr className="border-[1px] w-[100%] border-sky-800 mt-1" />
@@ -95,6 +95,44 @@ function AddClientPage() {
               </div>
             </div>
           </div>
+
+          {/* Apartado de usuario y contraseña */}
+          <div>
+            <div className="mt-10">
+              <h1 className="font-bold text-3xl">Usuario y Contraseña</h1>
+              <p>Complete el usuario y contraseña.</p>
+            </div>
+            <div className="w-[100%] pt-8 text-xl">
+              <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
+                <div className="relative md:w-5/12 w-auto">
+                  <InputField
+                    label="Usuario"
+                    id="usuario"
+                    {...register("userName", { required: true })}
+                  />
+                  {errors.name && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>
+                <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
+                  <InputField
+                    label="Contraseña"
+                    id="contraseña"
+                    {...register("password", { required: true })}
+                  />
+                  {errors.lastName && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Fin del apaertado de usuario y contraseña */}
+
           <div>
             <div className="mt-10">
               <h1 className="font-bold text-3xl">Rol y Departamento</h1>
@@ -102,13 +140,26 @@ function AddClientPage() {
             </div>
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex flex-col items-center sm:flex-row sm:justify-between">
-              <div className="relative w-[40%] ">
-                  <label
-                  
-                    className="block mb-2 text-sm font-medium"
+                <div className="relative w-[40%] ">
+                  <label className="block mb-2 text-sm font-medium">Departamento</label>
+                  <select
+                  {...register("department", { required: true })}
+                    id="small"
+                    className="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
-                    Rol
-                  </label>
+                    <option defaultValue={"Seleccionar"}>Seleccionar...</option>
+                    <option value="Ventas">Ventas</option>
+                    <option value="Almacén">Almacén</option>
+                    <option value="Producción">Producción</option>
+                  </select>
+                  {errors.address2 && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>
+                {/* <div className="relative w-[40%] ">
+                  <label className="block mb-2 text-sm font-medium">Rol</label>
                   <select
                     id="small"
                     className="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -118,45 +169,14 @@ function AddClientPage() {
                     <option value="Almacén">Almacén</option>
                     <option value="Producción">Producción</option>
                   </select>
-                  {/* <select
-                    {...register("department", { required: true })}
-                    className="h-9 rounded-md shadow-md font-medium p-1 w-[100%] text-sm "
-                  >
-                    <option>Seleccione una opción...</option>
-                    <option value="Vendedor">Vendedor</option>
-                    <option value="Almacén">Almacén</option>
-                    <option value="Producción">Producción</option>
-                  </select> */}
-                  {/* <InputField
-                    label="Dirección 2"
-                    id="dirección2"
-                    {...register("address2", { required: false })}
-                  /> */}
                   {errors.address2 && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
                   )}
-                </div>
-                <div className="relative w-[40%] mt-5 sm:mt-0">
-                  <InputField
-                    label="Dirección 1"
-                    id="dirección1"
-                    {...register("address1", { required: true })}
-                  />
-                  {errors.address1 && (
-                    <p className="text-red-500 text-xs">
-                      Este campo es requerido
-                    </p>
-                  )}
-                </div>
-
+                </div> */}
                 
               </div>
-              {/* <div className="flex justify-center mt-5">
-               
-                
-              </div> */}
             </div>
           </div>
 

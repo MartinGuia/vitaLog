@@ -15,7 +15,7 @@ export const useClient = () => {
 export function ClientProvider({ children }) {
   const [clients, setClients] = useState(null);
   const [errors, setErrors] = useState([]);
-  const [allClients, setAllClients] = useState([])
+  const [allClients, setAllClients] = useState([]);
 
   const registerClient = async (user) => {
     try {
@@ -30,16 +30,24 @@ export function ClientProvider({ children }) {
 
   const getClients = async () => {
     try {
-      const res = await getClientsRequest ()
-      console.log(res)
-      setAllClients(res.data)
+      const res = await getClientsRequest();
+      console.log(res);
+      setAllClients(res.data);
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
-    <ClientContext.Provider value={{ clients, registerClient, getClients, allClients, errors }}>
+    <ClientContext.Provider
+      value={{
+        clients,
+        registerClient,
+        getClients,
+        allClients,
+        errors,
+      }}
+    >
       {children}
     </ClientContext.Provider>
   );
