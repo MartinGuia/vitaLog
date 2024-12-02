@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useDepartment } from "../context/DepartmentContext.jsx";
 import { useForm } from "react-hook-form";
 import {
-  StepBack,
   Truck,
   PackageOpen,
   Settings,
   Archive,
   CirclePlus,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function DepartmentPage() {
   const {
@@ -19,7 +19,7 @@ function DepartmentPage() {
   const {
     registerDepartment,
     getDepartments,
-    departments,
+    allDepartments,
     errors: registerDepartmentErrors,
   } = useDepartment();
 
@@ -36,6 +36,22 @@ function DepartmentPage() {
     registerDepartment(values);
     closeModal(); // Cierra el modal después de enviar
   });
+
+  // Función para asignar iconos según el nombre del departamento
+  const getIcon = (departmentName) => {
+    switch (departmentName.toLowerCase()) {
+      case "ventas":
+        return <Truck color="white" size={38} />;
+      case "almacén":
+        return <PackageOpen color="white" size={38} />;
+      case "administración":
+        return <Archive color="white" size={38} />;
+      case "producción":
+        return <Settings color="white" size={38} />;
+      default:
+        return <Archive color="white" size={38} />; // Icono por defecto
+    }
+  };
 
   return (
     <>
@@ -56,45 +72,24 @@ function DepartmentPage() {
         </div>
 
         <div className="flex flex-col items-center justify-center mt-10">
-          <div className="w-[100%] sm:h-40 sm:w-[50%] md:w-[70%] flex flex-col items-center sm:flex-row sm:justify-between">
-            <div className="w-[100%] h-[60%] flex justify-center mt-5 sm:mt-0">
-              <button className="bg-cyan-950 rounded shadow-md w-[60%] h-20 lg:h-28 sm:w-[90%] lg:w-[60%] hover:-translate-y-1 hover:duration-700 duration-700">
-                <span className="text-white font-semibold text-xl">Ventas</span>
-                <div className="flex justify-center mt-2">
-                  <Truck color="white" size={38} />
-                </div>
-              </button>
-            </div>
-            <div className="w-[100%] h-[60%] flex justify-center mt-5 sm:mt-0">
-              <button className="bg-cyan-950 rounded shadow-md w-[60%] h-20 lg:h-28 sm:w-[90%] lg:w-[60%] hover:-translate-y-1 hover:duration-700 duration-700">
-                <span className="text-white font-semibold text-xl">
-                  Almacen
-                </span>
-                <div className="flex justify-center mt-2">
-                  <PackageOpen color="white" size={38} />
-                </div>
-              </button>
-            </div>
-          </div>
-          <div className="w-[100%] sm:h-40 sm:w-[50%] md:w-[70%] flex flex-col items-center sm:flex-row sm:justify-between mt-5 sm:mt-0">
-            <div className="w-[100%] h-[60%] flex justify-center">
-              <button className="bg-cyan-950 rounded shadow-md w-[60%] h-20 lg:h-28 sm:w-[90%] lg:w-[60%] hover:-translate-y-1 hover:duration-700 duration-700">
-                <span className="text-white font-semibold text-xl">Ventas</span>
-                <div className="flex justify-center mt-2">
-                  <Truck color="white" size={38} />
-                </div>
-              </button>
-            </div>
-            <div className="w-[100%] h-[60%] flex justify-center mt-5 sm:mt-0">
-              <button className="bg-cyan-950 rounded shadow-md w-[60%] h-20 lg:h-28 sm:w-[90%] lg:w-[60%] hover:-translate-y-1 hover:duration-700 duration-700">
-                <span className="text-white font-semibold text-xl">
-                  Almacen
-                </span>
-                <div className="flex justify-center mt-2">
-                  <PackageOpen color="white" size={38} />
-                </div>
-              </button>
-            </div>
+          <div className="w-full sm:h-auto md:w-[70%] flex flex-wrap justify-between">
+            {allDepartments.map((department, i) => (
+              <div
+                className="w-full sm:w-[48%] flex justify-center mt-5"
+                key={i}
+              >
+                <button className="bg-cyan-950 rounded shadow-md w-full h-20 lg:h-28 hover:-translate-y-1 hover:duration-700 duration-700">
+                  <Link to={department._id}>
+                    <span className="text-white font-semibold text-xl">
+                      {department.name}
+                    </span>
+                    <div className="flex justify-center mt-2">
+                      {getIcon(department.name)}
+                    </div>
+                  </Link>
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       </div>
