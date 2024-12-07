@@ -22,6 +22,7 @@ const userSchema = new Schema({
     department:{
         ref: "Department",
         type: Schema.Types.ObjectId,
+        required: false,
     },
     tires:[{
         ref: "Tire",

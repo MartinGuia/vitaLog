@@ -1,20 +1,38 @@
-import { useAuth } from "../context/AuthContext";
+import React from "react";
+import { useDepartment } from "../context/DepartmentContext";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { CirclePlus, StepBack } from "lucide-react";
 
-function UsersPage() {
-  const { getUsers, getAllUsers } = useAuth();
+function DepartmentByIdPage() {
+  const { getDepartmentById } = useDepartment();
+  const params = useParams();
+  const [users, setUsers] = useState([]);
+  const [department, setDepartment] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 10;
 
   useEffect(() => {
-    getUsers();
+    async function loadDepartment() {
+      try {
+        if (params.id) {
+          const departmentById = await getDepartmentById(params.id);
+          if (departmentById) {
+            setUsers(departmentById.users);
+            setDepartment(departmentById.name);
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    loadDepartment();
   }, []);
 
-  const totalPages = Math.ceil(getAllUsers.length / ordersPerPage);
+  const totalPages = Math.ceil(users.length / ordersPerPage);
 
   // Obtener los datos de la página actual
-  const currentOrders = getAllUsers.slice(
+  const currentOrders = users.slice(
     (currentPage - 1) * ordersPerPage,
     currentPage * ordersPerPage
   );
@@ -28,10 +46,22 @@ function UsersPage() {
     <>
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
         <div className="">
-          <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">Ordenes de trabajo</h2>
+        <Link to="/department">
+            <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
+              <StepBack color="white" />
+            </button>
+          </Link>
+          <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
+            {department}
+          </h2>
         </div>
         <div className="flex justify-end">
-          
+          <Link to="/register">
+            <button className="flex p-3 bg-indigo-400 rounded-lg text-white cursor-pointer hover:bg-indigo-700 duration-500 hover:duration-500">
+              <CirclePlus className="mr-2" />
+              Añadir nuevo
+            </button>
+          </Link>
         </div>
         <div className="p-4 w-full">
           <div className="overflow-x-auto">
@@ -40,7 +70,7 @@ function UsersPage() {
                 <tr className="bg-gray-100 text-gray-600 text-sm uppercase text-left">
                   <th className="py-3 px-6">Nombre</th>
                   <th className="py-3 px-6">Rol</th>
-                  <th className="py-3 px-6">O. T.</th>
+                  <th className="py-3 px-6">Departamento</th>
                 </tr>
               </thead>
               <tbody>
@@ -50,15 +80,20 @@ function UsersPage() {
                     className="border-t border-gray-200 hover:bg-gray-50"
                   >
                     <td className="py-3 px-6 text-sm text-gray-900">
-                      <Link className="h-auto w-auto" to={`/profile/${user._id}`}>
-                        <button>{user.name} {user.lastName}</button>
+                      <Link
+                        className="h-auto w-auto"
+                        to={`/profile/${user._id}`}
+                      >
+                        <button>
+                          {user.name} {user.lastName}
+                        </button>
                       </Link>
                     </td>
                     <td className="py-3 px-6 text-sm text-gray-900">
-                      {user.role}
+                      {user.userName}
                     </td>
                     <td className="py-3 px-6 text-sm text-gray-900">
-                      {user.department.name}
+                      {user.workOrders.length}
                     </td>
                   </tr>
                 ))}
@@ -66,7 +101,7 @@ function UsersPage() {
             </table>
 
             {/* Mostrar paginación solo si hay 10 o más usuarios */}
-            {getAllUsers.length >= 10 && (
+            {users.length >= 10 && (
               <div className="flex justify-between items-center mt-4">
                 <div className="text-sm text-gray-600">
                   Página {currentPage} de {totalPages}
@@ -117,52 +152,4 @@ function UsersPage() {
   );
 }
 
-export default UsersPage;
-// {/* <div className="overflow-x-auto flex justify-center max-[542px]:block">
-// <table className="w-[90%] bg-white shadow-md rounded-lg my-6 max-[540px]:ml-2">
-//   <thead>
-//     <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-//       <th className="py-3 px-6 text-left">Nombre</th>
-//       <th className="py-3 px-6 text-left">Rol</th>
-//       <th className="py-3 px-6 text-left">Departamento</th>
-//       {/* <th className="py-3 px-6 text-center">Acciones</th> */}
-//     </tr>
-//   </thead>
-//   <tbody className="text-gray-600 text-sm">
-//     {getAllUsers.map((user, id) => (
-//       <tr
-//         key={id}
-//         className="border-b border-gray-200 hover:bg-gray-100 hover:-translate-y-1"
-//       >
-//         <Link className="flex" to={`/profile/${user._id}`}>
-//           <td className="px-4 whitespace-nowrap flex justify-center items-center">
-//             {user.name} {user.lastName}
-//           </td>
-//         </Link>
-//         <td className="py-3 px-6 text-left whitespace-nowrap">Rol</td>
-//         <td className="py-3 px-6 text-left whitespace-nowrap">
-//           Departamento
-//         </td>
-//         {/* <td className="py-3 px-6 text-center flex justify-evenly max-[541px]:block">
-//         <button className="text-red-500 hover:text-red-700 mr-2 hover:-translate-y-1">
-//           Eliminar
-//         </button>
-//         <button
-//           onClick={() => handleOpenModalEditData(item.id)}
-//           className="text-blue-500 hover:text-blue-700 hover:-translate-y-1"
-//         >
-//           Editar
-//         </button>
-//         <button
-//           onClick={() => handleEdit(index)}
-//           onClick={handleOpenModalEditPass}
-//           className="text-green-500 hover:text-green-700 hover:-translate-y-1"
-//         >
-//           Editar contraseña
-//         </button>
-//       </td> */}
-//       </tr>
-//     ))}
-//   </tbody>
-// </table>
-// </div> */}
+export default DepartmentByIdPage;

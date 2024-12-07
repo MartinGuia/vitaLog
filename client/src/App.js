@@ -11,13 +11,13 @@ import UsersPage from "./pages/UsersPage";
 import TireFormPage from "./pages/TireFormPage";
 import ClientPage from "./pages/ClientPage";
 import AddClientPage from "./pages/AddClientPage";
+import DepartmentByIdPage from "./pages/DepartmentByIdPage";
 import { ClientProvider } from "./context/ClientContext";
 import { TiresProvider } from "./context/TireContext";
 import { WorkOrderProvider } from "./context/WorkOrderContext";
 import { AuthProvider } from "./context/AuthContext";
 import { DepartmentProvider } from "./context/DepartmentContext";
 import DepartmentPage from "./pages/DepartmentPage";
-import AddDepartmentPage from "./pages/AddDepartmentPage";
 
 function App() {
   return (
@@ -44,7 +44,7 @@ function App() {
                       <Route path="/client" element={<ClientPage />} />
                       <Route path="/add-client" element={<AddClientPage />} />
                       <Route path="/department" element={<DepartmentPage />} />
-                      <Route path="/add-department" element={<AddDepartmentPage/>} />
+                      <Route path="/department/:id" element={<DepartmentByIdPage />} />
                     </Route>
                   </Routes>
                 </Nav>

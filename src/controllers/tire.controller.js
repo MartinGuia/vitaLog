@@ -1,6 +1,6 @@
 import Tire from "../models/tire.model.js";
 import WorkOrder from "../models/workOrders.model.js";
-import  User  from "../models/user.model.js";
+import User from "../models/user.model.js";
 
 export const getTires = async (req, res) => {
   const tires = await Tire.find({
@@ -50,7 +50,7 @@ export const createTire = async (req, res) => {
       });
 
       // Agregar la orden de trabajo al usuario
-      await User.findByIdAndUpdate(req.user.id, {
+      await User.findByIdAndUpdate(req.user._id, {
         $push: { workOrders: workOrder._id }
       });
     }

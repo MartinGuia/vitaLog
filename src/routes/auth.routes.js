@@ -13,11 +13,11 @@ import { authRequired } from "../middlewares/validateToken.js";
 
 const router = Router();
 
-router.post("/register", register);
+router.post("/register", authRequired,register);
 router.get('/getUsers', getUsers);
 router.post("/login", login);
 router.post("/logout", logout);
 router.get("/verify", verifyToken);
-router.get("/profile/:id", authRequired, getProfileById);
+router.get("/profile/:id", getProfileById);
 
 export default router;

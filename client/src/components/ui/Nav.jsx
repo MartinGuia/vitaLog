@@ -1,14 +1,9 @@
 import Sidebar, { SidebarItem } from "../Sidebar";
 import {
-  BarChart3,
   LayoutDashboard,
-  BookMarked,
-  HousePlus,
-  ClipboardPen,
   SquareUser,
   Users,
   NotebookPen,
-  UserRoundPlus,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -28,6 +23,7 @@ function Nav({ children }) {
               <SidebarItem
                 icon={<LayoutDashboard size={20} color="white"/>}
                 text="Departamentos"
+                text2="Departamentos"
               />
             </Link>
             {/* <Link to="/homepage">
@@ -36,36 +32,34 @@ function Nav({ children }) {
                 text="Principal"
               />
             </Link> */}
-            <Link to="/allusers">
+            <Link to="/workorders">
               <SidebarItem
                 icon={<SquareUser size={20} color="white" />}
-                text="Usuarios"
+                text="Orden de trabajo"
+                text2="O.T."
               />
             </Link>
             <Link to="/client">
               <SidebarItem
                 icon={<Users size={20} color="white" />}
                 text="Clientes"
+                text2="Cuentas locales"
               />
             </Link>
             <Link to="/add-tire">
               <SidebarItem
                 icon={<NotebookPen size={20} color="white" />}
                 text="Agregar llantas"
+                text2="Llantas"
               />
             </Link>
-            <Link to="/workorders">
+            {/* <Link to="/workorders">
               <SidebarItem
                 icon={<BookMarked size={20} color="white" />}
                 text="Orden de trabajo"
               />
-            </Link>
-            {/* <Link to="/add-department">
-              <SidebarItem
-                icon={<HousePlus size={20} color="white" />}
-                text="Departamentos"
-              />
             </Link> */}
+            
           </>
         </Sidebar>
       ) : (

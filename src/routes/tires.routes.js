@@ -13,9 +13,9 @@ import {
 const router = Router();
 
 router.get("/tires", authRequired, getTires);
-router.get("/tires/:id", authRequired, getTire);
-router.post("/tires", authRequired, createTire);
-router.delete("/tires/:id", authRequired, deleteTire);
-router.put("/tires/:id", authRequired, updateTire);
+router.get("/tires/:id", authRequired ,getTire);
+router.post("/tires", authRequired,createTire);
+router.delete("/tires/:id", authRequired ,deleteTire);
+router.put("/tires/:id", authRequired ,updateTire);
 
 export default router;

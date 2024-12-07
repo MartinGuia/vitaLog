@@ -1,8 +1,9 @@
 import InputField from "../components/ui/InputField";
 import { useForm } from "react-hook-form";
-import { useClient } from "../context/ClientContext";
 import { StepBack } from "lucide-react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useDepartment } from "../context/DepartmentContext.jsx";
+import React, { useEffect } from "react";
 
 import { useAuth } from "../context/AuthContext";
 
@@ -13,14 +14,17 @@ function AddClientPage() {
     reset,
     formState: { errors },
   } = useForm();
-  // const { registerClient, errors: registerClientErrors } = useClient();
+
+  const {
+    getDepartments,
+    allDepartments,
+  } = useDepartment();
 
   const { signup, errors: registerErrors } = useAuth();
-  // const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (isAuthenticated) navigate("/register");
-  // }, [isAuthenticated]);
+  useEffect(() => {
+    getDepartments();
+  }, []);
 
   const onSubmit = handleSubmit(async (values) => {
     signup(values);
@@ -31,7 +35,7 @@ function AddClientPage() {
     <>
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
         <div>
-          <Link to="/allusers">
+          <Link to="/department">
             <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
               <StepBack color="white" />
             </button>
@@ -148,9 +152,9 @@ function AddClientPage() {
                     className="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
                     <option defaultValue={"Seleccionar"}>Seleccionar...</option>
-                    <option value="Ventas">Ventas</option>
-                    <option value="Almacén">Almacén</option>
-                    <option value="Producción">Producción</option>
+                    {allDepartments.map((department, i)=>(
+                      <option key={i} value={department._id}>{department.name}</option>
+                    ))}
                   </select>
                   {errors.address2 && (
                     <p className="text-red-500 text-xs">

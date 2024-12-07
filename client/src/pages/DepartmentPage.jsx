@@ -78,16 +78,19 @@ function DepartmentPage() {
                 className="w-full sm:w-[48%] flex justify-center mt-5"
                 key={i}
               >
-                <button className="bg-cyan-950 rounded shadow-md w-full h-20 lg:h-28 hover:-translate-y-1 hover:duration-700 duration-700">
-                  <Link to={department._id}>
+                <Link
+                  className="bg-cyan-950 rounded shadow-md w-full h-20 lg:h-28 hover:-translate-y-1 hover:duration-700 duration-700 flex justify-center"
+                  to={`/department/${department._id}`}
+                >
+                  <button>
                     <span className="text-white font-semibold text-xl">
                       {department.name}
                     </span>
                     <div className="flex justify-center mt-2">
                       {getIcon(department.name)}
                     </div>
-                  </Link>
-                </button>
+                  </button>
+                </Link>
               </div>
             ))}
           </div>

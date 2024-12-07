@@ -12,6 +12,9 @@ function AllWorkOrdersPage() {
   if (workOrders.length === 0) <h1>No hay Ordenes de trabajo</h1>;
   return (
     <>
+      <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
+            Ordenes de trabajo
+          </h2>
       <div className="overflow-x-auto flex justify-center max-[542px]:block">
         <table className="w-[90%] bg-white shadow-md rounded-lg my-6 max-[540px]:ml-2">
           <thead>

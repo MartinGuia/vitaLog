@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { registerDepartmentRequest, getDepartmentsRequest } from "../api/department.js";
+import { registerDepartmentRequest, getDepartmentsRequest, getDepartmentByIdRequest } from "../api/department.js";
 
 const DepartmentContext = createContext();
 
@@ -37,6 +37,16 @@ export function DepartmentProvider({ children }) {
     }
   }
 
+  const getDepartmentById = async (id) => {
+    try {
+      const res = await getDepartmentByIdRequest(id);
+      console.log(res.data)
+      return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <DepartmentContext.Provider
       value={{
@@ -44,6 +54,7 @@ export function DepartmentProvider({ children }) {
         registerDepartment,
         getDepartments,
         allDepartments,
+        getDepartmentById,
         errors,
       }}
     >

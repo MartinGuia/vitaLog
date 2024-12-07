@@ -1,36 +1,52 @@
 import User from "../models/user.model.js";
+import Department from "../models/department.model.js";
 import bcryptjs from "bcryptjs";
 import { createAccessToken } from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
 
 export const register = async (req, res) => {
-  const { name, lastName, userName, department, password } = req.body;
+  const { name, lastName, userName, password, department } = req.body;
 
   try {
+    // Verifica si el usuario ya existe
     const userFound = await User.findOne({ userName });
-    if (userFound)
-      return res.status(409).json(["User already exists"]);
+    if (userFound) {
+      return res.status(409).json({ message: "El usuario ya existe" });
+    }
+
+    // Verifica si el departamento existe
+    const departmentFound = await Department.findById(department);
+    if (!departmentFound) {
+      return res.status(404).json({ message: "El departamento no existe" });
+    }
 
     const passwordHash = await bcryptjs.hash(password, 10);
-
+    // Crea un nuevo usuario
     const newUser = new User({
       name,
       lastName,
       userName,
-      // department,
+      department, // Asigna el departamento al usuario
       password: passwordHash,
     });
 
+    // Guarda el usuario
     const userSaved = await newUser.save();
     const token = await createAccessToken({ id: userSaved._id });
     res.cookie("token", token);
+
+    // Actualiza el departamento para incluir al usuario
+    departmentFound.users.push(userSaved._id);
+    await departmentFound.save();
+    
+    // Responde con los datos del usuario creado
     res.json({
       id: userSaved._id,
       name: userSaved.name,
       lastName: userSaved.lastName,
       userName: userSaved.userName,
-      // department: userSaved.department,
+      department: departmentFound.name, // Retorna el nombre del departamento
       createdAt: userSaved.createdAt,
       updateAt: userSaved.updatedAt,
     });
@@ -38,6 +54,40 @@ export const register = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+// export const register = async (req, res) => {
+//   const { name, lastName, userName, department, password } = req.body;
+
+//   try {
+//     const userFound = await User.findOne({ userName });
+//     if (userFound)
+//       return res.status(409).json(["User already exists"]);
+
+//     const passwordHash = await bcryptjs.hash(password, 10);
+
+//     const newUser = new User({
+//       name,
+//       lastName,
+//       userName,
+//       // department,
+//       password: passwordHash,
+//     });
+
+//     const userSaved = await newUser.save();
+//     const token = await createAccessToken({ id: userSaved._id });
+//     res.cookie("token", token);
+//     res.json({
+//       id: userSaved._id,
+//       name: userSaved.name,
+//       lastName: userSaved.lastName,
+//       userName: userSaved.userName,
+//       // department: userSaved.department,
+//       createdAt: userSaved.createdAt,
+//       updateAt: userSaved.updatedAt,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
 export const login = async (req, res) => {
   const { userName, password } = req.body;
@@ -61,7 +111,7 @@ export const login = async (req, res) => {
 
     const token = await createAccessToken({ id: userFound._id });
 
-    res.cookie("token", token,);
+    res.cookie("token", token);
     res.json({
       id: userFound._id,
       name: userFound.name,
@@ -77,16 +127,32 @@ export const login = async (req, res) => {
 
 export const getUsers = async (req, res) => {
   try {
-    // Obtiene todos los usuarios de la base de datos, excluyendo la contraseña por seguridad
-    const users = await User.find({}, '-password') // Elimina el campo de password de los resultados
-
-    // Envía la lista de usuarios al frontend en formato JSON
+    // Obtiene todos los usuarios, excluyendo la contraseña y populando los datos relacionados
+    const users = await User.find({}, "-password")
+      .populate("department", "name") // Carga solo el nombre del departamento
+    
     res.status(200).json(users);
   } catch (error) {
     console.error("Error al obtener los usuarios:", error);
-    res.status(500).json({ success: false, message: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ success: false, message: "Error interno del servidor" });
   }
 };
+// export const getUsers = async (req, res) => {
+//   try {
+//     // Obtiene todos los usuarios de la base de datos, excluyendo la contraseña por seguridad
+//     const users = await User.find({}, "-password"); // Elimina el campo de password de los resultados
+
+//     // Envía la lista de usuarios al frontend en formato JSON
+//     res.status(200).json(users);
+//   } catch (error) {
+//     console.error("Error al obtener los usuarios:", error);
+//     res
+//       .status(500)
+//       .json({ success: false, message: "Error interno del servidor" });
+//   }
+// };
 
 export const logout = (req, res) => {
   res.clearCookie("token", "", {
@@ -101,7 +167,9 @@ export const getProfileById = async (req, res) => {
     const userId = req.params.id;
 
     // Busca al usuario por su ID
-    const userFound = await User.findById(userId).populate('tires').populate('workOrders');
+    const userFound = await User.findById(userId)
+      .populate("tires")
+      .populate("workOrders");
 
     // Si no se encuentra el usuario, responde con un error 404
     if (!userFound) {
@@ -115,51 +183,36 @@ export const getProfileById = async (req, res) => {
       lastName: userFound.lastName,
       userName: userFound.userName,
       department: userFound.department, // Esto contiene la referencia a `Department`
-      tires: userFound.tires,           // Esto contiene las llantas relacionadas
+      tires: userFound.tires, // Esto contiene las llantas relacionadas
       // clients: userFound.clients,       // Esto contiene los clientes relacionados
       workOrders: userFound.workOrders, // Esto contiene las órdenes de trabajo relacionadas
       createdAt: userFound.createdAt,
       updatedAt: userFound.updatedAt,
     });
-
   } catch (error) {
     console.error("Error al obtener el perfil de usuario:", error);
     return res.status(500).json({ message: "Error interno del servidor" });
   }
 };
 
-// export const profile = async (req, res) => {
-//   const userFound = await User.findById(req.user.id);
-//   if (!userFound) return res.status(404).json({ message: "User not found" });
-
-//   return res.json({
-//     id: userFound._id,
-//     name: userFound.name,
-//     lastName: userFound.lastName,
-//     userName: userFound.userName,
-//     createdAt: userFound.createdAt,
-//     updateAt: userFound.updatedAt,
-//   });
-// };
-
 export const verifyToken = async (req, res) => {
-  const {token} = req.cookies
+  const { token } = req.cookies;
 
-  if(!token) return res.status(401).json({ message: "Unauthorized"});
+  if (!token) return res.status(401).json({ message: "Unauthorized" });
 
-  jwt.verify(token, TOKEN_SECRET, async (err, user)=>{
-    if (err) return res.status(401).json({message: "Unauthorized"})
+  jwt.verify(token, TOKEN_SECRET, async (err, user) => {
+    if (err) return res.status(401).json({ message: "Unauthorized" });
 
-      const userFound = await User.findById(user.id);
-      if (!userFound) return res.status(401).json({ message: "Unauthorized" });
+    const userFound = await User.findById(user.id);
+    if (!userFound) return res.status(401).json({ message: "Unauthorized" });
 
-      return res.json({
-        id: userFound._id,
-        name: userFound.name,
-        lastName: userFound.lastName,
-        userName: userFound.userName,
-        createdAt: userFound.createdAt,
-        updateAt: userFound.updatedAt,
-      });
-  })
-}
+    return res.json({
+      id: userFound._id,
+      name: userFound.name,
+      lastName: userFound.lastName,
+      userName: userFound.userName,
+      createdAt: userFound.createdAt,
+      updateAt: userFound.updatedAt,
+    });
+  });
+};
