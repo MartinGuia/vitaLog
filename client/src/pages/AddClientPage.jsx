@@ -149,18 +149,6 @@ function AddClientPage() {
               </div>
 
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between mt-5">
-                <div className="relative w-auto sm:w-5/12">
-                  <InputField
-                    label="Dirección 2"
-                    id="dirección2"
-                    {...register("address2", { required: false })}
-                  />
-                  {errors.address2 && (
-                    <p className="text-red-500 text-xs">
-                      Este campo es requerido
-                    </p>
-                  )}
-                </div>
                 <div className="flex-col flex items-center sm:flex sm:w-[50%] sm:flex-row justify-between">
                   <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
                     <InputField

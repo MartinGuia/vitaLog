@@ -3,6 +3,7 @@ import {
   closeWorkOrderRequest,
   getWorkOrdersRequest,
   getWorkOrderRequest,
+  openWorkOrderRequest
 } from "../api/workOrders.js";
 
 const WorkOrderContext = createContext();
@@ -18,6 +19,11 @@ export const useWorkOrder = () => {
 export function WorkOrderProvider({ children }) {
   const [workOrders, setWorkOrders] = useState([]);
 
+  const openWorkOrder = (values) => {
+    openWorkOrderRequest(values);
+    console.log("work order open");
+  };
+  
   const closeWorkOrder = () => {
     closeWorkOrderRequest();
     console.log("work order closed");
@@ -45,7 +51,7 @@ export function WorkOrderProvider({ children }) {
 
   return (
     <WorkOrderContext.Provider
-      value={{ closeWorkOrder, getWorkOrders, workOrders, getWorkOrderById }}
+      value={{ openWorkOrder, closeWorkOrder, getWorkOrders, workOrders, getWorkOrderById }}
     >
       {children}
     </WorkOrderContext.Provider>

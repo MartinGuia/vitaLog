@@ -34,16 +34,6 @@ export const getDepartments = async (req, res) => {
   }
 };
 
-// export const getDepartments = async (req, res) => {
-//   try {
-//     const departments = await Department.find({});
-//     res.status(200).json(departments);
-//   } catch (error) {
-//     console.error("Error al obtener los departamentos", error)
-//     res.status(500).json({ succes: false, message: "error interno del servidor" });
-//   }
-// };
-
 export const getDepartmentById = async (req, res) => {
   try {
     //Obtener el id del usuario desde los párametros de la URL

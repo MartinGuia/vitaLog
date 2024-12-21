@@ -28,7 +28,7 @@ const tireSchema = new Schema({
     },
     helmetDesign:{
         type: String,
-        required: true,
+        required: false,
     },
     requiredBand:{
         type: String,
@@ -46,6 +46,7 @@ const tireSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    
 },{
     timestamps: true,
 });

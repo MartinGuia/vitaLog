@@ -13,10 +13,6 @@ const clientSchema = new Schema({
     type: String,
     required: true,
   },
-  address2: {
-    type: String,
-    required: false,
-  },
   city: {
     type: String,
     required: true,
@@ -33,10 +29,6 @@ const clientSchema = new Schema({
     type: String,
     required: true,
   },
-  // user: {
-  //   ref: "Client",
-  //   type: Schema.Types.ObjectId,
-  // },
 });
 
 export default model("Client", clientSchema);

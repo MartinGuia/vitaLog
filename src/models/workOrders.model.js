@@ -9,6 +9,10 @@ const workOrderSchema = new Schema({
     type: Boolean,
     default: true,
   },
+  client: {
+    type: Schema.Types.ObjectId,
+    ref: 'Client', // Referenciar al modelo de cliente (si existe)
+  },
   tires: [{
     type: Schema.Types.ObjectId,
     ref: 'Tire',
@@ -20,9 +24,10 @@ const workOrderSchema = new Schema({
   },
   createdBy: {
     type: Schema.Types.ObjectId,
-    ref: 'User',  // Asumiendo que tienes un modelo de usuario
+    ref: 'User', // Referenciar al modelo de usuario
     required: true,
   },
 });
 
 export default model("WorkOrder", workOrderSchema);
+

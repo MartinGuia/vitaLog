@@ -49,12 +49,10 @@ function ClientPage() {
                   <th className="py-3 px-6">Nombre de Cuenta</th>
                   <th className="py-3 px-6">Cuenta (Nombre corto)</th>
                   <th className="py-3 px-6">Dirección</th>
-                  <th className="py-3 px-6">Dirección 2</th>
                   <th className="py-3 px-6">ciudad</th>
                   <th className="py-3 px-6">region</th>
                   <th className="py-3 px-6">Codigo Postal</th>
-
-                  <th className="py-3 px-6">Estado</th>
+                  <th className="py-3 px-6"></th>
                 </tr>
               </thead>
               <tbody>
@@ -66,12 +64,16 @@ function ClientPage() {
                     <td className="py-3 px-6">{client.name}</td>
                     <td className="py-3 px-6">{client.alias}</td>
                     <td className="py-3 px-6">{client.address1}</td>
-                    <td className="py-3 px-6">{client.address2}</td>
                     <td className="py-3 px-6">{client.city}</td>
                     <td className="py-3 px-6">{client.region}</td>
                     <td className="py-3 px-6">{client.zipCode}</td>
                     <td className="py-3 px-6">
-                      {client.state ? "Activo" : "Inactivo"}
+                      <Link to={`/client/${client._id}`}>
+                        <button className="text-blue-600 hover:text-blue-800">
+                          Ver
+                        </button>
+                      </Link>
+                      {/* {client.state ? "Activo" : "Inactivo"} */}
                     </td>
                   </tr>
                 ))}

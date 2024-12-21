@@ -1,6 +1,7 @@
 import Tire from "../models/tire.model.js";
 import WorkOrder from "../models/workOrders.model.js";
 import User from "../models/user.model.js";
+import Client from "../models/client.model.js";
 
 export const getTires = async (req, res) => {
   const tires = await Tire.find({
@@ -26,42 +27,25 @@ export const createTire = async (req, res) => {
       date,
     } = req.body;
 
-    console.log(req.user);
-
-    // Buscar una orden de trabajo abierta o crear una nueva si no existe
-    let workOrder = await WorkOrder.findOne({ isOpen: true });
+    // Buscar la orden de trabajo abierta
+    const workOrder = await WorkOrder.findOne({ isOpen: true }).populate('tires');
 
     if (!workOrder) {
-      // Buscar la última orden de trabajo creada para calcular el número secuencial
-      const ultimaOrdenDeTrabajo = await WorkOrder.findOne().sort({ numero: -1 });
-
-      // Verificar si se encontró una orden de trabajo válida y calcular el número secuencial
-      let nuevoNumero = 1; // Comienza con 1 si no hay ninguna orden
-
-      if (ultimaOrdenDeTrabajo && ultimaOrdenDeTrabajo.numero) {
-        nuevoNumero = ultimaOrdenDeTrabajo.numero + 1; // Incrementa el número secuencial
-      }
-
-      // Crear una nueva orden de trabajo con el número secuencial
-      workOrder = await WorkOrder.create({
-        numero: nuevoNumero,
-        isOpen: true,
-        createdBy: req.user.id,  // Referenciar la orden de trabajo al usuario
-      });
-
-      // Agregar la orden de trabajo al usuario
-      await User.findByIdAndUpdate(req.user._id, {
-        $push: { workOrders: workOrder._id }
+      return res.status(400).json({
+        success: false,
+        message: "No hay una orden de trabajo abierta.",
       });
     }
 
-    // Encuentra la última llanta registrada para esta orden de trabajo
-    const ultimaLlanta = await Tire.findOne({}).sort({ linea: -1 });
-
+    // Calcular la nueva línea dentro de esta orden de trabajo
     let nuevaLinea = 1;
-
-    if (ultimaLlanta) {
-      nuevaLinea = ultimaLlanta.linea + 1;
+    if (workOrder.tires.length > 0) {
+      // Buscar el número máximo en las llantas de esta orden
+      const ultimaLlanta = workOrder.tires.reduce(
+        (max, tire) => (tire.linea > max ? tire.linea : max),
+        0
+      );
+      nuevaLinea = ultimaLlanta + 1;
     }
 
     // Crear la nueva llanta
@@ -76,7 +60,7 @@ export const createTire = async (req, res) => {
       antiquityDot,
       state,
       date,
-      user: req.user.id,  // Referenciar la llanta al usuario
+      user: req.user.id, // Referenciar la llanta al usuario
     });
 
     const savedTire = await newTire.save();
@@ -85,17 +69,13 @@ export const createTire = async (req, res) => {
     workOrder.tires.push(savedTire);
     await workOrder.save();
 
-    // Agregar la llanta al usuario
-    await User.findByIdAndUpdate(req.user.id, {
-      $push: { tires: savedTire._id }
-    });
-
-    res.json(savedTire);
+    res.json({ success: true, savedTire });
   } catch (error) {
-    console.error("Error al crear llantas:", error);
+    console.error("Error al agregar llanta:", error);
     res.status(500).json({ success: false, message: "Error interno del servidor" });
   }
 };
+
 
 
 // export const createTire = async (req, res) => {

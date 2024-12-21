@@ -13,7 +13,7 @@ import { authRequired } from "../middlewares/validateToken.js";
 
 const router = Router();
 
-router.post("/register", authRequired,register);
+router.post("/register", authRequired, register);
 router.get('/getUsers', getUsers);
 router.post("/login", login);
 router.post("/logout", logout);

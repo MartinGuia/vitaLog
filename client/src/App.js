@@ -18,6 +18,7 @@ import { WorkOrderProvider } from "./context/WorkOrderContext";
 import { AuthProvider } from "./context/AuthContext";
 import { DepartmentProvider } from "./context/DepartmentContext";
 import DepartmentPage from "./pages/DepartmentPage";
+import CreateWorkOrderPage from "./pages/CreateWorkOrderPage";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
                       <Route path="/add-client" element={<AddClientPage />} />
                       <Route path="/department" element={<DepartmentPage />} />
                       <Route path="/department/:id" element={<DepartmentByIdPage />} />
+                      <Route path="/createWorkOrder" element={<CreateWorkOrderPage />} />
                     </Route>
                   </Routes>
                 </Nav>

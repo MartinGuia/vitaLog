@@ -46,11 +46,11 @@ function Nav({ children }) {
                 text2="Cuentas locales"
               />
             </Link>
-            <Link to="/add-tire">
+            <Link to="/createWorkOrder">
               <SidebarItem
                 icon={<NotebookPen size={20} color="white" />}
-                text="Agregar llantas"
-                text2="Llantas"
+                text="Crear Orden"
+                text2="Crear orden"
               />
             </Link>
             {/* <Link to="/workorders">

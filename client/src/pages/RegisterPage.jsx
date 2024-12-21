@@ -4,7 +4,6 @@ import { StepBack } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useDepartment } from "../context/DepartmentContext.jsx";
 import React, { useEffect } from "react";
-
 import { useAuth } from "../context/AuthContext";
 
 function AddClientPage() {
@@ -183,98 +182,6 @@ function AddClientPage() {
               </div>
             </div>
           </div>
-
-          {/* <div>
-            <div className="mt-10">
-              <h1 className="font-bold text-3xl">Rol y Departamento</h1>
-              <p>
-                Complete el rol y el departamento del usuario.
-              </p>
-            </div>
-            <div className="w-[100%] pt-8 text-xl">
-              <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative w-auto sm:w-5/12">
-                  <InputField
-                    label="Dirección 1"
-                    id="dirección1"
-                    {...register("address1", { required: true })}
-                  />
-                  {errors.address1 && (
-                    <p className="text-red-500 text-xs">
-                      Este campo es requerido
-                    </p>
-                  )}
-                </div>
-                <div className="flex-col flex items-center sm:flex sm:w-[50%] sm:flex-row justify-between">
-                  <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
-                    <InputField
-                      label="Ciudad"
-                      id="Ciudad"
-                      {...register("city", { required: true })}
-                    />
-                    {errors.city && (
-                      <p className="text-red-500 text-xs">
-                        Este campo es requerido
-                      </p>
-                    )}
-                  </div>
-                  <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
-                    <InputField
-                      label="Región"
-                      id="Region"
-                      {...register("region", { required: true })}
-                    />
-                    {errors.region && (
-                      <p className="text-red-500 text-xs">
-                        Este campo es opcional
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between mt-5">
-                <div className="relative w-auto sm:w-5/12">
-                  <InputField
-                    label="Dirección 2"
-                    id="dirección2"
-                    {...register("address2", { required: false })}
-                  />
-                  {errors.address2 && (
-                    <p className="text-red-500 text-xs">
-                      Este campo es requerido
-                    </p>
-                  )}
-                </div>
-                <div className="flex-col flex items-center sm:flex sm:w-[50%] sm:flex-row justify-between">
-                  <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
-                    <InputField
-                      label="Codigo Postal"
-                      id="CodigoPostal"
-                      {...register("zipCode", { required: true })}
-                    />
-                    {errors.zipCode && (
-                      <p className="text-red-500 text-xs">
-                        Este campo es requerido
-                      </p>
-                    )}
-                  </div>
-                  <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
-                    <InputField
-                      label="País"
-                      id="País"
-                      {...register("country", { required: true })}
-                    />
-                    {errors.zipCode && (
-                      <p className="text-red-500 text-xs">
-                        Este campo es requerido
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> */}
 
           <div className="flex justify-end mt-14">
             <button
