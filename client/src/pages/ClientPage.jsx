@@ -1,4 +1,4 @@
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, UserRoundPen, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useClient } from "../context/ClientContext";
@@ -18,9 +18,9 @@ function ClientPage() {
 
   // Obtener los datos de la página actual
   const currentOrders = allClients.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-      )
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   // Cambiar de página
   const handlePageChange = (pageNumber) => {
@@ -49,31 +49,30 @@ function ClientPage() {
                   <th className="py-3 px-6">Nombre de Cuenta</th>
                   <th className="py-3 px-6">Cuenta (Nombre corto)</th>
                   <th className="py-3 px-6">Dirección</th>
-                  <th className="py-3 px-6">ciudad</th>
-                  <th className="py-3 px-6">region</th>
+                  <th className="py-3 px-6">Ciudad</th>
+                  <th className="py-3 px-6">Region</th>
                   <th className="py-3 px-6">Codigo Postal</th>
-                  <th className="py-3 px-6"></th>
+                  <th className="py-3 px-6">Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {currentOrders.map((client, index) => (
-                  <tr
-                    key={index}
-                    className="border-t border-gray-200 hover:bg-gray-50"
-                  >
+                  <tr key={index} className="border-t border-gray-200">
                     <td className="py-3 px-6">{client.name}</td>
                     <td className="py-3 px-6">{client.alias}</td>
                     <td className="py-3 px-6">{client.address1}</td>
                     <td className="py-3 px-6">{client.city}</td>
                     <td className="py-3 px-6">{client.region}</td>
                     <td className="py-3 px-6">{client.zipCode}</td>
-                    <td className="py-3 px-6">
+                    <td className="flex py-2 px-3 justify-between items-center">
                       <Link to={`/client/${client._id}`}>
-                        <button className="text-blue-600 hover:text-blue-800">
-                          Ver
+                        <button className="text-blue-600 hover:text-blue-800 ">
+                          <UserRoundPen />
                         </button>
                       </Link>
-                      {/* {client.state ? "Activo" : "Inactivo"} */}
+                      <button className="text-red-600 hover:text-red-800 ">
+                        <Trash2 />
+                      </button>
                     </td>
                   </tr>
                 ))}

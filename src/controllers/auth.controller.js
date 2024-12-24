@@ -33,13 +33,13 @@ export const register = async (req, res) => {
 
     // Guarda el usuario
     const userSaved = await newUser.save();
-    const token = await createAccessToken({ id: userSaved._id });
-    res.cookie("token", token);
+    // const token = await createAccessToken({ id: userSaved._id });
+    // res.cookie("token", token);
 
     // Actualiza el departamento para incluir al usuario
     departmentFound.users.push(userSaved._id);
     await departmentFound.save();
-    
+
     // Responde con los datos del usuario creado
     res.json({
       id: userSaved._id,
@@ -54,40 +54,6 @@ export const register = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-// export const register = async (req, res) => {
-//   const { name, lastName, userName, department, password } = req.body;
-
-//   try {
-//     const userFound = await User.findOne({ userName });
-//     if (userFound)
-//       return res.status(409).json(["User already exists"]);
-
-//     const passwordHash = await bcryptjs.hash(password, 10);
-
-//     const newUser = new User({
-//       name,
-//       lastName,
-//       userName,
-//       // department,
-//       password: passwordHash,
-//     });
-
-//     const userSaved = await newUser.save();
-//     const token = await createAccessToken({ id: userSaved._id });
-//     res.cookie("token", token);
-//     res.json({
-//       id: userSaved._id,
-//       name: userSaved.name,
-//       lastName: userSaved.lastName,
-//       userName: userSaved.userName,
-//       // department: userSaved.department,
-//       createdAt: userSaved.createdAt,
-//       updateAt: userSaved.updatedAt,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
 
 export const login = async (req, res) => {
   const { userName, password } = req.body;
@@ -128,9 +94,11 @@ export const login = async (req, res) => {
 export const getUsers = async (req, res) => {
   try {
     // Obtiene todos los usuarios, excluyendo la contraseña y populando los datos relacionados
-    const users = await User.find({}, "-password")
-      .populate("department", "name") // Carga solo el nombre del departamento
-    
+    const users = await User.find({}, "-password").populate(
+      "department",
+      "name"
+    ); // Carga solo el nombre del departamento
+
     res.status(200).json(users);
   } catch (error) {
     console.error("Error al obtener los usuarios:", error);
@@ -139,20 +107,6 @@ export const getUsers = async (req, res) => {
       .json({ success: false, message: "Error interno del servidor" });
   }
 };
-// export const getUsers = async (req, res) => {
-//   try {
-//     // Obtiene todos los usuarios de la base de datos, excluyendo la contraseña por seguridad
-//     const users = await User.find({}, "-password"); // Elimina el campo de password de los resultados
-
-//     // Envía la lista de usuarios al frontend en formato JSON
-//     res.status(200).json(users);
-//   } catch (error) {
-//     console.error("Error al obtener los usuarios:", error);
-//     res
-//       .status(500)
-//       .json({ success: false, message: "Error interno del servidor" });
-//   }
-// };
 
 export const logout = (req, res) => {
   res.clearCookie("token", "", {
@@ -167,9 +121,7 @@ export const getProfileById = async (req, res) => {
     const userId = req.params.id;
 
     // Busca al usuario por su ID
-    const userFound = await User.findById(userId)
-      .populate("tires")
-      .populate("workOrders");
+    const userFound = await User.findById(userId);
 
     // Si no se encuentra el usuario, responde con un error 404
     if (!userFound) {
@@ -183,15 +135,75 @@ export const getProfileById = async (req, res) => {
       lastName: userFound.lastName,
       userName: userFound.userName,
       department: userFound.department, // Esto contiene la referencia a `Department`
-      tires: userFound.tires, // Esto contiene las llantas relacionadas
-      // clients: userFound.clients,       // Esto contiene los clientes relacionados
-      workOrders: userFound.workOrders, // Esto contiene las órdenes de trabajo relacionadas
       createdAt: userFound.createdAt,
       updatedAt: userFound.updatedAt,
     });
   } catch (error) {
     console.error("Error al obtener el perfil de usuario:", error);
     return res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
+
+export const editUser = async (req, res) => {
+  const { id } = req.params; // ID del usuario a editar
+  const { name, lastName, userName, password, department } = req.body;
+
+  try {
+    // Verifica si el usuario existe
+    const userFound = await User.findById(id);
+    if (!userFound) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Si se envía un nuevo departamento, verifica que exista
+    if (department && department !== String(userFound.department)) {
+      const newDepartment = await Department.findById(department);
+      if (!newDepartment) {
+        return res.status(404).json({ message: "El nuevo departamento no existe" });
+      }
+
+      // Remueve al usuario del departamento actual
+      if (userFound.department) {
+        const currentDepartment = await Department.findById(userFound.department);
+        if (currentDepartment) {
+          currentDepartment.users = currentDepartment.users.filter(
+            (userId) => String(userId) !== String(id)
+          );
+          await currentDepartment.save();
+        }
+      }
+
+      // Agrega al usuario al nuevo departamento
+      newDepartment.users.push(id);
+      await newDepartment.save();
+
+      // Actualiza el departamento en el usuario
+      userFound.department = department;
+    }
+
+    // Actualiza otros datos del usuario
+    if (name) userFound.name = name;
+    if (lastName) userFound.lastName = lastName;
+    if (userName) userFound.userName = userName;
+    if (password) {
+      const passwordHash = await bcryptjs.hash(password, 10);
+      userFound.password = passwordHash;
+    }
+
+    // Guarda los cambios
+    const updatedUser = await userFound.save();
+
+    // Responde con los datos actualizados
+    res.json({
+      id: updatedUser._id,
+      name: updatedUser.name,
+      lastName: updatedUser.lastName,
+      userName: updatedUser.userName,
+      department: updatedUser.department,
+      updatedAt: updatedUser.updatedAt,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 

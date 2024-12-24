@@ -22,7 +22,7 @@ function AddClientPage() {
     <>
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
         <div>
-          <Link to="/client">
+          <Link to="/clients">
             <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
               <StepBack color="white" />
             </button>

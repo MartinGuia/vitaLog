@@ -73,6 +73,8 @@ export const getWorkOrders = async (req, res) => {
       .populate({
         path: "createdBy",  // Poblar el usuario que creó la orden de trabajo
         select: "name lastName _id",  // Lista de campos que deseas poblar del usuario
+      }).populate({
+        path: "client",  // Poblar el usuario que creó la orden de trabajo
       })
 
     res.json(workOrders);

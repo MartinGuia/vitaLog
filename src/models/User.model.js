@@ -24,18 +24,6 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         required: false,
     },
-    tires:[{
-        ref: "Tire",
-        type: Schema.Types.ObjectId,
-    }],
-    // clients:[{
-    //     ref: "Client",
-    //     type: Schema.Types.ObjectId,
-    // }],
-    workOrders:[{
-        ref: "WorkOrder",
-        type: Schema.Types.ObjectId,
-    }],
 },{
     timestamps: true
 })

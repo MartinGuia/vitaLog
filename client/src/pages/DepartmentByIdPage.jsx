@@ -2,7 +2,7 @@ import React from "react";
 import { useDepartment } from "../context/DepartmentContext";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { CirclePlus, StepBack } from "lucide-react";
+import { CirclePlus, StepBack, Printer, UserRoundPen, Trash2 } from "lucide-react";
 
 function DepartmentByIdPage() {
   const { getDepartmentById } = useDepartment();
@@ -46,7 +46,7 @@ function DepartmentByIdPage() {
     <>
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
         <div className="">
-        <Link to="/department">
+          <Link to="/departments">
             <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
               <StepBack color="white" />
             </button>
@@ -66,11 +66,12 @@ function DepartmentByIdPage() {
         <div className="p-4 w-full">
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-              <thead>
+              <thead className="">
                 <tr className="bg-gray-100 text-gray-600 text-sm uppercase text-left">
                   <th className="py-3 px-6">Nombre</th>
-                  <th className="py-3 px-6">Rol</th>
-                  <th className="py-3 px-6">Departamento</th>
+                  <th className="py-3 px-6">Apellido</th>
+                  <th className="py-3 px-6">Usuario</th>
+                  <th className="py-3 px-6 flex justify-center">Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -79,21 +80,24 @@ function DepartmentByIdPage() {
                     key={id}
                     className="border-t border-gray-200 hover:bg-gray-50"
                   >
+                    <td className=" py-3 px-6 text-sm text-gray-900">
+                      {user.name}
+                    </td>
                     <td className="py-3 px-6 text-sm text-gray-900">
-                      <Link
-                        className="h-auto w-auto"
-                        to={`/profile/${user._id}`}
-                      >
-                        <button>
-                          {user.name} {user.lastName}
-                        </button>
-                      </Link>
+                      {user.lastName}
                     </td>
                     <td className="py-3 px-6 text-sm text-gray-900">
                       {user.userName}
                     </td>
-                    <td className="py-3 px-6 text-sm text-gray-900">
-                      {user.workOrders.length}
+                    <td className="flex py-2 justify-around">
+                      <Link to={`/profile/${user._id}`}>
+                        <button className="text-blue-600 hover:text-blue-800 ">
+                          <UserRoundPen />
+                        </button>
+                      </Link>
+                      <button className="text-red-600 hover:text-red-800 ">
+                        <Trash2 />
+                      </button>
                     </td>
                   </tr>
                 ))}

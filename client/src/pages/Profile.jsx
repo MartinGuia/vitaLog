@@ -1,144 +1,143 @@
 import React from "react";
 import { useAuth } from "../context/AuthContext";
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import InputField from "../components/ui/InputField";
+import { useForm } from "react-hook-form";
+import { StepBack } from "lucide-react";
+import { useDepartment } from "../context/DepartmentContext.jsx";
 
 function Profile() {
-  const { getUser } = useAuth();
+  const { getUser, updateUser } = useAuth();
   const params = useParams();
-  // const [getOrders, setOrders] = useState()
-  const [workOrders, setWorkOrders] = useState([]);
-  const [name, setName] = useState();
-  const [lastName, setLastName] = useState();
-  const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 10;
+  const { getDepartments, allDepartments } = useDepartment();
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    // formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     async function loadUser() {
-      try {
-        if (params.id) {
-          const userById = await getUser(params.id);
-          if (userById) {
-            setWorkOrders(userById.workOrders);
-            setName(userById.name);
-            setLastName(userById.lastName);
-            console.log(workOrders);
-          }
+      if (params.id) {
+        const userById = await getUser(params.id);
+        if (userById) {
+          reset({
+            name: userById.name,
+            lastName: userById.lastName,
+            userName: userById.userName,
+            department: userById.department,
+          });
         }
-      } catch (error) {
-        console.error(error);
       }
     }
     loadUser();
+    getDepartments();
   }, []);
 
-  const totalPages = Math.ceil(workOrders.length / ordersPerPage);
+  const onSubmit = handleSubmit(async (values) => {
+    const updatedValues = Object.fromEntries(
+      Object.entries(values).filter(([key, value]) => value !== "")
+    );
 
-  // Obtener los datos de la página actual
-  const currentOrders = workOrders.slice(
-    (currentPage - 1) * ordersPerPage,
-    currentPage * ordersPerPage
-  );
-
-  // Cambiar de página
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+    try {
+      await updateUser(params.id, updatedValues);
+      navigate("/departments");
+      alert("Usuario actualizado exitosamente");
+    } catch (error) {
+      console.error(error);
+      alert("Error al actualizar el usuario");
+    }
+  });
 
   return (
-    <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
-      <div className="text-center my-8">
-        <h2 className="text-4xl text-stone-700 font-semibold mb-2">
-          {name} {lastName}
-        </h2>
+    <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
+      <div>
+        <Link to="/departments">
+          <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
+            <StepBack color="white" />
+          </button>
+        </Link>
       </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-          <thead>
-            <tr className="bg-gray-100 text-gray-600 text-sm uppercase text-left">
-              <th className="py-3 px-6">Número de Orden</th>
-              <th className="py-3 px-6">Fecha de Entrega</th>
-              <th className="py-3 px-6">Fecha de Recolección</th>
-              <th className="py-3 px-6">Llantas</th>
-              <th className="py-3 px-6">Cliente</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentOrders.map((order, index) => (
-              <tr
-                key={index}
-                className="border-t border-gray-200 hover:bg-gray-50"
-              >
-                <Link to={`/workorder/${order._id}`}>
-                  <td className="py-3 px-6 text-sm text-gray-900">
-                    {order.numero}
-                  </td>
-                </Link>
-                <td className="py-3 px-6 text-sm text-gray-900">
-                  {order.deliveryDate}
-                </td>
-                <td className="py-3 px-6 text-sm text-gray-900">
-                  {order.collectionDate}
-                </td>
-                <td className="py-3 px-6 text-sm text-gray-900">
-                  {order.tires.length}
-                </td>
-                <td className="py-3 px-6 text-sm text-gray-900">
-                  {order.client}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {/* Paginación */}
-        <div className="flex justify-between items-center mt-4">
-          <div className="text-sm text-gray-600">
-            Página {currentPage} de {totalPages}
-          </div>
-          <div className="flex space-x-2">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className={`px-4 py-2 rounded-lg border ${
-                currentPage === 1
-                  ? "text-gray-400 border-gray-200"
-                  : "text-blue-600 border-blue-600 hover:bg-blue-50"
-              }`}
-            >
-              Anterior
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i + 1}
-                onClick={() => handlePageChange(i + 1)}
-                className={`px-4 py-2 rounded-lg border ${
-                  currentPage === i + 1
-                    ? "bg-blue-600 text-white"
-                    : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                }`}
-              >
-                {i + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={
-                currentPage === totalPages || workOrders.length <= ordersPerPage
-              }
-              className={`px-4 py-2 rounded-lg border ${
-                currentPage === totalPages || workOrders.length <= ordersPerPage
-                  ? "text-gray-400 border-gray-200"
-                  : "text-blue-600 border-blue-600 hover:bg-blue-50"
-              }`}
-            >
-              Siguiente
-            </button>
+      <div>
+        <h1 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
+          Editar Usuario
+        </h1>
+      </div>
+      <form onSubmit={onSubmit}>
+        <div className="mt-10">
+          <h1 className="font-bold text-3xl">Datos de Usuario</h1>
+          <div className="w-[100%] pt-8 text-xl">
+            <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
+              <div className="relative md:w-5/12 w-auto">
+                <InputField  {...register("name")} />
+              </div>
+              <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
+                <InputField
+                  // id="apellido"
+                  // label="Apellido"
+                  {...register("lastName")}
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+
+        <div className="mt-10">
+          <h1 className="font-bold text-3xl">Usuario y Contraseña</h1>
+          <div className="w-[100%] pt-8 text-xl">
+            <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
+              <div className="relative md:w-5/12 w-auto">
+                <InputField
+                  // id="usuario"
+                  // label="Usuario"
+                  {...register("userName")}
+                />
+              </div>
+              <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
+                <InputField
+                  id="contraseña"
+                  label="Contraseña"
+                  type="password"
+                  {...register("password")}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-10">
+          <h1 className="font-bold text-3xl">Departamento</h1>
+          <div className="w-[40%] pt-8 text-xl">
+            <label className="block mb-2 text-sm font-medium">
+              Departamento
+            </label>
+            <select
+              {...register("department")}
+              className="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="">Seleccionar...</option>
+              {allDepartments.map((department) => (
+                <option key={department._id} value={department._id}>
+                  {department.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="flex justify-end mt-14">
+          <button
+            className="text-white font-medium bg-cyan-950 py-2 px-5 rounded-md shadow-md hover:bg-cyan-800 duration-500"
+            type="submit"
+          >
+            Actualizar
+          </button>
+        </div>
+      </form>
     </div>
-    // <div>{getName}</div>
   );
 }
 

@@ -5,6 +5,7 @@ import {
   verifyTokenRequest,
   getUsersRequest,
   getUserRequest,
+  updateUserRequest,
 } from "../api/auth.js";
 import Cookies from "js-cookie";
 
@@ -20,18 +21,17 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [userData, setUserData] = useState(null);
+  // const [userData, setUserData] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [getAllUsers, setGetAllUsers] = useState([])
+  const [getAllUsers, setGetAllUsers] = useState([]);
 
   const signup = async (user) => {
     try {
       const res = await registerRequest(user);
       console.log(res.data);
-      setUserData(res.data);
-      setIsAuthenticated(true);
+      setUser(res.data);
     } catch (error) {
       console.log(error);
       setErrors(error.response.data);
@@ -61,12 +61,20 @@ export const AuthProvider = ({ children }) => {
       console.error(error);
     }
   };
-  
+
   const getUser = async (id) => {
     try {
       const res = await getUserRequest(id);
-      console.log(res.data)
+      console.log(res.data);
       return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateUser = async (id, user) => {
+    try {
+      await updateUserRequest(id, user);
     } catch (error) {
       console.error(error);
     }
@@ -76,7 +84,7 @@ export const AuthProvider = ({ children }) => {
     Cookies.remove("token");
     setIsAuthenticated(false);
     setUser(null);
-  }
+  };
 
   useEffect(() => {
     if (errors.length > 0) {
@@ -113,7 +121,7 @@ export const AuthProvider = ({ children }) => {
       } catch (error) {
         setIsAuthenticated(false);
         setUser(null);
-        setLoading(false)
+        setLoading(false);
       }
     }
     checkLogin();
@@ -126,6 +134,7 @@ export const AuthProvider = ({ children }) => {
         signin,
         getUsers,
         getUser,
+        updateUser,
         loading,
         logout,
         getAllUsers,

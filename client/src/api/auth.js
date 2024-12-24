@@ -9,4 +9,7 @@ export const verifyTokenRequest = () => axios.get(`/verify`)
 export const getUsersRequest = () => axios.get(`/getUsers`)
 export const getUserRequest = (id) => axios.get(`/profile/${id}`)
 
+export const updateUserRequest = (id,user) =>
+    axios.put(`/editUser/${id}`,user);
+
 // const loginRequest = axios.post(`${API}/login`)

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useWorkOrder } from "../context/WorkOrderContext";
 import { useEffect, useState } from "react";
+import { Printer, UserRoundPen, Trash2 } from "lucide-react";
 
 function AllWorkOrdersPage() {
   const { getWorkOrders, workOrders } = useWorkOrder();
@@ -33,14 +34,6 @@ function AllWorkOrdersPage() {
       <div className="text-center my-8">
         <h2 className="text-4xl font-semibold mb-2">Ordenes de trabajo</h2>
       </div>
-      {/* <div className="flex justify-end">
-      <Link to="/add-client">
-        <button className="flex p-3 bg-indigo-400 rounded-lg text-white cursor-pointer hover:bg-indigo-700 duration-500 hover:duration-500">
-          <CirclePlus className="mr-2" />
-          Añadir nuevo
-        </button>
-      </Link>
-    </div> */}
       <section>
         <div className="p-4 w-full">
           <div className="overflow-x-auto">
@@ -50,29 +43,49 @@ function AllWorkOrdersPage() {
                   <th className="py-3 px-6">#</th>
                   <th className="py-3 px-6">Nombre</th>
                   <th className="py-3 px-6">Registros</th>
+                  <th className="py-3 px-6">Cliente</th>
                   <th className="py-3 px-6">Dirección</th>
-                  <th className="py-3 px-6">ciudad</th>
+                  <th className="py-3 px-6"></th>
+                  {/* <th className="py-3 px-6">ciudad</th>
                   <th className="py-3 px-6">region</th>
-                  <th className="py-3 px-6">Codigo Postal</th>
-
-                  <th className="py-3 px-6">Estado</th>
+                  <th className="py-3 px-6">Codigo Postal</th> */}
                 </tr>
               </thead>
               <tbody className="">
                 {currentOrders.map((workOrder, index) => (
                   <tr
                     key={index}
-                    className="border-t border-gray-200 hover:bg-gray-50"
+                    className="border-t border-gray-200"
                   >
                     <td className="py-3 px-6">{workOrder.numero}</td>
                     <td className="py-3 px-6 text-sm text-gray-900">
-                      <Link className="h-auto w-auto" to={`/workOrder/${workOrder._id}`}>
+                      <Link
+                        className="h-auto w-auto"
+                        to={`/workOrder/${workOrder._id}`}
+                      >
                         <button>{workOrder.createdBy.name}</button>
                       </Link>
                     </td>
                     <td className="py-3 px-6">{workOrder.tires.length}</td>
+                    <td className="py-3 px-6">{workOrder.client.name}</td>
                     <td className="py-3 px-6">
-                      {workOrder.state ? "Activo" : "Inactivo"}
+                      {workOrder.client.address1}, <br />
+                      {workOrder.client.region},
+                      {workOrder.client.city}, <br />
+                      {workOrder.client.zipCode}
+                    </td>
+                    <td className="sm:flex py-2 sm:py-10 px-3 justify-between">
+                      <Link to={`/workorder/${workOrder._id}`}>
+                        <button className="text-blue-600 hover:text-blue-800 ">
+                          <UserRoundPen />
+                        </button>
+                      </Link>
+                      <button className="text-red-600 hover:text-red-800 ">
+                        <Trash2 />
+                      </button>
+                      <button className="hover:text-slate-500">
+                      <Printer />
+                      </button>
                     </td>
                   </tr>
                 ))}

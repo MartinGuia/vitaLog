@@ -1,6 +1,10 @@
-import { createContext, useContext, useState } from "react";
-
-import { registerClientRequest, getClientsRequest } from "../api/client.js";
+import { createContext, useState, useContext, useEffect } from "react";
+import {
+  registerClientRequest,
+  getClientsRequest,
+  getClientRequest,
+  updateClientRequest,
+} from "../api/client.js";
 
 const ClientContext = createContext();
 
@@ -38,13 +42,44 @@ export function ClientProvider({ children }) {
     }
   };
 
+  const getClient = async (id) => {
+    try {
+      const res = await getClientRequest(id);
+      console.log(res.data);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateClient = async (id, user) => {
+    try {
+      await updateClientRequest(id, user);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (errors.length > 0) {
+      const timer = setTimeout(() => {
+        setErrors([]);
+      }, 5000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [errors]);
+
   return (
     <ClientContext.Provider
       value={{
         clients,
+        getClient,
         registerClient,
         getClients,
         allClients,
+        updateClient,
         errors,
       }}
     >

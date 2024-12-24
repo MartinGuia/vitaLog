@@ -19,19 +19,13 @@ function Nav({ children }) {
         <Sidebar additionalContent={children}>
           {/* Define el menú */}
           <>
-            <Link to="/department">
+            <Link to="/departments">
               <SidebarItem
                 icon={<LayoutDashboard size={20} color="white"/>}
                 text="Departamentos"
                 text2="Departamentos"
               />
             </Link>
-            {/* <Link to="/homepage">
-              <SidebarItem
-                icon={<LayoutDashboard size={20} color="white"/>}
-                text="Principal"
-              />
-            </Link> */}
             <Link to="/workorders">
               <SidebarItem
                 icon={<SquareUser size={20} color="white" />}
@@ -39,7 +33,7 @@ function Nav({ children }) {
                 text2="O.T."
               />
             </Link>
-            <Link to="/client">
+            <Link to="/clients">
               <SidebarItem
                 icon={<Users size={20} color="white" />}
                 text="Clientes"
@@ -59,7 +53,6 @@ function Nav({ children }) {
                 text="Orden de trabajo"
               />
             </Link> */}
-            
           </>
         </Sidebar>
       ) : (
