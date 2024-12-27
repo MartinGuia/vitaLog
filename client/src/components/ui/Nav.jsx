@@ -4,6 +4,7 @@ import {
   SquareUser,
   Users,
   NotebookPen,
+  Settings
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -47,12 +48,13 @@ function Nav({ children }) {
                 text2="Crear orden"
               />
             </Link>
-            {/* <Link to="/workorders">
+            <Link to="/production">
               <SidebarItem
-                icon={<BookMarked size={20} color="white" />}
-                text="Orden de trabajo"
+                icon={<Settings size={20} color="white" />}
+                text="Producción"
+                text2="Producción"
               />
-            </Link> */}
+            </Link>
           </>
         </Sidebar>
       ) : (

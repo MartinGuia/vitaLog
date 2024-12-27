@@ -38,10 +38,6 @@ const tireSchema = new Schema({
         type: String,
         required: true,
     },
-    state:{
-        type: Boolean,
-        // required: true,
-    },
     date:{
         type: Date,
         default: Date.now,

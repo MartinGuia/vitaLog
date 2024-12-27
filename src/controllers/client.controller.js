@@ -29,8 +29,8 @@ export const registerClient = async (req, res) => {
       region: clientSaved.region,
       zipCode: clientSaved.zipCode,
       country: clientSaved.country,
-      createdAt: userSaved.createdAt,
-      updateAt: userSaved.updatedAt,
+      createdAt: clientSaved.createdAt,
+      updateAt: clientSaved.updatedAt,
     });
   } catch (error) {
     res.status(404).json({ message: error.message });

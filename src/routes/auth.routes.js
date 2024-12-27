@@ -6,7 +6,8 @@ import {
   getProfileById,
   verifyToken,
   getUsers,
-  editUser
+  editUser,
+  deleteUser
 } from "../controllers/auth.controller.js";
 import { authRequired } from "../middlewares/validateToken.js";
 // import { validateSchema } from "../middlewares/validator.middleware.js";
@@ -15,11 +16,12 @@ import { authRequired } from "../middlewares/validateToken.js";
 const router = Router();
 
 router.post("/login", login);
-router.post("/register", authRequired, register);
+router.post("/register",  authRequired,register);
 router.get('/getUsers', getUsers);
 router.post("/logout", logout);
 router.get("/verify", verifyToken);
 router.get("/profile/:id", getProfileById);
 router.put("/editUser/:id", editUser);
+router.delete("/deleteUser/:id", deleteUser);
 
 export default router;

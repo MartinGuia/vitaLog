@@ -1,7 +1,8 @@
 import * as images from "../img";
 import { useWorkOrder } from "../context/WorkOrderContext";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { Printer, UserRoundPen, Trash2 } from "lucide-react";
 
 function WorkOrder() {
   const { getWorkOrderById } = useWorkOrder();
@@ -33,18 +34,28 @@ function WorkOrder() {
     loadWorkOrder();
   }, []);
 
-  // Calcular los elementos para la página actual
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentTires = tires.slice(indexOfFirstItem, indexOfLastItem);
+   const { getWorkOrders, workOrders } = useWorkOrder();
 
-  // Total de páginas
+  // Llamar a getClients una sola vez
+  useEffect(() => {
+    getWorkOrders();
+  }, []);
+
+  // Validar datos y calcular total de páginas
   const totalPages = Math.ceil(tires.length / itemsPerPage);
 
-  // Función para cambiar de página
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  // Obtener los datos de la página actual
+  const currentOrders = tires.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
-  // if (workOrders.length === 0) <h1>No hay Ordenes de trabajo</h1>;
+  // Cambiar de página
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  if (tires.length === 0) <h1>No hay Ordenes de trabajo</h1>;
   return (
     // <>
     //   <div>Hola</div>
@@ -66,7 +77,7 @@ function WorkOrder() {
           </div>
         </header>
         <main className="">
-          <section className="mt-4 flex justify-center">
+        <section className="mt-4 flex justify-center">
             <div className="flex justify-between w-[95%]">
               <article className="w-[33.3%] text-sm">
                 <div className="flex">
@@ -103,77 +114,102 @@ function WorkOrder() {
               </article>
             </div>
           </section>
-          {/* <p className="flex mt-2 ml-10">
-            Recolector:
-            <span className="font-bold ml-2">
-              {dataWorkOrder.createdBy.name} {dataWorkOrder.createdBy.lastName}
-            </span>
-          </p> */}
-          <section className="mt-4">
-            <div className="p-4 w-full">
-              <div className="overflow-x-auto">
-                <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-                  <thead>
-                    <tr className="bg-gray-100 text-gray-600 text-sm uppercase text-left">
-                      <th className="py-3 px-6">Línea</th>
+        <section>
+        <div className="p-4 w-full">
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+              <thead>
+                <tr className="bg-gray-100 text-gray-600 text-sm text-left">
+                <th className="py-3 px-6">Línea</th>
                       <th className="py-3 px-6">Código de Ítem</th>
                       <th className="py-3 px-6">Medida de Casco</th>
                       <th className="py-3 px-6">Marca</th>
                       <th className="py-3 px-6">Diseño de Casco</th>
                       <th className="py-3 px-6">Banda Requerida</th>
                       <th className="py-3 px-6">DOT</th>
-                      <th className="py-3 px-6">Estado</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentTires.map((tire, index) => (
-                      <tr
-                        key={index}
-                        className="border-t border-gray-200 hover:bg-gray-50"
-                      >
-                        <td className="py-3 px-6">{tire.linea}</td>
+                      <th className="py-3 px-6"></th>
+                </tr>
+              </thead>
+              <tbody className="">
+                {currentOrders.map((tire, index) => (
+                  <tr
+                    key={index}
+                    className="border-t border-gray-200"
+                  >
+                    <td className="py-3 px-6">{tire.linea}</td>
                         <td className="py-3 px-6">{tire.itemCode}</td>
                         <td className="py-3 px-6">{tire.helmetMeasurement}</td>
                         <td className="py-3 px-6">{tire.brand}</td>
                         <td className="py-3 px-6">{tire.helmetDesign}</td>
                         <td className="py-3 px-6">{tire.requiredBand}</td>
-                        <td className="py-3 px-6">{tire.antiquityDot}</td>
-                        <td className="py-3 px-6">
-                          {tire.state ? "Activo" : "Inactivo"}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                {/* Paginación */}
-                <div className="flex justify-between items-center mt-4">
+                        <td className="py-3 px-6">{tire.antiquityDot}</td>                     
+                    <td className="sm:flex py-2 px-3 justify-between">
+                      <Link
+                      to={`/tire/${tire._id}`}
+                      >
+                        <button className="text-blue-600 hover:text-blue-800 ">
+                          <UserRoundPen />
+                        </button>
+                      </Link>
+                      <button className="text-red-600 hover:text-red-800 ">
+                        <Trash2 />
+                      </button>
+                      <button className="hover:text-slate-500">
+                      <Printer />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {/* Mostrar paginación solo si hay 10 o más usuarios */}
+            {workOrders.length >= 10 && (
+              <div className="flex justify-between items-center mt-4">
+                <div className="text-sm text-gray-600">
+                  Página {currentPage} de {totalPages}
+                </div>
+                <div className="flex space-x-2">
                   <button
-                    onClick={() => paginate(currentPage - 1)}
+                    onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className={`px-4 py-2 bg-gray-200 rounded-lg ${
-                      currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+                    className={`px-4 py-2 rounded-lg border ${
+                      currentPage === 1
+                        ? "text-gray-400 border-gray-200"
+                        : "text-blue-600 border-blue-600 hover:bg-blue-50"
                     }`}
                   >
                     Anterior
                   </button>
-                  <span>
-                    Página {currentPage} de {totalPages}
-                  </span>
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <button
+                      key={i + 1}
+                      onClick={() => handlePageChange(i + 1)}
+                      className={`px-4 py-2 rounded-lg border ${
+                        currentPage === i + 1
+                          ? "bg-blue-600 text-white"
+                          : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
                   <button
-                    onClick={() => paginate(currentPage + 1)}
+                    onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className={`px-4 py-2 bg-gray-200 rounded-lg ${
+                    className={`px-4 py-2 rounded-lg border ${
                       currentPage === totalPages
-                        ? "opacity-50 cursor-not-allowed"
-                        : ""
+                        ? "text-gray-400 border-gray-200"
+                        : "text-blue-600 border-blue-600 hover:bg-blue-50"
                     }`}
                   >
                     Siguiente
                   </button>
                 </div>
               </div>
-            </div>
-          </section>
+            )}
+          </div>
+        </div>
+      </section>
         </main>
       </div>
     </>

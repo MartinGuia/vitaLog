@@ -5,6 +5,7 @@ import {
   verifyTokenRequest,
   getUsersRequest,
   getUserRequest,
+  deleteUserRequest,
   updateUserRequest,
 } from "../api/auth.js";
 import Cookies from "js-cookie";
@@ -86,6 +87,16 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const deleteUser = async (id) => {
+    // try {
+      const res = await deleteUserRequest(id)
+      console.log(res.data)
+    // } catch (error) {
+      
+    // }
+  }
+
+
   useEffect(() => {
     if (errors.length > 0) {
       const timer = setTimeout(() => {
@@ -136,6 +147,7 @@ export const AuthProvider = ({ children }) => {
         getUser,
         updateUser,
         loading,
+        deleteUser,
         logout,
         getAllUsers,
         user,

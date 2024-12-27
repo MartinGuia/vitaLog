@@ -7,6 +7,7 @@ function AllWorkOrdersPage() {
   const { getWorkOrders, workOrders } = useWorkOrder();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Mostrar 10 elementos por página
+  // const formattedDate = format(new Date(workOrders.createdAt), 'yyyy-MM-dd HH:mm:ss');
 
   // Llamar a getClients una sola vez
   useEffect(() => {
@@ -45,6 +46,7 @@ function AllWorkOrdersPage() {
                   <th className="py-3 px-6">Registros</th>
                   <th className="py-3 px-6">Cliente</th>
                   <th className="py-3 px-6">Dirección</th>
+                  <th className="py-3 px-6">Recolección</th>
                   <th className="py-3 px-6"></th>
                   {/* <th className="py-3 px-6">ciudad</th>
                   <th className="py-3 px-6">region</th>
@@ -74,7 +76,8 @@ function AllWorkOrdersPage() {
                       {workOrder.client.city}, <br />
                       {workOrder.client.zipCode}
                     </td>
-                    <td className="sm:flex py-2 sm:py-10 px-3 justify-between">
+                    <td>{workOrder.formattedCreatedAt}</td>
+                    <td className="sm:flex py-2 sm:py-8 px-3 justify-between">
                       <Link to={`/workorder/${workOrder._id}`}>
                         <button className="text-blue-600 hover:text-blue-800 ">
                           <UserRoundPen />
@@ -144,3 +147,4 @@ function AllWorkOrdersPage() {
 }
 
 export default AllWorkOrdersPage;
+

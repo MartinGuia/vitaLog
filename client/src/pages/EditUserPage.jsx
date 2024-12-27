@@ -1,13 +1,13 @@
 import React from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext.jsx";
 import { useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import InputField from "../components/ui/InputField";
+import InputField from "../components/ui/InputField.jsx";
 import { useForm } from "react-hook-form";
 import { StepBack } from "lucide-react";
 import { useDepartment } from "../context/DepartmentContext.jsx";
 
-function Profile() {
+function EditUserPage() {
   const { getUser, updateUser } = useAuth();
   const params = useParams();
   const { getDepartments, allDepartments } = useDepartment();
@@ -141,4 +141,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default EditUserPage;

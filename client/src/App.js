@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import WorkOrder from "./pages/WorkOrder";
-import Profile from "./pages/Profile";
+import EditUserPage from "./pages/EditUserPage";
 import ProtectedRoute from "./ProtectedRoute";
 import AllWorkOrdersPage from "./pages/AllWorkOrdersPage";
 import Nav from "./components/ui/Nav";
@@ -18,6 +18,8 @@ import { DepartmentProvider } from "./context/DepartmentContext";
 import DepartmentPage from "./pages/DepartmentPage";
 import CreateWorkOrderPage from "./pages/CreateWorkOrderPage";
 import ClientByIdPage from "./pages/ClientByIdPage";
+import ProductionPage from "./pages/ProductionPage";
+import EditTirePage from "./pages/EditTirePage";
 
 function App() {
   return (
@@ -38,13 +40,15 @@ function App() {
                       />
                       <Route path="/add-tire" element={<TireFormPage />} />
                       <Route path="/workorder/:id" element={<WorkOrder />} />
-                      <Route path="/profile/:id" element={<Profile />} />
+                      <Route path="/profile/:id" element={<EditUserPage />} />
                       <Route path="/clients" element={<ClientPage />} />
                       <Route path="/add-client" element={<AddClientPage />} />
                       <Route path="/departments" element={<DepartmentPage />} />
                       <Route path="/department/:id" element={<DepartmentByIdPage />} />
                       <Route path="/createWorkOrder" element={<CreateWorkOrderPage />} />
                       <Route path="/client/:id" element={<ClientByIdPage />} />
+                      <Route path="production" element={<ProductionPage />} />
+                      <Route path="/tire/:id" element={<EditTirePage />} />
                     </Route>
                   </Routes>
                 </Nav>

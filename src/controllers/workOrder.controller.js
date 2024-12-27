@@ -1,6 +1,7 @@
 import WorkOrder from "../models/workOrders.model.js";
 import Tire from "../models/tire.model.js"
 import User from "../models/user.model.js";
+import { format } from "date-fns";
 
 export const createOrOpenWorkOrder = async (req, res) => {
   try {
@@ -71,13 +72,21 @@ export const getWorkOrders = async (req, res) => {
     // Buscar todas las órdenes de trabajo existentes
     const workOrders = await WorkOrder.find({})
       .populate({
-        path: "createdBy",  // Poblar el usuario que creó la orden de trabajo
-        select: "name lastName _id",  // Lista de campos que deseas poblar del usuario
-      }).populate({
-        path: "client",  // Poblar el usuario que creó la orden de trabajo
+        path: "createdBy",
+        select: "name lastName _id",
       })
+      .populate({
+        path: "client",
+      });
 
-    res.json(workOrders);
+    // Formatear la fecha de creación
+    const formattedWorkOrders = workOrders.map((order) => ({
+      ...order.toObject(),
+      // formattedCreatedAt: format(new Date(order.createdAt), "yyyy-MM-dd HH:mm:ss"),
+      formattedCreatedAt: format(new Date(order.createdAt), "dd/MM/yyyy"),
+    }));
+
+    res.json(formattedWorkOrders);
   } catch (error) {
     console.error("Error al obtener órdenes de trabajo:", error);
     res.status(500).json({ success: false, message: "Error interno del servidor" });

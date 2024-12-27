@@ -1,9 +1,9 @@
 import React from 'react'
 
-function productionPage() {
+function ProductionPage() {
   return (
-    <div>productionPage</div>
+    <div>ProductionPage</div>
   )
 }
 
-export default productionPage
+export default ProductionPage

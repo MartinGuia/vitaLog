@@ -108,6 +108,33 @@ export const getUsers = async (req, res) => {
   }
 };
 
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params; // Captura el ID del usuario desde los parámetros de la solicitud
+
+    // Busca al usuario que se desea eliminar
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Si el usuario tiene un departamento asignado, elimina su referencia del departamento
+    if (user.department) {
+      await Department.findByIdAndUpdate(user.department, {
+        $pull: { users: id },
+      });
+    }
+
+    // Elimina el usuario
+    await User.findByIdAndDelete(id);
+
+    return res.status(200).json({ message: "Usuario eliminado exitosamente" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error al eliminar el usuario" });
+  }
+};
+
 export const logout = (req, res) => {
   res.clearCookie("token", "", {
     expres: new Date(0),

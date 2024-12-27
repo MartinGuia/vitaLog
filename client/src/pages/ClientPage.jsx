@@ -52,7 +52,7 @@ function ClientPage() {
                   <th className="py-3 px-6">Ciudad</th>
                   <th className="py-3 px-6">Region</th>
                   <th className="py-3 px-6">Codigo Postal</th>
-                  <th className="py-3 px-6">Acciones</th>
+                  <th className="py-3 px-6"></th>
                 </tr>
               </thead>
               <tbody>

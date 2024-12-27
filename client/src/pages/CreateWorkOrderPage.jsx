@@ -46,32 +46,31 @@ function CreateWorkOrderPage() {
         <form onSubmit={onSubmit}>
           <div>
             <div className="mt-10">
-              <div className="flex mb-3">
-              </div>
+              <div className="flex mb-3"></div>
               <h1 className="font-bold text-3xl">Orden de trabajo</h1>
               <p>Seleccione el cliente para la orden de trabajo.</p>
             </div>
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-              <div className="relative w-[40%] ">
+                <div className="relative w-[40%]">
                   <label className="block mb-2 text-sm font-medium">
                     Cliente
                   </label>
                   <select
-                    {...register("client", { required: true })}
+                    {...register("client", { required: "Debe seleccionar un cliente." })}
                     id="small"
-                    className="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="block w-full p-2 mb-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
-                    <option defaultValue={"Seleccionar"}>Seleccionar...</option>
+                    <option value="">Seleccionar...</option>
                     {allClients.map((client, i) => (
                       <option key={i} value={client._id}>
                         {client.name}
                       </option>
                     ))}
                   </select>
-                  {errors.address2 && (
-                    <p className="text-red-500 text-xs">
-                      Este campo es requerido
+                  {errors.client && (
+                    <p className="text-red-500 text-base">
+                      {errors.client.message}
                     </p>
                   )}
                 </div>
@@ -79,13 +78,13 @@ function CreateWorkOrderPage() {
             </div>
           </div>
           <div className="sm:flex sm:justify-center sm:mt-10">
-                <button
-                  className="sm:w-[20%] text-white font-medium bg-yellow-400 hover:bg-yellow-500 py-2 px-5 rounded-md shadow-md  hover:duration-500 "
-                  type="submit"
-                >
-                  Crear orden
-                </button>
-              </div>
+            <button
+              className="sm:w-[20%] text-white font-medium bg-yellow-400 hover:bg-yellow-500 py-2 px-5 rounded-md shadow-md hover:duration-500"
+              type="submit"
+            >
+              Crear orden
+            </button>
+          </div>
         </form>
       </div>
     </>
