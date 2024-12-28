@@ -1,17 +1,17 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import { useAuth } from "../context/AuthContext.jsx";
-import { useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams} from "react-router-dom";
 import InputField from "../components/ui/InputField.jsx";
 import { useForm } from "react-hook-form";
 import { StepBack } from "lucide-react";
 import { useDepartment } from "../context/DepartmentContext.jsx";
+import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta
 
 function EditUserPage() {
+  const [alert, setAlert] = useState(null); // Estado para manejar la alerta
   const { getUser, updateUser } = useAuth();
   const params = useParams();
   const { getDepartments, allDepartments } = useDepartment();
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -44,16 +44,24 @@ function EditUserPage() {
 
     try {
       await updateUser(params.id, updatedValues);
-      navigate("/departments");
-      alert("Usuario actualizado exitosamente");
+      // navigate("/departments");
+      setAlert({ message: "Usuario actualizado exitosamente", type: "success" });
+      setTimeout(() => setAlert(null), 3000); // Oculta la alerta después de 3 segundos
     } catch (error) {
       console.error(error);
-      alert("Error al actualizar el usuario");
+      alert({ message: "Usuario actualizado exitosamente", type: "" });
     }
   });
 
   return (
     <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
+      {alert && (
+        <Alert
+          message={alert.message}
+          type={alert.type}
+          onClose={() => setAlert(null)}
+        />
+      )}
       <div>
         <Link to="/departments">
           <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
@@ -61,6 +69,7 @@ function EditUserPage() {
           </button>
         </Link>
       </div>
+    
       <div>
         <h1 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
           Editar Usuario

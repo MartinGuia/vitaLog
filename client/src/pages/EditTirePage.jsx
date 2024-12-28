@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import InputField from "../components/ui/InputField";
 import { useTire } from "../context/TireContext";
+import { StepBack } from "lucide-react";
 
 function EditTirePage() {
   const {
@@ -15,12 +15,14 @@ function EditTirePage() {
   const { updateTire, getTire, errors: tireErrors } = useTire();
   const params = useParams();
   const navigate = useNavigate();
+  const [workOrder, setWorkOrder] = useState()
 
   useEffect(() => {
     async function loadTire() {
       if (params.id) {
         const tire = await getTire(params.id);
         if (tire) {
+          setWorkOrder(tire.workOrder);
           reset({
             itemCode: tire.itemCode,
             barCode: tire.barCode,
@@ -50,27 +52,20 @@ function EditTirePage() {
       alert("Error al actualizar el registro");
     }
   });
-  // const onSubmit = handleSubmit((values) => {
-  //   createTire(values);
-  //   reset();
-  // });
-
-  // const handleClick = async () => {
-  //   try {
-  //     await closeWorkOrder();
-  //     navigate("/workorders");
-  //     // Puedes realizar acciones adicionales después de cerrar la orden de trabajo si es necesario
-  //   } catch (error) {
-  //     // Manejo de errores, por ejemplo, mostrar un mensaje al usuario
-  //     console.error("Error al cerrar la orden de trabajo:", error.message);
-  //   }
-  // };
+ 
   return (
     <>
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
         <div>
+                <Link to={`/workOrder/${workOrder}`}>
+                  <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
+                    <StepBack color="white" />
+                  </button>
+                </Link>
+              </div>
+        <div>
           <h1 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
-            Añadir Llanta
+            Editar Llanta
           </h1>
           <div className="flex top-10 absolute w-[100%]">
             {tireErrors.map((error, i) => (

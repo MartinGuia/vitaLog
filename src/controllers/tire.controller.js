@@ -61,6 +61,7 @@ export const createTire = async (req, res) => {
       state,
       date,
       user: req.user.id, // Referenciar la llanta al usuario
+      workOrder: workOrder._id, // Asignar la referencia de la orden de trabajo
     });
 
     const savedTire = await newTire.save();

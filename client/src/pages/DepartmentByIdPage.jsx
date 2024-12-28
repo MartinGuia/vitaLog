@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { StepBack, UserRoundPen, Trash2 } from "lucide-react";
 import { useDepartment } from "../context/DepartmentContext";
 import { useAuth } from "../context/AuthContext";
+import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta
 
 function DepartmentByIdPage() {
   const { getDepartmentById } = useDepartment();
@@ -14,7 +15,7 @@ function DepartmentByIdPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [confirmationName, setConfirmationName] = useState("");
-  const [alertMessage, setAlertMessage] = useState(null); // Para el sistema de alertas
+  const [alert, setAlert] = useState(null); // Estado para manejar la alerta
   const ordersPerPage = 10;
 
   useEffect(() => {
@@ -50,23 +51,29 @@ function DepartmentByIdPage() {
     setIsModalOpen(true);
   };
 
-  const showAlert = (message) => {
-    setAlertMessage(message);
-    setTimeout(() => setAlertMessage(null), 3000); // Ocultar alerta después de 3 segundos
+  const showAlert = (message, type = "success") => {
+    setAlert({ message, type });
+    setTimeout(() => setAlert(null), 3000); // Oculta la alerta después de 3 segundos
   };
+  
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (confirmationName === userToDelete.name) {
-      deleteUser(userToDelete._id);
-      showAlert("Usuario eliminado exitosamente");
-      setUsers((prevUsers) =>
-        prevUsers.filter((currentUser) => currentUser._id !== userToDelete._id)
-      );
+      try {
+        await deleteUser(userToDelete._id);
+        showAlert("Usuario eliminado exitosamente", "success");
+        setUsers((prevUsers) =>
+          prevUsers.filter((currentUser) => currentUser._id !== userToDelete._id)
+        );
+      } catch (error) {
+        console.error(error);
+        showAlert("Error al eliminar el usuario. Intenta nuevamente.", "error");
+      }
       setIsModalOpen(false);
       setUserToDelete(null);
       setConfirmationName("");
     } else {
-      showAlert("El nombre no coincide. Usuario no eliminado.");
+      showAlert("El nombre no coincide. Usuario no eliminado.", "error");
     }
   };
 
@@ -74,11 +81,13 @@ function DepartmentByIdPage() {
     <>
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
         {/* Alerta de la aplicación */}
-        {alertMessage && (
-          <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-md shadow-md">
-            {alertMessage}
-          </div>
-        )}
+        {alert && (
+        <Alert
+          message={alert.message}
+          type={alert.type}
+          onClose={() => setAlert(null)}
+        />
+      )}
 
         <div>
           <Link to="/departments">
