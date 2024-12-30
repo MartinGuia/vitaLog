@@ -112,3 +112,36 @@ export const getWorkOrderById = async (req, res) => {
     res.status(500).json({ message: "Error al obtener la orden de trabajo", error });
   }
 };
+
+export const deleteWorkOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Buscar la orden de trabajo por ID
+    const workOrder = await WorkOrder.findById(id);
+
+    if (!workOrder) {
+      return res.status(404).json({
+        success: false,
+        message: "Orden de trabajo no encontrada.",
+      });
+    }
+
+    // Eliminar todas las llantas asociadas a la orden de trabajo
+    await Tire.deleteMany({ _id: { $in: workOrder.tires } });
+
+    // Eliminar la orden de trabajo
+    await WorkOrder.findByIdAndDelete(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Orden de trabajo y llantas asociadas eliminadas exitosamente.",
+    });
+  } catch (error) {
+    console.error("Error al eliminar la orden de trabajo:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error interno del servidor.",
+    });
+  }
+};

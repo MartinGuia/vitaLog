@@ -2,7 +2,7 @@ import * as images from "../img";
 import { useWorkOrder } from "../context/WorkOrderContext";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Printer, UserRoundPen, Trash2 } from "lucide-react";
+import { Printer, UserRoundPen, Trash2, StepBack } from "lucide-react";
 
 function WorkOrder() {
   const { getWorkOrderById } = useWorkOrder();
@@ -10,7 +10,7 @@ function WorkOrder() {
   // const [dataWorkOrder, setDataWorkOrder] = useState();
   const [name, setName] = useState();
   const [lastName, setLastName] = useState();
-
+  const [numero, setNumero] = useState();
   const [tires, setTires] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Mostrar 10 elementos por página
@@ -34,7 +34,7 @@ function WorkOrder() {
     loadWorkOrder();
   }, []);
 
-   const { getWorkOrders, workOrders } = useWorkOrder();
+  const { getWorkOrders, workOrders } = useWorkOrder();
 
   // Llamar a getClients una sola vez
   useEffect(() => {
@@ -57,11 +57,15 @@ function WorkOrder() {
 
   if (tires.length === 0) <h1>No hay Ordenes de trabajo</h1>;
   return (
-    // <>
-    //   <div>Hola</div>
-    // </>
     <>
       <div className="px-4 pt-4 lg:px-14 max-w-screen-2xl mx-auto">
+        <div>
+          <Link to={`/workOrders`}>
+            <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
+              <StepBack color="white" />
+            </button>
+          </Link>
+        </div>
         <header className="w-full mt-3 flex justify-center">
           <div className=" w-[95%] p-2 flex justify-between bg-slate-200 border-l-8 border-black rounded-md">
             <section className="ml-2">
@@ -77,7 +81,7 @@ function WorkOrder() {
           </div>
         </header>
         <main className="">
-        <section className="mt-4 flex justify-center">
+          <section className="mt-4 flex justify-center">
             <div className="flex justify-between w-[95%]">
               <article className="w-[33.3%] text-sm">
                 <div className="flex">
@@ -114,13 +118,13 @@ function WorkOrder() {
               </article>
             </div>
           </section>
-        <section>
-        <div className="p-4 w-full">
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-              <thead>
-                <tr className="bg-gray-100 text-gray-600 text-sm text-left">
-                <th className="py-3 px-6">Línea</th>
+          <section>
+            <div className="p-4 w-full">
+              <div className="overflow-x-auto">
+                <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+                  <thead>
+                    <tr className="bg-gray-100 text-gray-600 text-sm text-left">
+                      <th className="py-3 px-6">Línea</th>
                       <th className="py-3 px-6">Código de Ítem</th>
                       <th className="py-3 px-6">Medida de Casco</th>
                       <th className="py-3 px-6">Marca</th>
@@ -128,88 +132,77 @@ function WorkOrder() {
                       <th className="py-3 px-6">Banda Requerida</th>
                       <th className="py-3 px-6">DOT</th>
                       <th className="py-3 px-6"></th>
-                </tr>
-              </thead>
-              <tbody className="">
-                {currentOrders.map((tire, index) => (
-                  <tr
-                    key={index}
-                    className="border-t border-gray-200"
-                  >
-                    <td className="py-3 px-6">{tire.linea}</td>
+                    </tr>
+                  </thead>
+                  <tbody className="">
+                    {currentOrders.map((tire, index) => (
+                      <tr key={index} className="border-t border-gray-200">
+                        <td className="py-3 px-6">{tire.linea}</td>
                         <td className="py-3 px-6">{tire.itemCode}</td>
                         <td className="py-3 px-6">{tire.helmetMeasurement}</td>
                         <td className="py-3 px-6">{tire.brand}</td>
                         <td className="py-3 px-6">{tire.helmetDesign}</td>
                         <td className="py-3 px-6">{tire.requiredBand}</td>
-                        <td className="py-3 px-6">{tire.antiquityDot}</td>                     
-                    <td className="sm:flex py-2 px-3 justify-between">
-                      <Link
-                      to={`/tire/${tire._id}`}
+                        <td className="py-3 px-6">{tire.antiquityDot}</td>
+                        <td className="sm:flex py-2 px-3 justify-between">
+                          <Link to={`/tire/${tire._id}`}>
+                            <button className="text-blue-600 hover:text-blue-800 ">
+                              <UserRoundPen />
+                            </button>
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {/* Mostrar paginación solo si hay 10 o más usuarios */}
+                {workOrders.length >= 10 && (
+                  <div className="flex justify-between items-center mt-4">
+                    <div className="text-sm text-gray-600">
+                      Página {currentPage} de {totalPages}
+                    </div>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className={`px-4 py-2 rounded-lg border ${
+                          currentPage === 1
+                            ? "text-gray-400 border-gray-200"
+                            : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                        }`}
                       >
-                        <button className="text-blue-600 hover:text-blue-800 ">
-                          <UserRoundPen />
+                        Anterior
+                      </button>
+                      {Array.from({ length: totalPages }, (_, i) => (
+                        <button
+                          key={i + 1}
+                          onClick={() => handlePageChange(i + 1)}
+                          className={`px-4 py-2 rounded-lg border ${
+                            currentPage === i + 1
+                              ? "bg-blue-600 text-white"
+                              : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                          }`}
+                        >
+                          {i + 1}
                         </button>
-                      </Link>
-                      <button className="text-red-600 hover:text-red-800 ">
-                        <Trash2 />
+                      ))}
+                      <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className={`px-4 py-2 rounded-lg border ${
+                          currentPage === totalPages
+                            ? "text-gray-400 border-gray-200"
+                            : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                        }`}
+                      >
+                        Siguiente
                       </button>
-                      <button className="hover:text-slate-500">
-                      <Printer />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {/* Mostrar paginación solo si hay 10 o más usuarios */}
-            {workOrders.length >= 10 && (
-              <div className="flex justify-between items-center mt-4">
-                <div className="text-sm text-gray-600">
-                  Página {currentPage} de {totalPages}
-                </div>
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className={`px-4 py-2 rounded-lg border ${
-                      currentPage === 1
-                        ? "text-gray-400 border-gray-200"
-                        : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                    }`}
-                  >
-                    Anterior
-                  </button>
-                  {Array.from({ length: totalPages }, (_, i) => (
-                    <button
-                      key={i + 1}
-                      onClick={() => handlePageChange(i + 1)}
-                      className={`px-4 py-2 rounded-lg border ${
-                        currentPage === i + 1
-                          ? "bg-blue-600 text-white"
-                          : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                      }`}
-                    >
-                      {i + 1}
-                    </button>
-                  ))}
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className={`px-4 py-2 rounded-lg border ${
-                      currentPage === totalPages
-                        ? "text-gray-400 border-gray-200"
-                        : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                    }`}
-                  >
-                    Siguiente
-                  </button>
-                </div>
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </div>
-      </section>
+            </div>
+          </section>
         </main>
       </div>
     </>

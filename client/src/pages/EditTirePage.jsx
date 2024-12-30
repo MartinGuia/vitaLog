@@ -15,7 +15,7 @@ function EditTirePage() {
   const { updateTire, getTire, errors: tireErrors } = useTire();
   const params = useParams();
   const navigate = useNavigate();
-  const [workOrder, setWorkOrder] = useState()
+  const [workOrder, setWorkOrder] = useState();
 
   useEffect(() => {
     async function loadTire() {
@@ -52,17 +52,17 @@ function EditTirePage() {
       alert("Error al actualizar el registro");
     }
   });
- 
+
   return (
     <>
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
         <div>
-                <Link to={`/workOrder/${workOrder}`}>
-                  <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
-                    <StepBack color="white" />
-                  </button>
-                </Link>
-              </div>
+          <Link to={`/workOrder/${workOrder}`}>
+            <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
+              <StepBack color="white" />
+            </button>
+          </Link>
+        </div>
         <div>
           <h1 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
             Editar Llanta
@@ -198,9 +198,9 @@ function EditTirePage() {
                 </div>
 
                 <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
-                    <label htmlFor="" className="text-sm">
-                      Marca
-                    </label>
+                  <label htmlFor="" className="text-sm">
+                    Marca
+                  </label>
                   <InputField
                     // label="Marca"
                     // id="marca"

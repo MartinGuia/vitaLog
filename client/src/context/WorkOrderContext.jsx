@@ -3,7 +3,8 @@ import {
   closeWorkOrderRequest,
   getWorkOrdersRequest,
   getWorkOrderRequest,
-  openWorkOrderRequest
+  openWorkOrderRequest,
+  deleteWorkOrderRequest
 } from "../api/workOrders.js";
 
 const WorkOrderContext = createContext();
@@ -49,9 +50,18 @@ export function WorkOrderProvider({ children }) {
     }
   };
 
+  const deleteWorkOrder = async (id) => {
+      // try {
+        const res = await deleteWorkOrderRequest(id)
+        console.log(res.data)
+      // } catch (error) {
+        
+      // }
+    }
+
   return (
     <WorkOrderContext.Provider
-      value={{ openWorkOrder, closeWorkOrder, getWorkOrders, workOrders, getWorkOrderById }}
+      value={{deleteWorkOrder, setWorkOrders, openWorkOrder, closeWorkOrder, getWorkOrders, workOrders, getWorkOrderById }}
     >
       {children}
     </WorkOrderContext.Provider>
