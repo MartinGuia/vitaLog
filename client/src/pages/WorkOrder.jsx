@@ -24,6 +24,7 @@ function WorkOrder() {
             setName(workOrder.createdBy.name);
             setLastName(workOrder.createdBy.lastName);
             setTires(workOrder.tires);
+            setNumero(workOrder.numero);
             // setDataWorkOrder(getWorkOrderById(workOrder.data));
           }
         }

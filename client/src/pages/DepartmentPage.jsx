@@ -64,7 +64,7 @@ function DepartmentPage() {
 
         {/* botones superiores */}
         <div className="flex justify-end mt-10">
-          <div className="sm:w-[80%] lg:w-[50%] 2xl:w-[30%]  sm:flex justify-between">
+          <div className="sm:w-[80%] lg:w-[50%] 2xl:w-[30%] sm:flex justify-between">
             <button
               onClick={openModal}
               className="flex p-2 text-sm sm:text-base sm:p-3 bg-indigo-500 rounded-lg text-white cursor-pointer hover:bg-indigo-700 duration-500 hover:duration-500"
@@ -73,7 +73,7 @@ function DepartmentPage() {
               Nuevo departamento
             </button>
             <Link to="/register" className="flex justify-end">
-              <button className="flex mt-2 sm:mt-0 shadow p-2 text-sm sm:text-base sm:p-3 bg-yellow-500 rounded-lg text-white cursor-pointer hover:bg-yellow-600 duration-500 hover:duration-500">
+              <button className="flex mt-2 sm:mt-0 shadow p-2 text-sm sm:text-base sm:p-3 bg-yellow-500 rounded-lg text-white cursor-pointer hover:bg-vbYellow duration-500 hover:duration-500">
                 <CirclePlus className="mr-2 size-5 sm:size-6" />
                 Nuevo usuario
               </button>
