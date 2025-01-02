@@ -11,3 +11,6 @@ export const deleteTireRequest = (id) => axios.delete(`/tires/${id}`);
 
 export const updateTireRequest = (id,tires) =>
   axios.put(`/tire/${id}`, tires);
+
+export const getTireByBarcodeRequest = (barCode) =>
+  axios.post("/tires/barcode", { barCode });

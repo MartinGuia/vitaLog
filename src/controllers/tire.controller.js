@@ -28,7 +28,9 @@ export const createTire = async (req, res) => {
     } = req.body;
 
     // Buscar la orden de trabajo abierta
-    const workOrder = await WorkOrder.findOne({ isOpen: true }).populate('tires');
+    const workOrder = await WorkOrder.findOne({ isOpen: true }).populate(
+      "tires"
+    );
 
     if (!workOrder) {
       return res.status(400).json({
@@ -73,7 +75,9 @@ export const createTire = async (req, res) => {
     res.json({ success: true, savedTire });
   } catch (error) {
     console.error("Error al agregar llanta:", error);
-    res.status(500).json({ success: false, message: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ success: false, message: "Error interno del servidor" });
   }
 };
 
@@ -98,4 +102,36 @@ export const updateTire = async (req, res) => {
   });
   if (!tire) return res.status(404).json({ message: "Tire not found" });
   res.json(tire);
+};
+
+export const getTireByBarcode = async (req, res) => {
+  try {
+    const { barCode } = req.body;
+
+    // Verifica si se recibió el código de barras
+    if (!barCode) {
+      return res
+        .status(400)
+        .json({ message: "El código de barras es requerido." });
+    }
+
+    // Busca un registro de llanta que coincida con el código de barras
+    const tire = await Tire.findOne({ barCode })
+      .populate("user")
+      .populate("workOrder");
+
+    if (!tire) {
+      return res
+        .status(404)
+        .json({
+          message: "No se encontró ninguna llanta con ese código de barras.",
+        });
+    }
+
+    // Devuelve los datos de la llanta encontrada
+    return res.status(200).json(tire);
+  } catch (error) {
+    console.error("Error al buscar la llanta por código de barras:", error);
+    return res.status(500).json({ message: "Error interno del servidor." });
+  }
 };

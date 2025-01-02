@@ -4,8 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { useTire } from "../context/TireContext";
 import { useWorkOrder } from "../context/WorkOrderContext";
 import InputField from "../components/ui/InputField";
+import React, { useState } from "react";
+import BarcodeScannerComponent from "react-qr-barcode-scanner";
 
 function TireFormPage() {
+  const [data, setData] = useState("No result");
+  const [scannedCode, setScannedCode] = useState(""); // Estado para el código escaneado
+  const [isScannerOpen, setIsScannerOpen] = useState(false); // Control del modal
   const {
     register,
     handleSubmit,
@@ -18,17 +23,20 @@ function TireFormPage() {
   const { createTire } = useTire();
 
   const onSubmit = handleSubmit((values) => {
-    createTire(values);
+    const formData = { ...values, scannedCode };
+    createTire(formData);
     reset();
+    setScannedCode("");
   });
+
+  const handleScannerOpen = () => setIsScannerOpen(true);
+  const handleScannerClose = () => setIsScannerOpen(false);
 
   const handleClick = async () => {
     try {
       await closeWorkOrder();
       navigate("/workorders");
-      // Puedes realizar acciones adicionales después de cerrar la orden de trabajo si es necesario
     } catch (error) {
-      // Manejo de errores, por ejemplo, mostrar un mensaje al usuario
       console.error("Error al cerrar la orden de trabajo:", error.message);
     }
   };
@@ -52,19 +60,21 @@ function TireFormPage() {
           </div>
         </div>
         <form onSubmit={onSubmit}>
-          <div>
-            <div className="mt-10">
-              <div className="flex mb-3">
-                <h1 className="text-lg flex text-sky-900 font-semibold w-[50%] md:text-3xl md:w-[70%] lg:w-[25%] ">
-                  Datos de la llanta
-                </h1>
-                <div className="flex items-center w-[100%]">
-                  <hr className="border-[1px] w-[100%] border-sky-800 mt-1" />
-                </div>
+          <div className="mt-10">
+            <div className="flex mb-3">
+              <h1 className="text-lg flex text-sky-900 font-semibold w-[50%] md:text-3xl md:w-[70%] lg:w-[25%] ">
+                Datos de la llanta
+              </h1>
+              <div className="flex items-center w-[100%]">
+                <hr className="border-[1px] w-[100%] border-sky-800 mt-1" />
               </div>
-              <h1 className="font-bold text-3xl">Codigo item y Barras</h1>
-              <p>Complete los datos del registro de la llanta.</p>
             </div>
+            <h1 className="font-bold text-3xl">Codigo item y Barras</h1>
+            <p>Complete los datos del registro de la llanta.</p>
+          </div>
+          <div className="w-[100%] pt-8 text-xl"></div>
+
+          <div>
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
                 <div className="relative w-[40%] ">
@@ -89,8 +99,10 @@ function TireFormPage() {
                 </div>
                 <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
                   <InputField
-                    label="Codigo de barras"
-                    id="codigo"
+                    label="Código de Barras"
+                    id="barcode"
+                    value={scannedCode}
+                    readOnly
                     {...register("barCode", { required: true })}
                   />
                   {errors.barCode && (
@@ -98,7 +110,41 @@ function TireFormPage() {
                       Este campo es requerido
                     </p>
                   )}
+                  <button
+                  type="button"
+                  className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md"
+                  onClick={handleScannerOpen}
+                >
+                  Escanear Código de Barras
+                </button>
                 </div>
+                
+
+                {isScannerOpen && (
+                  <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded-md shadow-lg z-[100]">
+                      <h1 className="text-xl font-bold mb-4">
+                        Escanea el código
+                      </h1>
+                      <BarcodeScannerComponent
+                        width={500}
+                        height={500}
+                        onUpdate={(err, result) => {
+                          if (result) {
+                            setScannedCode(result.text);
+                            handleScannerClose();
+                          }
+                        }}
+                      />
+                      <button
+                        className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md"
+                        onClick={handleScannerClose}
+                      >
+                        Cerrar
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -174,25 +220,20 @@ function TireFormPage() {
               </div>
             </div>
           </div>
-          <div className="flex justify-end mt-14 ">
-            <div className="flex justify-between w-[100%] md:w-[40%]">
-              <div>
-                <button
-                  className=" text-white font-medium bg-cyan-950 py-2 px-5 rounded-md shadow-md hover:bg-cyan-800 duration-500 hover:duration-500 "
-                  type="submit"
-                >
-                  Agregar llanta
-                </button>
-              </div>
-              <div>
-                <button
-                  className="  font-medium bg-yellow-400 py-2 px-5 rounded-md shadow-md hover:bg-yellow-500 duration-500 hover:duration-500 "
-                  onClick={handleClick}
-                >
-                  Cerrar orden
-                </button>
-              </div>
-            </div>
+          <div className="flex justify-end mt-14 "></div>
+          <div className="flex justify-end mt-14">
+            <button
+              className="text-white font-medium bg-cyan-950 py-2 px-5 rounded-md shadow-md hover:bg-cyan-800"
+              type="submit"
+            >
+              Agregar llanta
+            </button>
+            <button
+              className="ml-4 font-medium bg-yellow-400 py-2 px-5 rounded-md shadow-md hover:bg-yellow-500"
+              onClick={handleClick}
+            >
+              Cerrar orden
+            </button>
           </div>
         </form>
       </div>

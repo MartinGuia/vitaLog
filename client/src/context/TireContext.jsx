@@ -5,6 +5,7 @@ import {
   // deleteTireRequest,
   getTireRequest,
   updateTireRequest,
+  getTireByBarcodeRequest
 } from "../api/tires.js";
 
 const TiresContext = createContext();
@@ -59,6 +60,18 @@ export function TiresProvider({ children }) {
     }
   };
 
+    // Nueva función para buscar una llanta por código de barras
+    const getTireByBarcode = async (barCode) => {
+      try {
+        const res = await getTireByBarcodeRequest(barCode);
+        console.log("Tire encontrada:", res.data);
+        return res.data; // Devuelve los datos de la llanta
+      } catch (error) {
+        console.error("Error al buscar la llanta por código de barras:", error);
+        setErrors(error.response?.data?.message || ["Error desconocido"]);
+      }
+    };
+
   useEffect(() => {
     if (errors.length > 0) {
       const timer = setTimeout(() => {
@@ -72,7 +85,7 @@ export function TiresProvider({ children }) {
 
   return (
     <TiresContext.Provider
-      value={{ updateTire, tires, getTires, getTire, createTire, errors }}
+      value={{ updateTire, getTireByBarcode,tires, getTires, getTire, createTire, errors }}
     >
       {children}
     </TiresContext.Provider>
