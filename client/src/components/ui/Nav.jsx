@@ -1,10 +1,12 @@
 import Sidebar, { SidebarItem } from "../Sidebar";
 import {
   LayoutDashboard,
-  SquareUser,
   Users,
   NotebookPen,
-  Settings
+  Settings,
+  Play,
+  Flag,
+  BookMarked,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -22,16 +24,9 @@ function Nav({ children }) {
           <>
             <Link to="/departments">
               <SidebarItem
-                icon={<LayoutDashboard size={20} color="white"/>}
+                icon={<LayoutDashboard size={20} color="white" />}
                 text="Departamentos"
                 text2="Departamentos"
-              />
-            </Link>
-            <Link to="/workorders">
-              <SidebarItem
-                icon={<SquareUser size={20} color="white" />}
-                text="Orden de trabajo"
-                text2="O.T."
               />
             </Link>
             <Link to="/clients">
@@ -41,6 +36,27 @@ function Nav({ children }) {
                 text2="Cuentas locales"
               />
             </Link>
+            <Link to="/productionInitial">
+              <SidebarItem
+                icon={<Play size={20} color="white" />}
+                text="Producción"
+                text2="Producción"
+              />
+            </Link>
+            <Link to="/productionFinal">
+              <SidebarItem
+                icon={<Flag size={20} color="white" />}
+                text="Producción"
+                text2="Producción"
+              />
+            </Link>
+            <Link to="/workorders">
+              <SidebarItem
+                icon={<BookMarked size={20} color="white" />}
+                text="Orden de trabajo"
+                text2="O.T."
+              />
+            </Link>
             <Link to="/createWorkOrder">
               <SidebarItem
                 icon={<NotebookPen size={20} color="white" />}
@@ -48,13 +64,13 @@ function Nav({ children }) {
                 text2="Crear orden"
               />
             </Link>
-            <Link to="/production">
-              <SidebarItem
-                icon={<Settings size={20} color="white" />}
-                text="Producción"
-                text2="Producción"
-              />
-            </Link>
+            {/* <Link to="/production">
+                  <SidebarItem
+                    icon={<Settings size={20} color="white" />}
+                    text="Producción"
+                    text2="Producción"
+                  />
+                </Link> */}
           </>
         </Sidebar>
       ) : (

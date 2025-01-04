@@ -43,6 +43,10 @@ const tireSchema = new Schema(
       type: Date,
       default: Date.now,
     },
+    rejection:{
+      type: String,
+      required: false,
+    },
     workOrder: { 
         type: Schema.Types.ObjectId, 
         ref: "WorkOrder" 

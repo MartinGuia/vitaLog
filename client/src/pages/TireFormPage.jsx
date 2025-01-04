@@ -8,7 +8,6 @@ import React, { useState } from "react";
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 
 function TireFormPage() {
-  const [data, setData] = useState("No result");
   const [scannedCode, setScannedCode] = useState(""); // Estado para el código escaneado
   const [isScannerOpen, setIsScannerOpen] = useState(false); // Control del modal
   const {
@@ -111,14 +110,13 @@ function TireFormPage() {
                     </p>
                   )}
                   <button
-                  type="button"
-                  className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md"
-                  onClick={handleScannerOpen}
-                >
-                  Escanear Código de Barras
-                </button>
+                    type="button"
+                    className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md"
+                    onClick={handleScannerOpen}
+                  >
+                    Escanear Código de Barras
+                  </button>
                 </div>
-                
 
                 {isScannerOpen && (
                   <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">

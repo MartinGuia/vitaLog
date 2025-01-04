@@ -20,6 +20,9 @@ import CreateWorkOrderPage from "./pages/CreateWorkOrderPage";
 import ClientByIdPage from "./pages/ClientByIdPage";
 import ProductionPage from "./pages/ProductionPage";
 import EditTirePage from "./pages/EditTirePage";
+import ExampleCode from "./pages/ExampleCode";
+import InitialInspectionPage from "./pages/InitialInspectionPage";
+import FinalInspectionPage from "./pages/FinalInspectionPage";
 
 function App() {
   return (
@@ -49,6 +52,10 @@ function App() {
                       <Route path="/client/:id" element={<ClientByIdPage />} />
                       <Route path="production" element={<ProductionPage />} />
                       <Route path="/tire/:id" element={<EditTirePage />} />
+                      <Route path="/example" element={<ExampleCode />} />
+                      <Route path="/productionInitial" element={<InitialInspectionPage />} />
+                      <Route path="/productionFinal" element={<FinalInspectionPage />} />
+
                     </Route>
                   </Routes>
                 </Nav>

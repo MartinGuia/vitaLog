@@ -2,10 +2,10 @@ import * as images from "../img";
 import { useWorkOrder } from "../context/WorkOrderContext";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Printer, UserRoundPen, Trash2, StepBack } from "lucide-react";
+import { UserRoundPen, StepBack } from "lucide-react";
 
 function WorkOrder() {
-  const { getWorkOrderById } = useWorkOrder();
+  const { getWorkOrderById, workOrders } = useWorkOrder();
   const params = useParams();
   // const [dataWorkOrder, setDataWorkOrder] = useState();
   const [name, setName] = useState();
@@ -35,12 +35,6 @@ function WorkOrder() {
     loadWorkOrder();
   }, []);
 
-  const { getWorkOrders, workOrders } = useWorkOrder();
-
-  // Llamar a getClients una sola vez
-  useEffect(() => {
-    getWorkOrders();
-  }, []);
 
   // Validar datos y calcular total de páginas
   const totalPages = Math.ceil(tires.length / itemsPerPage);

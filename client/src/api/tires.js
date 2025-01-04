@@ -13,4 +13,4 @@ export const updateTireRequest = (id,tires) =>
   axios.put(`/tire/${id}`, tires);
 
 export const getTireByBarcodeRequest = (barCode) =>
-  axios.post("/tires/barcode", { barCode });
+  axios.post("/tireBarcode", { barCode });

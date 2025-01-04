@@ -85,7 +85,7 @@ export function TiresProvider({ children }) {
 
   return (
     <TiresContext.Provider
-      value={{ updateTire, getTireByBarcode,tires, getTires, getTire, createTire, errors }}
+      value={{ updateTire, getTireByBarcode, tires, getTires, getTire, createTire, errors }}
     >
       {children}
     </TiresContext.Provider>
