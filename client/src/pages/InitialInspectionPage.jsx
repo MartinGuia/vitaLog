@@ -2,6 +2,8 @@ import { useTire } from "../context/TireContext";
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import React, { useState } from "react";
 import InputField from "../components/ui/InputField";
+import { useForm } from "react-hook-form";
+
 
 function InitialInspectionPage() {
   const { getTireByBarcode } = useTire();
@@ -9,6 +11,7 @@ function InitialInspectionPage() {
   const [tireData, setTireData] = useState(null); // Estado para los datos de la llanta
   const [error, setError] = useState(null); // Estado para errores
   const [isScannerOpen, setIsScannerOpen] = useState(false); // Control del modal
+  const [isEditing, setIsEditing] = useState(false); // Control del formulario de edición
 
   const handleScannerOpen = () => setIsScannerOpen(true);
   const handleScannerClose = () => setIsScannerOpen(false);
@@ -19,10 +22,12 @@ function InitialInspectionPage() {
       setError(null); // Limpiar errores previos
       const tire = await getTireByBarcode(code);
       setTireData(tire); // Guardar datos de la llanta en el estado
+      setIsEditing(true); // Activar modo edición
       console.log("Datos de la llanta escaneada:", tire);
     } catch (err) {
       console.error("Error al buscar la llanta:", err);
       setError("No se encontró información para el código escaneado."); // Mostrar mensaje de error
+      setIsEditing(false); // Desactivar modo edición
     }
   };
 
@@ -33,7 +38,7 @@ function InitialInspectionPage() {
       </div>
 
       <section>
-        <div className="p-4 w-full flex justify-center">
+        <div className="p-4 w-full flex justify-center flex-col items-center">
           <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
             <InputField
               label="Código de Barras"
@@ -49,17 +54,6 @@ function InitialInspectionPage() {
               Escanear Código de Barras
             </button>
           </div>
-
-          {/* Mostrar datos de la llanta si existen */}
-          {tireData && (
-            <div className="mt-4 p-4 bg-green-100 rounded-md">
-              <h3 className="text-lg font-bold">Datos de la Llanta:</h3>
-              <p><strong>Código:</strong> {tireData.barCode}</p>
-              <p><strong>Descripción:</strong> {tireData.brand}</p>
-              <p><strong>Numero de orden de trabajo:</strong> {tireData.workOrder.numero}</p>
-              {/* Agrega más campos según los datos disponibles */}
-            </div>
-          )}
 
           {/* Mostrar mensaje de error si hay */}
           {error && (
@@ -96,10 +90,69 @@ function InitialInspectionPage() {
               </div>
             </div>
           )}
+
+          {/* Mostrar formulario de edición si está en modo edición */}
+          {isEditing && tireData && (
+            <div className="mt-8 w-full">
+              <EditTireForm tireData={tireData} />
+            </div>
+          )}
         </div>
       </section>
     </div>
   );
 }
+
+const EditTireForm = ({ tireData }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: tireData, // Precargar valores con datos obtenidos
+  });
+
+  const onSubmit = async (values) => {
+    try {
+      console.log("Datos actualizados:", values);
+      alert("Datos actualizados con éxito");
+      // Aquí puedes llamar a una función para actualizar los datos en el backend
+    } catch (error) {
+      console.error("Error al actualizar:", error);
+      alert("Error al actualizar los datos");
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="mb-4">
+        <label className="block mb-2 text-sm font-medium">Código de barras</label>
+        <InputField {...register("barCode")} readOnly />
+      </div>
+
+      <div className="mb-4">
+        <label className="block mb-2 text-sm font-medium">Marca</label>
+        <InputField {...register("brand", { required: true })} />
+        {errors.brand && <p className="text-red-500 text-xs">Este campo es requerido</p>}
+      </div>
+
+      <div className="mb-4">
+        <label className="block mb-2 text-sm font-medium">Orden de trabajo</label>
+        <InputField {...register("workOrder.numero", { required: true })} />
+        {errors.workOrder && (
+          <p className="text-red-500 text-xs">Este campo es requerido</p>
+        )}
+      </div>
+
+      {/* Agrega más campos según sea necesario */}
+      <button
+        type="submit"
+        className="mt-4 bg-green-500 text-white px-4 py-2 rounded-md"
+      >
+        Guardar Cambios
+      </button>
+    </form>
+  );
+};
 
 export default InitialInspectionPage;
