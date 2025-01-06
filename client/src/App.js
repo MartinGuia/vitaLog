@@ -23,6 +23,8 @@ import EditTirePage from "./pages/EditTirePage";
 import ExampleCode from "./pages/ExampleCode";
 import InitialInspectionPage from "./pages/InitialInspectionPage";
 import FinalInspectionPage from "./pages/FinalInspectionPage";
+import FirstEditProduction from "./pages/FirstEditProduction";
+import LastEditProduction from "./pages/LastEditProduction";
 
 function App() {
   return (
@@ -55,6 +57,8 @@ function App() {
                       <Route path="/example" element={<ExampleCode />} />
                       <Route path="/productionInitial" element={<InitialInspectionPage />} />
                       <Route path="/productionFinal" element={<FinalInspectionPage />} />
+                      <Route path="/editInitial/:id" element={<FirstEditProduction />} />
+                      <Route path="/editFinal/:id" element={<LastEditProduction />} />
 
                     </Route>
                   </Routes>
