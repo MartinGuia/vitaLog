@@ -21,10 +21,12 @@ import ClientByIdPage from "./pages/ClientByIdPage";
 import ProductionPage from "./pages/ProductionPage";
 import EditTirePage from "./pages/EditTirePage";
 import ExampleCode from "./pages/ExampleCode";
-import InitialInspectionPage from "./pages/InitialInspectionPage";
-import FinalInspectionPage from "./pages/FinalInspectionPage";
 import FirstEditProduction from "./pages/FirstEditProduction";
-import LastEditProduction from "./pages/LastEditProduction";
+import FirstInspectionPage from "./pages/FirstInspectionPage";
+import SecondInspectionPage from "./pages/SecondInspectionPage";
+import SecondEditProduction from "./pages/SecondEditProduction";
+import FinalEditProduction from "./pages/FinalEditProduction";
+import FinalInspectionProduction from "./pages/FinalInspectionProduction";
 
 function App() {
   return (
@@ -55,10 +57,12 @@ function App() {
                       <Route path="production" element={<ProductionPage />} />
                       <Route path="/tire/:id" element={<EditTirePage />} />
                       <Route path="/example" element={<ExampleCode />} />
-                      <Route path="/productionInitial" element={<InitialInspectionPage />} />
-                      <Route path="/productionFinal" element={<FinalInspectionPage />} />
-                      <Route path="/editInitial/:id" element={<FirstEditProduction />} />
-                      <Route path="/editFinal/:id" element={<LastEditProduction />} />
+                      <Route path="/productionInitial" element={< FirstInspectionPage />} />
+                      <Route path="/editInitial/:id" element={<FirstEditProduction/>} />
+                      <Route path="/productionRepairs" element={<SecondInspectionPage />} />
+                      <Route path="/editRepairs/:id" element={<SecondEditProduction />} />
+                      <Route path="/productionFinal" element={<FinalInspectionProduction />} />
+                      <Route path="/editFinal/:id" element={<FinalEditProduction />} />
 
                     </Route>
                   </Routes>

@@ -17,7 +17,7 @@ const tireSchema = new Schema(
     },
     barCode: {
       type: String,
-      // required: true,
+      required: true,
     },
     helmetMeasurement: {
       type: String,
@@ -45,6 +45,38 @@ const tireSchema = new Schema(
     },
     rejection:{
       type: String,
+      required: false,
+    },
+    patch: {
+      type: String,
+      required: false,
+    },
+    patch2: {
+      type: String,
+      required: false,
+    },
+    patch3: {
+      type: String,
+      required: false,
+    },
+    patch4: {
+      type: String,
+      required: false,
+    },
+    numberPatches:{
+      type: Number,
+      required: false,
+    },
+    numberPatches2:{
+      type: Number,
+      required: false,
+    },
+    numberPatches3:{
+      type: Number,
+      required: false,
+    },
+    numberPatches4:{
+      type: Number,
       required: false,
     },
     workOrder: { 

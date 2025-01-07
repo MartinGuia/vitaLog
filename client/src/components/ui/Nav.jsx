@@ -7,6 +7,7 @@ import {
   Play,
   Flag,
   BookMarked,
+  Search
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -38,16 +39,23 @@ function Nav({ children }) {
             </Link>
             <Link to="/productionInitial">
               <SidebarItem
-                icon={<Play size={20} color="white" />}
-                text="Producción"
-                text2="Producción"
+                icon={<Search size={20} color="white" />}
+                text="Inspección inicial"
+                text2="Inspección inicial"
+              />
+            </Link>
+            <Link to="/productionRepairs">
+              <SidebarItem
+                icon={<Settings size={20} color="white" />}
+                text="Reparación"
+                text2="Reparación"
               />
             </Link>
             <Link to="/productionFinal">
               <SidebarItem
                 icon={<Flag size={20} color="white" />}
-                text="Producción"
-                text2="Producción"
+                text="Inspeccion Final"
+                text2="Inspeccion Final"
               />
             </Link>
             <Link to="/workorders">

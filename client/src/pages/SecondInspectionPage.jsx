@@ -4,37 +4,37 @@ import React, { useState } from "react";
 import InputField from "../components/ui/InputField";
 import { Link, useNavigate } from "react-router-dom";
 
-function FinalInspectionPage() {
+function SecondInspectionPage() {
   const { getTireByBarcode } = useTire();
-   const [scannedCode, setScannedCode] = useState(""); // Estado para el código escaneado
-   const [tireData, setTireData] = useState(null); // Estado para los datos de la llanta
-   const [error, setError] = useState(null); // Estado para errores
-   const [isScannerOpen, setIsScannerOpen] = useState(false); // Control del modal
-   const [isEditing, setIsEditing] = useState(false); // Control del formulario de edición
-   const navigate = useNavigate();
- 
-   const handleScannerOpen = () => setIsScannerOpen(true);
-   const handleScannerClose = () => setIsScannerOpen(false);
- 
-   const handleScan = async (code) => {
-     if (!code) return; // Validar código
-     try {
-       setError(null); // Limpiar errores previos
-       const tire = await getTireByBarcode(code);
-       setTireData(tire); // Guardar datos de la llanta en el estado
-       setIsEditing(true); // Activar modo edición
-       navigate(`/editFinal/${tire._id}`);
-       // console.log("Datos de la llanta escaneada:", tire);
-     } catch (err) {
-       console.error("Error al buscar la llanta:", err);
-       setError("No se encontró información para el código escaneado."); // Mostrar mensaje de error
-       setIsEditing(false); // Desactivar modo edición
-     }
-   };
+  const [scannedCode, setScannedCode] = useState(""); // Estado para el código escaneado
+  const [tireData, setTireData] = useState(null); // Estado para los datos de la llanta
+  const [error, setError] = useState(null); // Estado para errores
+  const [isScannerOpen, setIsScannerOpen] = useState(false); // Control del modal
+  const [isEditing, setIsEditing] = useState(false); // Control del formulario de edición
+  const navigate = useNavigate();
+
+  const handleScannerOpen = () => setIsScannerOpen(true);
+  const handleScannerClose = () => setIsScannerOpen(false);
+
+  const handleScan = async (code) => {
+    if (!code) return; // Validar código
+    try {
+      setError(null); // Limpiar errores previos
+      const tire = await getTireByBarcode(code);
+      navigate(`/editRepairs/${tire._id}`);
+      // setTireData(tire); // Guardar datos de la llanta en el estado
+      // setIsEditing(true); // Activar modo edición
+      // console.log("Datos de la llanta escaneada:", tire);
+    } catch (err) {
+      console.error("Error al buscar la llanta:", err);
+      setError("No se encontró información para el código escaneado."); // Mostrar mensaje de error
+      setIsEditing(false); // Desactivar modo edición
+    }
+  };
   return (
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
       <div className="text-center my-8">
-        <h2 className="text-4xl font-semibold mb-2">Estación Final</h2>
+        <h2 className="text-4xl font-semibold mb-2">Reparaciones</h2>
       </div>
 
       <section className="h-auto">
@@ -123,4 +123,4 @@ function FinalInspectionPage() {
   );
 }
 
-export default FinalInspectionPage;
+export default SecondInspectionPage;
