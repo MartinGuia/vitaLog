@@ -27,10 +27,6 @@ const tireSchema = new Schema(
       type: String,
       required: true,
     },
-    helmetDesign: {
-      type: String,
-      required: false,
-    },
     requiredBand: {
       type: String,
       required: true,
@@ -43,7 +39,7 @@ const tireSchema = new Schema(
       type: Date,
       default: Date.now,
     },
-    rejection:{
+    status: {
       type: String,
       required: false,
     },
@@ -63,29 +59,45 @@ const tireSchema = new Schema(
       type: String,
       required: false,
     },
-    numberPatches:{
+    numberPatches: {
       type: Number,
       required: false,
     },
-    numberPatches2:{
+    numberPatches2: {
       type: Number,
       required: false,
     },
-    numberPatches3:{
+    numberPatches3: {
       type: Number,
       required: false,
     },
-    numberPatches4:{
+    numberPatches4: {
       type: Number,
       required: false,
     },
-    workOrder: { 
-        type: Schema.Types.ObjectId, 
-        ref: "WorkOrder" 
+    rejection: {
+      type: String,
+      required: false,
+    },
+    inspection: {
+      type: Boolean,
+      required: false,
+      default: false, // Configurar el valor predeterminado como false
+    },
+    helmetDesign: {
+      type: String,
+      required: false,
+    },
+    workOrder: {
+      type: Schema.Types.ObjectId,
+      ref: "WorkOrder",
     },
   },
   {
     timestamps: true,
+  },
+  {
+    versionKey: false,
   }
 );
 

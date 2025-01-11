@@ -63,7 +63,7 @@ function SecondEditProduction() {
             </div>
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative w-[40%] ">
+                <div className=" w-[80%] sm:w-[40%]">
                   <div className="relative w-full">
                     <select
                       {...register("patch", { required: false })}
@@ -104,12 +104,13 @@ function SecondEditProduction() {
               </div>
 
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between mt-10">
-                <div className="relative w-[40%] ">
+                <div className="w-[80%] sm:w-[40%]">
                   <select
                     {...register("patch2", { required: false })}
                     className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    size="4" /* Controla cuántas opciones se muestran sin scroll */
                   >
-                    <option value="">Seleccionar parche...</option>
+                    <option value="">Razón de rechazo ...</option>
                     <option value="B120">B120</option>
                     <option value="B122">B122</option>
                     <option value="B124">B124</option>
@@ -142,12 +143,13 @@ function SecondEditProduction() {
               </div>
 
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between mt-10">
-                <div className="relative w-[40%] ">
+                <div className="relative w-[80%] sm:w-[40%] ">
                   <select
                     {...register("patch3", { required: false })}
                     className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    size="4" /* Controla cuántas opciones se muestran sin scroll */
                   >
-                    <option value="">Seleccionar parche...</option>
+                    <option value="">Razón de rechazo ...</option>
                     <option value="B120">B120</option>
                     <option value="B122">B122</option>
                     <option value="B124">B124</option>
@@ -158,6 +160,20 @@ function SecondEditProduction() {
                     <option value="Liner">Liner</option>
                     <option value="MP10">MP10</option>
                     <option value="SP-8">SP-8</option>
+                    <option value="Talón">Talón</option>
+                    <option value="165 CT-10">165 CT-10</option>
+                    <option value="170 CT-20">170 CT-20</option>
+                    <option value="172 CT-22">172 CT-22</option>
+                    <option value="174 CT-24">174 CT-24</option>
+                    <option value="180 CT-40">180 CT-40</option>
+                    <option value="182 CT-42">182 CT-42</option>
+                    <option value="184 CT-44">184 CT-44</option>
+                    <option value="RAD 120">RAD 120</option>
+                    <option value="RAD 122">RAD 122</option>
+                    <option value="RAD 124">RAD 124</option>
+                    <option value="RAD 140">RAD 140</option>
+                    <option value="RAD 142">RAD 142</option>
+                    <option value="RAD 144">RAD 144</option>
                   </select>
                   {/* {errors.patch3 && (
                     <p className="text-red-500 text-xs">
@@ -180,12 +196,13 @@ function SecondEditProduction() {
               </div>
 
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between mt-10">
-                <div className="relative w-[40%] ">
+                <div className="relative w-[80%] sm:w-[40%] ">
                   <select
                     {...register("patch4", { required: false })}
                     className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    size="4" /* Controla cuántas opciones se muestran sin scroll */
                   >
-                    <option value="">Seleccionar parche...</option>
+                    <option value="">Razón de rechazo ...</option>
                     <option value="B120">B120</option>
                     <option value="B122">B122</option>
                     <option value="B124">B124</option>

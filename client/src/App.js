@@ -27,6 +27,9 @@ import SecondInspectionPage from "./pages/SecondInspectionPage";
 import SecondEditProduction from "./pages/SecondEditProduction";
 import FinalEditProduction from "./pages/FinalEditProduction";
 import FinalInspectionProduction from "./pages/FinalInspectionProduction";
+import DeliveryOrder from "./pages/DeliveryOrderPage";
+import AddTiresPage from "./pages/AddTiresPage";
+import { DeliveryOrderProvider } from "./context/DeliveryOrderContext";
 
 function App() {
   return (
@@ -35,39 +38,75 @@ function App() {
         <TiresProvider>
           <ClientProvider>
             <DepartmentProvider>
-              <BrowserRouter>
-                <Nav>
-                  <Routes>
-                    <Route path="/" element={<LoginPage />} />
-                    <Route element={<ProtectedRoute />}>
-                      <Route path="/register" element={<RegisterPage />} />
-                      <Route
-                        path="/workorders"
-                        element={<AllWorkOrdersPage />}
-                      />
-                      <Route path="/add-tire" element={<TireFormPage />} />
-                      <Route path="/workorder/:id" element={<WorkOrder />} />
-                      <Route path="/profile/:id" element={<EditUserPage />} />
-                      <Route path="/clients" element={<ClientPage />} />
-                      <Route path="/add-client" element={<AddClientPage />} />
-                      <Route path="/departments" element={<DepartmentPage />} />
-                      <Route path="/department/:id" element={<DepartmentByIdPage />} />
-                      <Route path="/createWorkOrder" element={<CreateWorkOrderPage />} />
-                      <Route path="/client/:id" element={<ClientByIdPage />} />
-                      <Route path="production" element={<ProductionPage />} />
-                      <Route path="/tire/:id" element={<EditTirePage />} />
-                      <Route path="/example" element={<ExampleCode />} />
-                      <Route path="/productionInitial" element={< FirstInspectionPage />} />
-                      <Route path="/editInitial/:id" element={<FirstEditProduction/>} />
-                      <Route path="/productionRepairs" element={<SecondInspectionPage />} />
-                      <Route path="/editRepairs/:id" element={<SecondEditProduction />} />
-                      <Route path="/productionFinal" element={<FinalInspectionProduction />} />
-                      <Route path="/editFinal/:id" element={<FinalEditProduction />} />
-
-                    </Route>
-                  </Routes>
-                </Nav>
-              </BrowserRouter>
+              <DeliveryOrderProvider>
+                <BrowserRouter>
+                  <Nav>
+                    <Routes>
+                      <Route path="/" element={<LoginPage />} />
+                      <Route element={<ProtectedRoute />}>
+                        <Route path="/register" element={<RegisterPage />} />
+                        <Route
+                          path="/workorders"
+                          element={<AllWorkOrdersPage />}
+                        />
+                        <Route path="/add-tire" element={<TireFormPage />} />
+                        <Route path="/workorder/:id" element={<WorkOrder />} />
+                        <Route path="/profile/:id" element={<EditUserPage />} />
+                        <Route path="/clients" element={<ClientPage />} />
+                        <Route path="/add-client" element={<AddClientPage />} />
+                        <Route
+                          path="/departments"
+                          element={<DepartmentPage />}
+                        />
+                        <Route
+                          path="/department/:id"
+                          element={<DepartmentByIdPage />}
+                        />
+                        <Route
+                          path="/createWorkOrder"
+                          element={<CreateWorkOrderPage />}
+                        />
+                        <Route
+                          path="/client/:id"
+                          element={<ClientByIdPage />}
+                        />
+                        <Route path="production" element={<ProductionPage />} />
+                        <Route path="/tire/:id" element={<EditTirePage />} />
+                        <Route path="/example" element={<ExampleCode />} />
+                        <Route
+                          path="/productionInitial"
+                          element={<FirstInspectionPage />}
+                        />
+                        <Route
+                          path="/editInitial/:id"
+                          element={<FirstEditProduction />}
+                        />
+                        <Route
+                          path="/productionRepairs"
+                          element={<SecondInspectionPage />}
+                        />
+                        <Route
+                          path="/editRepairs/:id"
+                          element={<SecondEditProduction />}
+                        />
+                        <Route
+                          path="/productionFinal"
+                          element={<FinalInspectionProduction />}
+                        />
+                        <Route
+                          path="/editFinal/:id"
+                          element={<FinalEditProduction />}
+                        />
+                        <Route
+                          path="/deliveryOrders"
+                          element={<DeliveryOrder />}
+                        />
+                        <Route path="/add-tires" element={<AddTiresPage />} />
+                      </Route>
+                    </Routes>
+                  </Nav>
+                </BrowserRouter>
+              </DeliveryOrderProvider>
             </DepartmentProvider>
           </ClientProvider>
         </TiresProvider>

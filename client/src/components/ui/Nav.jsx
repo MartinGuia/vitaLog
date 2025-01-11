@@ -7,7 +7,8 @@ import {
   Play,
   Flag,
   BookMarked,
-  Search
+  Search,
+  PackageCheck
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -68,8 +69,15 @@ function Nav({ children }) {
             <Link to="/createWorkOrder">
               <SidebarItem
                 icon={<NotebookPen size={20} color="white" />}
-                text="Crear Orden"
-                text2="Crear orden"
+                text="Orden de trabajo"
+                text2="Orden de trabajo"
+              />
+            </Link>
+            <Link to="/deliveryOrders">
+              <SidebarItem
+                icon={<PackageCheck size={20} color="white" />}
+                text="Entrega"
+                text2="Entrega"
               />
             </Link>
             {/* <Link to="/production">

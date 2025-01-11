@@ -86,41 +86,9 @@ export const getClientById = async (req, res) => {
 };
 
 export const editClient = async (req, res) => {
-    const {id} = req.params; //id del cliente a editar
-    const {name, alias, address1, city, region, zipCode, country} = req.body;
-
-    try {
-        //Verifica si el cliente existe 
-        const clientFound = await Client.findById(id);
-        if (!clientFound) {
-            return res.status(404).json({message: "Cliente no encontrado"});
-        }
-
-        //Actualiza los datos del cliente
-       if(name) clientFound.name = name;
-        if(alias)clientFound.alias = alias;
-        if(address1)clientFound.address1 = address1;
-        if(city)clientFound.city = city;
-        if(region)clientFound.region = region;
-        if(zipCode)clientFound.zipCode = zipCode;
-        if(country)clientFound.country = country;
-
-        //Guarda los cambios en la base de datos
-        const clientUpdated = await clientFound.save();
-
-        //Envía los datos actualizados al cliente
-        res.json({
-            id: clientUpdated._id,
-            name: clientUpdated.name,
-            alias: clientUpdated.alias,
-            address1: clientUpdated.address1,
-            city: clientUpdated.city,
-            region: clientUpdated.region,
-            zipCode: clientUpdated.zipCode,
-            country: clientUpdated.country,
-            updatedAt: clientUpdated.updatedAt,
-        });
-    } catch (error) {
-        res.status(500).json({message: error.message})
-    }
+  const client = await Client.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  })
+  if (!client) return res.status(404).json({ message: "Cliente no encontrado" });
+  res.json(client);
 }

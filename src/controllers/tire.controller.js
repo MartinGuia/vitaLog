@@ -90,16 +90,25 @@ export const getTire = async (req, res) => {
   res.json(tire);
 };
 
-export const deleteTire = async (req, res) => {
-  const tire = await Tire.findByIdAndDelete(req.params.id);
-  if (!tire) return res.status(404).json({ message: "Task not found" });
-  return res.sendStatus(204);
-};
-
 export const updateTire = async (req, res) => {
   const tire = await Tire.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   });
+  if (!tire) return res.status(404).json({ message: "Tire not found" });
+  res.json(tire);
+};
+
+export const updateFinalTire = async (req, res) => {
+  // Asegúrate de que el campo inspection se actualice a true
+  const updatedData = {
+    ...req.body,
+    inspection: true, // Forzar el valor de inspection a true
+  };
+
+  const tire = await Tire.findByIdAndUpdate(req.params.id, updatedData, {
+    new: true, // Devuelve el documento actualizado
+  });
+
   if (!tire) return res.status(404).json({ message: "Tire not found" });
   res.json(tire);
 };
@@ -117,7 +126,7 @@ export const getTireByBarcode = async (req, res) => {
 
     // Busca un registro de llanta que coincida con el código de barras
     const tire = await Tire.findOne({ barCode })
-      .populate("user")
+      // .populate("user")
       .populate("workOrder");
 
     if (!tire) {
@@ -135,3 +144,28 @@ export const getTireByBarcode = async (req, res) => {
     return res.status(500).json({ message: "Error interno del servidor." });
   }
 };
+
+export const getTiresWithInspection = async (req, res) => {
+  try {
+    // Filtrar registros donde inspection sea true
+    const tires = await Tire.find({ inspection: true });
+
+    // Verificar si existen registros
+    if (!tires || tires.length === 0) {
+      return res.status(404).json({ message: "No tires found with inspection set to true" });
+    }
+
+    // Enviar los registros como respuesta
+    res.json(tires);
+  } catch (error) {
+    // Manejo de errores
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving tires" });
+  }
+};
+
+// export const deleteTire = async (req, res) => {
+//   const tire = await Tire.findByIdAndDelete(req.params.id);
+//   if (!tire) return res.status(404).json({ message: "Task not found" });
+//   return res.sendStatus(204);
+// };

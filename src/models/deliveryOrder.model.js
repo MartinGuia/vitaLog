@@ -1,10 +1,10 @@
 import { model, Schema } from "mongoose";
 
-const workOrderSchema = new Schema(
+const deliveryOrderSchema = new Schema(
   {
     numero: {
       type: Number,
-      unique: true,
+      default: true,
     },
     isOpen: {
       type: Boolean,
@@ -36,4 +36,4 @@ const workOrderSchema = new Schema(
   }
 );
 
-export default model("WorkOrder", workOrderSchema);
+export default model("DeliveryOrder", deliveryOrderSchema); // Nombre del modelo y esquema de MongoDB para DeliveryOrder

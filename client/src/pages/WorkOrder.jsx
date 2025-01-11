@@ -65,7 +65,7 @@ function WorkOrder() {
           <div className=" w-[95%] p-2 flex justify-between bg-slate-200 border-l-8 border-black rounded-md">
             <section className="ml-2">
               <h1 className="font-bold text-xl">
-                Número de orden de trabajo #
+                Número de orden de trabajo <span>{numero}</span>
               </h1>
               <p className="font-medium">VITA-BAJIO S.A de C.V</p>
               <p className="font-medium text-sm">VITA-BAJIO S.A de C.V</p>
@@ -121,6 +121,7 @@ function WorkOrder() {
                     <tr className="bg-gray-100 text-gray-600 text-sm text-left">
                       <th className="py-3 px-6">Línea</th>
                       <th className="py-3 px-6">Código de Ítem</th>
+                      <th className="py-3 px-6">Código de Barras</th>
                       <th className="py-3 px-6">Medida de Casco</th>
                       <th className="py-3 px-6">Marca</th>
                       <th className="py-3 px-6">Diseño de Casco</th>
@@ -134,6 +135,7 @@ function WorkOrder() {
                       <tr key={index} className="border-t border-gray-200">
                         <td className="py-3 px-6">{tire.linea}</td>
                         <td className="py-3 px-6">{tire.itemCode}</td>
+                        <td className="py-3 px-6">{tire.barCode}</td>
                         <td className="py-3 px-6">{tire.helmetMeasurement}</td>
                         <td className="py-3 px-6">{tire.brand}</td>
                         <td className="py-3 px-6">{tire.helmetDesign}</td>

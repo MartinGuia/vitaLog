@@ -87,7 +87,7 @@ export function SidebarItem({ icon, text2, text, active, alert }) {
   const { expanded } = useContext(SidebarContext);
   return (
     <li
-      className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
+      className={`relative flex items-center py-4 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
         active
           ? "bg-gradient-to-tr from-indigo-200 to-indigo-200 text-indigo-800"
           : "hover:bg-sky-800 text-gray-600"
@@ -96,7 +96,7 @@ export function SidebarItem({ icon, text2, text, active, alert }) {
       {icon}
       <span
         className={`overflow-hidden text-white ${
-          expanded ? "w-52 ml-3" : "w-0"
+          expanded ? "w-52 ml-3" : "hidden w-0"
         } transition-all`}
       >
         {text}
