@@ -69,57 +69,109 @@ export const closeDeliveryOrder = async (req, res) => {
 
 export const addTiresToDeliveryOrder = async (req, res) => {
   try {
-    const { tireIds } = req.body; // IDs de llantas a asociar
+    const { tireIds } = req.body; // Recibe un array de IDs de llantas desde el frontend
 
+    // Validar que se hayan enviado IDs de llantas
     if (!tireIds || !Array.isArray(tireIds) || tireIds.length === 0) {
-      return res.status(400).json({ success: false, message: "No tire IDs provided" });
-    }
-
-    // Buscar una orden de entrega abierta
-    let deliveryOrder = await DeliveryOrder.findOne({ isOpen: true });
-
-    if (!deliveryOrder) {
-      // Crear una nueva orden si no existe una abierta
-      const lastOrder = await DeliveryOrder.findOne().sort({ numero: -1 });
-      const newOrderNumber = lastOrder && lastOrder.numero ? lastOrder.numero + 1 : 1;
-
-      deliveryOrder = await DeliveryOrder.create({
-        numero: newOrderNumber,
-        isOpen: true,
-        createdBy: req.user.id,
+      return res.status(400).json({
+        success: false,
+        message: "No se proporcionaron IDs de llantas válidos.",
       });
     }
 
-    // Verificar que las llantas existen
-    const existingTires = await Tire.find({ _id: { $in: tireIds } });
-    if (existingTires.length !== tireIds.length) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Some tire IDs are invalid" });
+    // Buscar una orden de entrega abierta
+    const deliveryOrder = await DeliveryOrder.findOne({ isOpen: true });
+
+    if (!deliveryOrder) {
+      return res.status(404).json({
+        success: false,
+        message: "No hay ninguna orden de entrega abierta.",
+      });
     }
 
-    // Agregar las llantas a la orden, evitando duplicados
-    const currentTires = new Set(deliveryOrder.tires.map((tire) => tire.toString()));
-    const newTires = tireIds.filter((id) => !currentTires.has(id));
+    // Validar que los IDs de llantas existen
+    const tires = await Tire.find({ _id: { $in: tireIds } });
 
-    if (newTires.length === 0) {
-      return res
-        .status(400)
-        .json({ success: false, message: "All tires are already in the order" });
+    if (tires.length !== tireIds.length) {
+      return res.status(400).json({
+        success: false,
+        message: "Algunos IDs de llantas no son válidos.",
+      });
     }
 
-    deliveryOrder.tires.push(...newTires);
+    // Agregar las llantas a la orden de entrega
+    deliveryOrder.tires = deliveryOrder.tires || [];
+    deliveryOrder.tires.push(...tires.map((tire) => tire._id));
 
-    // Guardar la orden de entrega actualizada
+    // Guardar los cambios en la base de datos
     await deliveryOrder.save();
 
-    res.status(200).json({
+    res.json({
       success: true,
-      message: "Tires added successfully",
+      message: "Llantas agregadas a la orden de entrega abierta.",
       deliveryOrder,
     });
   } catch (error) {
-    console.error("Error adding tires to delivery order:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.error("Error al agregar llantas a la orden de entrega:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error interno del servidor.",
+    });
   }
 };
+// export const addTiresToDeliveryOrder = async (req, res) => {
+//   try {
+//     const { tireIds } = req.body; // IDs de llantas a asociar
+
+//     if (!tireIds || !Array.isArray(tireIds) || tireIds.length === 0) {
+//       return res.status(400).json({ success: false, message: "No tire IDs provided" });
+//     }
+
+//     // Buscar una orden de entrega abierta
+//     let deliveryOrder = await DeliveryOrder.findOne({ isOpen: true });
+
+//     if (!deliveryOrder) {
+//       // Crear una nueva orden si no existe una abierta
+//       const lastOrder = await DeliveryOrder.findOne().sort({ numero: -1 });
+//       const newOrderNumber = lastOrder && lastOrder.numero ? lastOrder.numero + 1 : 1;
+
+//       deliveryOrder = await DeliveryOrder.create({
+//         numero: newOrderNumber,
+//         isOpen: true,
+//         createdBy: req.user.id,
+//       });
+//     }
+
+//     // Verificar que las llantas existen
+//     const existingTires = await Tire.find({ _id: { $in: tireIds } });
+//     if (existingTires.length !== tireIds.length) {
+//       return res
+//         .status(400)
+//         .json({ success: false, message: "Some tire IDs are invalid" });
+//     }
+
+//     // Agregar las llantas a la orden, evitando duplicados
+//     const currentTires = new Set(deliveryOrder.tires.map((tire) => tire.toString()));
+//     const newTires = tireIds.filter((id) => !currentTires.has(id));
+
+//     if (newTires.length === 0) {
+//       return res
+//         .status(400)
+//         .json({ success: false, message: "All tires are already in the order" });
+//     }
+
+//     deliveryOrder.tires.push(...newTires);
+
+//     // Guardar la orden de entrega actualizada
+//     await deliveryOrder.save();
+
+//     res.status(200).json({
+//       success: true,
+//       message: "Tires added successfully",
+//       deliveryOrder,
+//     });
+//   } catch (error) {
+//     console.error("Error adding tires to delivery order:", error);
+//     res.status(500).json({ success: false, message: "Internal server error" });
+//   }
+// };
