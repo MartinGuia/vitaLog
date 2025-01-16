@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { useWorkOrder } from "../context/WorkOrderContext";
+import { useDeliveryOrder } from "../context/DeliveryOrderContext.jsx";
 import { useEffect, useState } from "react";
 import { Printer, UserRoundPen, Trash2 } from "lucide-react";
 import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta
 
-function AllWorkOrdersPage() {
-  const { deleteWorkOrder, getWorkOrders, workOrders, setWorkOrders } = useWorkOrder();
+function AllDeliveryOrders() {
+  const { getDeliveryOrders, deliveryOrders } = useDeliveryOrder();
   const [currentPage, setCurrentPage] = useState(1);
   const [alert, setAlert] = useState(null); // Estado para manejar la alerta
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,12 +14,12 @@ function AllWorkOrdersPage() {
   const itemsPerPage = 10;
 
   useEffect(() => {
-    getWorkOrders();
+    getDeliveryOrders();
   }, []);
 
-  const totalPages = Math.ceil(workOrders.length / itemsPerPage);
+  const totalPages = Math.ceil(deliveryOrders.length / itemsPerPage);
 
-  const currentOrders = workOrders.slice(
+  const currentOrders = deliveryOrders.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -34,34 +34,34 @@ function AllWorkOrdersPage() {
   };
 
   const handleDeleteClick = (workOrder) => {
-    setWorkOrderToDelete(workOrder);
+    // setWorkOrderToDelete(workOrder);
     setIsModalOpen(true);
   };
 
-  const confirmDelete = async () => {
-    if (confirmationNumber === String(workOrderToDelete.numero)) {
-      try {
-        await deleteWorkOrder(workOrderToDelete._id);
-        showAlert("Orden de trabajo eliminada exitosamente", "success");
-        setWorkOrders((prevOrders) =>
-          prevOrders.filter((order) => order._id !== workOrderToDelete._id)
-        );
-      } catch (error) {
-        console.error(error);
-        showAlert("Error al eliminar la orden de trabajo. Intenta nuevamente.", "error");
-      }
-      setIsModalOpen(false);
-      setWorkOrderToDelete(null);
-      setConfirmationNumber("");
-    } else {
-      showAlert("El número no coincide. Orden no eliminada.", "error");
-    }
-  };
+  // const confirmDelete = async () => {
+  //   if (confirmationNumber === String(workOrderToDelete.numero)) {
+  //     try {
+  //       await deleteWorkOrder(workOrderToDelete._id);
+  //       showAlert("Orden de trabajo eliminada exitosamente", "success");
+  //       setWorkOrders((prevOrders) =>
+  //         prevOrders.filter((order) => order._id !== workOrderToDelete._id)
+  //       );
+  //     } catch (error) {
+  //       console.error(error);
+  //       showAlert("Error al eliminar la orden de trabajo. Intenta nuevamente.", "error");
+  //     }
+  //     setIsModalOpen(false);
+  //     setWorkOrderToDelete(null);
+  //     setConfirmationNumber("");
+  //   } else {
+  //     showAlert("El número no coincide. Orden no eliminada.", "error");
+  //   }
+  // };
 
   return (
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
       <div className="text-center my-8">
-        <h2 className="text-4xl font-semibold mb-2">Ordenes de trabajo</h2>
+        <h2 className="text-4xl font-semibold mb-2">Ordenes de Entrega</h2>
       </div>
       {alert && (
         <Alert
@@ -76,41 +76,44 @@ function AllWorkOrdersPage() {
             <table className="min-w-full bg-white border border-gray-200 rounded-lg">
               <thead>
                 <tr className="bg-gray-100 text-gray-600 text-sm text-left">
-                  <th className="px-6">#</th>
-                  <th className="px-6">Nombre</th>
-                  <th className="px-6">Registros</th>
-                  <th className="px-6">Cliente</th>
-                  <th className="px-6">Dirección</th>
-                  <th className="px-6">Recolección</th>
+                  <th className="py-3 px-6">#</th>
+                  <th className="py-3 px-6">Nombre</th>
+                  <th className="py-3 px-6">Registros</th>
+                  <th className="py-3 px-6">Cliente</th>
+                  <th className="py-3 px-6">Dirección</th>
+                  <th className="py-3 px-6">Recolección</th>
                   <th className="py-3 px-6">Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {currentOrders.map((workOrder, index) => (
-                  <tr key={index} className="border-t border-gray-200 text-sm">
-                    <td className="px-6">{workOrder.numero}</td>
-                    <td className="px-6 text-sm text-gray-900">
-                      <Link className="h-auto w-auto" to={`/workOrder/${workOrder._id}`}>
-                        <button>{workOrder.createdBy.name}</button>
+                {currentOrders.map((deliveryOrders, index) => (
+                  <tr key={index} className="border-t border-gray-200">
+                    <td className="py-3 px-6">{deliveryOrders.numero}</td>
+                    <td className="py-3 px-6 text-sm text-gray-900">
+                      <Link
+                        className="h-auto w-auto"
+                        to={`/deliveryOrders/${deliveryOrders._id}`}
+                      >
+                        <button>{deliveryOrders.createdBy.name}</button>
                       </Link>
                     </td>
-                    <td className="px-6">{workOrder.tires.length}</td>
-                    <td className="px-6">{workOrder.client.name}</td>
-                    <td className="px-6 text-xs">
-                      {workOrder.client.address1 + "," + workOrder.client.city}, <br />
-                       { workOrder.client.region}, <br />
-                      {workOrder.client.zipCode}
+                    <td className="py-2 px-6">{deliveryOrders.tires.length}</td>
+                    <td className="py-2 px-6">{deliveryOrders.client.name}</td>
+                    <td className="py-2 px-6 ">
+                      {deliveryOrders.client.address1}, <br />
+                      {deliveryOrders.client.region}, {deliveryOrders.client.city}, <br />
+                      {deliveryOrders.client.zipCode}
                     </td>
-                    <td>{workOrder.formattedCreatedAt}</td>
-                    <td className="flex justify-between sm:mt-8">
-                      <Link to={`/workorder/${workOrder._id}`}>
+                    <td>{deliveryOrders.formattedCreatedAT}</td>
+                    <td className="flex justify-between sm:mt-7">
+                      <Link to={`/viewDeliveryOrder/${deliveryOrders._id}`}>
                         <button className="text-blue-600 hover:text-blue-800">
                           <UserRoundPen />
                         </button>
                       </Link>
                       <button
                         className="text-red-600 hover:text-red-800"
-                        onClick={() => handleDeleteClick(workOrder)}
+                        onClick={() => handleDeleteClick(deliveryOrders)}
                       >
                         <Trash2 />
                       </button>
@@ -122,7 +125,7 @@ function AllWorkOrdersPage() {
                 ))}
               </tbody>
             </table>
-            {workOrders.length >= itemsPerPage && (
+            {deliveryOrders.length >= itemsPerPage && (
               <div className="flex justify-between items-center mt-4">
                 <div className="text-sm text-gray-600">
                   Página {currentPage} de {totalPages}
@@ -169,12 +172,13 @@ function AllWorkOrdersPage() {
           </div>
         </div>
       </section>
-      {isModalOpen && (
+      {/* {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h3 className="text-lg font-bold mb-4">Confirmar eliminación</h3>
             <p>
-              Escribe el número de la orden <strong>{workOrderToDelete.numero}</strong> para confirmar:
+              Escribe el número de la orden{" "}
+              <strong>{workOrderToDelete.numero}</strong> para confirmar:
             </p>
             <input
               type="text"
@@ -193,7 +197,7 @@ function AllWorkOrdersPage() {
                 Cancelar
               </button>
               <button
-                onClick={confirmDelete}
+                // onClick={confirmDelete}
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
               >
                 Confirmar
@@ -201,9 +205,9 @@ function AllWorkOrdersPage() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
 
-export default AllWorkOrdersPage;
+export default AllDeliveryOrders;

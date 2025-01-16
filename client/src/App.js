@@ -30,6 +30,8 @@ import FinalInspectionProduction from "./pages/FinalInspectionProduction";
 import DeliveryOrder from "./pages/DeliveryOrderPage";
 import AddTiresPage from "./pages/AddTiresPage";
 import { DeliveryOrderProvider } from "./context/DeliveryOrderContext";
+import AllDeliveryOrders from "./pages/AllDeliveryOrders";
+import ViewDeliveryOrderPage from "./pages/ViewDeliveryOrderPage";
 
 function App() {
   return (
@@ -102,6 +104,8 @@ function App() {
                           element={<DeliveryOrder />}
                         />
                         <Route path="/add-tires" element={<AddTiresPage />} />
+                        <Route path="/allDeliveryOrders" element={<AllDeliveryOrders />} />
+                        <Route path="/viewDeliveryOrder/:id" element={<ViewDeliveryOrderPage />} />
                       </Route>
                     </Routes>
                   </Nav>

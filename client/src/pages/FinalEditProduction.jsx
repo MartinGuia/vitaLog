@@ -76,7 +76,7 @@ function FinalEditProduction() {
             <div className="w-[100%] flex justify-center sm:flex sm:justify-center pt-8 text-xl">
               <div className="relative w-[80%] sm:w-[40%]">
                 <select
-                  {...register("stat", {
+                  {...register("rejection", {
                     required: "Debe seleccionar una opción.",
                   })}
                   className="shadow-md block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

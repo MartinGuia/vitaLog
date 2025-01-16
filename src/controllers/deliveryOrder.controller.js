@@ -1,5 +1,5 @@
-import DeliveryOrder from "../models/deliveryOrder.model.js" 
-import Tire from "../models/tire.model.js"
+import DeliveryOrder from "../models/deliveryOrder.model.js";
+import Tire from "../models/tire.model.js";
 import User from "../models/user.model.js";
 import { format } from "date-fns";
 
@@ -12,11 +12,13 @@ export const createOrOpenDeliveryOrder = async (req, res) => {
 
     if (!deliveryOrder) {
       // Buscar la última orden de trabajo para calcular el número secuencial
-      const ultimaOrdenDeTrabajo = await DeliveryOrder.findOne().sort({ numero: -1 });
+      const ultimaOrdenDeEntrega = await DeliveryOrder.findOne().sort({
+        numero: -1,
+      });
 
       let nuevoNumero = 1;
-      if (ultimaOrdenDeTrabajo && ultimaOrdenDeTrabajo.numero) {
-        nuevoNumero = ultimaOrdenDeTrabajo.numero + 1;
+      if (ultimaOrdenDeEntrega && ultimaOrdenDeEntrega.numero) {
+        nuevoNumero = ultimaOrdenDeEntrega.numero + 1;
       }
 
       // Crear una nueva orden de trabajo
@@ -28,7 +30,7 @@ export const createOrOpenDeliveryOrder = async (req, res) => {
 
       // Agregar la orden de trabajo al usuario
       await User.findByIdAndUpdate(req.user._id, {
-        $push: { workOrders: deliveryOrder._id },
+        $push: { deliveryOrders: deliveryOrder._id },
       });
     }
 
@@ -40,8 +42,10 @@ export const createOrOpenDeliveryOrder = async (req, res) => {
 
     res.json({ success: true, deliveryOrder });
   } catch (error) {
-    console.error("Error al crear/abrir orden de trabajo:", error);
-    res.status(500).json({ success: false, message: "Error interno del servidor" });
+    console.error("Error al crear/abrir orden de entrega:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Error interno del servidor" });
   }
 };
 
@@ -49,11 +53,17 @@ export const createOrOpenDeliveryOrder = async (req, res) => {
 export const closeDeliveryOrder = async (req, res) => {
   try {
     // Buscar la orden de trabajo abierta más reciente
-    const currentDeliveryOrder = await DeliveryOrder.findOne({ isOpen: true })
-      .sort({ createdAt: -1 })
+    const currentDeliveryOrder = await DeliveryOrder.findOne({
+      isOpen: true,
+    }).sort({ createdAt: -1 });
 
     if (!currentDeliveryOrder) {
-      return res.status(404).json({ success: false, message: "No hay ninguna orden de trabajo abierta." });
+      return res
+        .status(404)
+        .json({
+          success: false,
+          message: "No hay ninguna orden de trabajo abierta.",
+        });
     }
 
     // Actualizar la orden de trabajo encontrada a cerrada
@@ -69,109 +79,112 @@ export const closeDeliveryOrder = async (req, res) => {
 
 export const addTiresToDeliveryOrder = async (req, res) => {
   try {
-    const { tireIds } = req.body; // Recibe un array de IDs de llantas desde el frontend
+    const { tires } = req.body;
 
-    // Validar que se hayan enviado IDs de llantas
-    if (!tireIds || !Array.isArray(tireIds) || tireIds.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: "No se proporcionaron IDs de llantas válidos.",
-      });
+    // Validar los datos recibidos
+    if (!tires) {
+      return res
+        .status(400)
+        .json({ message: "Faltan datos requeridos: tires." });
     }
 
-    // Buscar una orden de entrega abierta
+    // Asegurar que tires sea un arreglo, incluso si es un solo ID
+    const tiresArray = Array.isArray(tires) ? tires : [tires];
+
+    // Buscar la orden de entrega abierta
     const deliveryOrder = await DeliveryOrder.findOne({ isOpen: true });
 
     if (!deliveryOrder) {
       return res.status(404).json({
-        success: false,
-        message: "No hay ninguna orden de entrega abierta.",
+        message: "No se encontró una orden de entrega abierta.",
       });
     }
 
-    // Validar que los IDs de llantas existen
-    const tires = await Tire.find({ _id: { $in: tireIds } });
+    // Verificar que las llantas existen y no están asociadas a otra orden
+    const validTires = await Tire.find({
+      _id: { $in: tiresArray },
+      deliveryOrder: null, // Verificar que no están asociadas a otra orden
+    });
 
-    if (tires.length !== tireIds.length) {
+    if (validTires.length !== tiresArray.length) {
       return res.status(400).json({
-        success: false,
-        message: "Algunos IDs de llantas no son válidos.",
+        message:
+          "Algunas llantas no existen o ya están asociadas a otra orden.",
       });
     }
 
     // Agregar las llantas a la orden de entrega
-    deliveryOrder.tires = deliveryOrder.tires || [];
-    deliveryOrder.tires.push(...tires.map((tire) => tire._id));
+    deliveryOrder.tires.push(...validTires.map((tire) => tire._id)); // Aseguramos que solo se agreguen los IDs
 
-    // Guardar los cambios en la base de datos
+    // Guardar la orden de entrega actualizada
     await deliveryOrder.save();
 
-    res.json({
-      success: true,
-      message: "Llantas agregadas a la orden de entrega abierta.",
+    return res.status(200).json({
+      message: "Llantas agregadas a la orden de entrega con éxito.",
       deliveryOrder,
     });
   } catch (error) {
     console.error("Error al agregar llantas a la orden de entrega:", error);
-    res.status(500).json({
-      success: false,
-      message: "Error interno del servidor.",
+    return res.status(500).json({
+      message: "Ocurrió un error al agregar las llantas.",
+      error: error.message,
     });
   }
 };
-// export const addTiresToDeliveryOrder = async (req, res) => {
-//   try {
-//     const { tireIds } = req.body; // IDs de llantas a asociar
 
-//     if (!tireIds || !Array.isArray(tireIds) || tireIds.length === 0) {
-//       return res.status(400).json({ success: false, message: "No tire IDs provided" });
-//     }
+export const getDeliveryOrders = async (request, res) => {
+  try {
+    // Buscar todas las órdenes de entrega existentes
+    const deliveryOrders = await DeliveryOrder.find({})
+      .populate({
+        path: "createdBy",
+        select: "name lastName _id",
+      })
+      .populate({
+        path: "tires",
+      })
+      .populate({
+        path: "client",
+      });
 
-//     // Buscar una orden de entrega abierta
-//     let deliveryOrder = await DeliveryOrder.findOne({ isOpen: true });
+    const formattedDeliveryOrders = deliveryOrders.map((order) => ({
+      ...order.toObject(),
+      formattedCreatedAT: format(new Date(order.createdAt), "dd/MM/yyyy"),
+    }));
 
-//     if (!deliveryOrder) {
-//       // Crear una nueva orden si no existe una abierta
-//       const lastOrder = await DeliveryOrder.findOne().sort({ numero: -1 });
-//       const newOrderNumber = lastOrder && lastOrder.numero ? lastOrder.numero + 1 : 1;
+    res.json(formattedDeliveryOrders);
+  } catch (error) {
+    console.error("Error al obtener órdenes de entrega:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Error interno del servidor" });
+  }
+};
 
-//       deliveryOrder = await DeliveryOrder.create({
-//         numero: newOrderNumber,
-//         isOpen: true,
-//         createdBy: req.user.id,
-//       });
-//     }
+export const getDeliveryOrderById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    //Buscar la orden de entrega y agregar llantas asociadas
+    const deliveryOrder = await DeliveryOrder.findById(id)
+      .populate({path:"tires", })
+      .populate({path:"createdBy"});
 
-//     // Verificar que las llantas existen
-//     const existingTires = await Tire.find({ _id: { $in: tireIds } });
-//     if (existingTires.length !== tireIds.length) {
-//       return res
-//         .status(400)
-//         .json({ success: false, message: "Some tire IDs are invalid" });
-//     }
+    if (!deliveryOrder) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Orden de entrega no encontrada." });
+    }
 
-//     // Agregar las llantas a la orden, evitando duplicados
-//     const currentTires = new Set(deliveryOrder.tires.map((tire) => tire.toString()));
-//     const newTires = tireIds.filter((id) => !currentTires.has(id));
+     // Convertir a un objeto y formatear la fecha
+     const formattedDeliveryOrder = {
+      ...deliveryOrder.toObject(),
+      formattedCreatedAt: format(new Date(deliveryOrder.createdAt), "dd/MM/yyyy"), // Ajusta el formato según tus necesidades
+    };
 
-//     if (newTires.length === 0) {
-//       return res
-//         .status(400)
-//         .json({ success: false, message: "All tires are already in the order" });
-//     }
-
-//     deliveryOrder.tires.push(...newTires);
-
-//     // Guardar la orden de entrega actualizada
-//     await deliveryOrder.save();
-
-//     res.status(200).json({
-//       success: true,
-//       message: "Tires added successfully",
-//       deliveryOrder,
-//     });
-//   } catch (error) {
-//     console.error("Error adding tires to delivery order:", error);
-//     res.status(500).json({ success: false, message: "Internal server error" });
-//   }
-// };
+    res.json(formattedDeliveryOrder);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error al obtener la orden de entrega", error });
+  }
+};

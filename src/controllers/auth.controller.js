@@ -108,6 +108,35 @@ export const getUsers = async (req, res) => {
   }
 };
 
+export const getProfileById = async (req, res) => {
+  try {
+    // Obtén el ID del usuario desde los parámetros de la URL
+    const userId = req.params.id;
+
+    // Busca al usuario por su ID
+    const userFound = await User.findById(userId);
+
+    // Si no se encuentra el usuario, responde con un error 404
+    if (!userFound) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Si el usuario se encuentra, responde con los detalles del usuario
+    return res.json({
+      id: userFound._id,
+      name: userFound.name,
+      lastName: userFound.lastName,
+      userName: userFound.userName,
+      department: userFound.department, // Esto contiene la referencia a `Department`
+      createdAt: userFound.createdAt,
+      updatedAt: userFound.updatedAt,
+    });
+  } catch (error) {
+    console.error("Error al obtener el perfil de usuario:", error);
+    return res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
+
 export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params; // Captura el ID del usuario desde los parámetros de la solicitud
@@ -140,35 +169,6 @@ export const logout = (req, res) => {
     expres: new Date(0),
   });
   return res.sendStatus(200);
-};
-
-export const getProfileById = async (req, res) => {
-  try {
-    // Obtén el ID del usuario desde los parámetros de la URL
-    const userId = req.params.id;
-
-    // Busca al usuario por su ID
-    const userFound = await User.findById(userId);
-
-    // Si no se encuentra el usuario, responde con un error 404
-    if (!userFound) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Si el usuario se encuentra, responde con los detalles del usuario
-    return res.json({
-      id: userFound._id,
-      name: userFound.name,
-      lastName: userFound.lastName,
-      userName: userFound.userName,
-      department: userFound.department, // Esto contiene la referencia a `Department`
-      createdAt: userFound.createdAt,
-      updatedAt: userFound.updatedAt,
-    });
-  } catch (error) {
-    console.error("Error al obtener el perfil de usuario:", error);
-    return res.status(500).json({ message: "Error interno del servidor" });
-  }
 };
 
 export const editUser = async (req, res) => {

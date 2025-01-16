@@ -8,7 +8,8 @@ import {
   Flag,
   BookMarked,
   Search,
-  PackageCheck
+  PackageCheck,
+  FileInput
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -76,8 +77,15 @@ function Nav({ children }) {
             <Link to="/deliveryOrders">
               <SidebarItem
                 icon={<PackageCheck size={20} color="white" />}
-                text="Entrega"
-                text2="Entrega"
+                text="Crear orden de Entrega"
+                text2="Crear orden de Entrega"
+              />
+            </Link>
+            <Link to="/allDeliveryOrders">
+              <SidebarItem
+                icon={<FileInput size={20} color="white" />}
+                text="Ver Orden de Entrega"
+                text2="Ver Orden de Entrega"
               />
             </Link>
             {/* <Link to="/production">

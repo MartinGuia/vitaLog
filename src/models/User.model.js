@@ -25,11 +25,15 @@ const userSchema = new Schema(
       type: Schema.Types.ObjectId,
       required: false,
     },
+    roles: [
+      {
+        ref: "Role",
+        type: Schema.Types.ObjectId,
+      },
+    ],
   },
   {
     timestamps: true,
-  },
-  {
     versionKey: false,
   }
 );

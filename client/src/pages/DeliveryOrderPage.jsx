@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useWorkOrder } from "../context/WorkOrderContext";
 import { useEffect } from "react";
 import { useClient } from "../context/ClientContext";
+import { useDeliveryOrder } from "../context/DeliveryOrderContext";
 
 function DeliveryOrderPage() {
   const {
@@ -13,7 +14,7 @@ function DeliveryOrderPage() {
   } = useForm();
   const { errors: registerErrors } = useAuth();
   const navigate = useNavigate();
-  const { openWorkOrder } = useWorkOrder();
+  const { openDeliveryOrder } = useDeliveryOrder();
   const { getClients, allClients } = useClient();
 
   useEffect(() => {
@@ -21,7 +22,7 @@ function DeliveryOrderPage() {
   }, []);
 
   const onSubmit = handleSubmit((values) => {
-    openWorkOrder(values);
+    openDeliveryOrder(values);
     navigate("/add-tires");
   });
 
@@ -50,9 +51,9 @@ function DeliveryOrderPage() {
               <h1 className="font-bold text-3xl">Orden de entrega</h1>
               <p>Seleccione el cliente para la orden de entrega.</p>
             </div>
-            <div className="w-[100%] pt-8 text-xl">
-              <div className="flex items-center flex-col lg:w-auto lg:flex-row lg:justify-between">
-                <div className="relative w-[40%]">
+            <div className="w-[100%] pt-8 text-xl flex justify-center">
+              <div className="flex items-center flex-col lg:w-[30%] lg:flex-row lg:justify-between">
+                <div className="relative w-[100%]">
                   <label className="block mb-2 text-sm font-medium">
                     Cliente
                   </label>

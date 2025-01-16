@@ -107,7 +107,13 @@ export const getWorkOrderById = async (req, res) => {
       return res.status(404).json({ message: "Orden de trabajo no encontrada" });
     }
 
-    res.json(workOrder);
+     // Convertir a un objeto y formatear la fecha
+     const formattedWorkOrder = {
+      ...workOrder.toObject(),
+      formattedCreatedAt: format(new Date(workOrder.createdAt), "dd/MM/yyyy"), // Ajusta el formato según tus necesidades
+    };
+
+    res.json(formattedWorkOrder);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener la orden de trabajo", error });
   }

@@ -5,7 +5,7 @@ import { useParams, Link } from "react-router-dom";
 import { UserRoundPen, StepBack } from "lucide-react";
 
 function WorkOrder() {
-  const { getWorkOrderById, workOrders } = useWorkOrder();
+  const { getWorkOrderById } = useWorkOrder();
   const params = useParams();
   // const [dataWorkOrder, setDataWorkOrder] = useState();
   const [name, setName] = useState();
@@ -14,6 +14,7 @@ function WorkOrder() {
   const [tires, setTires] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Mostrar 10 elementos por página
+  const [date, setDate] = useState();
 
   useEffect(() => {
     async function loadWorkOrder() {
@@ -25,6 +26,7 @@ function WorkOrder() {
             setLastName(workOrder.createdBy.lastName);
             setTires(workOrder.tires);
             setNumero(workOrder.numero);
+            setDate(workOrder.formattedCreatedAt);
             // setDataWorkOrder(getWorkOrderById(workOrder.data));
           }
         }
@@ -34,7 +36,6 @@ function WorkOrder() {
     }
     loadWorkOrder();
   }, []);
-
 
   // Validar datos y calcular total de páginas
   const totalPages = Math.ceil(tires.length / itemsPerPage);
@@ -101,7 +102,10 @@ function WorkOrder() {
                 </p>
               </article>
               <article className="w-[33.3%] text-sm">
-                <p className="mt-2">Fecha de recolección:</p>
+                <p className="mt-2">
+                  Fecha de recolección:{" "}
+                  <span className="font-semibold">{date}</span>
+                </p>
                 <p className="mt-2">Fecha de solicitud de entrega:</p>
                 <p className="mt-2">Ref #:</p>
               </article>
@@ -153,7 +157,7 @@ function WorkOrder() {
                   </tbody>
                 </table>
                 {/* Mostrar paginación solo si hay 10 o más usuarios */}
-                {workOrders.length >= 10 && (
+                {tires.length >= 10 && (
                   <div className="flex justify-between items-center mt-4">
                     <div className="text-sm text-gray-600">
                       Página {currentPage} de {totalPages}

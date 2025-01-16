@@ -130,11 +130,9 @@ export const getTireByBarcode = async (req, res) => {
       .populate("workOrder");
 
     if (!tire) {
-      return res
-        .status(404)
-        .json({
-          message: "No se encontró ninguna llanta con ese código de barras.",
-        });
+      return res.status(404).json({
+        message: "No se encontró ninguna llanta con ese código de barras.",
+      });
     }
 
     // Devuelve los datos de la llanta encontrada
@@ -148,11 +146,17 @@ export const getTireByBarcode = async (req, res) => {
 export const getTiresWithInspection = async (req, res) => {
   try {
     // Filtrar registros donde inspection sea true
-    const tires = await Tire.find({ inspection: true });
+    const tires = await Tire.find({ inspection: true })
+    .populate({
+      path: "workOrder",
+      select: "numero",
+    });
 
     // Verificar si existen registros
     if (!tires || tires.length === 0) {
-      return res.status(404).json({ message: "No tires found with inspection set to true" });
+      return res
+        .status(404)
+        .json({ message: "No tires found with inspection set to true" });
     }
 
     // Enviar los registros como respuesta
