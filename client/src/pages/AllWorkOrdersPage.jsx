@@ -76,13 +76,13 @@ function AllWorkOrdersPage() {
             <table className="min-w-full bg-white border border-gray-200 rounded-lg">
               <thead>
                 <tr className="bg-gray-100 text-gray-600 text-sm text-left">
-                  <th className="px-6">#</th>
+                  <th className="py-2 px-6">#</th>
                   <th className="px-6">Nombre</th>
                   <th className="px-6">Registros</th>
                   <th className="px-6">Cliente</th>
                   <th className="px-6">Dirección</th>
                   <th className="px-6">Recolección</th>
-                  <th className="py-3 px-6">Acciones</th>
+                  <th className="px-6">Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -102,7 +102,7 @@ function AllWorkOrdersPage() {
                       {workOrder.client.zipCode}
                     </td>
                     <td>{workOrder.formattedCreatedAt}</td>
-                    <td className="flex justify-between sm:mt-8">
+                    <td className="flex justify-between sm:mt-4">
                       <Link to={`/workorder/${workOrder._id}`}>
                         <button className="text-blue-600 hover:text-blue-800">
                           <UserRoundPen />

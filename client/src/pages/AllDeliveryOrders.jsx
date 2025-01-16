@@ -76,20 +76,20 @@ function AllDeliveryOrders() {
             <table className="min-w-full bg-white border border-gray-200 rounded-lg">
               <thead>
                 <tr className="bg-gray-100 text-gray-600 text-sm text-left">
-                  <th className="py-3 px-6">#</th>
-                  <th className="py-3 px-6">Nombre</th>
-                  <th className="py-3 px-6">Registros</th>
-                  <th className="py-3 px-6">Cliente</th>
-                  <th className="py-3 px-6">Dirección</th>
-                  <th className="py-3 px-6">Recolección</th>
-                  <th className="py-3 px-6">Acciones</th>
+                  <th className="py-2 px-6">#</th>
+                  <th className="px-6">Nombre</th>
+                  <th className="px-6">Registros</th>
+                  <th className="px-6">Cliente</th>
+                  <th className="px-6">Dirección</th>
+                  <th className="px-6">Recolección</th>
+                  <th className="px-6">Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {currentOrders.map((deliveryOrders, index) => (
-                  <tr key={index} className="border-t border-gray-200">
-                    <td className="py-3 px-6">{deliveryOrders.numero}</td>
-                    <td className="py-3 px-6 text-sm text-gray-900">
+                  <tr key={index} className="border-t border-gray-200 text-sm">
+                    <td className="px-6">{deliveryOrders.numero}</td>
+                    <td className="px-6 text-sm text-gray-900">
                       <Link
                         className="h-auto w-auto"
                         to={`/deliveryOrders/${deliveryOrders._id}`}
@@ -97,9 +97,9 @@ function AllDeliveryOrders() {
                         <button>{deliveryOrders.createdBy.name}</button>
                       </Link>
                     </td>
-                    <td className="py-2 px-6">{deliveryOrders.tires.length}</td>
-                    <td className="py-2 px-6">{deliveryOrders.client.name}</td>
-                    <td className="py-2 px-6 ">
+                    <td className="px-6">{deliveryOrders.tires.length}</td>
+                    <td className="px-6">{deliveryOrders.client.name}</td>
+                    <td className="px-6 text-xs">
                       {deliveryOrders.client.address1}, <br />
                       {deliveryOrders.client.region}, {deliveryOrders.client.city}, <br />
                       {deliveryOrders.client.zipCode}

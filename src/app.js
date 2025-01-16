@@ -1,5 +1,6 @@
 import express from "express";
 import morgan from "morgan";
+import { createRoles } from "./libs/InitialRoles.js";
 import authRoutes from "./routes/auth.routes.js";
 import tiresRoutes from "./routes/tires.routes.js";
 import workOrderRoutes from "./routes/workOrder.routes.js";
@@ -10,6 +11,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 const app = express();
+createRoles()
 
 app.use(cors({
     origin: 'http://localhost:3000',
