@@ -38,11 +38,18 @@ export const register = async (req, res) => {
       userName,
       password: passwordHash,
       department, // Asigna el departamento al usuario
-      role,       // Asigna el rol al usuario
+      role, // Asigna el rol al usuario
     });
 
     // Guarda el usuario en la base de datos
     const userSaved = await newUser.save();
+
+    // create access token
+    const token = await createAccessToken({
+      id: userSaved._id,
+    });
+
+    res.cookie("token", token);
 
     // Actualiza el departamento para incluir al usuario
     departmentFound.users.push(userSaved._id);
@@ -55,7 +62,7 @@ export const register = async (req, res) => {
       lastName: userSaved.lastName,
       userName: userSaved.userName,
       department: departmentFound.name, // Retorna el nombre del departamento
-      role: roleFound.name,             // Retorna el nombre del rol
+      role: roleFound.name, // Retorna el nombre del rol
       createdAt: userSaved.createdAt,
       updatedAt: userSaved.updatedAt,
     });
@@ -125,6 +132,10 @@ export const login = async (req, res) => {
       });
     }
 
+     // Gets the user's role adn department
+     const roleFound = userFound.role;
+    //  const departmentFound = userFound.department;
+
     const isMatch = await bcryptjs.compare(password, userFound.password);
 
     if (!isMatch) {
@@ -133,13 +144,17 @@ export const login = async (req, res) => {
       });
     }
 
-    const token = await createAccessToken({ id: userFound._id });
+    const token = await createAccessToken({
+      id: userFound._id,
+      role: roleFound,
+    });
 
     res.cookie("token", token);
     res.json({
       id: userFound._id,
       name: userFound.name,
       lastName: userFound.lastName,
+      role: userFound.role,
       userName: userFound.userName,
       createdAt: userFound.createdAt,
       updateAt: userFound.updatedAt,
@@ -245,12 +260,16 @@ export const editUser = async (req, res) => {
     if (department && department !== String(userFound.department)) {
       const newDepartment = await Department.findById(department);
       if (!newDepartment) {
-        return res.status(404).json({ message: "El nuevo departamento no existe" });
+        return res
+          .status(404)
+          .json({ message: "El nuevo departamento no existe" });
       }
 
       // Remueve al usuario del departamento actual
       if (userFound.department) {
-        const currentDepartment = await Department.findById(userFound.department);
+        const currentDepartment = await Department.findById(
+          userFound.department
+        );
         if (currentDepartment) {
           currentDepartment.users = currentDepartment.users.filter(
             (userId) => String(userId) !== String(id)
@@ -309,8 +328,7 @@ export const verifyToken = async (req, res) => {
       name: userFound.name,
       lastName: userFound.lastName,
       userName: userFound.userName,
-      createdAt: userFound.createdAt,
-      updateAt: userFound.updatedAt,
+      role: userFound.role,
     });
   });
 };

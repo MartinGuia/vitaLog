@@ -8,7 +8,9 @@ const SidebarContext = createContext();
 
 export default function Sidebar({ children, additionalContent }) {
   const [expanded, setExpanded] = useState(false);
-  const { logout, user } = useAuth();
+  const { logout, user, userDta } = useAuth();
+
+  console.log(user)
 
   return (
     <main className="flex">

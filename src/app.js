@@ -7,6 +7,7 @@ import workOrderRoutes from "./routes/workOrder.routes.js";
 import clientRoutes from "./routes/client.routes.js";
 import departmentRoutes from "./routes/department.routes.js";
 import deliveryOrderRoutes from "./routes/deliveryOrder.routes.js";
+import rolesRoutes from "./routes/role.routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -27,5 +28,6 @@ app.use("/api", workOrderRoutes);
 app.use("/api", clientRoutes);
 app.use("/api", departmentRoutes);
 app.use("/api", deliveryOrderRoutes);
+app.use("/api", rolesRoutes);
 
 export default app;

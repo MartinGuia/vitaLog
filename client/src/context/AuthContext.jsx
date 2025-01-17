@@ -7,6 +7,7 @@ import {
   getUserRequest,
   deleteUserRequest,
   updateUserRequest,
+  getRolesRequest
 } from "../api/auth.js";
 import Cookies from "js-cookie";
 
@@ -27,6 +28,7 @@ export const AuthProvider = ({ children }) => {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [getAllUsers, setGetAllUsers] = useState([]);
+  const [role, setRole] = useState(null)
 
   const signup = async (user) => {
     try {
@@ -96,6 +98,15 @@ export const AuthProvider = ({ children }) => {
     // }
   }
 
+  const getRoles = async () => {
+    try {
+      const res = await getRolesRequest();
+      console.log(res.data);
+      return res.data; 
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     if (errors.length > 0) {
@@ -111,7 +122,8 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     async function checkLogin() {
       const cookies = Cookies.get();
-
+      setRole(cookies.token)
+      // console.log(cookies.token)
       if (!cookies.token) {
         setIsAuthenticated(false);
         setLoading(false);
@@ -147,7 +159,9 @@ export const AuthProvider = ({ children }) => {
         getUser,
         updateUser,
         loading,
+        role,
         deleteUser,
+        getRoles,
         logout,
         getAllUsers,
         user,

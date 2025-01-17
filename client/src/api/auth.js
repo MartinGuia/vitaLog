@@ -14,4 +14,6 @@ export const updateUserRequest = (id, user) =>
 
 export const deleteUserRequest = (id) => axios.delete(`/deleteUser/${id}`);
 
+export const getRolesRequest = () => axios.get("/get-roles");
+
 // const loginRequest = axios.post(`${API}/login`)

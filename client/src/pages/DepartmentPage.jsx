@@ -9,6 +9,7 @@ import {
   CirclePlus,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
 
 function DepartmentPage() {
   const {
@@ -21,8 +22,8 @@ function DepartmentPage() {
     getDepartments,
     allDepartments,
     errors: registerDepartmentErrors,
-  } = useDepartment();
-
+  } = useDepartment();  
+  
   useEffect(() => {
     getDepartments();
   }, []);
