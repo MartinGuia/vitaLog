@@ -322,7 +322,7 @@ export const verifyToken = async (req, res) => {
 
     const userFound = await User.findById(user.id);
     if (!userFound) return res.status(401).json({ message: "Unauthorized" });
-
+    
     return res.json({
       id: userFound._id,
       name: userFound.name,

@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [getAllUsers, setGetAllUsers] = useState([]);
   const [role, setRole] = useState(null)
+  const [isAuthLoading, setIsAuthLoading] = useState(true); // Nuevo estado
 
   const signup = async (user) => {
     try {
@@ -122,29 +123,32 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     async function checkLogin() {
       const cookies = Cookies.get();
-      setRole(cookies.token)
-      // console.log(cookies.token)
       if (!cookies.token) {
         setIsAuthenticated(false);
         setLoading(false);
+        setIsAuthLoading(false); // Marcar como terminado
         return setUser(null);
       }
-
+  
       try {
         const res = await verifyTokenRequest(cookies.token);
         if (!res.data) {
           setIsAuthenticated(false);
           setLoading(false);
+          setIsAuthLoading(false); // Marcar como terminado
           return;
         }
-
+  
         setIsAuthenticated(true);
         setUser(res.data);
+        setRole(cookies.token); // Almacenar el token
         setLoading(false);
       } catch (error) {
         setIsAuthenticated(false);
         setUser(null);
         setLoading(false);
+      } finally {
+        setIsAuthLoading(false); // Marcar como terminado
       }
     }
     checkLogin();

@@ -11,7 +11,7 @@ import {
   PackageCheck,
   FileInput,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import LoginPage from "../../pages/LoginPage";
 import {jwtDecode} from "jwt-decode"; // Asegúrate del import correcto
@@ -25,28 +25,29 @@ function Nav({ children }) {
     almacenista: null,
     operador: null,
   });
+  const navigate = useNavigate(); // Hook para redirigir
 
-  // Obtener los roles desde la API y almacenarlos
-  useEffect(() => {
-    const fetchRoles = async () => {
-      try {
-        const res = await getRoles();
-        if (res) {
-          const rolesMap = {};
-          for (const role of res) {
-            if (role.name === "Administrador") rolesMap.administrador = role._id;
-            if (role.name === "Vendedor") rolesMap.ventas = role._id;
-            if (role.name === "Almacenista") rolesMap.almacenista = role._id;
-            if (role.name === "Operador") rolesMap.operador = role._id;
-          }
-          setRoleIds(rolesMap);
+ // Obtener los roles desde la API y almacenarlos
+ useEffect(() => {
+  const fetchRoles = async () => {
+    try {
+      const res = await getRoles();
+      if (res) {
+        const rolesMap = {};
+        for (const role of res) {
+          if (role.name === "Administrador") rolesMap.administrador = role._id;
+          if (role.name === "Vendedor") rolesMap.ventas = role._id;
+          if (role.name === "Almacenista") rolesMap.almacenista = role._id;
+          if (role.name === "Operador") rolesMap.operador = role._id;
         }
-      } catch (error) {
-        console.error("Error al obtener los roles:", error);
+        setRoleIds(rolesMap);
       }
-    };
-    fetchRoles();
-  }, []);
+    } catch (error) {
+      console.error("Error al obtener los roles:", error);
+    }
+  };
+  fetchRoles();
+}, []);
 
   // Obtener el ID del rol del usuario actual desde el token
   useEffect(() => {
@@ -60,6 +61,21 @@ function Nav({ children }) {
       }
     }
   }, [role]);
+
+    // Redirigir a la página inicial según el rol
+    useEffect(() => {
+      if (userRoleId) {
+        if (userRoleId === roleIds.administrador) {
+          navigate("/departments"); // Página para Administrador
+        } else if (userRoleId === roleIds.ventas) {
+          navigate("/createWorkOrder"); // Página para Vendedor
+        } else if (userRoleId === roleIds.almacenista) {
+          navigate("/deliveryOrders"); // Página para Almacenista
+        } else if (userRoleId === roleIds.operador) {
+          navigate("/productionInitial"); // Página para Operador
+        }
+      }
+    }, []);
 
   // Define las rutas y los roles permitidos
   const menuItems = [
@@ -97,13 +113,13 @@ function Nav({ children }) {
       path: "/workorders",
       icon: <BookMarked size={20} color="white" />,
       text: "Orden de trabajo",
-      allowedRoles: [roleIds.administrador, roleIds.operador], // Administrador, Ventas y Operador
+      allowedRoles: [roleIds.administrador, roleIds.almacenista], // Administrador, Ventas y Operador
     },
     {
       path: "/createWorkOrder",
       icon: <NotebookPen size={20} color="white" />,
       text: "Crear Orden de Trabajo",
-      allowedRoles: [roleIds.ventas], // Administrador y Operador
+      allowedRoles: [roleIds.administrador, roleIds.ventas], // Administrador y Operador
     },
     {
       path: "/deliveryOrders",
