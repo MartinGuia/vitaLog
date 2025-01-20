@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { StepBack, UserRoundPen, Trash2 } from "lucide-react";
-import { useDepartment } from "../context/DepartmentContext";
-import { useAuth } from "../context/AuthContext";
+import { useDepartment } from "../context/DepartmentContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta
 
-function DepartmentByIdPage() {
+function ViewDepartmentByIdPage() {
   const { getDepartmentById } = useDepartment();
   const { deleteUser } = useAuth();
   const params = useParams();
@@ -55,7 +55,6 @@ function DepartmentByIdPage() {
     setAlert({ message, type });
     setTimeout(() => setAlert(null), 3000); // Oculta la alerta después de 3 segundos
   };
-  
 
   const confirmDelete = async () => {
     if (confirmationName === userToDelete.name) {
@@ -63,7 +62,9 @@ function DepartmentByIdPage() {
         await deleteUser(userToDelete._id);
         showAlert("Usuario eliminado exitosamente", "success");
         setUsers((prevUsers) =>
-          prevUsers.filter((currentUser) => currentUser._id !== userToDelete._id)
+          prevUsers.filter(
+            (currentUser) => currentUser._id !== userToDelete._id
+          )
         );
       } catch (error) {
         console.error(error);
@@ -82,12 +83,12 @@ function DepartmentByIdPage() {
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
         {/* Alerta de la aplicación */}
         {alert && (
-        <Alert
-          message={alert.message}
-          type={alert.type}
-          onClose={() => setAlert(null)}
-        />
-      )}
+          <Alert
+            message={alert.message}
+            type={alert.type}
+            onClose={() => setAlert(null)}
+          />
+        )}
 
         <div>
           <Link to="/departments">
@@ -100,88 +101,100 @@ function DepartmentByIdPage() {
           </h2>
         </div>
         <div className="p-4 w-full">
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-              <thead>
-                <tr className="bg-gray-100 text-gray-600 text-sm uppercase text-left">
-                  <th className="py-3 px-6">Nombre</th>
-                  <th className="py-3 px-6">Apellido</th>
-                  <th className="py-3 px-6">Usuario</th>
-                  <th className="py-3 px-6 flex justify-center">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentOrders.map((user, id) => (
-                  <tr
-                    key={id}
-                    className="border-t border-gray-200 hover:bg-gray-50"
-                  >
-                    <td className=" py-3 px-6 text-sm text-gray-900">{user.name}</td>
-                    <td className="py-3 px-6 text-sm text-gray-900">{user.lastName}</td>
-                    <td className="py-3 px-6 text-sm text-gray-900">{user.userName}</td>
-                    <td className="flex py-2 justify-around">
-                      <Link to={`/profile/${user._id}`}>
-                        <button className="text-blue-600 hover:text-blue-800">
-                          <UserRoundPen />
-                        </button>
-                      </Link>
-                      <button
-                        className="text-red-600 hover:text-red-800"
-                        onClick={() => handleDeleteClick(user)}
-                      >
-                        <Trash2 />
-                      </button>
-                    </td>
+          {users.length === 0 ? (
+            <div className="text-center text-gray-600 text-lg">
+              No hay usuarios asociados a este departamento.
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+                <thead>
+                  <tr className="bg-gray-100 text-gray-600 text-sm uppercase text-left">
+                    <th className="py-3 px-6">Nombre</th>
+                    <th className="py-3 px-6">Apellido</th>
+                    <th className="py-3 px-6">Usuario</th>
+                    <th className="py-3 px-6 flex justify-center">Acciones</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {currentOrders.map((user, id) => (
+                    <tr
+                      key={id}
+                      className="border-t border-gray-200 hover:bg-gray-50"
+                    >
+                      <td className=" py-3 px-6 text-sm text-gray-900">
+                        {user.name}
+                      </td>
+                      <td className="py-3 px-6 text-sm text-gray-900">
+                        {user.lastName}
+                      </td>
+                      <td className="py-3 px-6 text-sm text-gray-900">
+                        {user.userName}
+                      </td>
+                      <td className="flex py-2 justify-around">
+                        <Link to={`/profile/${user._id}`}>
+                          <button className="text-blue-600 hover:text-blue-800">
+                            <UserRoundPen />
+                          </button>
+                        </Link>
+                        <button
+                          className="text-red-600 hover:text-red-800"
+                          onClick={() => handleDeleteClick(user)}
+                        >
+                          <Trash2 />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
 
-            {users.length >= 10 && (
-              <div className="flex justify-between items-center mt-4">
-                <div className="text-sm text-gray-600">
-                  Página {currentPage} de {totalPages}
-                </div>
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className={`px-4 py-2 rounded-lg border ${
-                      currentPage === 1
-                        ? "text-gray-400 border-gray-200"
-                        : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                    }`}
-                  >
-                    Anterior
-                  </button>
-                  {Array.from({ length: totalPages }, (_, i) => (
+              {users.length >= 10 && (
+                <div className="flex justify-between items-center mt-4">
+                  <div className="text-sm text-gray-600">
+                    Página {currentPage} de {totalPages}
+                  </div>
+                  <div className="flex space-x-2">
                     <button
-                      key={i + 1}
-                      onClick={() => handlePageChange(i + 1)}
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
                       className={`px-4 py-2 rounded-lg border ${
-                        currentPage === i + 1
-                          ? "bg-blue-600 text-white"
+                        currentPage === 1
+                          ? "text-gray-400 border-gray-200"
                           : "text-blue-600 border-blue-600 hover:bg-blue-50"
                       }`}
                     >
-                      {i + 1}
+                      Anterior
                     </button>
-                  ))}
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className={`px-4 py-2 rounded-lg border ${
-                      currentPage === totalPages
-                        ? "text-gray-400 border-gray-200"
-                        : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                    }`}
-                  >
-                    Siguiente
-                  </button>
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <button
+                        key={i + 1}
+                        onClick={() => handlePageChange(i + 1)}
+                        className={`px-4 py-2 rounded-lg border ${
+                          currentPage === i + 1
+                            ? "bg-blue-600 text-white"
+                            : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                        }`}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className={`px-4 py-2 rounded-lg border ${
+                        currentPage === totalPages
+                          ? "text-gray-400 border-gray-200"
+                          : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                      }`}
+                    >
+                      Siguiente
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -192,7 +205,8 @@ function DepartmentByIdPage() {
               Confirmar eliminación del usuario
             </h3>
             <p>
-              Escribe el nombre del usuario <strong>{userToDelete.name}</strong> para confirmar:
+              Escribe el nombre del usuario <strong>{userToDelete.name}</strong>{" "}
+              para confirmar:
             </p>
             <input
               type="text"
@@ -224,4 +238,4 @@ function DepartmentByIdPage() {
   );
 }
 
-export default DepartmentByIdPage;
+export default ViewDepartmentByIdPage;

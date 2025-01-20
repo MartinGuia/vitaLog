@@ -7,7 +7,7 @@ function ProductionPage() {
     <>
       <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
         <div className="text-center my-8">
-          <h2 className="text-4xl mb-2 md:text-4xl flex justify-center font-bold">Producción</h2>
+          <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">Producción</h2>
         </div>
         <div className="p-4 w-auto flex justify-center">
           <div className="sm:flex sm:justify-between sm:w-full md:mt-10">

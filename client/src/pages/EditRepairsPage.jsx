@@ -4,7 +4,7 @@ import { useTire } from "../context/TireContext";
 import { StepBack } from "lucide-react";
 import InputField from "../components/ui/InputField";
 
-function SecondEditProduction() {
+function EditRepairsPage() {
   const {
     register,
     handleSubmit,
@@ -254,4 +254,4 @@ function SecondEditProduction() {
   );
 }
 
-export default SecondEditProduction;
+export default EditRepairsPage;

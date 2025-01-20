@@ -7,7 +7,7 @@ import InputField from "../components/ui/InputField";
 import React, { useState } from "react";
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 
-function TireFormPage() {
+function AddTireToWO() {
   const [scannedCode, setScannedCode] = useState(""); // Estado para el código escaneado
   const [isScannerOpen, setIsScannerOpen] = useState(false); // Control del modal
   const {
@@ -239,4 +239,4 @@ function TireFormPage() {
   );
 }
 
-export default TireFormPage;
+export default AddTireToWO;

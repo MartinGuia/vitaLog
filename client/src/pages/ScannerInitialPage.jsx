@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import InputField from "../components/ui/InputField";
 import { Link, useNavigate } from "react-router-dom";
 
-function FirstInspectionPage() {
+function ScannerInitialPage() {
   const { getTireByBarcode } = useTire();
   const [scannedCode, setScannedCode] = useState(""); // Estado para el código escaneado
   // const [tireData, setTireData] = useState(null); // Estado para los datos de la llanta
@@ -35,7 +35,9 @@ function FirstInspectionPage() {
   return (
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
       <div className="text-center my-8">
-        <h2 className="text-4xl font-semibold mb-2">Inspección Inicial</h2>
+        <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
+          Inspección Inicial
+        </h2>
       </div>
 
       <section className="h-auto">
@@ -176,4 +178,4 @@ function FirstInspectionPage() {
 //   );
 // };
 
-export default FirstInspectionPage;
+export default ScannerInitialPage;

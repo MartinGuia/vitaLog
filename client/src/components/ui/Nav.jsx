@@ -55,7 +55,7 @@ function Nav({ children }) {
       try {
         const decodedToken = jwtDecode(role);
         setUserRoleId(decodedToken.role); // Asegúrate de que `role` sea el campo correcto en el token
-        console.log("Rol del usuario:", decodedToken.role);
+        // console.log("Rol del usuario:", decodedToken.role);
       } catch (error) {
         console.error("Error al decodificar el token:", error);
       }
@@ -65,9 +65,10 @@ function Nav({ children }) {
     // Redirigir a la página inicial según el rol
     useEffect(() => {
       if (userRoleId) {
-        if (userRoleId === roleIds.administrador) {
-          navigate("/departments"); // Página para Administrador
-        } else if (userRoleId === roleIds.ventas) {
+        // if (userRoleId === roleIds.administrador) {
+        //   navigate("/departments"); // Página para Administrador
+        // } else
+         if (userRoleId === roleIds.ventas) {
           navigate("/createWorkOrder"); // Página para Vendedor
         } else if (userRoleId === roleIds.almacenista) {
           navigate("/deliveryOrders"); // Página para Almacenista
@@ -75,7 +76,7 @@ function Nav({ children }) {
           navigate("/productionInitial"); // Página para Operador
         }
       }
-    }, []);
+    }, [user]);
 
   // Define las rutas y los roles permitidos
   const menuItems = [

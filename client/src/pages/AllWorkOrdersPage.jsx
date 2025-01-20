@@ -61,7 +61,7 @@ function AllWorkOrdersPage() {
   return (
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
       <div className="text-center my-8">
-        <h2 className="text-4xl font-semibold mb-2">Ordenes de trabajo</h2>
+        <h2 className="md:text-4xl text-2xl font-bold mb-2">Órdenes de Trabajo</h2>
       </div>
       {alert && (
         <Alert
@@ -72,101 +72,109 @@ function AllWorkOrdersPage() {
       )}
       <section>
         <div className="p-4 w-full">
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-              <thead>
-                <tr className="bg-gray-100 text-gray-600 text-sm text-left">
-                  <th className="py-2 px-6">#</th>
-                  <th className="px-6">Nombre</th>
-                  <th className="px-6">Registros</th>
-                  <th className="px-6">Cliente</th>
-                  <th className="px-6">Dirección</th>
-                  <th className="px-6">Recolección</th>
-                  <th className="px-6">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentOrders.map((workOrder, index) => (
-                  <tr key={index} className="border-t border-gray-200 text-sm">
-                    <td className="px-6">{workOrder.numero}</td>
-                    <td className="px-6 text-sm text-gray-900">
-                      <Link className="h-auto w-auto" to={`/workOrder/${workOrder._id}`}>
-                        <button>{workOrder.createdBy.name}</button>
-                      </Link>
-                    </td>
-                    <td className="px-6">{workOrder.tires.length}</td>
-                    <td className="px-6">{workOrder.client.name}</td>
-                    <td className="px-6 text-xs">
-                      {workOrder.client.address1 + "," + workOrder.client.city}, <br />
-                       { workOrder.client.region}, <br />
-                      {workOrder.client.zipCode}
-                    </td>
-                    <td>{workOrder.formattedCreatedAt}</td>
-                    <td className="flex justify-between sm:mt-4">
-                      <Link to={`/workorder/${workOrder._id}`}>
-                        <button className="text-blue-600 hover:text-blue-800">
-                          <UserRoundPen />
-                        </button>
-                      </Link>
-                      <button
-                        className="text-red-600 hover:text-red-800"
-                        onClick={() => handleDeleteClick(workOrder)}
-                      >
-                        <Trash2 />
-                      </button>
-                      <button className="hover:text-slate-500">
-                        <Printer />
-                      </button>
-                    </td>
+          {workOrders.length === 0 ? (
+            <div className="text-center text-gray-600 text-lg">
+              No hay órdenes de trabajo registradas.
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+                <thead>
+                  <tr className="bg-gray-100 text-gray-600 text-sm text-left">
+                    <th className="py-2 px-6">#</th>
+                    <th className="px-6">Nombre</th>
+                    <th className="px-6">Registros</th>
+                    <th className="px-6">Cliente</th>
+                    <th className="px-6">Dirección</th>
+                    <th className="px-6">Recolección</th>
+                    <th className="px-6">Acciones</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            {workOrders.length >= itemsPerPage && (
-              <div className="flex justify-between items-center mt-4">
-                <div className="text-sm text-gray-600">
-                  Página {currentPage} de {totalPages}
-                </div>
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className={`px-4 py-2 rounded-lg border ${
-                      currentPage === 1
-                        ? "text-gray-400 border-gray-200"
-                        : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                    }`}
-                  >
-                    Anterior
-                  </button>
-                  {Array.from({ length: totalPages }, (_, i) => (
+                </thead>
+                <tbody>
+                  {currentOrders.map((workOrder, index) => (
+                    <tr key={index} className="border-t border-gray-200 text-sm">
+                      <td className="px-6">{workOrder.numero}</td>
+                      <td className="px-6 text-sm text-gray-900">
+                        <Link
+                          className="h-auto w-auto"
+                          to={`/workOrder/${workOrder._id}`}
+                        >
+                          <button>{workOrder.createdBy.name}</button>
+                        </Link>
+                      </td>
+                      <td className="px-6">{workOrder.tires.length}</td>
+                      <td className="px-6">{workOrder.client.name}</td>
+                      <td className="px-6 text-xs">
+                        {workOrder.client.address1 + ", " + workOrder.client.city}, <br />
+                        {workOrder.client.region + ", " + workOrder.client.zipCode}
+                      </td>
+                      <td>{workOrder.formattedCreatedAt}</td>
+                      <td className="flex flex-col items-center md:flex-row md:items-center md:justify-around ">
+                        <Link to={`/workorder/${workOrder._id}`}>
+                          <button className="text-blue-600 hover:text-blue-800 mt-2">
+                            <UserRoundPen />
+                          </button>
+                        </Link>
+                        <button
+                          className="text-red-600 hover:text-red-800 mt-2"
+                          onClick={() => handleDeleteClick(workOrder)}
+                        >
+                          <Trash2 />
+                        </button>
+                        <button className="hover:text-slate-500 mt-2">
+                          <Printer />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {workOrders.length >= itemsPerPage && (
+                <div className="flex justify-between items-center mt-4">
+                  <div className="text-sm text-gray-600">
+                    Página {currentPage} de {totalPages}
+                  </div>
+                  <div className="flex space-x-2">
                     <button
-                      key={i + 1}
-                      onClick={() => handlePageChange(i + 1)}
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
                       className={`px-4 py-2 rounded-lg border ${
-                        currentPage === i + 1
-                          ? "bg-blue-600 text-white"
+                        currentPage === 1
+                          ? "text-gray-400 border-gray-200"
                           : "text-blue-600 border-blue-600 hover:bg-blue-50"
                       }`}
                     >
-                      {i + 1}
+                      Anterior
                     </button>
-                  ))}
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className={`px-4 py-2 rounded-lg border ${
-                      currentPage === totalPages
-                        ? "text-gray-400 border-gray-200"
-                        : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                    }`}
-                  >
-                    Siguiente
-                  </button>
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <button
+                        key={i + 1}
+                        onClick={() => handlePageChange(i + 1)}
+                        className={`px-4 py-2 rounded-lg border ${
+                          currentPage === i + 1
+                            ? "bg-blue-600 text-white"
+                            : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                        }`}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className={`px-4 py-2 rounded-lg border ${
+                        currentPage === totalPages
+                          ? "text-gray-400 border-gray-200"
+                          : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                      }`}
+                    >
+                      Siguiente
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </div>
       </section>
       {isModalOpen && (

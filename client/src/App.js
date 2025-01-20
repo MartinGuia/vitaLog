@@ -1,37 +1,37 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import WorkOrder from "./pages/WorkOrder";
+import AddUserPage from "./pages/AddUserPage";
+import ViewWorkOrder from "./pages/ViewWorkOrder";
 import EditUserPage from "./pages/EditUserPage";
 import ProtectedRoute from "./ProtectedRoute";
 import AllWorkOrdersPage from "./pages/AllWorkOrdersPage";
 import Nav from "./components/ui/Nav";
-import TireFormPage from "./pages/TireFormPage";
-import ClientPage from "./pages/ClientPage";
+import AddTireToWO from "./pages/AddTireToWO";
+import AllClientPage from "./pages/AllClientPage";
 import AddClientPage from "./pages/AddClientPage";
-import DepartmentByIdPage from "./pages/DepartmentByIdPage";
+import ViewDepartmentByIdPage from "./pages/ViewDepartmentByIdPage";
+import AllDepartmentsPage from "./pages/AllDepartmentsPage";
+import CreateWorkOrderPage from "./pages/CreateWorkOrderPage";
+import EditClientPage from "./pages/EditClientPage";
+import ProductionPage from "./pages/ProductionPage";
+import EditTirePage from "./pages/EditTirePage";
+import EditInitialPage from "./pages/EditInitialPage";
+import ScannerInitialPage from "./pages/ScannerInitialPage";
+import ScannerInspectionPage from "./pages/ScannerInspectionPage";
+import EditRepairsPage from "./pages/EditRepairsPage";
+import EditFinalPage from "./pages/EditFinalPage";
+import ScannerFinalProduction from "./pages/ScannerFinalProduction";
+import CreateDeliveryOrderPage from "./pages/CreateDeliveryOrderPage";
+import AddTiresPage from "./pages/AddTiresPage";
+import AllDeliveryOrders from "./pages/AllDeliveryOrders";
+import ViewDeliveryOrderPage from "./pages/ViewDeliveryOrderPage";
+
 import { ClientProvider } from "./context/ClientContext";
 import { TiresProvider } from "./context/TireContext";
 import { WorkOrderProvider } from "./context/WorkOrderContext";
 import { AuthProvider } from "./context/AuthContext";
 import { DepartmentProvider } from "./context/DepartmentContext";
-import DepartmentPage from "./pages/DepartmentPage";
-import CreateWorkOrderPage from "./pages/CreateWorkOrderPage";
-import ClientByIdPage from "./pages/ClientByIdPage";
-import ProductionPage from "./pages/ProductionPage";
-import EditTirePage from "./pages/EditTirePage";
-import ExampleCode from "./pages/ExampleCode";
-import FirstEditProduction from "./pages/FirstEditProduction";
-import FirstInspectionPage from "./pages/FirstInspectionPage";
-import SecondInspectionPage from "./pages/SecondInspectionPage";
-import SecondEditProduction from "./pages/SecondEditProduction";
-import FinalEditProduction from "./pages/FinalEditProduction";
-import FinalInspectionProduction from "./pages/FinalInspectionProduction";
-import DeliveryOrder from "./pages/DeliveryOrderPage";
-import AddTiresPage from "./pages/AddTiresPage";
 import { DeliveryOrderProvider } from "./context/DeliveryOrderContext";
-import AllDeliveryOrders from "./pages/AllDeliveryOrders";
-import ViewDeliveryOrderPage from "./pages/ViewDeliveryOrderPage";
 
 function App() {
   return (
@@ -46,23 +46,23 @@ function App() {
                     <Routes>
                       <Route path="/" element={<LoginPage />} />
                       <Route element={<ProtectedRoute />}>
-                        <Route path="/register" element={<RegisterPage />} />
+                        <Route path="/register" element={<AddUserPage />} />
                         <Route
                           path="/workorders"
                           element={<AllWorkOrdersPage />}
                         />
-                        <Route path="/add-tire" element={<TireFormPage />} />
-                        <Route path="/workorder/:id" element={<WorkOrder />} />
+                        <Route path="/add-tire" element={<AddTireToWO />} />
+                        <Route path="/workorder/:id" element={<ViewWorkOrder />} />
                         <Route path="/profile/:id" element={<EditUserPage />} />
-                        <Route path="/clients" element={<ClientPage />} />
+                        <Route path="/clients" element={<AllClientPage />} />
                         <Route path="/add-client" element={<AddClientPage />} />
                         <Route
                           path="/departments"
-                          element={<DepartmentPage />}
+                          element={<AllDepartmentsPage />}
                         />
                         <Route
                           path="/department/:id"
-                          element={<DepartmentByIdPage />}
+                          element={<ViewDepartmentByIdPage />}
                         />
                         <Route
                           path="/createWorkOrder"
@@ -70,38 +70,37 @@ function App() {
                         />
                         <Route
                           path="/client/:id"
-                          element={<ClientByIdPage />}
+                          element={<EditClientPage />}
                         />
                         <Route path="production" element={<ProductionPage />} />
                         <Route path="/tire/:id" element={<EditTirePage />} />
-                        <Route path="/example" element={<ExampleCode />} />
                         <Route
                           path="/productionInitial"
-                          element={<FirstInspectionPage />}
+                          element={<ScannerInitialPage />}
                         />
                         <Route
                           path="/editInitial/:id"
-                          element={<FirstEditProduction />}
+                          element={<EditInitialPage />}
                         />
                         <Route
                           path="/productionRepairs"
-                          element={<SecondInspectionPage />}
+                          element={<ScannerInspectionPage />}
                         />
                         <Route
                           path="/editRepairs/:id"
-                          element={<SecondEditProduction />}
+                          element={<EditRepairsPage />}
                         />
                         <Route
                           path="/productionFinal"
-                          element={<FinalInspectionProduction />}
+                          element={<ScannerFinalProduction />}
                         />
                         <Route
                           path="/editFinal/:id"
-                          element={<FinalEditProduction />}
+                          element={<EditFinalPage />}
                         />
                         <Route
                           path="/deliveryOrders"
-                          element={<DeliveryOrder />}
+                          element={<CreateDeliveryOrderPage />}
                         />
                         <Route path="/add-tires" element={<AddTiresPage />} />
                         <Route path="/allDeliveryOrders" element={<AllDeliveryOrders />} />

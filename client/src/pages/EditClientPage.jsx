@@ -1,22 +1,27 @@
 import React from "react";
-import { useAuth } from "../context/AuthContext";
-import { useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import InputField from "../components/ui/InputField";
+import { useEffect, useState } from "react";
+import { Link, useParams} from "react-router-dom";
+import InputField from "../components/ui/InputField.jsx";
 import { useForm } from "react-hook-form";
 import { StepBack } from "lucide-react";
-import { useClient } from "../context/ClientContext";
+import { useClient } from "../context/ClientContext.jsx";
+import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta}
 
-function ClientByIdPage() {
+function EditClientPage() {
   const params = useParams();
-  const navigate = useNavigate();
-    const { getClient, updateClient, errors: registerClientErrors } = useClient();
+  const { getClient, updateClient, errors: registerClientErrors } = useClient();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
+  const [alert, setAlert] = useState(null); // Estado para manejar la alerta
+
+  const showAlert = (message, type = "success") => {
+    setAlert({ message, type });
+    setTimeout(() => setAlert(null), 3000);
+  };
 
   useEffect(() => {
     async function loadClient() {
@@ -31,9 +36,6 @@ function ClientByIdPage() {
             region: clientById.region,
             zipCode: clientById.zipCode,
             country: clientById.country,
-            // lastName: userById.lastName,
-            // userName: userById.userName,
-            // department: userById.department,
           });
         }
       }
@@ -48,17 +50,24 @@ function ClientByIdPage() {
 
     try {
       await updateClient(params.id, updatedValues);
-      navigate("/clients");
-      alert("Cliente actualizado exitosamente");
+      showAlert("Cliente actualizado correctamente", "success");
+      // navigate("/clients");
     } catch (error) {
       console.error(error);
-      alert("Error al actualizar el usuario");
+      showAlert("Error al actualizar cliente. Intenta nuevamente.", "error");
     }
   });
 
   return (
     <>
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
+        {alert && (
+          <Alert
+            message={alert.message}
+            type={alert.type}
+            onClose={() => setAlert(null)}
+          />
+        )}
         <div>
           <Link to="/clients">
             <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
@@ -88,6 +97,7 @@ function ClientByIdPage() {
                 <h1 className="text-lg flex text-sky-900 font-semibold w-[50%] md:text-3xl md:w-[70%] lg:w-[25%] ">
                   Nombre y Dirección
                 </h1>
+
                 <div className="flex items-center w-[100%]">
                   <hr className="border-[1px] w-[100%] border-sky-800 mt-1" />
                 </div>
@@ -230,4 +240,4 @@ function ClientByIdPage() {
   );
 }
 
-export default ClientByIdPage;
+export default EditClientPage;

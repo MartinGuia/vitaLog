@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useClient } from "../context/ClientContext";
 
-function ClientPage() {
+function AllClientPage() {
   const { getClients, allClients } = useClient();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Mostrar 10 elementos por página
@@ -30,12 +30,12 @@ function ClientPage() {
   return (
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
       <div className="text-center my-8">
-        <h2 className="text-4xl font-semibold mb-2">Cuentas Locales</h2>
+        <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">Cuentas Locales</h2>
       </div>
       <div className="flex justify-end">
         <Link to="/add-client">
-          <button className="flex p-3 bg-indigo-400 rounded-lg text-white cursor-pointer hover:bg-indigo-700 duration-500 hover:duration-500">
-            <CirclePlus className="mr-2" />
+          <button className="flex p-2 text-sm sm:text-base sm:p-3 bg-indigo-400 rounded-lg text-white cursor-pointer hover:bg-indigo-700 duration-500 hover:duration-500">
+            <CirclePlus className="mr-2 size-5 sm:size-6" />
             Añadir nuevo
           </button>
         </Link>
@@ -45,26 +45,26 @@ function ClientPage() {
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white border border-gray-200 rounded-lg">
               <thead>
-                <tr className="bg-gray-100 text-gray-600 text-sm text-left">
-                  <th className="py-3 px-6">Nombre de Cuenta</th>
-                  <th className="py-3 px-6">Cuenta (Nombre corto)</th>
-                  <th className="py-3 px-6">Dirección</th>
-                  <th className="py-3 px-6">Ciudad</th>
-                  <th className="py-3 px-6">Region</th>
-                  <th className="py-3 px-6">Codigo Postal</th>
-                  <th className="py-3 px-6"></th>
+                <tr className="bg-gray-100 text-gray-600 text-xs text-left">
+                  <th className="py-2 px-6">Nombre de Cuenta</th>
+                  <th className="px-6">Cuenta (Nombre corto)</th>
+                  <th className="px-6">Dirección</th>
+                  <th className="px-6">Ciudad</th>
+                  <th className="px-6">Region</th>
+                  <th className="px-6">Codigo Postal</th>
+                  <th className="px-6"></th>
                 </tr>
               </thead>
               <tbody>
                 {currentOrders.map((client, index) => (
-                  <tr key={index} className="border-t border-gray-200">
-                    <td className="py-3 px-6">{client.name}</td>
-                    <td className="py-3 px-6">{client.alias}</td>
-                    <td className="py-3 px-6">{client.address1}</td>
-                    <td className="py-3 px-6">{client.city}</td>
-                    <td className="py-3 px-6">{client.region}</td>
-                    <td className="py-3 px-6">{client.zipCode}</td>
-                    <td className="flex py-2 px-3 justify-between items-center">
+                  <tr key={index} className="border-t border-gray-200 text-xs">
+                    <td className="px-6">{client.name}</td>
+                    <td className="px-6">{client.alias}</td>
+                    <td className="px-6">{client.address1}</td>
+                    <td className="px-6">{client.city}</td>
+                    <td className="px-6">{client.region}</td>
+                    <td className="px-6">{client.zipCode}</td>
+                    <td className="flex py-2 justify-between items-center">
                       <Link to={`/client/${client._id}`}>
                         <button className="text-blue-600 hover:text-blue-800 ">
                           <UserRoundPen />
@@ -130,4 +130,4 @@ function ClientPage() {
   );
 }
 
-export default ClientPage;
+export default AllClientPage;

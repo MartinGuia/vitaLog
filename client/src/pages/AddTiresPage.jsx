@@ -33,12 +33,12 @@ function AddTiresPage() {
   return (
     <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
       <div>
-        <h1 className="md:text-4xl flex justify-center font-bold mb-6 text-xl sm:text-2xl text-gray-700">
+        <h1 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
           Orden de Entrega
         </h1>
       </div>
       <div className="overflow-x-auto">
-        <table className="table-auto w-full border-collapse rounded-lg shadow-lg overflow-hidden">
+        <table className="table-auto w-full border-collapse rounded-lg overflow-hidden">
           <thead className="bg-primary text-white">
             <tr className="text-sm">
               <th className="px-6 py-2 text-left">Seleccionar</th>

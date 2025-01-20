@@ -1,12 +1,12 @@
-import InputField from "../components/ui/InputField";
+import InputField from "../components/ui/InputField.jsx";
 import { useForm } from "react-hook-form";
 import { StepBack } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useDepartment } from "../context/DepartmentContext.jsx";
 import React, { useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext.jsx";
 
-function AddClientPage() {
+function AddUserPage() {
   const {
     register,
     handleSubmit,
@@ -197,4 +197,4 @@ function AddClientPage() {
   );
 }
 
-export default AddClientPage;
+export default AddUserPage;

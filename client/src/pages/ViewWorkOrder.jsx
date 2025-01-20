@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { UserRoundPen, StepBack } from "lucide-react";
 
-function WorkOrder() {
+function ViewWorkOrder() {
   const { getWorkOrderById } = useWorkOrder();
   const params = useParams();
   // const [dataWorkOrder, setDataWorkOrder] = useState();
@@ -210,4 +210,4 @@ function WorkOrder() {
   );
 }
 
-export default WorkOrder;
+export default ViewWorkOrder;

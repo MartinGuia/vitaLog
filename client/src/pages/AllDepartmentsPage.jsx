@@ -11,7 +11,7 @@ import {
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
-function DepartmentPage() {
+function AllDepartmentsPage() {
   const {
     register,
     handleSubmit,
@@ -22,8 +22,8 @@ function DepartmentPage() {
     getDepartments,
     allDepartments,
     errors: registerDepartmentErrors,
-  } = useDepartment();  
-  
+  } = useDepartment();
+
   useEffect(() => {
     getDepartments();
   }, []);
@@ -58,7 +58,7 @@ function DepartmentPage() {
     <>
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
         <div>
-          <h1 className="md:text-4xl flex justify-center font-bold mb-3 text-xl sm:text-2xl">
+          <h1 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
             Departamentos
           </h1>
         </div>
@@ -82,28 +82,34 @@ function DepartmentPage() {
           </div>
         </div>
         <div className="flex flex-col items-center justify-center mt-5">
-          <div className="w-full sm:h-auto md:w-[70%] flex flex-wrap justify-between">
-            {allDepartments.map((department, i) => (
-              <div
-                className="w-full sm:w-[48%] flex justify-center mt-5"
-                key={i}
-              >
-                <Link
-                  className="bg-cyan-950 rounded shadow-md w-full h-20 lg:h-28 hover:-translate-y-1 hover:duration-700 duration-700 flex justify-center"
-                  to={`/department/${department._id}`}
+          {allDepartments.lenght === 0 ? (
+            <div className="text-center text-gray-600 text-lg">
+              No hay departamentos registrados
+            </div>
+          ) : (
+            <div className="w-full sm:h-auto md:w-[70%] flex flex-wrap justify-between">
+              {allDepartments.map((department, i) => (
+                <div
+                  className="w-full sm:w-[48%] flex justify-center mt-5"
+                  key={i}
                 >
-                  <button>
-                    <span className="text-white font-semibold text-xl">
-                      {department.name}
-                    </span>
-                    <div className="flex justify-center mt-2">
-                      {getIcon(department.name)}
-                    </div>
-                  </button>
-                </Link>
-              </div>
-            ))}
-          </div>
+                  <Link
+                    className="bg-cyan-950 rounded shadow-md w-full h-20 lg:h-28 hover:-translate-y-1 hover:duration-700 duration-700 flex justify-center"
+                    to={`/department/${department._id}`}
+                  >
+                    <button>
+                      <span className="text-white font-semibold text-xl">
+                        {department.name}
+                      </span>
+                      <div className="flex justify-center mt-2">
+                        {getIcon(department.name)}
+                      </div>
+                    </button>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -162,4 +168,4 @@ function DepartmentPage() {
   );
 }
 
-export default DepartmentPage;
+export default AllDepartmentsPage;

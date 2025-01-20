@@ -40,7 +40,6 @@ function LoginPage() {
             <article className="flex flex-col items-center mb-6 mt-2">
               <div className="mb-3">
                 <label
-                  htmlFor=""
                   className="flex justify-center mb-2 font-medium "
                 >
                   <h1 className="text-white">Usuario</h1>

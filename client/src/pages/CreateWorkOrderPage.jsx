@@ -46,13 +46,12 @@ function CreateWorkOrderPage() {
         <form onSubmit={onSubmit}>
           <div className="p-4 w-full">
             <div className="mt-10">
-              <div className="flex mb-3"></div>
-              <h1 className="font-bold text-3xl">Orden de trabajo</h1>
+              <h1 className="font-bold text-2xl md:text-3xl">Orden de trabajo</h1>
               <p>Seleccione el cliente para la orden de trabajo.</p>
             </div>
-            <div className="w-[100%] pt-8 text-xl">
-              <div className="flex items-center flex-col lg:w-auto lg:flex-row lg:justify-between">
-                <div className="relative w-[40%]">
+            <div className="w-[100%] pt-8 text-xl flex justify-center">
+              <div className="flex items-center flex-col lg:w-[30%] lg:flex-row lg:justify-between">
+                <div className="relative w-[100%]">
                   <label className="block mb-2 text-sm font-medium">
                     Cliente
                   </label>

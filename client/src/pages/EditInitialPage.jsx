@@ -1,41 +1,18 @@
 import { useForm } from "react-hook-form";
-// import { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useTire } from "../context/TireContext";
 import { StepBack } from "lucide-react";
 
-function FirstEditProduction() {
+function EditInitialPage() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    // reset,
   } = useForm();
-  const { updateTire, getTire, errors: tireErrors } = useTire();
+  const { updateTire, errors: tireErrors } = useTire();
   const params = useParams();
   const navigate = useNavigate();
-  // const [workOrder, setWorkOrder] = useState();
 
-  // useEffect(() => {
-  //   async function loadTire() {
-  //     if (params.id) {
-  //       const tire = await getTire(params.id);
-  //       if (tire) {
-  //         setWorkOrder(tire.workOrder);
-  //          reset({
-  //            itemCode: tire.itemCode,
-  //            barCode: tire.barCode,
-  //            helmetMeasurement: tire.helmetMeasurement,
-  //            brand: tire.brand,
-  //            helmetDesign: tire.helmetDesign,
-  //            requiredBand: tire.requiredBand,
-  //            antiquityDot: tire.antiquityDot,
-  //          });
-  //       }
-  //     }
-  //   }
-  //   loadTire();
-  // }, []);
 
   const onSubmit = handleSubmit(async (values) => {
     const updatedValues = Object.fromEntries(
@@ -93,7 +70,7 @@ function FirstEditProduction() {
             <div className="w-[100%] pt-8 text-xl">
               <div className="relative w-[40%] ">
                 <select
-                  {...register("rejection", {
+                  {...register("status", {
                     required: "Debe seleccionar una opción.",
                   })}
                   className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -129,4 +106,4 @@ function FirstEditProduction() {
   );
 }
 
-export default FirstEditProduction;
+export default EditInitialPage;

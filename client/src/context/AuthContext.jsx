@@ -42,12 +42,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  function recargarPagina() {
+    window.location.reload(); // Recarga la página
+  }
+
   const signin = async (user) => {
     try {
       const res = await loginRequest(user);
       console.log(res);
       setIsAuthenticated(true);
       setUser(res.data);
+      recargarPagina()
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -102,7 +107,7 @@ export const AuthProvider = ({ children }) => {
   const getRoles = async () => {
     try {
       const res = await getRolesRequest();
-      console.log(res.data);
+      // console.log(res.data);
       return res.data; 
     } catch (error) {
       console.error(error);

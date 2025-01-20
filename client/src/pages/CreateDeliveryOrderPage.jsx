@@ -1,12 +1,11 @@
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useWorkOrder } from "../context/WorkOrderContext";
 import { useEffect } from "react";
 import { useClient } from "../context/ClientContext";
 import { useDeliveryOrder } from "../context/DeliveryOrderContext";
 
-function DeliveryOrderPage() {
+function CreateDeliveryOrderPage() {
   const {
     register,
     handleSubmit,
@@ -47,8 +46,7 @@ function DeliveryOrderPage() {
         <form onSubmit={onSubmit}>
           <div className="p-4 w-full">
             <div className="mt-10">
-              <div className="flex mb-3"></div>
-              <h1 className="font-bold text-3xl">Orden de entrega</h1>
+              <h1 className="font-bold text-2xl md:text-3xl">Orden de entrega</h1>
               <p>Seleccione el cliente para la orden de entrega.</p>
             </div>
             <div className="w-[100%] pt-8 text-xl flex justify-center">
@@ -92,4 +90,4 @@ function DeliveryOrderPage() {
   );
 }
 
-export default DeliveryOrderPage
+export default CreateDeliveryOrderPage

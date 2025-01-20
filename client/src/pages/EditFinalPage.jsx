@@ -4,7 +4,7 @@ import { useTire } from "../context/TireContext";
 import { StepBack } from "lucide-react";
 import InputField from "../components/ui/InputField";
 
-function FinalEditProduction() {
+function EditFinalPage() {
   const {
     register,
     handleSubmit,
@@ -41,7 +41,7 @@ function FinalEditProduction() {
           </Link>
         </div>
         <div>
-          <h1 className="md:text-4xl flex justify-center font-bold text-2xl">
+          <h1 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
             Editar Llanta
           </h1>
           <div className="flex absolute w-[100%]">
@@ -76,7 +76,7 @@ function FinalEditProduction() {
             <div className="w-[100%] flex justify-center sm:flex sm:justify-center pt-8 text-xl">
               <div className="relative w-[80%] sm:w-[40%]">
                 <select
-                  {...register("rejection", {
+                  {...register("status", {
                     required: "Debe seleccionar una opción.",
                   })}
                   className="shadow-md block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -387,4 +387,4 @@ function FinalEditProduction() {
   );
 }
 
-export default FinalEditProduction;
+export default EditFinalPage;

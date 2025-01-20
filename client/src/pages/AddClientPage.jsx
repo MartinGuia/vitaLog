@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { useClient } from "../context/ClientContext";
 import { StepBack } from "lucide-react";
 import { Link } from "react-router-dom";
+import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta}
+import { useState } from "react";
 
 function AddClientPage() {
   const {
@@ -12,10 +14,16 @@ function AddClientPage() {
     formState: { errors },
   } = useForm();
   const { registerClient, errors: registerClientErrors } = useClient();
+  const [alert, setAlert] = useState(null); // Estado para manejar la alerta
+
+  const showAlert = (message, type = "success") => {
+    setAlert({ message, type });
+    setTimeout(() => setAlert(null), 3000);
+  };
 
   const onSubmit = handleSubmit(async (values) => {
     registerClient(values);
-    alert("Cliente Agregado exitosamente");
+    showAlert("Cliente agregado correctamente", "success");
     reset();
   });
 
@@ -33,6 +41,13 @@ function AddClientPage() {
           <h1 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
             Añadir cuenta local
           </h1>
+          {alert && (
+            <Alert
+              message={alert.message}
+              type={alert.type}
+              onClose={() => setAlert(null)}
+            />
+          )}
           <div className="flex top-10 absolute w-[100%]">
             {registerClientErrors.map((error, i) => (
               <div
