@@ -106,25 +106,23 @@ function AllDeliveryOrders() {
                       <td className="px-6">{deliveryOrders.tires.length}</td>
                       <td className="px-6">{deliveryOrders.client.name}</td>
                       <td className="px-6 text-xs">
-                        {deliveryOrders.client.address1}, <br />
-                        {deliveryOrders.client.region},{" "}
-                        {deliveryOrders.client.city}, <br />
-                        {deliveryOrders.client.zipCode}
+                        {deliveryOrders.client.address1 + ", " + deliveryOrders.client.city}, <br />
+                        {deliveryOrders.client.region + ", " + deliveryOrders.client.zipCode}
                       </td>
                       <td>{deliveryOrders.formattedCreatedAT}</td>
-                      <td className="flex justify-between sm:mt-7">
+                      <td className="flex flex-col items-center sm:flex-row sm:justify-around">
                         <Link to={`/viewDeliveryOrder/${deliveryOrders._id}`}>
-                          <button className="text-blue-600 hover:text-blue-800">
+                          <button className="text-blue-600 hover:text-blue-800 mt-2 sm:mt-0">
                             <UserRoundPen />
                           </button>
                         </Link>
                         <button
-                          className="text-red-600 hover:text-red-800"
+                          className="text-red-600 hover:text-red-800 mt-2 sm:mt-0"
                           onClick={() => handleDeleteClick(deliveryOrders)}
                         >
                           <Trash2 />
                         </button>
-                        <button className="hover:text-slate-500">
+                        <button className="hover:text-slate-500 mt-2 sm:mt-0">
                           <Printer />
                         </button>
                       </td>

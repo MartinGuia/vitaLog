@@ -6,12 +6,15 @@ import { useForm } from "react-hook-form";
 import { StepBack } from "lucide-react";
 import { useDepartment } from "../context/DepartmentContext.jsx";
 import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta
+import { useNavigate } from "react-router-dom";
 
 function EditUserPage() {
   const [alert, setAlert] = useState(null); // Estado para manejar la alerta
+  const [department, setDepartment] = useState(); // Estado para manejar la alerta
   const { getUser, updateUser } = useAuth();
   const params = useParams();
   const { getDepartments, allDepartments } = useDepartment();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -24,6 +27,7 @@ function EditUserPage() {
       if (params.id) {
         const userById = await getUser(params.id);
         if (userById) {
+          setDepartment(userById.department)
           reset({
             name: userById.name,
             lastName: userById.lastName,
@@ -44,26 +48,31 @@ function EditUserPage() {
 
     try {
       await updateUser(params.id, updatedValues);
-      // navigate("/departments");
-      setAlert({ message: "Usuario actualizado exitosamente", type: "success" });
-      setTimeout(() => setAlert(null), 3000); // Oculta la alerta después de 3 segundos
+      setAlert({
+        message: "Usuario actualizado exitosamente",
+        type: "success",
+        onAccept: () => navigate(`/department/${department}`), // Redirige tras cerrar la alerta
+      });
     } catch (error) {
       console.error(error);
-      alert({ message: "Usuario actualizado exitosamente", type: "" });
+      setAlert({
+        message: "Hubo un error al actualizar el usuario",
+        type: "error",
+      });
     }
   });
 
   return (
     <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
-      {alert && (
+       {alert && (
         <Alert
           message={alert.message}
           type={alert.type}
-          onClose={() => setAlert(null)}
+          onAccept={alert.onAccept} // Maneja el cierre de la alerta con redirección
         />
       )}
       <div>
-        <Link to="/departments">
+        <Link to={`/department/${department}`}>
           <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
             <StepBack color="white" />
           </button>

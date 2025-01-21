@@ -111,17 +111,17 @@ function AllWorkOrdersPage() {
                       <td>{workOrder.formattedCreatedAt}</td>
                       <td className="flex flex-col items-center md:flex-row md:items-center md:justify-around ">
                         <Link to={`/workorder/${workOrder._id}`}>
-                          <button className="text-blue-600 hover:text-blue-800 mt-2">
+                          <button className="text-blue-600 hover:text-blue-800 mt-2 sm:mt-0">
                             <UserRoundPen />
                           </button>
                         </Link>
                         <button
-                          className="text-red-600 hover:text-red-800 mt-2"
+                          className="text-red-600 hover:text-red-800 mt-2 sm:mt-0"
                           onClick={() => handleDeleteClick(workOrder)}
                         >
                           <Trash2 />
                         </button>
-                        <button className="hover:text-slate-500 mt-2">
+                        <button className="hover:text-slate-500 mt-2 sm:mt-0">
                           <Printer />
                         </button>
                       </td>

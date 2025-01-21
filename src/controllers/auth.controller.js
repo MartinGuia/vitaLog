@@ -128,7 +128,7 @@ export const login = async (req, res) => {
 
     if (!userFound) {
       return res.status(404).json({
-        message: ["The User does not exist"],
+        message: ["El usuario: ", userName , " no existe"],
       });
     }
 
@@ -140,7 +140,7 @@ export const login = async (req, res) => {
 
     if (!isMatch) {
       return res.status(400).json({
-        message: ["The password is incorrect"],
+        message: ["la contraseña es incorrecta"],
       });
     }
 

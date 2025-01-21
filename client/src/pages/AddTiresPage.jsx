@@ -1,11 +1,16 @@
 import { useTire } from "../context/TireContext";
 import { useDeliveryOrder } from "../context/DeliveryOrderContext";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Alert from "../components/ui/Alert";
 
 function AddTiresPage() {
   const { getTiresByInspection, tires } = useTire();
   const { addTiresDeliveryOrder, closeDeliveryOrder } = useDeliveryOrder();
   const [selectedTires, setSelectedTires] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     getTiresByInspection();
@@ -25,9 +30,24 @@ function AddTiresPage() {
   const handleSendSelectedTires = async () => {
     if (selectedTires.length === 0) return;
 
-    await addTiresDeliveryOrder(selectedTires);
-    setSelectedTires([]); // Limpia la selección después del envío
-    closeDeliveryOrder(); // Opcional, solo si deseas cerrar la orden tras agregar las llantas
+    try {
+      await addTiresDeliveryOrder(selectedTires);
+      await closeDeliveryOrder();
+      setAlertMessage("Llantas agregadas y orden cerrada exitosamente.");
+      setShowAlert(true); // Muestra la alerta
+    } catch (error) {
+      console.error(error);
+      setAlertMessage("Hubo un error al procesar la solicitud.");
+      setShowAlert(true); // Muestra la alerta de error
+    } finally {
+      setSelectedTires([]); // Limpia la selección
+    }
+  };
+
+  // Ocultar la alerta y redirigir
+  const handleAlertAccept = () => {
+    setShowAlert(false);
+    navigate("/somewhere"); // Reemplaza "/somewhere" por la página a la que deseas redirigir
   };
 
   return (
@@ -91,6 +111,15 @@ function AddTiresPage() {
           Enviar Seleccionados
         </button>
       </div>
+
+      {/* Mostrar alerta */}
+      {showAlert && (
+        <Alert
+          message={alertMessage}
+          type={alertMessage.includes("exitosamente") ? "success" : "error"}
+          onAccept={handleAlertAccept}
+        />
+      )}
     </div>
   );
 }

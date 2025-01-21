@@ -86,7 +86,6 @@ function ViewDepartmentByIdPage() {
           <Alert
             message={alert.message}
             type={alert.type}
-            onClose={() => setAlert(null)}
           />
         )}
 
