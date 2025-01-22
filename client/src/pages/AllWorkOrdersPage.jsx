@@ -30,7 +30,7 @@ function AllWorkOrdersPage() {
 
   const showAlert = (message, type = "success") => {
     setAlert({ message, type });
-    setTimeout(() => setAlert(null), 3000);
+    setTimeout(() => setAlert(null), 1000);
   };
 
   const handleDeleteClick = (workOrder) => {

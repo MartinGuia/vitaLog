@@ -8,8 +8,7 @@ function AddTiresPage() {
   const { getTiresByInspection, tires } = useTire();
   const { addTiresDeliveryOrder, closeDeliveryOrder } = useDeliveryOrder();
   const [selectedTires, setSelectedTires] = useState([]);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
+  const [alert, setAlert] = useState(null); // Estado para manejar la alerta
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,25 +32,38 @@ function AddTiresPage() {
     try {
       await addTiresDeliveryOrder(selectedTires);
       await closeDeliveryOrder();
-      setAlertMessage("Llantas agregadas y orden cerrada exitosamente.");
-      setShowAlert(true); // Muestra la alerta
+      setAlert({
+        message: "Se agregaron correctamente las llantas",
+        type: "success",
+        onAccept: () => navigate(`/allDeliveryOrders`), // Redirige tras cerrar la alerta
+      }); // Muestra la alerta
     } catch (error) {
       console.error(error);
-      setAlertMessage("Hubo un error al procesar la solicitud.");
-      setShowAlert(true); // Muestra la alerta de error
+      setAlert({
+        message: "Hubo un error al registrar las llantas",
+        type: "error",
+      });
     } finally {
       setSelectedTires([]); // Limpia la selección
     }
   };
 
-  // Ocultar la alerta y redirigir
-  const handleAlertAccept = () => {
-    setShowAlert(false);
-    navigate("/somewhere"); // Reemplaza "/somewhere" por la página a la que deseas redirigir
-  };
+  // // Ocultar la alerta y redirigir
+  // const handleAlertAccept = () => {
+  //   setShowAlert(false);
+  //   navigate("/allDeliveryOrders"); // Reemplaza "/somewhere" por la página a la que deseas redirigir
+  // };
 
   return (
     <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
+       {/* Mostrar alerta */}
+       {alert && (
+        <Alert
+          message={alert.message}
+          type={alert.type}
+          onAccept={alert.onAccept} // Maneja el cierre de la alerta con redirección
+        />
+      )}
       <div>
         <h1 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
           Orden de Entrega
@@ -112,14 +124,7 @@ function AddTiresPage() {
         </button>
       </div>
 
-      {/* Mostrar alerta */}
-      {showAlert && (
-        <Alert
-          message={alertMessage}
-          type={alertMessage.includes("exitosamente") ? "success" : "error"}
-          onAccept={handleAlertAccept}
-        />
-      )}
+     
     </div>
   );
 }

@@ -61,7 +61,7 @@ function AllDeliveryOrders() {
   return (
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
       <div className="text-center my-8">
-        <h2 className="md:text-4xl text-2xl font-semibold mb-2">Ordenes de Entrega</h2>
+        <h2 className="md:text-4xl text-2xl font-bold mb-2">Ordenes de Entrega</h2>
       </div>
       {alert && (
         <Alert

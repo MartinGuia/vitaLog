@@ -13,7 +13,7 @@ export const register = async (req, res) => {
     // Verifica si el usuario ya existe
     const userFound = await User.findOne({ userName });
     if (userFound) {
-      return res.status(409).json({ message: "El usuario ya existe" });
+      return res.status(409).json([ "El usuario " + userName + " ya existe"  ]);
     }
 
     // Verifica si el departamento existe
@@ -43,13 +43,6 @@ export const register = async (req, res) => {
 
     // Guarda el usuario en la base de datos
     const userSaved = await newUser.save();
-
-    // create access token
-    const token = await createAccessToken({
-      id: userSaved._id,
-    });
-
-    res.cookie("token", token);
 
     // Actualiza el departamento para incluir al usuario
     departmentFound.users.push(userSaved._id);

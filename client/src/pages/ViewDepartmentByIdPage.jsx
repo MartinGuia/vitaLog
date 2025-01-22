@@ -53,7 +53,7 @@ function ViewDepartmentByIdPage() {
 
   const showAlert = (message, type = "success") => {
     setAlert({ message, type });
-    setTimeout(() => setAlert(null), 3000); // Oculta la alerta después de 3 segundos
+    setTimeout(() => setAlert(null), 1000); // Oculta la alerta después de 3 segundos
   };
 
   const confirmDelete = async () => {

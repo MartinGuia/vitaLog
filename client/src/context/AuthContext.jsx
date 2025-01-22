@@ -23,19 +23,21 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  // const [userData, setUserData] = useState(null);
+  const [userRegister, setUserRegister] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [getAllUsers, setGetAllUsers] = useState([]);
   const [role, setRole] = useState(null)
   const [isAuthLoading, setIsAuthLoading] = useState(true); // Nuevo estado
+  const [allRoles, setAllRoles] = useState([]); // Nuevo estado
 
   const signup = async (user) => {
     try {
       const res = await registerRequest(user);
       console.log(res.data);
-      setUser(res.data);
+      return res.data
+      // setUser(res.data);
     } catch (error) {
       console.log(error);
       setErrors(error.response.data);
@@ -108,6 +110,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await getRolesRequest();
       // console.log(res.data);
+      setAllRoles(res.data)
       return res.data; 
     } catch (error) {
       console.error(error);
@@ -169,6 +172,7 @@ export const AuthProvider = ({ children }) => {
         updateUser,
         loading,
         role,
+        allRoles,
         deleteUser,
         getRoles,
         logout,

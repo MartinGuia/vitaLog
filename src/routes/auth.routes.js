@@ -23,8 +23,8 @@ router.post("/register",  authRequired, verifyRoleAdmin ,register);
 router.get('/getUsers', getUsers);
 router.post("/logout", logout);
 router.get("/verify", verifyToken);
-router.get("/profile/:id", getProfileById);
-router.put("/editUser/:id", editUser);
+router.get("/profile/:id", verifyRoleAdmin ,getProfileById);
+router.put("/editUser/:id", verifyRoleAdmin , editUser);
 router.delete("/deleteUser/:id", deleteUser);
 
 export default router;
