@@ -132,7 +132,7 @@ export const addTiresToDeliveryOrder = async (req, res) => {
   }
 };
 
-export const getDeliveryOrders = async (request, res) => {
+export const getDeliveryOrders = async (req, res) => {
   try {
     // Buscar todas las órdenes de entrega existentes
     const deliveryOrders = await DeliveryOrder.find({})
@@ -166,8 +166,15 @@ export const getDeliveryOrderById = async (req, res) => {
     const { id } = req.params;
     //Buscar la orden de entrega y agregar llantas asociadas
     const deliveryOrder = await DeliveryOrder.findById(id)
-      .populate({path:"tires", })
-      .populate({path:"createdBy"});
+    .populate({
+      path: "tires",
+      populate: {
+        path: "workOrder",
+        select: "numero",
+      },
+    })
+      .populate({path:"createdBy"})
+      // .populate({path:"workOrder", select:"numero"});
 
     if (!deliveryOrder) {
       return res
