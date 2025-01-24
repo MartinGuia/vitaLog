@@ -61,7 +61,9 @@ function AllDeliveryOrders() {
   return (
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
       <div className="text-center my-8">
-        <h2 className="md:text-4xl text-2xl font-bold mb-2">Ordenes de Entrega</h2>
+        <h2 className="md:text-4xl text-2xl font-bold mb-2">
+          Ordenes de Entrega
+        </h2>
       </div>
       {alert && (
         <Alert
@@ -73,7 +75,9 @@ function AllDeliveryOrders() {
       <section>
         <div className="p-4 w-full">
           {deliveryOrders.length === 0 ? (
-            <div className="text-center text-gray-600 text-lg">No hay ordenes de entrega</div>
+            <div className="text-center text-gray-600 text-lg">
+              No hay ordenes de entrega
+            </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full bg-white border border-gray-200 rounded-lg">
@@ -106,14 +110,19 @@ function AllDeliveryOrders() {
                       <td className="px-6">{deliveryOrders.tires.length}</td>
                       <td className="px-6">{deliveryOrders.client.name}</td>
                       <td className="px-6 text-xs">
-                        {deliveryOrders.client.address1 + ", " + deliveryOrders.client.city}, <br />
-                        {deliveryOrders.client.region + ", " + deliveryOrders.client.zipCode}
+                        {deliveryOrders.client.address1 +
+                          ", " +
+                          deliveryOrders.client.city}
+                        , <br />
+                        {deliveryOrders.client.region +
+                          ", " +
+                          deliveryOrders.client.zipCode}
                       </td>
                       <td>{deliveryOrders.formattedCreatedAT}</td>
                       <td className="flex flex-col items-center sm:flex-row sm:justify-around">
                         <Link to={`/viewDeliveryOrder/${deliveryOrders._id}`}>
-                          <button className="text-blue-600 hover:text-blue-800 mt-2 sm:mt-0">
-                            <UserRoundPen />
+                          <button className="hover:text-slate-500 mt-1">
+                            <Printer />
                           </button>
                         </Link>
                         <button
@@ -121,9 +130,6 @@ function AllDeliveryOrders() {
                           onClick={() => handleDeleteClick(deliveryOrders)}
                         >
                           <Trash2 />
-                        </button>
-                        <button className="hover:text-slate-500 mt-2 sm:mt-0">
-                          <Printer />
                         </button>
                       </td>
                     </tr>

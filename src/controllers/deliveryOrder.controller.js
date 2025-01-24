@@ -58,12 +58,10 @@ export const closeDeliveryOrder = async (req, res) => {
     }).sort({ createdAt: -1 });
 
     if (!currentDeliveryOrder) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "No hay ninguna orden de trabajo abierta.",
-        });
+      return res.status(404).json({
+        success: false,
+        message: "No hay ninguna orden de trabajo abierta.",
+      });
     }
 
     // Actualizar la orden de trabajo encontrada a cerrada
@@ -166,15 +164,15 @@ export const getDeliveryOrderById = async (req, res) => {
     const { id } = req.params;
     //Buscar la orden de entrega y agregar llantas asociadas
     const deliveryOrder = await DeliveryOrder.findById(id)
-    .populate({
-      path: "tires",
-      populate: {
-        path: "workOrder",
-        select: "numero",
-      },
-    })
-      .populate({path:"createdBy"})
-      // .populate({path:"workOrder", select:"numero"});
+      .populate({
+        path: "tires",
+        populate: {
+          path: "workOrder",
+          select: "numero",
+        },
+      })
+      .populate({ path: "createdBy", select: "name lastName userName"})
+      .populate({ path: "client"});
 
     if (!deliveryOrder) {
       return res
@@ -182,10 +180,13 @@ export const getDeliveryOrderById = async (req, res) => {
         .json({ success: false, message: "Orden de entrega no encontrada." });
     }
 
-     // Convertir a un objeto y formatear la fecha
-     const formattedDeliveryOrder = {
+    // Convertir a un objeto y formatear la fecha
+    const formattedDeliveryOrder = {
       ...deliveryOrder.toObject(),
-      formattedCreatedAt: format(new Date(deliveryOrder.createdAt), "dd/MM/yyyy"), // Ajusta el formato según tus necesidades
+      formattedCreatedAt: format(
+        new Date(deliveryOrder.createdAt),
+        "dd/MM/yyyy"
+      ), // Ajusta el formato según tus necesidades
     };
 
     res.json(formattedDeliveryOrder);
