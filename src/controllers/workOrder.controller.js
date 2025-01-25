@@ -101,7 +101,7 @@ export const getWorkOrderById = async (req, res) => {
     const workOrder = await WorkOrder.findById(id).populate('tires').populate({
       path: "createdBy",  // Poblar el usuario que creó la orden de trabajo
       select: "name lastName _id",  // Lista de campos que deseas poblar del usuario
-    });
+    }).populate({path: "client"});
     
     if (!workOrder) {
       return res.status(404).json({ message: "Orden de trabajo no encontrada" });

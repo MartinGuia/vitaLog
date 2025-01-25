@@ -1,8 +1,10 @@
 import * as images from "../img";
-import { useWorkOrder } from "../context/WorkOrderContext";
+import { useWorkOrder } from "../context/WorkOrderContext.jsx";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { UserRoundPen, StepBack } from "lucide-react";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import WorkOrderPDF from "../components/PDF/WorkOrderPDF.jsx";
 
 function ViewWorkOrder() {
   const { getWorkOrderById } = useWorkOrder();
@@ -15,6 +17,12 @@ function ViewWorkOrder() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Mostrar 10 elementos por página
   const [date, setDate] = useState();
+  const [workOrder, setWorkOrder] = useState();
+  const [clientName, setNameClient] = useState();
+  const [clientAddress, setClientAddress] = useState();
+  const [clientRegion, setClientRegion] = useState();
+  const [clientCity, setClientCity] = useState();
+  const [clientZipCode, setClientZipCode] = useState();
 
   useEffect(() => {
     async function loadWorkOrder() {
@@ -27,6 +35,12 @@ function ViewWorkOrder() {
             setTires(workOrder.tires);
             setNumero(workOrder.numero);
             setDate(workOrder.formattedCreatedAt);
+            setWorkOrder(workOrder);
+            setNameClient(workOrder.client.name);
+            setClientAddress(workOrder.client.address1);
+            setClientRegion(workOrder.client.region);
+            setClientCity(workOrder.client.city);
+            setClientZipCode(workOrder.client.zipCode);
             // setDataWorkOrder(getWorkOrderById(workOrder.data));
           }
         }
@@ -63,57 +77,59 @@ function ViewWorkOrder() {
           </Link>
         </div>
         <header className="w-full mt-3 flex justify-center">
-          <div className=" w-[95%] p-2 flex justify-between bg-slate-200 border-l-8 border-black rounded-md">
-            <section className="ml-2">
-              <h1 className="font-bold text-xl">
-                Número de orden de trabajo <span>{numero}</span>
+          <div className=" w-full p-2 flex justify-between border-b-2 border-blue-600 ">
+            <section className="">
+              <h1 className="font-bold text-xl text-blue-700">
+                Orden de Entrega: <span>{numero}</span>
               </h1>
               <p className="font-medium">VITA-BAJIO S.A de C.V</p>
-              <p className="font-medium text-sm">VITA-BAJIO S.A de C.V</p>
+              <p className="font-medium text-sm">
+                Hidalgo 1500 San Juan de La Presa, Salamanca
+              </p>
             </section>
-            <section className="flex justify-end mr-2">
-              <img src={images.logoVB} className="w-[45%]" alt="" />
+            <section className="flex justify-end mr-2 ">
+              <img
+                src={images.logoVB}
+                className="w-auto size-20  sm:size-auto sm:w-[45%]"
+                alt=""
+              />
             </section>
           </div>
         </header>
         <main className="">
-          <section className="mt-4 flex justify-center">
-            <div className="flex justify-between w-[95%]">
-              <article className="w-[33.3%] text-sm">
-                <div className="flex">
-                  <p className="">Cuenta: </p>
-                  <p className="font-bold ml-2">VITA-BAJIO</p>
-                </div>
-                <div className="mt-2">
-                  <p className="flex">
-                    Ubicación:
-                    <span className="font-bold ml-2">Salamanca () (L)</span>
+          <section className="mt-4">
+            <div className="bg-gray-100 sm:flex sm:justify-evenly rounded p-3">
+              <article className="sm:w-[50%]">
+                <h2 className="text-lg font-semibold">
+                  Detalles de la Recolección
+                </h2>
+
+                <div>
+                  <p>
+                    Recolector:{" "}
+                    <span className="font-medium">
+                      {name} {lastName}
+                    </span>
                   </p>
-                  <p className="font-bold">
-                    Hidalgo 1500 San Juan de La Presa, Salamanca
+                  <p>
+                    Fecha: <span className="font-semibold">{date}</span>
                   </p>
-                  <p className="font-bold">Salamanca 36770</p>
                 </div>
-                <p className="flex mt-2">
-                  Recolector:
-                  <span className="font-bold ml-2">
-                    {name} {lastName}
-                  </span>
-                </p>
               </article>
-              <article className="w-[33.3%] text-sm">
-                <p className="mt-2">
-                  Fecha de recolección:{" "}
-                  <span className="font-semibold">{date}</span>
-                </p>
-                <p className="mt-2">Fecha de solicitud de entrega:</p>
-                <p className="mt-2">Ref #:</p>
-              </article>
-              <article className="w-[33.3%] text-sm">
-                <p className="flex">
-                  Desecho dejado en la ubicación:{" "}
-                  <span className="font-bold ml-2">Sí</span>
-                </p>
+              <article className="sm:flex sm:justify-end sm:w-[50%]">
+                <div>
+                  <h2>Envíe a:</h2>
+                  <div>
+                    <p className="font-bold">{clientName}</p>
+                    <div className="text-xs">
+                      <p>{clientAddress}</p>
+                      <p>
+                        {clientRegion}, {clientCity}
+                      </p>
+                      <p>{clientZipCode}</p>
+                    </div>
+                  </div>
+                </div>
               </article>
             </div>
           </section>
@@ -122,27 +138,25 @@ function ViewWorkOrder() {
               <div className="overflow-x-auto">
                 <table className="min-w-full bg-white border border-gray-200 rounded-lg">
                   <thead>
-                    <tr className="bg-gray-100 text-gray-600 text-sm text-left">
-                      <th className="py-3 px-6">Línea</th>
+                    <tr className="bg-blue-600 text-white text-sm text-center">
+                      <th className="py-3 px-1">Línea</th>
                       <th className="py-3 px-6">Código de Ítem</th>
                       <th className="py-3 px-6">Código de Barras</th>
                       <th className="py-3 px-6">Medida de Casco</th>
                       <th className="py-3 px-6">Marca</th>
-                      <th className="py-3 px-6">Diseño de Casco</th>
                       <th className="py-3 px-6">Banda Requerida</th>
                       <th className="py-3 px-6">DOT</th>
                       <th className="py-3 px-6"></th>
                     </tr>
                   </thead>
-                  <tbody className="">
+                  <tbody className="text-center">
                     {currentOrders.map((tire, index) => (
                       <tr key={index} className="border-t border-gray-200">
-                        <td className="py-3 px-6">{tire.linea}</td>
+                        <td className="py-3 px-1">{tire.linea}</td>
                         <td className="py-3 px-6">{tire.itemCode}</td>
                         <td className="py-3 px-6">{tire.barCode}</td>
                         <td className="py-3 px-6">{tire.helmetMeasurement}</td>
                         <td className="py-3 px-6">{tire.brand}</td>
-                        <td className="py-3 px-6">{tire.helmetDesign}</td>
                         <td className="py-3 px-6">{tire.requiredBand}</td>
                         <td className="py-3 px-6">{tire.antiquityDot}</td>
                         <td className="sm:flex py-2 px-3 justify-between">
@@ -204,6 +218,27 @@ function ViewWorkOrder() {
               </div>
             </div>
           </section>
+          <div>
+            {/* Tu diseño actual */}
+            {workOrder && (
+              <PDFDownloadLink
+                document={<WorkOrderPDF workOrder={workOrder} />}
+                fileName={`OrdenTrabajo_${workOrder.numero}.pdf`}
+              >
+                {({ loading }) =>
+                  loading ? (
+                    <button className="flex mt-2 sm:mt-0 shadow p-2 text-sm sm:text-base sm:p-3 bg-red-400 rounded-lg text-white cursor-pointer hover:bg-red-600 duration-500 hover:duration-500">
+                      Generando PDF...
+                    </button>
+                  ) : (
+                    <button className="flex mt-2 sm:mt-0 shadow p-2 text-sm sm:text-base sm:p-3 bg-red-400 rounded-lg text-white cursor-pointer hover:bg-red-600 duration-500 hover:duration-500">
+                      Descargar PDF
+                    </button>
+                  )
+                }
+              </PDFDownloadLink>
+            )}
+          </div>
         </main>
       </div>
     </>

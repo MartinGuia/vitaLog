@@ -1,7 +1,7 @@
 import * as images from "../img";
 import { useDeliveryOrder } from "../context/DeliveryOrderContext.jsx";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import DeliveryOrderPDF from "./DeliveryOrderPDF";
+import DeliveryOrderPDF from "../components/PDF/DeliveryOrderPDF.jsx";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { StepBack } from "lucide-react";
@@ -52,6 +52,10 @@ function ViewDeliveryOrderPage() {
             setDeliveryOrder(deliveryOrder);
             setDate(deliveryOrder.formattedCreatedAt);
             setNameClient(deliveryOrder.client.name);
+            setClientAddress(deliveryOrder.client.address1);
+            setClientRegion(deliveryOrder.client.region);
+            setClientCity(deliveryOrder.client.city);
+            setClientZipCode(deliveryOrder.client.zipCode);
           }
         }
       } catch (error) {
@@ -101,7 +105,7 @@ function ViewDeliveryOrderPage() {
 
                 <div>
                   <p>
-                    Nombre:{" "}
+                    Conductor:{" "}
                     <span className="font-medium">
                       {name} {lastName}
                     </span>
@@ -116,7 +120,11 @@ function ViewDeliveryOrderPage() {
                   <h2>Envíe a:</h2>
                   <div>
                     <p className="font-bold">{clientName}</p>
-                    <p></p>
+                    <div className="text-xs">
+                    <p>{clientAddress}</p>
+                    <p>{clientRegion}, {clientCity}</p>
+                    <p>{clientZipCode}</p>
+                    </div>
                   </div>
                 </div>
               </article>
@@ -127,10 +135,12 @@ function ViewDeliveryOrderPage() {
               <div className="overflow-x-auto">
                 <table className="min-w-full bg-white border border-gray-200 rounded-lg">
                   <thead>
-                    <tr className="bg-gray-100 text-gray-600 text-sm text-left">
-                      <th className="py-3 px-6">Línea</th>
+                    <tr className="bg-blue-600 text-white text-sm text-center">
+                      <th className="py-3 flex-1"></th>
+                      <th className="py-3 flex-1 text-center">Orden de trabajo</th>
                       <th className="py-3 px-6">Código de Ítem</th>
                       <th className="py-3 px-6">Código de Barras</th>
+                      <th className="py-3 px-6">Estado</th>
                       <th className="py-3 px-6">Medida de Casco</th>
                       <th className="py-3 px-6">Marca</th>
                       <th className="py-3 px-6">Banda aplicada</th>
@@ -138,15 +148,17 @@ function ViewDeliveryOrderPage() {
                       {/* <th className="py-3 px-6"></th> */}
                     </tr>
                   </thead>
-                  <tbody className="">
+                  <tbody className="text-center">
                     {currentOrders.map((tire, index) => (
                       <tr key={index} className="border-t border-gray-200">
-                        <td className="py-3 px-6">{tire.linea}</td>
+                        <td className="py-3 px-2">{tire.linea}</td>
+                        <td className="py-3 px-6 flex-1">{tire.workOrder.numero}</td>
                         <td className="py-3 px-6">{tire.itemCode}</td>
                         <td className="py-3 px-6">{tire.barCode}</td>
+                        <td className="py-3 px-6">{tire.status}</td>
                         <td className="py-3 px-6">{tire.helmetMeasurement}</td>
                         <td className="py-3 px-6">{tire.brand}</td>
-                        <td className="py-3 px-6">{tire.helmetDesign}</td>
+                        <td className="py-3 px-6">{tire.helmetDesign || "-"}</td>
                         <td className="py-3 px-6">{tire.antiquityDot}</td>
                         {/* <td className="sm:flex py-2 px-3 justify-between">
                               <Link to={`/tire/${tire._id}`}>
@@ -207,7 +219,6 @@ function ViewDeliveryOrderPage() {
               </div>
             </div>
           </section>
-          <div>
             <div>
               {/* Tu diseño actual */}
               {deliveryOrder && (
@@ -227,7 +238,6 @@ function ViewDeliveryOrderPage() {
                 </PDFDownloadLink>
               )}
             </div>
-          </div>
         </main>
       </div>
     </>
