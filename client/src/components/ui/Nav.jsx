@@ -20,6 +20,7 @@ function Nav({ children }) {
   const { isAuthenticated, role, user, getRoles } = useAuth();
   const [userRoleId, setUserRoleId] = useState(null); // ID del rol del usuario
   const [roleIds, setRoleIds] = useState({
+    master: null,
     administrador: null,
     ventas: null,
     almacenista: null,
@@ -36,6 +37,7 @@ function Nav({ children }) {
         const rolesMap = {};
         for (const role of res) {
           if (role.name === "Administrador") rolesMap.administrador = role._id;
+          if (role.name === "Master") rolesMap.master = role._id;
           if (role.name === "Vendedor") rolesMap.ventas = role._id;
           if (role.name === "Almacenista") rolesMap.almacenista = role._id;
           if (role.name === "Operador") rolesMap.operador = role._id;
@@ -72,6 +74,8 @@ function Nav({ children }) {
           navigate("/createWorkOrder"); // Página para Vendedor
         } else if (userRoleId === roleIds.almacenista) {
           navigate("/deliveryOrders"); // Página para Almacenista
+        } else if (userRoleId === roleIds.administrador) {
+          navigate("/workorders"); // Página para Almacenista
         } else if (userRoleId === roleIds.operador) {
           navigate("/productionInitial"); // Página para Operador
         }
@@ -84,55 +88,55 @@ function Nav({ children }) {
       path: "/departments",
       icon: <LayoutDashboard size={20} color="white" />,
       text: "Departamentos",
-      allowedRoles: [roleIds.administrador], // Solo Administrador
+      allowedRoles: [roleIds.master], // Solo Administrador
     },
     {
       path: "/clients",
       icon: <Users size={20} color="white" />,
       text: "Clientes",
-      allowedRoles: [roleIds.administrador,], // Administrador y Ventas
+      allowedRoles: [roleIds.master,], // Administrador y Ventas
     },
     {
       path: "/productionInitial",
       icon: <Search size={20} color="white" />,
       text: "Inspección inicial",
-      allowedRoles: [roleIds.administrador, roleIds.operador], // Administrador y Operador
+      allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
     },
     {
       path: "/productionRepairs",
       icon: <Settings size={20} color="white" />,
       text: "Reparación",
-      allowedRoles: [roleIds.administrador, roleIds.operador], // Administrador y Operador
+      allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
     },
     {
       path: "/productionFinal",
       icon: <Flag size={20} color="white" />,
       text: "Inspección Final",
-      allowedRoles: [roleIds.administrador, roleIds.operador], // Administrador y Operador
+      allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
     },
     {
       path: "/workorders",
       icon: <BookMarked size={20} color="white" />,
       text: "Orden de trabajo",
-      allowedRoles: [roleIds.administrador, roleIds.almacenista], // Administrador, Ventas y Operador
+      allowedRoles: [roleIds.master, roleIds.almacenista, roleIds.administrador], // Administrador, Ventas y Operador
     },
     {
       path: "/createWorkOrder",
       icon: <NotebookPen size={20} color="white" />,
       text: "Crear Orden de Trabajo",
-      allowedRoles: [roleIds.administrador, roleIds.ventas], // Administrador y Operador
+      allowedRoles: [roleIds.master, roleIds.ventas], // Administrador y Operador
     },
     {
       path: "/deliveryOrders",
       icon: <PackageCheck size={20} color="white" />,
       text: "Crear orden de Entrega",
-      allowedRoles: [roleIds.administrador, roleIds.almacenista], // Administrador y Almacén
+      allowedRoles: [roleIds.master, roleIds.almacenista], // Administrador y Almacén
     },
     {
       path: "/allDeliveryOrders",
       icon: <FileInput size={20} color="white" />,
       text: "Ver Orden de Entrega",
-      allowedRoles: [roleIds.administrador, roleIds.almacenista], // Administrador, Ventas y Almacén
+      allowedRoles: [roleIds.master, roleIds.almacenista,  roleIds.administrador], // Administrador, Ventas y Almacén
     },
   ];
 

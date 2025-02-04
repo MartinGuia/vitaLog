@@ -20,14 +20,15 @@ const verifyRoleAdmin =  (req, res, next) => {
         const role = await Role.findById(user.role);
 
         // Validate if the role name is Admin
-        if (role.name != "Administrador") {
+        if (role.name != "Master") {
             return res.status(401).json({ message: "Not authorized"});
         } else{
             next();
         };
     });
     } catch (error) {
-       console.error(error) 
+       res.status(401).json({error})
+        console.error(error) 
     }
 };
 

@@ -84,7 +84,7 @@ export function TiresProvider({ children }) {
     const getTireByBarcode = async (barCode) => {
       try {
         const res = await getTireByBarcodeRequest(barCode);
-        console.log("Tire encontrada:", res.data);
+        console.log("Registro encontrado:", res.data);
         return res.data; // Devuelve los datos de la llanta
       } catch (error) {
         console.error("Error al buscar la llanta por código de barras:", error);

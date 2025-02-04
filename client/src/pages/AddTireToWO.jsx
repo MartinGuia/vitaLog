@@ -6,6 +6,7 @@ import { useWorkOrder } from "../context/WorkOrderContext";
 import InputField from "../components/ui/InputField";
 import React, { useState } from "react";
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
+import ButtonPrimary, {  } from "../components/ui/ButtonPrimary";
 
 function AddTireToWO() {
   const [scannedCode, setScannedCode] = useState(""); // Estado para el código escaneado
@@ -125,8 +126,13 @@ function AddTireToWO() {
                         Escanea el código
                       </h1>
                       <BarcodeScannerComponent
-                        width={500}
-                        height={500}
+                        width={300}
+                        // height={300}
+                        videoConstraints={{
+                          facingMode: "environment", // Usa la cámara trasera
+                          width: { ideal: 1920 },
+                          height: { ideal: 1080 },
+                        }}
                         onUpdate={(err, result) => {
                           if (result) {
                             setScannedCode(result.text);
@@ -185,8 +191,8 @@ function AddTireToWO() {
 
           <div>
             <div className="mt-10">
-              <h1 className="font-bold text-3xl">Medida </h1>
-              <p>Complete el usuario y contraseña.</p>
+              <h1 className="font-bold text-3xl">Medida y Marca</h1>
+              <p>Complete la marca y medida de la llanta.</p>
             </div>
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
@@ -219,19 +225,22 @@ function AddTireToWO() {
             </div>
           </div>
           <div className="flex justify-end mt-14 "></div>
-          <div className="flex justify-end mt-14">
+          <div className="flex justify-end mt-5">
             <button
               className="text-white font-medium bg-cyan-950 py-2 px-5 rounded-md shadow-md hover:bg-cyan-800"
               type="submit"
             >
               Agregar llanta
             </button>
-            <button
+            {/* <button
               className="ml-4 font-medium bg-yellow-400 py-2 px-5 rounded-md shadow-md hover:bg-yellow-500"
               onClick={handleClick}
             >
               Cerrar orden
-            </button>
+            </button> */}
+            <ButtonPrimary onClick={handleClick}>
+              <p>Cerrar orden</p>
+            </ButtonPrimary>
           </div>
         </form>
       </div>

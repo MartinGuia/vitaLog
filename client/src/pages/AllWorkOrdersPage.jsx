@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { useWorkOrder } from "../context/WorkOrderContext";
 import { useEffect, useState } from "react";
-import { Printer, UserRoundPen, Trash2 } from "lucide-react";
+import { Printer, Trash2 } from "lucide-react";
 import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta
+// import { useAuth } from "../context/AuthContext";
 
 function AllWorkOrdersPage() {
   const { deleteWorkOrder, getWorkOrders, workOrders, setWorkOrders } = useWorkOrder();
@@ -12,6 +13,7 @@ function AllWorkOrdersPage() {
   const [workOrderToDelete, setWorkOrderToDelete] = useState(null);
   const [confirmationNumber, setConfirmationNumber] = useState("");
   const itemsPerPage = 10;
+  // const { user } = useAuth();
 
   useEffect(() => {
     getWorkOrders();
@@ -111,8 +113,8 @@ function AllWorkOrdersPage() {
                       <td>{workOrder.formattedCreatedAt}</td>
                       <td className="flex flex-col items-center md:flex-row md:items-center md:justify-around ">
                         <Link to={`/workorder/${workOrder._id}`}>
-                          <button className="text-blue-600 hover:text-blue-800 mt-2 sm:mt-0">
-                            <UserRoundPen />
+                          <button className="hover:text-slate-500 mt-2 sm:mt-0 duration-500 hover:duration-500">
+                            <Printer />
                           </button>
                         </Link>
                         <button
@@ -120,9 +122,6 @@ function AllWorkOrdersPage() {
                           onClick={() => handleDeleteClick(workOrder)}
                         >
                           <Trash2 />
-                        </button>
-                        <button className="hover:text-slate-500 mt-2 sm:mt-0">
-                          <Printer />
                         </button>
                       </td>
                     </tr>

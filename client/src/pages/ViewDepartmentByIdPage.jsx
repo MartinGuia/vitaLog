@@ -82,12 +82,7 @@ function ViewDepartmentByIdPage() {
     <>
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
         {/* Alerta de la aplicación */}
-        {alert && (
-          <Alert
-            message={alert.message}
-            type={alert.type}
-          />
-        )}
+        {alert && <Alert message={alert.message} type={alert.type} />}
 
         <div>
           <Link to="/departments">

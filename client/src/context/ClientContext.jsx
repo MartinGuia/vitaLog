@@ -4,6 +4,7 @@ import {
   getClientsRequest,
   getClientRequest,
   updateClientRequest,
+  deleteClientRequest,
 } from "../api/client.js";
 
 const ClientContext = createContext();
@@ -60,6 +61,16 @@ export function ClientProvider({ children }) {
     }
   };
 
+  const deleteClient = async (id) => {
+    try {
+      const res = await deleteClientRequest(id);
+      console.log(res.data);
+      // setClients(clients.filter((client) => client._id!== id));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     if (errors.length > 0) {
       const timer = setTimeout(() => {
@@ -80,6 +91,7 @@ export function ClientProvider({ children }) {
         getClients,
         allClients,
         updateClient,
+        deleteClient,
         errors,
       }}
     >

@@ -2,10 +2,15 @@ import { CirclePlus, UserRoundPen, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useClient } from "../context/ClientContext";
+import Alert from "../components/ui/Alert"; // Importa tu componente de alerta
 
 function AllClientPage() {
-  const { getClients, allClients } = useClient();
+  const { getClients, allClients, deleteClient } = useClient();
   const [currentPage, setCurrentPage] = useState(1);
+  const [alert, setAlert] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [clientToDelete, setClientToDelete] = useState(null);
+  const [confirmationName, setConfirmationName] = useState("");
   const itemsPerPage = 10; // Mostrar 10 elementos por página
 
   // Llamar a getClients una sola vez
@@ -27,10 +32,42 @@ function AllClientPage() {
     setCurrentPage(pageNumber);
   };
 
+  const showAlert = (message, type = "success") => {
+    setAlert({ message, type });
+    setTimeout(() => setAlert(null), 1000);
+  };
+
+  const handleDeleteClick = (client) => {
+    setClientToDelete(client);
+    setIsModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (confirmationName === clientToDelete.alias) {
+      try {
+        await deleteClient(clientToDelete._id);
+        showAlert("Cliente eliminado exitosamente", "success");
+        getClients(); // Refresca la lista de clientes
+      } catch (error) {
+        console.error(error);
+        showAlert("Error al eliminar el cliente. Intenta nuevamente.", "error");
+      }
+      setIsModalOpen(false);
+      setClientToDelete(null);
+      setConfirmationName("");
+    } else {
+      showAlert("El nombre no coincide. Cliente no eliminado.", "error");
+    }
+  };
+
   return (
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
+      {/* Alerta */}
+      {alert && <Alert message={alert.message} type={alert.type} />}
       <div className="text-center my-8">
-        <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">Cuentas Locales</h2>
+        <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
+          Cuentas Locales
+        </h2>
       </div>
       <div className="flex justify-end">
         <Link to="/add-client">
@@ -70,7 +107,10 @@ function AllClientPage() {
                           <UserRoundPen />
                         </button>
                       </Link>
-                      <button className="text-red-600 hover:text-red-800 ">
+                      <button
+                        className="text-red-600 hover:text-red-800 "
+                        onClick={() => handleDeleteClick(client)}
+                      >
                         <Trash2 />
                       </button>
                     </td>
@@ -78,7 +118,6 @@ function AllClientPage() {
                 ))}
               </tbody>
             </table>
-            {/* Mostrar paginación solo si hay 10 o más usuarios */}
             {allClients.length >= 10 && (
               <div className="flex justify-between items-center mt-4">
                 <div className="text-sm text-gray-600">
@@ -126,6 +165,43 @@ function AllClientPage() {
           </div>
         </div>
       </section>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h3 className="text-lg font-bold mb-4">
+              Confirmar eliminación del cliente
+            </h3>
+            <p>
+              Escribe el nombre del cliente{" "}
+              <strong>{clientToDelete.alias}</strong> para confirmar:
+            </p>
+            <input
+              type="text"
+              value={confirmationName}
+              onChange={(e) => setConfirmationName(e.target.value)}
+              className="border border-gray-300 rounded-md px-2 py-1 mt-2 w-full"
+            />
+            <div className="flex justify-end space-x-4 mt-4">
+              <button
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setConfirmationName("");
+                }}
+                className="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                Confirmar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

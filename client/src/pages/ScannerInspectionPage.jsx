@@ -16,25 +16,38 @@ function ScannerInspectionPage() {
   const handleScannerOpen = () => setIsScannerOpen(true);
   const handleScannerClose = () => setIsScannerOpen(false);
 
+  const normalizeBarcode = (barcode) => {
+    return barcode.replace("'", "-"); // Reemplaza apóstrofes con guiones
+  };
+
   const handleScan = async (code) => {
-    if (!code) return; // Validar código
+    if (!code) return;
     try {
-      setError(null); // Limpiar errores previos
-      const tire = await getTireByBarcode(code);
+      const normalizedCode = normalizeBarcode(code);
+      setError(null);
+      const tire = await getTireByBarcode(normalizedCode);
       navigate(`/editRepairs/${tire._id}`);
-      // setTireData(tire); // Guardar datos de la llanta en el estado
-      // setIsEditing(true); // Activar modo edición
-      // console.log("Datos de la llanta escaneada:", tire);
     } catch (err) {
       console.error("Error al buscar la llanta:", err);
-      setError("No se encontró información para el código escaneado."); // Mostrar mensaje de error
-      setIsEditing(false); // Desactivar modo edición
+      setError("No se encontró información para el código escaneado.");
     }
   };
+
+    // Manejar entrada del teclado (para escáner físico)
+    const handleKeyDown = (e) => {
+      // Detecta cuando el código de barras ha terminado (presión de la tecla Enter o Tab)
+      if (e.key === "Enter" || e.key === "Tab") {
+        e.preventDefault(); // Prevenir comportamiento por defecto del Enter
+        handleScan(scannedCode.trim()); // Buscar llanta con el código ingresado
+      }
+    };
+
   return (
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
       <div className="text-center my-8">
-        <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">Reparaciones</h2>
+        <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
+          Reparaciones
+        </h2>
       </div>
 
       <section className="h-auto">
@@ -44,7 +57,9 @@ function ScannerInspectionPage() {
               label="Código de Barras"
               id="barcode"
               value={scannedCode}
-              readOnly
+              onChange={(e) => setScannedCode(e.target.value)} // Actualizar estado
+              onKeyDown={handleKeyDown} // Detectar tecla Enter o Tab
+              autoFocus // Asegura que el campo tenga foco al cargar
             />
             <button
               type="button"
@@ -67,14 +82,18 @@ function ScannerInspectionPage() {
               <div className="bg-white p-6 rounded-md shadow-lg z-[100]">
                 <h1 className="text-xl font-bold mb-4">Escanea el código</h1>
                 <BarcodeScannerComponent
-                  width={500}
-                  height={500}
+                  width={600}
+                  height={600}
+                  videoConstraints={{
+                    facingMode: "environment", // Usa la cámara trasera
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 },
+                  }}
                   onUpdate={(err, result) => {
                     if (result) {
-                      const scannedValue = result.text; // Código escaneado
-                      setScannedCode(scannedValue); // Actualizar el estado
-                      handleScan(scannedValue); // Llamar a handleScan con el código
-                      handleScannerClose(); // Cerrar el escáner
+                      setScannedCode(result.text.trim());
+                      handleScan(result.text.trim());
+                      handleScannerClose();
                     } else if (err) {
                       console.error("Error al escanear:", err);
                       setError("Error al escanear el código.");

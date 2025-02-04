@@ -80,15 +80,39 @@ export const getClientById = async (req, res) => {
   } catch (error) {
     console.error("Error al obtener el cliente:", error);
     res
-     .status(500)
-     .json({ succes: false, message: "Error interno del servidor" });
+      .status(500)
+      .json({ succes: false, message: "Error interno del servidor" });
   }
 };
 
 export const editClient = async (req, res) => {
   const client = await Client.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
-  })
-  if (!client) return res.status(404).json({ message: "Cliente no encontrado" });
+  });
+  if (!client)
+    return res.status(404).json({ message: "Cliente no encontrado" });
   res.json(client);
-}
+};
+
+export const deleteClient = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    //Buscar la orden de trabajo mediante el ID
+    const client = await Client.findById(id);
+
+    //Si no se encuentra el cliente, responde un error 404
+    if (!client)
+      return res.status(404).json({ message: "Cliente no encontrado" });
+
+    //Si el cliente se encuentra, elimina el cliente de la base de datos
+    await Client.findByIdAndDelete(id);
+
+    res.json({ message: "Cliente eliminado exitosamente" });
+  } catch (error) {
+    console.error("Error al eliminar el cliente:", error);
+    res
+      .status(500)
+      .json({ succes: false, message: "Error interno del servidor" });
+  }
+};

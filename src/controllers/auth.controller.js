@@ -13,7 +13,7 @@ export const register = async (req, res) => {
     // Verifica si el usuario ya existe
     const userFound = await User.findOne({ userName });
     if (userFound) {
-      return res.status(409).json([ "El usuario " + userName + " ya existe"  ]);
+      return res.status(409).json(["El usuario " + userName + " ya existe"]);
     }
 
     // Verifica si el departamento existe
@@ -121,12 +121,12 @@ export const login = async (req, res) => {
 
     if (!userFound) {
       return res.status(404).json({
-        message: ["El usuario: ", userName , " no existe"],
+        message: ["El usuario: ", userName, " no existe"],
       });
     }
 
-     // Gets the user's role adn department
-     const roleFound = userFound.role;
+    // Gets the user's role adn department
+    const roleFound = userFound.role;
     //  const departmentFound = userFound.department;
 
     const isMatch = await bcryptjs.compare(password, userFound.password);
@@ -315,7 +315,7 @@ export const verifyToken = async (req, res) => {
 
     const userFound = await User.findById(user.id);
     if (!userFound) return res.status(401).json({ message: "Unauthorized" });
-    
+
     return res.json({
       id: userFound._id,
       name: userFound.name,

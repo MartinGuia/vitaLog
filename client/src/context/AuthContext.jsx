@@ -7,7 +7,7 @@ import {
   getUserRequest,
   deleteUserRequest,
   updateUserRequest,
-  getRolesRequest
+  getRolesRequest,
 } from "../api/auth.js";
 import Cookies from "js-cookie";
 
@@ -23,12 +23,11 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [userRegister, setUserRegister] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [getAllUsers, setGetAllUsers] = useState([]);
-  const [role, setRole] = useState(null)
+  const [role, setRole] = useState(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true); // Nuevo estado
   const [allRoles, setAllRoles] = useState([]); // Nuevo estado
 
@@ -36,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await registerRequest(user);
       console.log(res.data);
-      return res.data
+      return res.data;
       // setUser(res.data);
     } catch (error) {
       console.log(error);
@@ -54,7 +53,7 @@ export const AuthProvider = ({ children }) => {
       console.log(res);
       setIsAuthenticated(true);
       setUser(res.data);
-      recargarPagina()
+      recargarPagina();
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -98,20 +97,20 @@ export const AuthProvider = ({ children }) => {
   };
 
   const deleteUser = async (id) => {
-    // try {
-      const res = await deleteUserRequest(id)
-      console.log(res.data)
-    // } catch (error) {
-      
-    // }
-  }
+    try {
+      const res = await deleteUserRequest(id);
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const getRoles = async () => {
     try {
       const res = await getRolesRequest();
       // console.log(res.data);
-      setAllRoles(res.data)
-      return res.data; 
+      setAllRoles(res.data);
+      return res.data;
     } catch (error) {
       console.error(error);
     }
@@ -137,7 +136,7 @@ export const AuthProvider = ({ children }) => {
         setIsAuthLoading(false); // Marcar como terminado
         return setUser(null);
       }
-  
+
       try {
         const res = await verifyTokenRequest(cookies.token);
         if (!res.data) {
@@ -146,7 +145,7 @@ export const AuthProvider = ({ children }) => {
           setIsAuthLoading(false); // Marcar como terminado
           return;
         }
-  
+
         setIsAuthenticated(true);
         setUser(res.data);
         setRole(cookies.token); // Almacenar el token

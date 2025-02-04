@@ -5,31 +5,37 @@ import { StepBack } from "lucide-react";
 import { Link } from "react-router-dom";
 import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta}
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function AddClientPage() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm();
   const { registerClient, errors: registerClientErrors } = useClient();
   const [alert, setAlert] = useState(null); // Estado para manejar la alerta
-
-  const showAlert = (message, type = "success") => {
-    setAlert({ message, type });
-    setTimeout(() => setAlert(null), 3000);
-  };
+  const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (values) => {
     registerClient(values);
-    showAlert("Cliente agregado correctamente", "success");
-    reset();
+    setAlert({
+      message: "Cliente registrado exitosamente",
+      type: "success",
+      onAccept: () => navigate(`/clients`), // Redirige tras cerrar la alerta
+    });
   });
 
   return (
     <>
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
+        {alert && (
+          <Alert
+            message={alert.message}
+            type={alert.type}
+            onAccept={alert.onAccept} // Maneja el cierre de la alerta con redirección
+          />
+        )}
         <div>
           <Link to="/clients">
             <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
@@ -41,13 +47,6 @@ function AddClientPage() {
           <h1 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
             Añadir cuenta local
           </h1>
-          {alert && (
-            <Alert
-              message={alert.message}
-              type={alert.type}
-              onClose={() => setAlert(null)}
-            />
-          )}
           <div className="flex top-10 absolute w-[100%]">
             {registerClientErrors.map((error, i) => (
               <div

@@ -15,7 +15,6 @@ function AddUserPage() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm();
 
@@ -31,7 +30,7 @@ function AddUserPage() {
   const onSubmit = handleSubmit(async (values) => {
     signup(values);
     setAlert({
-      message: "Usuario actualizado exitosamente",
+      message: "Usuario registrao exitosamente",
       type: "success",
       onAccept: () => navigate(`/departments`), // Redirige tras cerrar la alerta
     });

@@ -25,6 +25,6 @@ router.post("/logout", logout);
 router.get("/verify", verifyToken);
 router.get("/profile/:id", verifyRoleAdmin ,getProfileById);
 router.put("/editUser/:id", verifyRoleAdmin , editUser);
-router.delete("/deleteUser/:id", deleteUser);
+router.delete("/deleteUser/:id", verifyRoleAdmin,deleteUser);
 
 export default router;

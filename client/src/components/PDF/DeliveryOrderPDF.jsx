@@ -29,12 +29,12 @@ const styles = StyleSheet.create({
     width: 80,
     height: 40,
   },
-  textClient:{
+  textClient: {
     fontSize: 11,
     color: "#000000",
     fontWeight: "bold",
   },
-  textAddress:{
+  textAddress: {
     fontSize: 8,
     color: "#000000",
     fontWeight: "medium",
@@ -164,9 +164,15 @@ const DeliveryOrderPDF = ({ deliveryOrder }) => {
           <View>
             <Text style={styles.sectionContent}>Envíe a:</Text>
             <Text style={styles.textClient}>{deliveryOrder.client.name}</Text>
-            <Text style={styles.textAddress}>{deliveryOrder.client.address1}</Text>
-            <Text style={styles.textAddress}>{deliveryOrder.client.region}</Text>
-            <Text style={styles.textAddress}>{deliveryOrder.client.city}{" "}{deliveryOrder.client.zipCode}</Text>
+            <Text style={styles.textAddress}>
+              {deliveryOrder.client.address1}
+            </Text>
+            <Text style={styles.textAddress}>
+              {deliveryOrder.client.region}
+            </Text>
+            <Text style={styles.textAddress}>
+              {deliveryOrder.client.city} {deliveryOrder.client.zipCode}
+            </Text>
           </View>
         </View>
         <View style={styles.table}>
