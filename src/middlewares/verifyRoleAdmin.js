@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { TOKEN_SECRET } from "../config.js";
+import config from "../config.js";
 import Role from "../models/roles.model.js";
 
 const verifyRoleAdmin =  (req, res, next) => { 
@@ -11,7 +11,7 @@ const verifyRoleAdmin =  (req, res, next) => {
     if (!token) return res.status(401).json({ message: "No token, autorization denied." });
 
     // Verify if token is valid
-    jwt.verify(token, TOKEN_SECRET, async (err, user) => {
+    jwt.verify(token, config.SECRET_KEY, async (err, user) => {
         
         // Returns status and message if token is valid
         if (err) return res.status(403).json({ message: "Invalid token"});

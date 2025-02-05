@@ -3,7 +3,8 @@ import Department from "../models/department.model.js";
 import bcryptjs from "bcryptjs";
 import { createAccessToken } from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
-import { TOKEN_SECRET } from "../config.js";
+import config from "../config.js";
+// import { TOKEN_SECRET } from "../config.js";
 import Role from "../models/roles.model.js";
 
 export const register = async (req, res) => {
@@ -63,55 +64,6 @@ export const register = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-// export const register = async (req, res) => {
-//   const { name, lastName, userName, password, department } = req.body;
-
-//   try {
-//     // Verifica si el usuario ya existe
-//     const userFound = await User.findOne({ userName });
-//     if (userFound) {
-//       return res.status(409).json({ message: "El usuario ya existe" });
-//     }
-
-//     // Verifica si el departamento existe
-//     const departmentFound = await Department.findById(department);
-//     if (!departmentFound) {
-//       return res.status(404).json({ message: "El departamento no existe" });
-//     }
-
-//     const passwordHash = await bcryptjs.hash(password, 10);
-//     // Crea un nuevo usuario
-//     const newUser = new User({
-//       name,
-//       lastName,
-//       userName,
-//       department, // Asigna el departamento al usuario
-//       password: passwordHash,
-//     });
-
-//     // Guarda el usuario
-//     const userSaved = await newUser.save();
-//     // const token = await createAccessToken({ id: userSaved._id });
-//     // res.cookie("token", token);
-
-//     // Actualiza el departamento para incluir al usuario
-//     departmentFound.users.push(userSaved._id);
-//     await departmentFound.save();
-
-//     // Responde con los datos del usuario creado
-//     res.json({
-//       id: userSaved._id,
-//       name: userSaved.name,
-//       lastName: userSaved.lastName,
-//       userName: userSaved.userName,
-//       department: departmentFound.name, // Retorna el nombre del departamento
-//       createdAt: userSaved.createdAt,
-//       updateAt: userSaved.updatedAt,
-//     });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
 
 export const login = async (req, res) => {
   const { userName, password } = req.body;
@@ -310,7 +262,7 @@ export const verifyToken = async (req, res) => {
 
   if (!token) return res.status(401).json({ message: "Unauthorized" });
 
-  jwt.verify(token, TOKEN_SECRET, async (err, user) => {
+  jwt.verify(token, config.SECRET_KEY, async (err, user) => {
     if (err) return res.status(401).json({ message: "Unauthorized" });
 
     const userFound = await User.findById(user.id);
