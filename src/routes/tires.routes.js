@@ -21,7 +21,7 @@ router.get("/tiresByInspection", authRequired , getTiresWithInspection);
 // router.delete("/tires/:id", authRequired ,deleteTire);
 router.put("/tire/:id", authRequired ,updateTire);
 router.put("/editTire/:id", authRequired , updateFinalTire);
-router.post("/tires", authRequired,createTire);
+router.post("/tires", authRequired, createTire);
 router.post("/tireBarcode", authRequired , getTireByBarcode);
 
 export default router;

@@ -8,8 +8,8 @@ const router = Router();
 router.post("/addClient", verifyRoleAdmin,registerClient);
 
 router.delete("/deleteClient/:id", authRequired, verifyRoleAdmin, deleteClient);
-router.get("/getClients", getClients);
-router.get("/getClient/:id", getClientById);
-router.put("/editClient/:id", editClient);
+router.get("/getClients", authRequired, getClients);
+router.get("/getClient/:id", authRequired, getClientById);
+router.put("/editClient/:id", authRequired, editClient);
 
 export default router;
