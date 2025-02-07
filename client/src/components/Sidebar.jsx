@@ -1,6 +1,6 @@
 import * as images from "../img";
 import { useState, createContext, useContext } from "react";
-import { Menu, ChevronLast, LogOut } from "lucide-react";
+import { Menu, ChevronLast, LogOut, Bell } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 
@@ -77,6 +77,9 @@ export default function Sidebar({ children, additionalContent }) {
           expanded ? "w-screen" : "w-screen"
         }`}
       >
+        <div className="absolute bottom-8 right-8">
+          <Bell />
+        </div>
         {additionalContent}
       </section>
     </main>
@@ -87,7 +90,7 @@ export function SidebarItem({ icon, text2, text, active, alert }) {
   const { expanded } = useContext(SidebarContext);
   return (
     <li
-      className={`relative flex items-center py-4 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
+      className={`relative flex items-center py-3 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
         active
           ? "bg-gradient-to-tr from-indigo-200 to-indigo-200 text-indigo-800"
           : "hover:bg-sky-800 text-gray-600"

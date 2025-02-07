@@ -16,6 +16,7 @@ function AddUserPage() {
     register,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm();
 
   const { getDepartments, allDepartments } = useDepartment();
@@ -29,6 +30,7 @@ function AddUserPage() {
 
   const onSubmit = handleSubmit(async (values) => {
     signup(values);
+    reset()
     setAlert({
       message: "Usuario registrao exitosamente",
       type: "success",
