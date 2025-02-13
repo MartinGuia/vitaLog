@@ -3,25 +3,28 @@ import { useWorkOrder } from "../context/WorkOrderContext";
 import { useEffect, useState } from "react";
 import { Printer, Trash2 } from "lucide-react";
 import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta
-// import { useAuth } from "../context/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { removeWorkOrder } from "../store/slices/workOrderSlice.js";
+import socket from "../socket";
 
 function AllWorkOrdersPage() {
-  const { deleteWorkOrder, getWorkOrders, workOrders, setWorkOrders } = useWorkOrder();
+  const { deleteWorkOrder, getWorkOrders, setAllWorkOrders } = useWorkOrder();
   const [currentPage, setCurrentPage] = useState(1);
   const [alert, setAlert] = useState(null); // Estado para manejar la alerta
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [workOrderToDelete, setWorkOrderToDelete] = useState(null);
   const [confirmationNumber, setConfirmationNumber] = useState("");
   const itemsPerPage = 10;
-  // const { user } = useAuth();
+  const dispatch = useDispatch();
+  const allWorkOrders = useSelector((state) => state.workOrders.list);
 
   useEffect(() => {
     getWorkOrders();
   }, []);
 
-  const totalPages = Math.ceil(workOrders.length / itemsPerPage);
+  const totalPages = Math.ceil(allWorkOrders.length / itemsPerPage);
 
-  const currentOrders = workOrders.slice(
+  const currentOrders = allWorkOrders.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -40,12 +43,22 @@ function AllWorkOrdersPage() {
     setIsModalOpen(true);
   };
 
+  useEffect(() => {
+    socket.on("workOrderDeleted", ({ id }) => {
+      dispatch(removeWorkOrder(id));
+    });
+
+    return () => {
+      socket.off("workOrderDeleted");
+    };
+  }, [dispatch]);
+
   const confirmDelete = async () => {
     if (confirmationNumber === String(workOrderToDelete.numero)) {
       try {
         await deleteWorkOrder(workOrderToDelete._id);
         showAlert("Orden de trabajo eliminada exitosamente", "success");
-        setWorkOrders((prevOrders) =>
+        setAllWorkOrders((prevOrders) =>
           prevOrders.filter((order) => order._id !== workOrderToDelete._id)
         );
       } catch (error) {
@@ -74,7 +87,7 @@ function AllWorkOrdersPage() {
       )}
       <section>
         <div className="p-4 w-full">
-          {workOrders.length === 0 ? (
+          {allWorkOrders.length === 0 ? (
             <div className="text-center text-gray-600 text-lg">
               No hay órdenes de trabajo registradas.
             </div>
@@ -128,7 +141,7 @@ function AllWorkOrdersPage() {
                   ))}
                 </tbody>
               </table>
-              {workOrders.length >= itemsPerPage && (
+              {allWorkOrders.length >= itemsPerPage && (
                 <div className="flex justify-between items-center mt-4">
                   <div className="text-sm text-gray-600">
                     Página {currentPage} de {totalPages}

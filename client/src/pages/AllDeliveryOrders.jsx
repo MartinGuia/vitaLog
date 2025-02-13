@@ -76,7 +76,7 @@ function AllDeliveryOrders() {
         <div className="p-4 w-full">
           {deliveryOrders.length === 0 ? (
             <div className="text-center text-gray-600 text-lg">
-              No hay ordenes de entrega
+              No hay ordenes de entrega registradas
             </div>
           ) : (
             <div className="overflow-x-auto">
