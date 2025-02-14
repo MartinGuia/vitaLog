@@ -6,7 +6,7 @@ import { useWorkOrder } from "../context/WorkOrderContext";
 import InputField from "../components/ui/InputField";
 import React, { useState } from "react";
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
-import ButtonPrimary, {  } from "../components/ui/ButtonPrimary";
+import socket from "../socket"
 
 function AddTireToWO() {
   const [scannedCode, setScannedCode] = useState(""); // Estado para el código escaneado
@@ -17,7 +17,7 @@ function AddTireToWO() {
     formState: { errors },
     reset,
   } = useForm();
-  const { errors: registerErrors } = useAuth();
+  const { errors: registerErrors, user } = useAuth();
   const navigate = useNavigate();
   const { closeWorkOrder } = useWorkOrder();
   const { createTire } = useTire();
@@ -32,10 +32,21 @@ function AddTireToWO() {
   const handleScannerOpen = () => setIsScannerOpen(true);
   const handleScannerClose = () => setIsScannerOpen(false);
 
+
   const handleClick = async () => {
     try {
-      await closeWorkOrder();
-      navigate("/workorders");
+      // const user = JSON.parse(localStorage.getItem("user")); // Obtener el usuario almacenado
+      if (!user || !user.name) {
+        console.error("No se encontró el usuario");
+        return;
+      }
+  
+      await closeWorkOrder({
+        socketId: socket.id, // Enviar el socketId
+        username: user.name, // Enviar el nombre del usuario
+      });
+      navigate("/createWorkOrder");
+      console.log(`Orden de trabajo creada por: ${user.name}`);
     } catch (error) {
       console.error("Error al cerrar la orden de trabajo:", error.message);
     }
@@ -238,9 +249,9 @@ function AddTireToWO() {
             >
               Cerrar orden
             </button> */}
-            <ButtonPrimary onClick={handleClick}>
+            <button className="ml-4 font-medium bg-yellow-400 text-blue-950 py-2 px-5 rounded-md shadow-md hover:bg-vbYellow duration-500 hover:duration-500" onClick={handleClick}>
               <p>Cerrar orden</p>
-            </ButtonPrimary>
+            </button>
           </div>
         </form>
       </div>

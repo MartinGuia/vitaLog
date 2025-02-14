@@ -48,12 +48,6 @@ function AddTiresPage() {
     }
   };
 
-  // // Ocultar la alerta y redirigir
-  // const handleAlertAccept = () => {
-  //   setShowAlert(false);
-  //   navigate("/allDeliveryOrders"); // Reemplaza "/somewhere" por la página a la que deseas redirigir
-  // };
-
   return (
     <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
        {/* Mostrar alerta */}

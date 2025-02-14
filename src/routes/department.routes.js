@@ -8,8 +8,8 @@ import {
 
 const router = Router();
 
-router.post("/department", registerDepartment);
-router.get("/departments", getDepartments);
-router.get("/department/:id", getDepartmentById);
+router.post("/department", authRequired, registerDepartment);
+router.get("/departments", authRequired, getDepartments);
+router.get("/department/:id", authRequired, getDepartmentById);
 
 export default router;

@@ -7,8 +7,8 @@ const router = Router();
 
 router.post("/open", authRequired, createOrOpenWorkOrder);
 router.post("/close", authRequired, closeWorkOrder);
-router.get("/workorders", getWorkOrders);
-router.get("/workorder/:id", getWorkOrderById);
-router.delete("/deleteWorkorder/:id", deleteWorkOrder);
+router.get("/workorders", authRequired,getWorkOrders);
+router.get("/workorder/:id", authRequired,getWorkOrderById);
+router.delete("/deleteWorkorder/:id", authRequired,deleteWorkOrder);
 
 export default router;

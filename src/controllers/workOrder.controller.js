@@ -3,6 +3,7 @@ import Tire from "../models/tire.model.js"
 import User from "../models/user.model.js";
 import { format } from "date-fns";
 
+
 export const createOrOpenWorkOrder = async (req, res) => {
   try {
     const { client } = req.body;
@@ -48,48 +49,40 @@ export const createOrOpenWorkOrder = async (req, res) => {
 // Este controlador cierra una orden de trabajo
 export const closeWorkOrder = async (req, res) => {
   try {
-    // Buscar la orden de trabajo abierta más reciente
-    const currentWorkOrder = await WorkOrder.findOne({ isOpen: true })
-      .sort({ createdAt: -1 })
+    const { socketId, username } = req.body; // Obtener socketId y nombre de usuario
+
+    if (!socketId || !username) {
+      return res.status(400).json({ success: false, message: "Faltan datos requeridos." });
+    }
+
+    const currentWorkOrder = await WorkOrder.findOne({ isOpen: true }).sort({ createdAt: -1 });
 
     if (!currentWorkOrder) {
       return res.status(404).json({ success: false, message: "No hay ninguna orden de trabajo abierta." });
     }
 
-    // Actualizar la orden de trabajo encontrada a cerrada
+    // Cerrar la orden de trabajo
     currentWorkOrder.isOpen = false;
     currentWorkOrder.status = "cerrado";
     await currentWorkOrder.save();
 
-    res.status(200).json({ success: true, currentWorkOrder });
+    // Obtener instancia de Socket.IO
+    const io = req.app.get("io");
+
+    // Enviar notificación a TODOS excepto al usuario que cerró la orden
+    io.sockets.sockets.forEach((socket) => {
+      if (socket.id !== socketId) {
+        socket.emit("newNotification", {
+          message: `${username} creo una orden de trabajo.`,
+          timestamp: new Date().toLocaleString(),
+        });
+      }
+    });
+
+    res.status(200).json({ success: true, message: "Orden cerrada correctamente." });
   } catch (error) {
+    console.error("Error al cerrar la orden:", error);
     res.status(500).json({ success: false, message: error.message });
-  }
-};
-
-export const getWorkOrders = async (req, res) => {
-  try {
-    // Buscar todas las órdenes de trabajo existentes
-    const workOrders = await WorkOrder.find({})
-      .populate({
-        path: "createdBy",
-        select: "name lastName _id",
-      })
-      .populate({
-        path: "client",
-      });
-
-    // Formatear la fecha de creación
-    const formattedWorkOrders = workOrders.map((order) => ({
-      ...order.toObject(),
-      // formattedCreatedAt: format(new Date(order.createdAt), "yyyy-MM-dd HH:mm:ss"),
-      formattedCreatedAt: format(new Date(order.createdAt), "dd/MM/yyyy"),
-    }));
-
-    res.json(formattedWorkOrders);
-  } catch (error) {
-    console.error("Error al obtener órdenes de trabajo:", error);
-    res.status(500).json({ success: false, message: "Error interno del servidor" });
   }
 };
 
@@ -119,35 +112,52 @@ export const getWorkOrderById = async (req, res) => {
   }
 };
 
+export const getWorkOrders = async (req, res) => {
+  try {
+    // Buscar todas las órdenes de trabajo existentes
+    const workOrders = await WorkOrder.find({})
+      .populate({
+        path: "createdBy",
+        select: "name lastName _id",
+      })
+      .populate({
+        path: "client",
+      });
+
+    // Formatear la fecha de creación
+    const formattedWorkOrders = workOrders.map((order) => ({
+      ...order.toObject(),
+      // formattedCreatedAt: format(new Date(order.createdAt), "yyyy-MM-dd HH:mm:ss"),
+      formattedCreatedAt: format(new Date(order.createdAt), "dd/MM/yyyy"),
+    }));
+
+    res.json(formattedWorkOrders);
+  } catch (error) {
+    console.error("Error al obtener órdenes de trabajo:", error);
+    res.status(500).json({ success: false, message: "Error interno del servidor" });
+  }
+};
+
 export const deleteWorkOrder = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Buscar la orden de trabajo por ID
     const workOrder = await WorkOrder.findById(id);
-
     if (!workOrder) {
-      return res.status(404).json({
-        success: false,
-        message: "Orden de trabajo no encontrada.",
-      });
+      return res.status(404).json({ success: false, message: "Orden no encontrada" });
     }
 
-    // Eliminar todas las llantas asociadas a la orden de trabajo
     await Tire.deleteMany({ _id: { $in: workOrder.tires } });
-
-    // Eliminar la orden de trabajo
     await WorkOrder.findByIdAndDelete(id);
 
-    res.status(200).json({
-      success: true,
-      message: "Orden de trabajo y llantas asociadas eliminadas exitosamente.",
-    });
+    const io = req.app.get("io");
+    if (io) {
+      io.emit("workOrderDeleted", { id });
+    }
+
+    res.status(200).json({ success: true, message: "Orden eliminada correctamente" });
   } catch (error) {
-    console.error("Error al eliminar la orden de trabajo:", error);
-    res.status(500).json({
-      success: false,
-      message: "Error interno del servidor.",
-    });
+    console.error("Error al eliminar la orden:", error);
+    res.status(500).json({ success: false, message: "Error del servidor" });
   }
 };

@@ -6,6 +6,8 @@ import jwt from "jsonwebtoken";
 import config from "../config.js";
 // import { TOKEN_SECRET } from "../config.js";
 import Role from "../models/roles.model.js";
+import { validationResult } from "express-validator";
+import sanitizeInput from "../middlewares/sanitize.js";
 
 export const register = async (req, res) => {
   const { name, lastName, userName, password, department, role } = req.body;
@@ -49,27 +51,24 @@ export const register = async (req, res) => {
     departmentFound.users.push(userSaved._id);
     await departmentFound.save();
 
-    // Responde con los datos del usuario creado
-    res.json({
-      id: userSaved._id,
-      name: userSaved.name,
-      lastName: userSaved.lastName,
-      userName: userSaved.userName,
-      department: departmentFound.name, // Retorna el nombre del departamento
-      role: roleFound.name, // Retorna el nombre del rol
-      createdAt: userSaved.createdAt,
-      updatedAt: userSaved.updatedAt,
-    });
+    return res.status(200).json({message: "El usuario se creo correctamente"});
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
 export const login = async (req, res) => {
+    // Verifica si hay errores en la validación
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    
+    // Verifica si se recibió el nombre de usuario y la contraseña
   const { userName, password } = req.body;
-
+  
   try {
-    const userFound = await User.findOne({ userName });
+    const userFound = await User.findOne({ userName: req.body.userName });
 
     if (!userFound) {
       return res.status(404).json({
@@ -85,7 +84,7 @@ export const login = async (req, res) => {
 
     if (!isMatch) {
       return res.status(400).json({
-        message: ["la contraseña es incorrecta"],
+        message: ["La contraseña es incorrecta"],
       });
     }
 

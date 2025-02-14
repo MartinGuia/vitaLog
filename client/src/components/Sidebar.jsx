@@ -1,15 +1,36 @@
 import * as images from "../img";
-import { useState, createContext, useContext } from "react";
-import { Menu, ChevronLast, LogOut } from "lucide-react";
+import { useState, createContext, useContext,  useEffect } from "react";
+import { Menu, ChevronLast, LogOut, Bell } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { addNotification, clearNotifications } from "../store/slices/notificationSlice";
+import socket from "../socket"; // Importar socket
 
 const SidebarContext = createContext();
 
 export default function Sidebar({ children, additionalContent }) {
   const [expanded, setExpanded] = useState(false);
   const { logout, user } = useAuth();
+  const dispatch = useDispatch();
+  const { hasNewNotification, notifications } = useSelector((state) => state.notifications);
+  
 
+  useEffect(() => {
+    // Escuchar evento de notificación del backend
+    socket.on("newNotification", (notification) => {
+      dispatch(addNotification(notification)); // Agregar notificación a Redux
+    });
+  
+    return () => {
+      socket.off("newNotification"); // Evitar múltiples suscripciones
+    };
+  }, [dispatch]);
+  
+  const handleClearNotifications = () => {
+    dispatch(clearNotifications()); // Limpia las notificaciones y el indicador
+  };
+ 
   return (
     <main className="flex">
       {/* Condicional para que el sidebar sea sticky solo cuando no esté expandido */}
@@ -77,6 +98,26 @@ export default function Sidebar({ children, additionalContent }) {
           expanded ? "w-screen" : "w-screen"
         }`}
       >
+        <div className="absolute top-2 right-5">
+          <button onClick={handleClearNotifications} className="relative">
+            <Bell />
+            {hasNewNotification && (
+              <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full" />
+            )}
+          </button>
+          {notifications.length > 0 && (
+            <div className="absolute top-8 border-vbYellow border right-0 bg-white px-8 shadow-lg rounded-md">
+              {notifications.map((notif, index) => (
+                <div key={index} className="w-44 p-2">
+                  <p>{notif.message}</p>
+                  <span className="text-xs text-gray-500">
+                    {notif.timestamp}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         {additionalContent}
       </section>
     </main>
@@ -87,7 +128,7 @@ export function SidebarItem({ icon, text2, text, active, alert }) {
   const { expanded } = useContext(SidebarContext);
   return (
     <li
-      className={`relative flex items-center py-4 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
+      className={`relative flex items-center py-3 md:py-5 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
         active
           ? "bg-gradient-to-tr from-indigo-200 to-indigo-200 text-indigo-800"
           : "hover:bg-sky-800 text-gray-600"

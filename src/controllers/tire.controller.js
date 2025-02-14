@@ -167,9 +167,3 @@ export const getTiresWithInspection = async (req, res) => {
     res.status(500).json({ message: "Error retrieving tires" });
   }
 };
-
-// export const deleteTire = async (req, res) => {
-//   const tire = await Tire.findByIdAndDelete(req.params.id);
-//   if (!tire) return res.status(404).json({ message: "Task not found" });
-//   return res.sendStatus(204);
-// };

@@ -112,8 +112,6 @@ function EditClientPage() {
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
                 <div className="relative md:w-5/12 w-auto">
                   <InputField
-                    // label="Nombre"
-                    // id="nombre"
                     {...register("name", { required: true })}
                   />
                   {errors.name && (
@@ -124,8 +122,6 @@ function EditClientPage() {
                 </div>
                 <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
                   <InputField
-                    // label="Alias"
-                    // id="alias"
                     {...register("alias", { required: true })}
                   />
                   {errors.alias && (
@@ -135,14 +131,6 @@ function EditClientPage() {
                   )}
                 </div>
               </div>
-              {/* <div className="flex items-center flex-col mt-5 sm:w-auto sm:flex-row sm:justify-between">
-            <div className="relative md:w-5/12 w-auto">
-              <InputField label="Segmento" id="segmento" />
-            </div>
-            <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
-              <InputField label="N.° de clte renovador" id="numerocliente" />
-            </div>
-          </div> */}
             </div>
           </div>
           <div>
@@ -158,8 +146,6 @@ function EditClientPage() {
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
                 <div className="relative w-auto sm:w-5/12">
                   <InputField
-                    // label="Dirección 1"
-                    // id="dirección1"
                     {...register("address1", { required: true })}
                   />
                   {errors.address1 && (
@@ -171,8 +157,6 @@ function EditClientPage() {
                 <div className="flex-col flex items-center sm:flex sm:w-[50%] sm:flex-row justify-between">
                   <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
                     <InputField
-                      // label="Ciudad"
-                      // id="Ciudad"
                       {...register("city", { required: true })}
                     />
                     {errors.city && (
@@ -183,8 +167,6 @@ function EditClientPage() {
                   </div>
                   <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
                     <InputField
-                      // label="Región"
-                      // id="Region"
                       {...register("region", { required: true })}
                     />
                     {errors.region && (
@@ -200,8 +182,6 @@ function EditClientPage() {
                 <div className="flex-col flex items-center sm:flex sm:w-[50%] sm:flex-row justify-between">
                   <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
                     <InputField
-                      // label="Codigo Postal"
-                      // id="CodigoPostal"
                       {...register("zipCode", { required: true })}
                     />
                     {errors.zipCode && (
@@ -212,8 +192,6 @@ function EditClientPage() {
                   </div>
                   <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
                     <InputField
-                      // label="País"
-                      // id="País"
                       {...register("country", { required: true })}
                     />
                     {errors.zipCode && (
