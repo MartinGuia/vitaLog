@@ -6,7 +6,8 @@ import { useWorkOrder } from "../context/WorkOrderContext";
 import InputField from "../components/ui/InputField";
 import React, { useState } from "react";
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
-import socket from "../socket"
+import socket from "../socket";
+import { Focus } from "lucide-react";
 
 function AddTireToWO() {
   const [scannedCode, setScannedCode] = useState(""); // Estado para el código escaneado
@@ -32,7 +33,6 @@ function AddTireToWO() {
   const handleScannerOpen = () => setIsScannerOpen(true);
   const handleScannerClose = () => setIsScannerOpen(false);
 
-
   const handleClick = async () => {
     try {
       // const user = JSON.parse(localStorage.getItem("user")); // Obtener el usuario almacenado
@@ -40,7 +40,7 @@ function AddTireToWO() {
         console.error("No se encontró el usuario");
         return;
       }
-  
+
       await closeWorkOrder({
         socketId: socket.id, // Enviar el socketId
         username: user.name, // Enviar el nombre del usuario
@@ -73,14 +73,14 @@ function AddTireToWO() {
         <form onSubmit={onSubmit}>
           <div className="mt-10">
             <div className="flex mb-3">
-              <h1 className="text-lg flex text-sky-900 font-semibold w-[50%] md:text-3xl md:w-[70%] lg:w-[25%] ">
+              <h1 className="text-lg flex text-sky-900 font-semibold w-[90%] sm:text-2xl md:text-3xl sm:w-[50%] md:w-[70%] lg:w-[25%] ">
                 Datos de la llanta
               </h1>
-              <div className="flex items-center w-[100%]">
-                <hr className="border-[1px] w-[100%] border-sky-800 mt-1" />
+              <div className="flex items-center w-[70%] sm:w-full">
+                <hr className="border-[1px] w-full border-sky-800 mt-1"/>
               </div>
             </div>
-            <h1 className="font-bold text-3xl">Codigo item y Barras</h1>
+            <h1 className="font-bold text-2xl sm:text-3xl">Codigo item y Barras</h1>
             <p>Complete los datos del registro de la llanta.</p>
           </div>
           <div className="w-[100%] pt-8 text-xl"></div>
@@ -108,26 +108,31 @@ function AddTireToWO() {
                     </p>
                   )}
                 </div>
-                <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
-                  <InputField
-                    label="Código de Barras"
-                    id="barcode"
-                    value={scannedCode}
-                    readOnly
-                    {...register("barCode", { required: true })}
-                  />
+                <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0 md:flex sm:justify-between">
+                  <div className="sm:w-[85%]">
+                    <InputField
+                      label="Código de Barras"
+                      id="barcode"
+                      value={scannedCode}
+                      readOnly
+                      {...register("barCode", { required: true })}
+                    />
+                  </div>
                   {errors.barCode && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
                   )}
-                  <button
-                    type="button"
-                    className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md"
-                    onClick={handleScannerOpen}
-                  >
-                    Escanear Código de Barras
-                  </button>
+
+                  <div className="flex justify-center mt-4 md:mt-0">
+                    <button
+                      type="button"
+                      className="bg-slate-200 hover:bg-slate-300 duration-700 hover:duration-700 shadow-md px-4 py-2 rounded-md"
+                      onClick={handleScannerOpen}
+                    >
+                      <Focus />
+                    </button>
+                  </div>
                 </div>
 
                 {isScannerOpen && (
@@ -137,12 +142,12 @@ function AddTireToWO() {
                         Escanea el código
                       </h1>
                       <BarcodeScannerComponent
-                        width={300}
-                        // height={300}
+                        width={600}
+                        delay={300} // Reduce el número de intentos por segundo
                         videoConstraints={{
-                          facingMode: "environment", // Usa la cámara trasera
-                          width: { ideal: 1920 },
-                          height: { ideal: 1080 },
+                          facingMode: "environment",
+                          width: { ideal: 1280 },
+                          height: { ideal: 720 },
                         }}
                         onUpdate={(err, result) => {
                           if (result) {
@@ -167,7 +172,7 @@ function AddTireToWO() {
           {/* DOT Y BANDA REQUERIDA */}
           <div>
             <div className="mt-10">
-              <h1 className="font-bold text-3xl">Dot y banda requerida</h1>
+              <h1 className="font-bold text-2xl sm:text-3xl">Dot y banda requerida</h1>
               <p>Complete el usuario y contraseña.</p>
             </div>
             <div className="w-[100%] pt-8 text-xl">
@@ -202,7 +207,7 @@ function AddTireToWO() {
 
           <div>
             <div className="mt-10">
-              <h1 className="font-bold text-3xl">Medida y Marca</h1>
+              <h1 className="font-bold text-2xl sm:text-3xl">Medida y Marca</h1>
               <p>Complete la marca y medida de la llanta.</p>
             </div>
             <div className="w-[100%] pt-8 text-xl">
@@ -235,21 +240,17 @@ function AddTireToWO() {
               </div>
             </div>
           </div>
-          <div className="flex justify-end mt-14 "></div>
-          <div className="flex justify-end mt-5">
+          <div className="flex flex-col sm:flex-row justify-end mt-5">
             <button
               className="text-white font-medium bg-cyan-950 py-2 px-5 rounded-md shadow-md hover:bg-cyan-800"
               type="submit"
             >
               Agregar llanta
             </button>
-            {/* <button
-              className="ml-4 font-medium bg-yellow-400 py-2 px-5 rounded-md shadow-md hover:bg-yellow-500"
+            <button
+              className="mt-2 sm:mt-0 sm:ml-4 font-medium bg-yellow-400 text-blue-950 py-2 px-5 rounded-md shadow-md hover:bg-vbYellow duration-500 hover:duration-500"
               onClick={handleClick}
             >
-              Cerrar orden
-            </button> */}
-            <button className="ml-4 font-medium bg-yellow-400 text-blue-950 py-2 px-5 rounded-md shadow-md hover:bg-vbYellow duration-500 hover:duration-500" onClick={handleClick}>
               <p>Cerrar orden</p>
             </button>
           </div>

@@ -22,7 +22,7 @@ function EditTirePage() {
       if (params.id) {
         const tire = await getTire(params.id);
         if (tire) {
-          setWorkOrder(tire.workOrder);
+          setWorkOrder(tire.workOrder._id);
           reset({
             itemCode: tire.itemCode,
             barCode: tire.barCode,

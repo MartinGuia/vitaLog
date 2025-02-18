@@ -1,7 +1,8 @@
 import Tire from "../models/tire.model.js";
 import WorkOrder from "../models/workOrders.model.js";
-import User from "../models/user.model.js";
-import Client from "../models/client.model.js";
+import { format } from "date-fns";
+// import User from "../models/user.model.js";
+// import Client from "../models/client.model.js";
 
 export const getTires = async (req, res) => {
   const tires = await Tire.find({
@@ -82,12 +83,35 @@ export const createTire = async (req, res) => {
 };
 
 export const getTire = async (req, res) => {
-  const tire = await Tire.findById(req.params.id).populate({
-    path: "user",
-    // select: "name lastName _id", // Lista de campos que deseas poblar
-  });
-  if (!tire) return res.status(404).json({ message: "Tire not found" });
-  res.json(tire);
+  try {
+    
+    const tire = await Tire.findById(req.params.id)
+      .populate({
+        path: "user",
+        select: "name lastName _id", // Lista de campos que deseas poblar
+      })
+      .populate({
+        path: "workOrder",
+        select: "client tires", // Lista de campos que deseas poblar
+        populate: {
+          path: "client numero",
+          select: "name",
+        },
+      });
+
+    if (!tire) return res.status(404).json({ message: "Tire not found" });
+
+    const formattedTire = {
+      ...tire.toObject(),
+      formattedUpdatedAt: format(new Date(tire.updatedAt), "dd/MM/yyyy"), // Ajusta el formato según tus necesidades
+    };
+
+    res.json(formattedTire);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error al obtener el registro", error });
+  }
 };
 
 export const updateTire = async (req, res) => {
@@ -146,8 +170,7 @@ export const getTireByBarcode = async (req, res) => {
 export const getTiresWithInspection = async (req, res) => {
   try {
     // Filtrar registros donde inspection sea true
-    const tires = await Tire.find({ inspection: true })
-    .populate({
+    const tires = await Tire.find({ inspection: true }).populate({
       path: "workOrder",
       select: "numero",
     });
