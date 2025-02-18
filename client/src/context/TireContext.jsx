@@ -7,8 +7,9 @@ import {
   updateTireRequest,
   getTireByBarcodeRequest,
   updateFinalTireRequest,
-  getTiresByInspectionRequest
+  getTiresByInspectionRequest,
 } from "../api/tires.js";
+import { printLabelRequest } from "../api/print.js";
 
 const TiresContext = createContext();
 
@@ -33,7 +34,7 @@ export function TiresProvider({ children }) {
       console.error(error);
     }
   };
-  
+
   const getTiresByInspection = async () => {
     try {
       const res = await getTiresByInspectionRequest();
@@ -71,7 +72,7 @@ export function TiresProvider({ children }) {
       console.error(error);
     }
   };
-  
+
   const updateFinalTire = async (id, tire) => {
     try {
       await updateFinalTireRequest(id, tire);
@@ -80,17 +81,27 @@ export function TiresProvider({ children }) {
     }
   };
 
-    // Nueva función para buscar una llanta por código de barras
-    const getTireByBarcode = async (barCode) => {
-      try {
-        const res = await getTireByBarcodeRequest(barCode);
-        console.log("Registro encontrado:", res.data);
-        return res.data; // Devuelve los datos de la llanta
-      } catch (error) {
-        console.error("Error al buscar la llanta por código de barras:", error);
-        setErrors(error.response?.data?.message || ["Error desconocido"]);
-      }
-    };
+  // Nueva función para buscar una llanta por código de barras
+  const getTireByBarcode = async (barCode) => {
+    try {
+      const res = await getTireByBarcodeRequest(barCode);
+      console.log("Registro encontrado:", res.data);
+      return res.data; // Devuelve los datos de la llanta
+    } catch (error) {
+      console.error("Error al buscar la llanta por código de barras:", error);
+      setErrors(error.response?.data?.message || ["Error desconocido"]);
+    }
+  };
+
+  const printLabel = async (text) => {
+    try {
+      await printLabelRequest({ text });
+      alert("Etiqueta enviada a la impresora");
+    } catch (error) {
+      console.error("Error al imprimir:", error);
+      alert("Hubo un error al imprimir");
+    }
+  };
 
   useEffect(() => {
     if (errors.length > 0) {
@@ -105,7 +116,18 @@ export function TiresProvider({ children }) {
 
   return (
     <TiresContext.Provider
-      value={{ updateTire, getTiresByInspection, updateFinalTire, getTireByBarcode, tires, getTires, getTire, createTire, errors }}
+      value={{
+        updateTire,
+        getTiresByInspection,
+        printLabel,
+        updateFinalTire,
+        getTireByBarcode,
+        tires,
+        getTires,
+        getTire,
+        createTire,
+        errors,
+      }}
     >
       {children}
     </TiresContext.Provider>

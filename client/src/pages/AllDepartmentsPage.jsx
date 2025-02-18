@@ -9,12 +9,12 @@ import {
   CirclePlus,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext.jsx";
 
 function AllDepartmentsPage() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
   const {
@@ -35,6 +35,7 @@ function AllDepartmentsPage() {
 
   const onSubmit = handleSubmit(async (values) => {
     registerDepartment(values);
+    reset();
     closeModal(); // Cierra el modal después de enviar
   });
 
@@ -81,36 +82,40 @@ function AllDepartmentsPage() {
             </Link>
           </div>
         </div>
-        <div className="flex flex-col items-center justify-center mt-5">
-          {allDepartments.lenght === 0 ? (
-            <div className="text-center text-gray-600 text-lg">
-              No hay departamentos registrados
-            </div>
-          ) : (
-            <div className="w-full sm:h-auto md:w-[70%] flex flex-wrap justify-between">
-              {allDepartments.map((department, i) => (
-                <div
-                  className="w-full sm:w-[48%] flex justify-center mt-5"
-                  key={i}
-                >
-                  <Link
-                    className="bg-cyan-950 rounded shadow-md w-full h-20 lg:h-28 hover:-translate-y-1 hover:duration-700 duration-700 flex justify-center"
-                    to={`/department/${department._id}`}
+        {allDepartments ? (
+          <div className="flex flex-col items-center justify-center mt-5">
+            {allDepartments.lenght === 0 ? (
+              <div className="text-center text-gray-600 text-lg">
+                No hay departamentos registrados
+              </div>
+            ) : (
+              <div className="w-full sm:h-auto md:w-[70%] flex flex-wrap justify-between">
+                {allDepartments.map((department, i) => (
+                  <div
+                    className="w-full sm:w-[48%] flex justify-center mt-5"
+                    key={i}
                   >
-                    <button>
-                      <span className="text-white font-semibold text-xl">
-                        {department.name}
-                      </span>
-                      <div className="flex justify-center mt-2">
-                        {getIcon(department.name)}
-                      </div>
-                    </button>
-                  </Link>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                    <Link
+                      className="bg-cyan-950 rounded shadow-md w-full h-20 lg:h-28 hover:-translate-y-1 hover:duration-700 duration-700 flex justify-center"
+                      to={`/department/${department._id}`}
+                    >
+                      <button>
+                        <span className="text-white font-semibold text-xl">
+                          {department.name}
+                        </span>
+                        <div className="flex justify-center mt-2">
+                          {getIcon(department.name)}
+                        </div>
+                      </button>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          <p>Cargando datos de la llanta...</p>
+        )}
       </div>
 
       {/* Modal */}

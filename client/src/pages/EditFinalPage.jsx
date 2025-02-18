@@ -91,7 +91,6 @@ function EditFinalPage() {
                   </p>
                 )}
               </div>
-             
             </div>
           </div>
 
@@ -379,6 +378,15 @@ function EditFinalPage() {
               >
                 Editar
               </button>
+
+              <Link to={`/printlabel/${params.id}`}>
+                <button
+                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  // onClick={() => printLabel("Texto de prueba")}
+                >
+                  Imprimir Etiqueta
+                </button>
+              </Link>
             </div>
           </div>
         </form>

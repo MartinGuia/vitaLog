@@ -34,6 +34,7 @@ import { DepartmentProvider } from "./context/DepartmentContext";
 import { DeliveryOrderProvider } from "./context/DeliveryOrderContext";
 import { Provider } from "react-redux";
 import store from "./store";
+import PrintLabel from "./pages/PrintLabel";
 
 function App() {
   return (
@@ -125,6 +126,10 @@ function App() {
                           <Route
                             path="/viewDeliveryOrder/:id"
                             element={<ViewDeliveryOrderPage />}
+                          />
+                          <Route
+                            path="/printlabel/:id"
+                            element={<PrintLabel />}
                           />
                         </Route>
                       </Routes>
