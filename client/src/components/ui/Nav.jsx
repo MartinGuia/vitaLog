@@ -43,44 +43,42 @@ function Nav({ children }) {
           if (role.name === "Operador") rolesMap.operador = role._id;
         }
         setRoleIds(rolesMap);
+        // console.log(user)
       }
     } catch (error) {
       console.error("Error al obtener los roles:", error);
     }
   };
   fetchRoles();
-}, []);
+}, [isAuthenticated, user, role]);
 
-  // Obtener el ID del rol del usuario actual desde el token
-  useEffect(() => {
-    if (role) {
-      try {
-        const decodedToken = jwtDecode(role);
-        setUserRoleId(decodedToken.role); // Asegúrate de que `role` sea el campo correcto en el token
-        // console.log("Rol del usuario:", decodedToken.role);
-      } catch (error) {
-        console.error("Error al decodificar el token:", error);
-      }
+ // Observar cambios en el role y filtrar los elementos del menú
+useEffect(() => {
+  if (role) {
+    // Decodificar el token para obtener el rol
+    try {
+      const decodedToken = jwtDecode(role);
+      setUserRoleId(decodedToken.role); // Establecer el rol del usuario actual
+    } catch (error) {
+      console.error("Error al decodificar el token:", error);
     }
-  }, [role]);
+  }
+}, [role]); // Este efecto se ejecutará cada vez que `role` cambie
 
-    // Redirigir a la página inicial según el rol
-    useEffect(() => {
-      if (userRoleId) {
-        // if (userRoleId === roleIds.administrador) {
-        //   navigate("/departments"); // Página para Administrador
-        // } else
-         if (userRoleId === roleIds.ventas) {
-          navigate("/createWorkOrder"); // Página para Vendedor
-        } else if (userRoleId === roleIds.almacenista) {
-          navigate("/deliveryOrders"); // Página para Almacenista
-        } else if (userRoleId === roleIds.administrador) {
-          navigate("/workorders"); // Página para Almacenista
-        } else if (userRoleId === roleIds.operador) {
-          navigate("/productionInitial"); // Página para Operador
-        }
-      }
-    }, [user]);
+// Redirigir al inicio según el rol
+useEffect(() => {
+  if (userRoleId) {
+    if (userRoleId === roleIds.ventas) {
+      navigate("/createWorkOrder"); // Página para Vendedor
+    } else if (userRoleId === roleIds.almacenista) {
+      navigate("/deliveryOrders"); // Página para Almacenista
+    } else if (userRoleId === roleIds.administrador) {
+      navigate("/workorders"); // Página para Administrador
+    } else if (userRoleId === roleIds.operador) {
+      navigate("/productionInitial"); // Página para Operador
+    }
+  }
+}, [userRoleId, roleIds]);
 
   // Define las rutas y los roles permitidos
   const menuItems = [

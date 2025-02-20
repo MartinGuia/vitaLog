@@ -43,17 +43,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  function recargarPagina() {
-    window.location.reload(); // Recarga la página
-  }
-
   const signin = async (user) => {
     try {
       const res = await loginRequest(user);
       console.log(res);
       setIsAuthenticated(true);
       setUser(res.data);
-      recargarPagina();
     } catch (error) {
       if (Array.isArray(error.response.data)) {
         return setErrors(error.response.data);
@@ -65,7 +60,7 @@ export const AuthProvider = ({ children }) => {
   const getUsers = async () => {
     try {
       const res = await getUsersRequest();
-      console.log(res);
+      // console.log(res);
       setGetAllUsers(res.data);
     } catch (error) {
       console.error(error);
@@ -75,7 +70,7 @@ export const AuthProvider = ({ children }) => {
   const getUser = async (id) => {
     try {
       const res = await getUserRequest(id);
-      console.log(res.data);
+      // console.log(res.data);
       return res.data;
     } catch (error) {
       console.error(error);
@@ -99,7 +94,7 @@ export const AuthProvider = ({ children }) => {
   const deleteUser = async (id) => {
     try {
       const res = await deleteUserRequest(id);
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       console.error(error);
     }
@@ -159,7 +154,7 @@ export const AuthProvider = ({ children }) => {
       }
     }
     checkLogin();
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <AuthContext.Provider

@@ -74,7 +74,7 @@ function AllWorkOrdersPage() {
   };
 
   return (
-    <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
+    <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
       <div className="text-center my-8">
         <h2 className="md:text-4xl text-2xl font-bold mb-2">Órdenes de Trabajo</h2>
       </div>

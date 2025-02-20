@@ -40,7 +40,7 @@ function ScannerFinalProduction() {
   };
 
   return (
-    <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
+    <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
       <div className="text-center my-8">
         <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
           Inspección Final

@@ -67,7 +67,7 @@ function ViewDeliveryOrderPage() {
 
   return (
     <>
-      <div className="px-4 pt-4 lg:px-14 max-w-screen-2xl mx-auto">
+      <div className="px-4 pt-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
         <div>
           <Link to={`/allDeliveryOrders`}>
             <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
