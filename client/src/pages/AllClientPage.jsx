@@ -61,7 +61,7 @@ function AllClientPage() {
   };
 
   return (
-    <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto">
+    <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
       {/* Alerta */}
       {alert && <Alert message={alert.message} type={alert.type} />}
       <div className="text-center my-8">

@@ -24,7 +24,7 @@ function LoginPage() {
   
   return (
     <>
-      <main className="bg-gradient-to-br from-slate-800 to-slate-900 h-dvh flex justify-center items-center flex-col">
+      <main className="bg-gradient-to-br from-slate-800 to-slate-900 h-dvh flex justify-center items-center flex-col select-none">
         <div className="flex top-10 absolute w-[100%]">
           {loginErrors.map((error, i) => (
             <div className="bg-red-500 py-2 text-white w-[100%] flex justify-center" key={i}>
