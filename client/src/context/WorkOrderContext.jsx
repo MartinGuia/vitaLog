@@ -4,10 +4,13 @@ import {
   getWorkOrdersRequest,
   getWorkOrderRequest,
   openWorkOrderRequest,
-  deleteWorkOrderRequest
+  deleteWorkOrderRequest,
 } from "../api/workOrders.js";
 import { useDispatch } from "react-redux";
-import { setWorkOrders, removeWorkOrder } from "../store/slices/workOrderSlice.js";
+import {
+  setWorkOrders,
+  removeWorkOrder,
+} from "../store/slices/workOrderSlice.js";
 import socket from "../socket";
 
 const WorkOrderContext = createContext();
@@ -28,7 +31,7 @@ export function WorkOrderProvider({ children }) {
     openWorkOrderRequest(values);
     console.log("work order open");
   };
-  
+
   const closeWorkOrder = (data) => {
     closeWorkOrderRequest(data);
     console.log("work order closed");
@@ -63,20 +66,28 @@ export function WorkOrderProvider({ children }) {
     }
   };
 
-    useEffect(() => {
-      socket.on("workOrderDeleted", ({ id }) => {
-        console.log("Orden de trabajo eliminada:", id);
-        dispatch(removeWorkOrder(id));
-      });
-  
-      return () => {
-        socket.off("workOrderDeleted");
-      };
-    }, [dispatch]);
+  useEffect(() => {
+    socket.on("workOrderDeleted", ({ id }) => {
+      console.log("Orden de trabajo eliminada:", id);
+      dispatch(removeWorkOrder(id));
+    });
+
+    return () => {
+      socket.off("workOrderDeleted");
+    };
+  }, [dispatch]);
 
   return (
     <WorkOrderContext.Provider
-      value={{deleteWorkOrder, openWorkOrder, closeWorkOrder, setAllWorkOrders ,getWorkOrders, allWorkOrders, getWorkOrderById }}
+      value={{
+        deleteWorkOrder,
+        openWorkOrder,
+        closeWorkOrder,
+        setAllWorkOrders,
+        getWorkOrders,
+        allWorkOrders,
+        getWorkOrderById,
+      }}
     >
       {children}
     </WorkOrderContext.Provider>

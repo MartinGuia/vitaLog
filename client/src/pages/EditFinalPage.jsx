@@ -22,7 +22,7 @@ function EditFinalPage() {
 
     try {
       await updateFinalTire(params.id, updatedValues);
-      navigate("/productionFinal");
+      // navigate("/productionFinal");
       alert("Registro actualizado exitosamente");
     } catch (error) {
       console.error(error);

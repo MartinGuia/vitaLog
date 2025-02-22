@@ -3,23 +3,29 @@ import { useDeliveryOrder } from "../context/DeliveryOrderContext.jsx";
 import { useEffect, useState } from "react";
 import { Printer, UserRoundPen, Trash2 } from "lucide-react";
 import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta
+import { useDispatch, useSelector } from "react-redux";
+import socket from "../socket";
+import { removeDeliveryOrder } from "../store/slices/deliveryOrderSlice.js";
 
 function AllDeliveryOrders() {
-  const { getDeliveryOrders, deliveryOrders } = useDeliveryOrder();
+  const { getDeliveryOrders, setAllDeliveryOrders, deleteDeliveryOrder } =
+    useDeliveryOrder();
   const [currentPage, setCurrentPage] = useState(1);
   const [alert, setAlert] = useState(null); // Estado para manejar la alerta
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [workOrderToDelete, setWorkOrderToDelete] = useState(null);
+  const [deliveryOrderToDelete, setDeliveryOrderToDelete] = useState(null);
   const [confirmationNumber, setConfirmationNumber] = useState("");
   const itemsPerPage = 10;
+  const dispatch = useDispatch();
+  const allDeliveryOrders = useSelector((state) => state.deliveryOrders.list);
 
   useEffect(() => {
     getDeliveryOrders();
   }, []);
 
-  const totalPages = Math.ceil(deliveryOrders.length / itemsPerPage);
+  const totalPages = Math.ceil(allDeliveryOrders.length / itemsPerPage);
 
-  const currentOrders = deliveryOrders.slice(
+  const currentOrders = allDeliveryOrders.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -30,33 +36,46 @@ function AllDeliveryOrders() {
 
   const showAlert = (message, type = "success") => {
     setAlert({ message, type });
-    setTimeout(() => setAlert(null), 3000);
+    setTimeout(() => setAlert(null), 1000);
   };
 
-  const handleDeleteClick = (workOrder) => {
-    // setWorkOrderToDelete(workOrder);
+  const handleDeleteClick = (deliveryOrder) => {
+    setDeliveryOrderToDelete(deliveryOrder);
     setIsModalOpen(true);
   };
 
-  // const confirmDelete = async () => {
-  //   if (confirmationNumber === String(workOrderToDelete.numero)) {
-  //     try {
-  //       await deleteWorkOrder(workOrderToDelete._id);
-  //       showAlert("Orden de trabajo eliminada exitosamente", "success");
-  //       setWorkOrders((prevOrders) =>
-  //         prevOrders.filter((order) => order._id !== workOrderToDelete._id)
-  //       );
-  //     } catch (error) {
-  //       console.error(error);
-  //       showAlert("Error al eliminar la orden de trabajo. Intenta nuevamente.", "error");
-  //     }
-  //     setIsModalOpen(false);
-  //     setWorkOrderToDelete(null);
-  //     setConfirmationNumber("");
-  //   } else {
-  //     showAlert("El número no coincide. Orden no eliminada.", "error");
-  //   }
-  // };
+  useEffect(() => {
+    socket.on("deliveryOrderDeleted", ({ id }) => {
+      dispatch(removeDeliveryOrder(id));
+    });
+
+    return () => {
+      socket.off("deliveryOrderDeleted");
+    };
+  }, [dispatch]);
+
+  const confirmDelete = async () => {
+    if (confirmationNumber === String(deliveryOrderToDelete.numero)) {
+      try {
+        await deleteDeliveryOrder(deliveryOrderToDelete._id);
+        showAlert("Se dio de baja la O.E. exitosamente", "success");
+        setAllDeliveryOrders((prevOrders) =>
+          prevOrders.filter((order) => order._id !== deliveryOrderToDelete._id)
+        );
+      } catch (error) {
+        console.error(error);
+        showAlert(
+          "Error al dar de baja la orden de entrega. Intenta nuevamente.",
+          "error"
+        );
+      }
+      setIsModalOpen(false);
+      setDeliveryOrderToDelete(null);
+      setConfirmationNumber("");
+    } else {
+      showAlert("El número no coincide. Orden no eliminada.", "error");
+    }
+  };
 
   return (
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
@@ -74,7 +93,7 @@ function AllDeliveryOrders() {
       )}
       <section>
         <div className="p-4 w-full">
-          {deliveryOrders.length === 0 ? (
+          {allDeliveryOrders.length === 0 ? (
             <div className="text-center text-gray-600 text-lg">
               No hay ordenes de entrega registradas
             </div>
@@ -136,7 +155,7 @@ function AllDeliveryOrders() {
                   ))}
                 </tbody>
               </table>
-              {deliveryOrders.length >= itemsPerPage && (
+              {allDeliveryOrders.length >= itemsPerPage && (
                 <div className="flex justify-between items-center mt-4">
                   <div className="text-sm text-gray-600">
                     Página {currentPage} de {totalPages}
@@ -184,13 +203,14 @@ function AllDeliveryOrders() {
           )}
         </div>
       </section>
-      {/* {isModalOpen && (
+
+      {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h3 className="text-lg font-bold mb-4">Confirmar eliminación</h3>
             <p>
               Escribe el número de la orden{" "}
-              <strong>{workOrderToDelete.numero}</strong> para confirmar:
+              <strong>{deliveryOrderToDelete.numero}</strong> para confirmar:
             </p>
             <input
               type="text"
@@ -209,7 +229,7 @@ function AllDeliveryOrders() {
                 Cancelar
               </button>
               <button
-                // onClick={confirmDelete}
+                onClick={confirmDelete}
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
               >
                 Confirmar
@@ -217,7 +237,7 @@ function AllDeliveryOrders() {
             </div>
           </div>
         </div>
-      )} */}
+      )}
     </div>
   );
 }

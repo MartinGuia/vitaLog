@@ -84,7 +84,6 @@ export const createTire = async (req, res) => {
 
 export const getTire = async (req, res) => {
   try {
-    
     const tire = await Tire.findById(req.params.id)
       .populate({
         path: "user",
@@ -108,9 +107,7 @@ export const getTire = async (req, res) => {
 
     res.json(formattedTire);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error al obtener el registro", error });
+    res.status(500).json({ message: "Error al obtener el registro", error });
   }
 };
 
@@ -188,5 +185,23 @@ export const getTiresWithInspection = async (req, res) => {
     // Manejo de errores
     console.error(error);
     res.status(500).json({ message: "Error retrieving tires" });
+  }
+};
+
+export const getTiresByHelmetDesign = async (req, res) => {
+  try {
+    const tires = await Tire.aggregate([
+      { $match: { user: req.user.id } }, // Filtrar por usuario
+      { 
+        $group: { 
+          _id: "$helmetDesign", 
+          count: { $sum: 1 } 
+        } 
+      }
+    ]);
+
+    res.json(tires);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener los datos", error });
   }
 };

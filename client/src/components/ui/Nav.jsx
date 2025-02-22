@@ -10,6 +10,7 @@ import {
   Search,
   PackageCheck,
   FileInput,
+  ChartColumnBig,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -135,6 +136,12 @@ useEffect(() => {
       icon: <FileInput size={20} color="white" />,
       text: "Ver Orden de Entrega",
       allowedRoles: [roleIds.master, roleIds.almacenista,  roleIds.administrador], // Administrador, Ventas y Almacén
+    },
+    {
+      path: "/reports",
+      icon: <ChartColumnBig size={20} color="white" />,
+      text: "Estadística",
+      allowedRoles: [roleIds.master, roleIds.administrador], // Administrador, Ventas y Almacén
     },
   ];
 

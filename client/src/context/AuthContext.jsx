@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
   const getUsers = async () => {
     try {
       const res = await getUsersRequest();
-      // console.log(res);
+      console.log(res);
       setGetAllUsers(res.data);
     } catch (error) {
       console.error(error);
