@@ -350,16 +350,495 @@ function EditFinalPage() {
                 </div>
                 <div className="relative w-[90%] sm:w-[40%] mt-10 sm:mt-0">
                   <select
-                    {...register("helmetDesign", { required: false })}
-                    className="block shadow-md w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    {...register("appliedBand", { required: false })}
+                    className="block shadow-md w-full p-2 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    size="4" /* Controla cuántas opciones se muestran sin scroll */
                   >
-                    <option value="">Banda usada...</option>
-                    <option value="HT3">HT3</option>
-                    <option value="HDL">HDL</option>
-                    <option value="HSC">HSC</option>
-                    <option value="HSR">HSC</option>
-                    <option value="HTL">HSC</option>
+                    <option className="p-1" value="">
+                      Banda usada...
+                    </option>
+                    <option className="p-1" value="HT3">
+                      HT3
+                    </option>
+                    <option className="p-1" value="HDL">
+                      HDL
+                    </option>
+                    <option className="p-1" value="HSC">
+                      HSC
+                    </option>
+                    <option className="p-1" value="HSR">
+                      HSR
+                    </option>
+                    <option className="p-1" value="HTL">
+                      HTL
+                    </option>
                   </select>
+                  <select
+                    {...register("appliedBandBandag", { required: false })}
+                    className="block shadow-md w-full mt-3 p-2 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    size="4" /* Controla cuántas opciones se muestran sin scroll */
+                  >
+                    <option className="p-1" value="">
+                      Banda usada...
+                    </option>
+                    <option className="p-1" value="B123 FUELTECH - 220">
+                      B123 FUELTECH - 220
+                    </option>
+                    <option className="p-1" value="B123 FUELTECH - 230">
+                      B123 FUELTECH - 230
+                    </option>
+                    <option className="p-1" value="B197 - 230">
+                      B197 - 230
+                    </option>
+                    <option className="p-1" value="B197 - 210">
+                      B197 - 210
+                    </option>
+                    <option className="p-1" value="B197 - 220">
+                      B197 - 220
+                    </option>
+                    <option className="p-1" value="B440 - 250">
+                      B440 - 250
+                    </option>
+                    <option className="p-1" value="B440 - 240">
+                      B440 - 240
+                    </option>
+                    <option className="p-1" value="B440 - 230">
+                      B440 - 230
+                    </option>
+                    <option className="p-1" value="B440 - 220">
+                      B440 - 220
+                    </option>
+                    <option className="p-1" value="B440 - 210">
+                      B440 - 210
+                    </option>
+                    <option className="p-1" value="B710 - 230">
+                      B710 - 230
+                    </option>
+                    <option className="p-1" value="B710 - 220">
+                      B710 - 220
+                    </option>
+                    <option className="p-1" value="B710 - 210">
+                      B710 - 210
+                    </option>
+                    <option className="p-1" value="B713 FUELTECH - 240">
+                      B713 FUELTECH - 240
+                    </option>
+                    <option className="p-1" value="B713 FUELTECH - 230">
+                      B713 FUELTECH - 230
+                    </option>
+                    <option className="p-1" value="B713 FUELTECH - 220">
+                      B713 FUELTECH - 220
+                    </option>
+                    <option className="p-1" value="B713 FUELTECH - 210">
+                      B713 FUELTECH - 210
+                    </option>
+                    <option className="p-1" value="B736 - 230">
+                      B736 - 230
+                    </option>
+                    <option className="p-1" value="B736 - 270">
+                      B736 - 270
+                    </option>
+                    <option className="p-1" value="B736 - 240">
+                      B736 - 240
+                    </option>
+                    <option className="p-1" value="B736 - 250">
+                      B736 - 250
+                    </option>
+                    <option className="p-1" value="B736 - 260">
+                      B736 - 260
+                    </option>
+                    <option className="p-1" value="BDL - 210">
+                      BDL - 210
+                    </option>
+                    <option className="p-1" value="BDL - 230">
+                      BDL - 230
+                    </option>
+                    <option className="p-1" value="BDL - 220">
+                      BDL - 220
+                    </option>
+                    <option className="p-1" value="BDM - 220">
+                      BDM - 220
+                    </option>
+                    <option className="p-1" value="BDM - 230">
+                      BDM - 230
+                    </option>
+                    <option className="p-1" value="BDM - 240">
+                      BDM - 240
+                    </option>
+                    <option className="p-1" value="BDM - 250">
+                      BDM - 250
+                    </option>
+                    <option className="p-1" value="BDR AS - 230">
+                      BDR AS - 230
+                    </option>
+                    <option className="p-1" value="BDR HG - 260">
+                      BDR HG - 260
+                    </option>
+                    <option className="p-1" value="BDR HG - 230">
+                      BDR HG - 230
+                    </option>
+                    <option className="p-1" value="BDR HG - 240">
+                      BDR HG - 240
+                    </option>
+                    <option className="p-1" value="BDV - 260">
+                      BDV - 260
+                    </option>
+                    <option className="p-1" value="BDV - 210">
+                      BDV - 210
+                    </option>
+                    <option className="p-1" value="BDV - 230">
+                      BDV - 230
+                    </option>
+                    <option className="p-1" value="BDV - 240">
+                      BDV - 240
+                    </option>
+                    <option className="p-1" value="BDV - 220">
+                      BDV - 220
+                    </option>
+                    <option className="p-1" value="Brawny Rib - 600">
+                      Brawny Rib - 600
+                    </option>
+                    <option className="p-1" value="Brawny Rib - 800">
+                      Brawny Rib - 800
+                    </option>
+                    <option className="p-1" value="Brawny Rib - 750">
+                      Brawny Rib - 750
+                    </option>
+                    <option className="p-1" value="Brawny Rib - 700">
+                      Brawny Rib - 700
+                    </option>
+                    <option className="p-1" value="Brawny Rib - 850">
+                      Brawny Rib - 850
+                    </option>
+                    <option className="p-1" value="Brawny Trac - 150">
+                      Brawny Trac - 150
+                    </option>
+                    <option className="p-1" value="Brawny Trac - 140">
+                      Brawny Trac - 140
+                    </option>
+                    <option className="p-1" value="BRMS - 240">
+                      BRMS - 240
+                    </option>
+                    <option className="p-1" value="BRMS2 - 250">
+                      BRMS2 - 250
+                    </option>
+                    <option className="p-1" value="BRR13 - 230">
+                      BRR13 - 230
+                    </option>
+                    <option className="p-1" value="BRR13 - 250">
+                      BRR13 - 250
+                    </option>
+                    <option className="p-1" value="BRR13 - 260">
+                      BRR13 - 260
+                    </option>
+                    <option className="p-1" value="BRR13 - 240">
+                      BRR13 - 240
+                    </option>
+                    <option className="p-1" value="BRR13 - 220">
+                      BRR13 - 220
+                    </option>
+                    <option className="p-1" value="BRSS - 230">
+                      BRSS - 230
+                    </option>
+                    <option className="p-1" value="BRSS - 200">
+                      BRSS - 200
+                    </option>
+                    <option className="p-1" value="BRSS - 220">
+                      BRSS - 220
+                    </option>
+                    <option className="p-1" value="BRSS 210">
+                      BRSS 210
+                    </option>
+                    <option className="p-1" value="BSS - 230">
+                      BSS - 230
+                    </option>
+                    <option className="p-1" value="BSS - 220">
+                      BSS - 220
+                    </option>
+                    <option className="p-1" value="BTL - 230">
+                      BTL - 230
+                    </option>
+                    <option className="p-1" value="BTL - 220">
+                      BTL - 220
+                    </option>
+                    <option className="p-1" value="BTL - 210">
+                      BTL - 210
+                    </option>
+                    <option className="p-1" value="BTL SA - 210">
+                      BTL SA - 210
+                    </option>
+                    <option className="p-1" value="BTL SA - 220">
+                      BTL SA - 220
+                    </option>
+                    <option className="p-1" value="BTL SA - 230">
+                      BTL SA - 230
+                    </option>
+                    <option className="p-1" value="BTL SA2 - 230">
+                      BTL SA2 - 230
+                    </option>
+                    <option className="p-1" value="BTL SA2 - 240">
+                      BTL SA2 - 240
+                    </option>
+                    <option className="p-1" value="BTL SA2 - 210">
+                      BTL SA2 - 210
+                    </option>
+                    <option className="p-1" value="BTL SA2 - 220">
+                      BTL SA2 - 220
+                    </option>
+                    <option className="p-1" value="BTL3 - 240">
+                      BTL3 - 240
+                    </option>
+                    <option className="p-1" value="BTL3 - 220">
+                      BTL3 - 220
+                    </option>
+                    <option className="p-1" value="BTL3 - 230">
+                      BTL3 - 230
+                    </option>
+                    <option className="p-1" value="BTL3 - 250">
+                      BTL3 - 250
+                    </option>
+                    <option className="p-1" value="BTR SA - 260">
+                      BTR SA - 260
+                    </option>
+                    <option className="p-1" value="BTR - 230">
+                      BTR - 230
+                    </option>
+                    <option className="p-1" value="BTR SA - 240">
+                      BTR SA - 240
+                    </option>
+                    <option className="p-1" value="BTR SA - 250">
+                      BTR SA - 250
+                    </option>
+                    <option className="p-1" value="BTRA SA s - 220">
+                      BTRA SA s - 220
+                    </option>
+                    <option className="p-1" value="BZY - 9">
+                      BZY - 9
+                    </option>
+                    <option className="p-1" value="BZY - 8.5">
+                      BZY - 8.5
+                    </option>
+                    <option className="p-1" value="BZY - 8">
+                      BZY - 8
+                    </option>
+                    <option className="p-1" value="BZY - 10.5">
+                      BZY - 10.5
+                    </option>
+                    <option className="p-1" value="CT (Comercial Traction) - 600">
+                      CT (Comercial Traction) - 600
+                    </option>
+                    <option className="p-1" value="CT (Comercial Traction) - 800">
+                      CT (Comercial Traction) - 800
+                    </option>
+                    <option className="p-1" value="D4300 - 9">
+                      D4300 - 9
+                    </option>
+                    <option className="p-1" value="D4300 - 9.5">
+                      D4300 - 9.5
+                    </option>
+                    <option className="p-1" value="D4300 10.5">
+                      D4300 10.5
+                    </option>
+                    <option className="p-1" value="D4300 - 8.5">
+                      D4300 - 8.5
+                    </option>
+                    <option className="p-1" value="D4300 - 250">
+                      D4300 - 250
+                    </option>
+                    <option className="p-1" value="DR5.3 - 210">
+                      DR5.3 - 210
+                    </option>
+                    <option className="p-1" value="DR5.3 - 220">
+                      DR5.3 - 220
+                    </option>
+                    <option className="p-1" value="DR5.3 - 230">
+                      DR5.3 - 230
+                    </option>
+                    <option className="p-1" value="DR5.3 - 240">
+                      DR5.3 - 240
+                    </option>
+                    <option className="p-1" value="DR5.3 - 200">
+                      DR5.3 - 200
+                    </option>
+                    <option className="p-1" value="ECL Drive - 8.5">
+                      ECL Drive - 8.5
+                    </option>
+                    <option className="p-1" value="Econo Drive - 9.5">
+                      Econo Drive - 9.5
+                    </option>
+                    <option className="p-1" value="Econo Drive - 9">
+                      Econo Drive - 9
+                    </option>
+                    <option className="p-1" value="Econo Drive - 8">
+                      Econo Drive - 8
+                    </option>
+                    <option className="p-1" value="Econo Drive - 8.5">
+                      Econo Drive - 8.5
+                    </option>
+                    <option className="p-1" value="Econo Drive 10.5">
+                      Econo Drive 10.5
+                    </option>
+                    <option className="p-1" value="FCR-T2 - 220">
+                      FCR-T2 - 220
+                    </option>
+                    <option className="p-1" value="FCR-T2 - 210">
+                      FCR-T2 - 210
+                    </option>
+                    <option className="p-1" value="FCR-T2 - 240">
+                      FCR-T2 - 240
+                    </option>
+                    <option className="p-1" value="FCR-T2 - 230">
+                      FCR-T2 - 230
+                    </option>
+                    <option className="p-1" value="Highway (HW) - 3">
+                      Highway (HW) - 3
+                    </option>
+                    <option className="p-1" value="Highway (HW) - 8">
+                      Highway (HW) - 8
+                    </option>
+                    <option className="p-1" value="Highway (HW) - 6">
+                      Highway (HW) - 6
+                    </option>
+                    <option className="p-1" value="LIGHT S - 190">
+                      LIGHT S - 190
+                    </option>
+                    <option className="p-1" value="LIGHT S - 150">
+                      LIGHT S - 150
+                    </option>
+                    <option className="p-1" value="LIGHT S - 200">
+                      LIGHT S - 200
+                    </option>
+                    <option className="p-1" value="LIGHT S - 180">
+                      LIGHT S - 180
+                    </option>
+                    <option className="p-1" value="LIGHT S - 215">
+                      LIGHT S - 215
+                    </option>
+                    <option className="p-1" value="LIGHT S - 165">
+                      LIGHT S - 165
+                    </option>
+                    <option className="p-1" value="LIGHT S - 140">
+                      LIGHT S - 140
+                    </option>
+                    <option className="p-1" value="LIGHT S - 210">
+                      LIGHT S - 210
+                    </option>
+                    <option className="p-1" value="Megatreck - 230">
+                      Megatreck - 230
+                    </option>
+                    <option className="p-1" value="Megatreck - 210">
+                      Megatreck - 210
+                    </option>
+                    <option className="p-1" value="Megatreck - 220">
+                      Megatreck - 220
+                    </option>
+                    <option className="p-1" value="Metromax Rib (MMR) - 160">
+                      Metromax Rib (MMR) - 160
+                    </option>
+                    <option className="p-1" value="Metromax Rib (MMR) - 195">
+                      Metromax Rib (MMR) - 195
+                    </option>
+                    <option className="p-1" value="Metromax Rib (MMR) - 170">
+                      Metromax Rib (MMR) - 170
+                    </option>
+                    <option className="p-1" value="Metromax Rib (MMR) - 150">
+                      Metromax Rib (MMR) - 150
+                    </option>
+                    <option className="p-1" value="R4200 - 9">
+                      R4200 - 9
+                    </option>
+                    <option className="p-1" value="T4100 - 8.5">
+                      T4100 - 8.5
+                    </option>
+                    <option className="p-1" value="T4100 - 265">
+                      T4100 - 265
+                    </option>
+                    <option className="p-1" value="T4100 - 10.5">
+                      T4100 - 10.5
+                    </option>
+                    <option className="p-1" value="T4100 - 255">
+                      T4100 - 255
+                    </option>
+                    <option className="p-1" value="T4100 - 9">
+                      T4100 - 9
+                    </option>
+                    <option className="p-1" value="T4100 - 9.5">
+                      T4100 - 9.5
+                    </option>
+                    <option className="p-1" value="TR4.1 - 230">
+                      TR4.1 - 230
+                    </option>
+                    <option className="p-1" value="TR4.1 - 220">
+                      TR4.1 - 220
+                    </option>
+                    <option className="p-1" value="TR4.1 - 200">
+                      TR4.1 - 200
+                    </option>
+                    <option className="p-1" value="TR4.1 - 210">
+                      TR4.1 - 210
+                    </option>
+                    <option className="p-1" value="TR4.1 - 240">
+                      TR4.1 - 240
+                    </option>
+                    <option className="p-1" value="UAP - 210">
+                      UAP - 210
+                    </option>
+                    <option className="p-1" value="UAP - 230">
+                      UAP - 230
+                    </option>
+                    <option className="p-1" value="UAP - 210">
+                      UAP - 210
+                    </option>
+                    <option className="p-1" value="UAP - 220">
+                      UAP - 220
+                    </option>
+                    <option className="p-1" value="UAP - 260">
+                      UAP - 260
+                    </option>
+                    <option className="p-1" value="UAP - 250">
+                      UAP - 250
+                    </option>
+                    <option className="p-1" value="UAP2 - 240">
+                      UAP2 - 240
+                    </option>
+                    <option className="p-1" value="UAP2 - 220">
+                      UAP2 - 220
+                    </option>
+                    <option className="p-1" value="UAP2 - 230">
+                      UAP2 - 230
+                    </option>
+                    <option className="p-1" value="UAP2 - 210">
+                      UAP2 - 210
+                    </option>
+                    <option className="p-1" value="UDR - 240">
+                      UDR - 240
+                    </option>
+                    <option className="p-1" value="UDR - 230">
+                      UDR - 230
+                    </option>
+                    <option className="p-1" value="UDR - 210">
+                      UDR - 210
+                    </option>
+                    <option className="p-1" value="UDR - 250">
+                      UDR - 250
+                    </option>
+                    <option className="p-1" value="UDR - 220">
+                      UDR - 220
+                    </option>
+                    <option className="p-1" value="UDR - 200">
+                      UDR - 200
+                    </option>
+                    <option className="p-1" value="BDX2 - 240">
+                      BDX2 - 240
+                    </option>
+                    <option className="p-1" value="BDX2 - 260">
+                      BDX2 - 260
+                    </option>
+                    <option className="p-1" value="BDX2 - 250">
+                      BDX2 - 250
+                    </option>
+                  </select>
+
                   {/* {errors.patch && (
                     <p className="text-red-500 text-xs">
                       {errors.rejection.message}

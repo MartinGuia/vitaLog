@@ -22,7 +22,8 @@ function Nav({ children }) {
   const [userRoleId, setUserRoleId] = useState(null); // ID del rol del usuario
   const [roleIds, setRoleIds] = useState({
     master: null,
-    administrador: null,
+    administradorP: null,
+    administradorF: null,
     ventas: null,
     almacenista: null,
     operador: null,
@@ -37,11 +38,12 @@ function Nav({ children }) {
       if (res) {
         const rolesMap = {};
         for (const role of res) {
-          if (role.name === "Administrador") rolesMap.administrador = role._id;
           if (role.name === "Master") rolesMap.master = role._id;
+          if (role.name === "AdministradorP") rolesMap.administradorP = role._id;
+          if (role.name === "AdministradorF") rolesMap.administradorF = role._id;
           if (role.name === "Vendedor") rolesMap.ventas = role._id;
-          if (role.name === "Almacenista") rolesMap.almacenista = role._id;
           if (role.name === "Operador") rolesMap.operador = role._id;
+          if (role.name === "Almacenista") rolesMap.almacenista = role._id;
         }
         setRoleIds(rolesMap);
         // console.log(user)
@@ -73,7 +75,9 @@ useEffect(() => {
       navigate("/createWorkOrder"); // Página para Vendedor
     } else if (userRoleId === roleIds.almacenista) {
       navigate("/deliveryOrders"); // Página para Almacenista
-    } else if (userRoleId === roleIds.administrador) {
+    } else if (userRoleId === roleIds.administradorP) {
+      navigate("/workorders"); // Página para Administrador
+    } else if (userRoleId === roleIds.administradorF) {
       navigate("/workorders"); // Página para Administrador
     } else if (userRoleId === roleIds.operador) {
       navigate("/productionInitial"); // Página para Operador
@@ -117,7 +121,7 @@ useEffect(() => {
       path: "/workorders",
       icon: <BookMarked size={20} color="white" />,
       text: "Orden de trabajo",
-      allowedRoles: [roleIds.master, roleIds.almacenista, roleIds.administrador], // Administrador, Ventas y Operador
+      allowedRoles: [roleIds.master, roleIds.almacenista, roleIds.administradorP, roleIds.administradorF], // Administrador, Ventas y Operador
     },
     {
       path: "/createWorkOrder",
@@ -135,13 +139,13 @@ useEffect(() => {
       path: "/allDeliveryOrders",
       icon: <FileInput size={20} color="white" />,
       text: "Ver Orden de Entrega",
-      allowedRoles: [roleIds.master, roleIds.almacenista,  roleIds.administrador], // Administrador, Ventas y Almacén
+      allowedRoles: [roleIds.master, roleIds.almacenista, roleIds.administradorP, roleIds.administradorF], // Administrador, Ventas y Almacén
     },
     {
       path: "/reports",
       icon: <ChartColumnBig size={20} color="white" />,
       text: "Estadística",
-      allowedRoles: [roleIds.master, roleIds.administrador], // Administrador, Ventas y Almacén
+      allowedRoles: [roleIds.master, roleIds.administradorP, roleIds.administradorF], // Administrador, Ventas y Almacén
     },
   ];
 

@@ -11,7 +11,8 @@ export const createRoles = async () => {
 
     const values = await Promise.all([
       new Role({ name: "Master" }).save(),
-      new Role({ name: "Administrador" }).save(),
+      new Role({ name: "AdministradorP" }).save(),
+      new Role({ name: "AdministradorF" }).save(),
       new Role({ name: "Vendedor" }).save(),
       new Role({ name: "Operador" }).save(),
       new Role({ name: "Almacenista" }).save(),
@@ -36,7 +37,7 @@ export const createRoles = async () => {
         name: "admin",
         lastName: "admin",
         userName: "rootAdmin",
-        password: await bcryptjs.hash("qwerty123", 10),
+        password: await bcryptjs.hash("@qwerty123VB", 10),
         role: roleAdmin[0]._id,
         // department: depAdministracion[0]._id,
       }).save(),

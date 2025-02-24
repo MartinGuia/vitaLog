@@ -188,20 +188,22 @@ export const getTiresWithInspection = async (req, res) => {
   }
 };
 
-export const getTiresByHelmetDesign = async (req, res) => {
+export const getHelmetDesignCounts = async (req, res) => {
   try {
-    const tires = await Tire.aggregate([
-      { $match: { user: req.user.id } }, // Filtrar por usuario
-      { 
-        $group: { 
-          _id: "$helmetDesign", 
-          count: { $sum: 1 } 
-        } 
-      }
+    const helmetDesignCounts = await Tire.aggregate([
+      {
+        $group: {
+          _id: "$appliedBand",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { count: -1 },
+      },
     ]);
 
-    res.json(tires);
+    res.json(helmetDesignCounts);
   } catch (error) {
-    res.status(500).json({ message: "Error al obtener los datos", error });
+    res.status(500).json({ message: "Error al obtener los diseños de casco", error });
   }
 };

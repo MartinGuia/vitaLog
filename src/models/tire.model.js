@@ -84,7 +84,11 @@ const tireSchema = new Schema(
       required: false,
       default: false, // Configurar el valor predeterminado como false
     },
-    helmetDesign: {
+    appliedBand: {
+      type: String,
+      required: false,
+    },
+    appliedBandBandag: {
       type: String,
       required: false,
     },
