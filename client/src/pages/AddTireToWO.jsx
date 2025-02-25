@@ -142,7 +142,7 @@ function AddTireToWO() {
                         Escanea el código
                       </h1>
                       <BarcodeScannerComponent
-                        width={600}
+                        width={300}
                         delay={300} // Reduce el número de intentos por segundo
                         videoConstraints={{
                           facingMode: "environment",
