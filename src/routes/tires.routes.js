@@ -7,8 +7,8 @@ import {
   updateTire,
   updateFinalTire,
   getTiresWithInspection,
-  getTireByBarcode
-  // deleteTire,
+  getTireByBarcode,
+  getHelmetDesignCounts
 } from "../controllers/tire.controller.js";
 // import { validateSchema } from "../middlewares/validator.middleware.js";
 // import { createTireSchema } from "../schemas/tire.schema.js";
@@ -23,5 +23,6 @@ router.put("/tire/:id", authRequired ,updateTire);
 router.put("/editTire/:id", authRequired , updateFinalTire);
 router.post("/tires", authRequired, createTire);
 router.post("/tireBarcode", authRequired , getTireByBarcode);
+router.get("/tiresByHelmetDesign", authRequired , getHelmetDesignCounts);
 
 export default router;

@@ -35,6 +35,7 @@ import { DeliveryOrderProvider } from "./context/DeliveryOrderContext";
 import { Provider } from "react-redux";
 import store from "./store";
 import PrintLabel from "./pages/PrintLabel";
+import ReportPage from "./pages/ReportPage";
 
 function App() {
   return (
@@ -131,6 +132,7 @@ function App() {
                             path="/printlabel/:id"
                             element={<PrintLabel />}
                           />
+                          <Route path="/reports" element={<ReportPage/>}/>
                         </Route>
                       </Routes>
                     </Nav>

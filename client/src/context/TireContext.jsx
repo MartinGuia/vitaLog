@@ -8,6 +8,7 @@ import {
   getTireByBarcodeRequest,
   updateFinalTireRequest,
   getTiresByInspectionRequest,
+  getTiresByHelmetDesignRequest
 } from "../api/tires.js";
 import { printLabelRequest } from "../api/print.js";
 
@@ -28,6 +29,16 @@ export function TiresProvider({ children }) {
   const getTires = async () => {
     try {
       const res = await getTiresRequest();
+      console.log(res);
+      setTires(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+ 
+  const getTiresByHelmetDesign = async () => {
+    try {
+      const res = await getTiresByHelmetDesignRequest();
       console.log(res);
       setTires(res.data);
     } catch (error) {
@@ -126,6 +137,7 @@ export function TiresProvider({ children }) {
         getTires,
         getTire,
         createTire,
+        getTiresByHelmetDesign,
         errors,
       }}
     >

@@ -50,7 +50,7 @@ function PrintLabel() {
 ^FO120,620^A0N,110,90^FD${tire.helmetMeasurement}^FS
 
 ; **Banda Aplicada (izquierda, tamaño pequeño)**
-^FO20,720^A0N,50,30^FD${tire.helmetDesign}^FS
+^FO20,720^A0N,50,30^FD${tire.appliedBand || tire.appliedBandBandag}^FS
 
 ; **Ancho (izquierda, tamaño pequeño)**
 ^FO20,770^A0N,50,30^FD${tire.width}^FS
@@ -161,7 +161,7 @@ function PrintLabel() {
                 <p className="flex justify-center text-4xl my-7">
                   {tire.helmetMeasurement}
                 </p>
-                <p>{tire.helmetDesign}</p>
+                <p>{tire.appliedBand || tire.appliedBandBandag}</p>
                 <p>210</p>
                 <div className="flex justify-between">
                   <p>{tire.brand}</p>

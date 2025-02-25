@@ -1,11 +1,18 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import {
   closeDeliveryOrderRequest,
   openDeliveryOrderRequest,
   addTiresDeliveryOrderRequest,
   getDeliveryOrdersRequest,
   getDeliveryOrderRequest,
+  deleteDeliveryOrderRequest,
 } from "../api/deliveryOrder.js";
+import { useDispatch } from "react-redux";
+import socket from "../socket.js";
+import {
+  setDeliveryOrders,
+  removeDeliveryOrder,
+} from "../store/slices/deliveryOrderSlice.js";
 
 const DeliveryOrderContext = createContext();
 
@@ -20,8 +27,9 @@ export const useDeliveryOrder = () => {
 };
 
 export function DeliveryOrderProvider({ children }) {
-  const [deliveryOrders, setDeliveryOrders] = useState([]);
+  const [allDeliveryOrders, setAllDeliveryOrders] = useState([]);
   const [errors, setErrors] = useState([]);
+  const dispatch = useDispatch();
 
   const openDeliveryOrder = (deliveryOrder) => {
     openDeliveryOrderRequest(deliveryOrder);
@@ -46,33 +54,55 @@ export function DeliveryOrderProvider({ children }) {
   const getDeliveryOrders = async () => {
     try {
       const res = await getDeliveryOrdersRequest();
-      console.log(res);
-      setDeliveryOrders(res.data);
+      setAllDeliveryOrders(res.data);
+      dispatch(setDeliveryOrders(res.data));
     } catch (error) {
       console.error(error);
     }
   };
 
-   const getDeliveryOrder = async (id) => {
-      try {
-        const res = await getDeliveryOrderRequest(id);
-        console.log(res);
-        return res.data;
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const getDeliveryOrder = async (id) => {
+    try {
+      const res = await getDeliveryOrderRequest(id);
+      console.log(res);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deleteDeliveryOrder = async (id) => {
+    try {
+      await deleteDeliveryOrderRequest(id);
+      dispatch(removeDeliveryOrder(id));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    socket.on("deliveryOrderDeleted", ({id}) => {
+      console.log("Orden de trabajo eliminada:", id);
+      dispatch(removeDeliveryOrder(id));
+    })
+    return () => {
+      socket.off("deliveryOrderDeleted");
+    }
+  }, [dispatch])
+  
 
   return (
     <DeliveryOrderContext.Provider
       value={{
-        addTiresDeliveryOrder,
+        deleteDeliveryOrder,
         openDeliveryOrder,
         closeDeliveryOrder,
-        deliveryOrders,
-        errors,
+        setAllDeliveryOrders,
         getDeliveryOrders,
+        allDeliveryOrders,
         getDeliveryOrder,
+        errors,
+        addTiresDeliveryOrder,
       }}
     >
       {children}

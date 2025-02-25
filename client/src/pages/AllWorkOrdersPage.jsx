@@ -63,7 +63,10 @@ function AllWorkOrdersPage() {
         );
       } catch (error) {
         console.error(error);
-        showAlert("Error al eliminar la orden de trabajo. Intenta nuevamente.", "error");
+        showAlert(
+          "Error al eliminar la orden de trabajo. Intenta nuevamente.",
+          "error"
+        );
       }
       setIsModalOpen(false);
       setWorkOrderToDelete(null);
@@ -76,7 +79,9 @@ function AllWorkOrdersPage() {
   return (
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
       <div className="text-center my-8">
-        <h2 className="md:text-4xl text-2xl font-bold mb-2">Órdenes de Trabajo</h2>
+        <h2 className="md:text-4xl text-2xl font-bold mb-2">
+          Órdenes de Trabajo
+        </h2>
       </div>
       {alert && (
         <Alert
@@ -107,7 +112,10 @@ function AllWorkOrdersPage() {
                 </thead>
                 <tbody>
                   {currentOrders.map((workOrder, index) => (
-                    <tr key={index} className="border-t border-gray-200 text-sm">
+                    <tr
+                      key={index}
+                      className="border-t border-gray-200 text-sm"
+                    >
                       <td className="px-6">{workOrder.numero}</td>
                       <td className="px-6 text-sm text-gray-900">
                         <Link
@@ -120,8 +128,13 @@ function AllWorkOrdersPage() {
                       <td className="px-6">{workOrder.tires.length}</td>
                       <td className="px-6">{workOrder.client.name}</td>
                       <td className="px-6 text-xs">
-                        {workOrder.client.address1 + ", " + workOrder.client.city}, <br />
-                        {workOrder.client.region + ", " + workOrder.client.zipCode}
+                        {workOrder.client.address1 +
+                          ", " +
+                          workOrder.client.city}
+                        , <br />
+                        {workOrder.client.region +
+                          ", " +
+                          workOrder.client.zipCode}
                       </td>
                       <td>{workOrder.formattedCreatedAt}</td>
                       <td className="flex flex-col items-center md:flex-row md:items-center md:justify-around ">
@@ -189,12 +202,14 @@ function AllWorkOrdersPage() {
           )}
         </div>
       </section>
+
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h3 className="text-lg font-bold mb-4">Confirmar eliminación</h3>
             <p>
-              Escribe el número de la orden <strong>{workOrderToDelete.numero}</strong> para confirmar:
+              Escribe el número de la orden{" "}
+              <strong>{workOrderToDelete.numero}</strong> para confirmar:
             </p>
             <input
               type="text"

@@ -97,7 +97,7 @@ function AddTiresPage() {
                 <td className="px-6">{tire.barCode}</td>
                 <td className="px-6">{tire.itemCode}</td>
                 <td className="px-6">{tire.helmetMeasurement}</td>
-                <td className="px-6">{tire.helmetDesign}</td>
+                <td className="px-6">{tire.appliedBand || tire.appliedBandBandag}</td>
                 <td className="px-6">{tire.brand}</td>
               </tr>
             ))}

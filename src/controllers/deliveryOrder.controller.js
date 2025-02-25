@@ -52,6 +52,14 @@ export const createOrOpenDeliveryOrder = async (req, res) => {
 // Este controlador cierra una orden de trabajo
 export const closeDeliveryOrder = async (req, res) => {
   try {
+    // const { socketId, username } = req.body;
+
+    // if (!socketId || !username) {
+    //   return res
+    //     .status(400)
+    //     .json({ success: false, message: "Faltan datos requeridos." });
+    // }
+
     // Buscar la orden de trabajo abierta más reciente
     const currentDeliveryOrder = await DeliveryOrder.findOne({
       isOpen: true,
@@ -68,6 +76,18 @@ export const closeDeliveryOrder = async (req, res) => {
     currentDeliveryOrder.isOpen = false;
     currentDeliveryOrder.status = "cerrado";
     await currentDeliveryOrder.save();
+
+    // // Obtener instancia de Socket.IO
+    // const io = req.app.get("io");
+
+    // io.sockets.sockets.forEach((socket) => {
+    //   if (socket.id !== socketId) {
+    //     socket.emit("newNotification", {
+    //       message: `${username} ha creado la orden de entrega #${currentDeliveryOrder.numero}.`,
+    //       timestamp: new Date().toLocaleString(),
+    //     });
+    //   }
+    // });
 
     res.status(200).json({ success: true, currentDeliveryOrder });
   } catch (error) {
@@ -171,8 +191,8 @@ export const getDeliveryOrderById = async (req, res) => {
           select: "numero",
         },
       })
-      .populate({ path: "createdBy", select: "name lastName userName"})
-      .populate({ path: "client"});
+      .populate({ path: "createdBy", select: "name lastName userName" })
+      .populate({ path: "client" });
 
     if (!deliveryOrder) {
       return res
@@ -194,5 +214,36 @@ export const getDeliveryOrderById = async (req, res) => {
     res
       .status(500)
       .json({ message: "Error al obtener la orden de entrega", error });
+  }
+};
+
+// Este controlador elimina una orden de trabajo
+export const deleteDeliveryOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deliveryOrder = await DeliveryOrder.findById(id);
+    if (!deliveryOrder) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Orden de entrega no encontrada." });
+    }
+
+    await DeliveryOrder.findByIdAndDelete(id);
+
+    const io = req.app.get("io");
+    if (io) {
+      io.emit("deliveryOrderDeleted", { id });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Orden de entrega eliminada exitosamente.",
+    });
+  } catch (error) {
+    console.error("Error al eliminar la orden de entrega:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Error interno del servidor" });
   }
 };

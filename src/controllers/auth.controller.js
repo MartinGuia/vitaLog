@@ -51,22 +51,24 @@ export const register = async (req, res) => {
     departmentFound.users.push(userSaved._id);
     await departmentFound.save();
 
-    return res.status(200).json({message: "El usuario se creo correctamente"});
+    return res
+      .status(200)
+      .json({ message: "El usuario se creo correctamente" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
 export const login = async (req, res) => {
-    // Verifica si hay errores en la validación
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    
-    // Verifica si se recibió el nombre de usuario y la contraseña
+  // Verifica si hay errores en la validación
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  // Verifica si se recibió el nombre de usuario y la contraseña
   const { userName, password } = req.body;
-  
+
   try {
     const userFound = await User.findOne({ userName: req.body.userName });
 
@@ -111,10 +113,7 @@ export const login = async (req, res) => {
 export const getUsers = async (req, res) => {
   try {
     // Obtiene todos los usuarios, excluyendo la contraseña y populando los datos relacionados
-    const users = await User.find({}, "-password").populate(
-      "department",
-      "name"
-    ); // Carga solo el nombre del departamento
+    const users = await User.find({}, "-password") // Carga solo el nombre del departamento
 
     res.status(200).json(users);
   } catch (error) {
