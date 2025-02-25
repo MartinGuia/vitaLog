@@ -1,0 +1,35 @@
+services:
+  frontend:
+    build: 
+      context: ./client  # Carpeta del frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend  # Espera a que el backend esté listo
+
+  backend:
+    build:
+      context: ./src  # Carpeta del backend
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - DB=mongodb://mongo:27017/vitalogdb  # Conexión a MongoDB a través del nombre del contenedor
+      - FRONTEND_URI=http://172.25.26.200:3000  # Dirección IP pública del servidor para el frontend
+    depends_on:
+      - mongo  # Espera a que MongoDB esté listo
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - volume_vitalog:/data/db  # Volumen persistente para MongoDB
+
+volumes:
+  volume_vitalog:  # Volumen para MongoDB
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/adminvitabajio/vitalogdb  # Usar este directorio en el servidor para persistencia
+      o: bind
