@@ -1,31 +1,29 @@
-services:
+service:
   frontend:
-    build: 
-      context: ./client  # Carpeta del frontend
+    image: frontend:1.0 #Carpeta del frontend
     ports:
-      - "3000:3000"
-    env_file:
-      - ./client/.env  # Cargar variables del frontend
+      -"3000:3000"
     depends_on:
       - backend
-
+      
   backend:
-    build:
-      context: ./src  # Carpeta del backend
+    image: backend:1.0 # Carpeta del backend
     ports:
       - "4000:4000"
-    env_file:
-      - ./.env  # Cargar variables del backend
+    enviroment:
+      - PORT=4000
+      - MONGODB_URI=mongodb://mongodb:27017/vitalogdb # Conexión a MongoDB en el puerto 27017
     depends_on:
-      - mongo  # Espera a que MongoDB esté listo
-
-  mongo:
+      - mongodb
+      
+  mongodb:
+    # Imagen de MongoDB
     image: mongo:latest
     ports:
-      - "27017:27017"
+      - "27017:27017" # Puerto de MongoDB en el host y en el contenedor
     volumes:
-      - volume_vitalog:/data/db  # Volumen persistente para MongoDB
-
+      - volume_vitalog:/data/db # Montaje del volumen en el contenedor para persistencia de datos
+    
 volumes:
   volume_vitalog:
     driver: local
