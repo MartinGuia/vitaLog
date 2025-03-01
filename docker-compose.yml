@@ -1,8 +1,8 @@
-service:
+services:
   frontend:
     image: frontend:1.0 #Carpeta del frontend
     ports:
-      -"3000:3000"
+      - "3000:3000"
     depends_on:
       - backend
       
@@ -10,7 +10,7 @@ service:
     image: backend:1.0 # Carpeta del backend
     ports:
       - "4000:4000"
-    enviroment:
+    environment:
       - PORT=4000
       - MONGODB_URI=mongodb://mongodb:27017/vitalogdb # Conexión a MongoDB en el puerto 27017
     depends_on:
