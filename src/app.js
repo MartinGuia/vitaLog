@@ -18,7 +18,7 @@ const app = express();
 createRoles()
 
 app.use(cors({
-    origin: process.env.REACT_APP_FRONTEND_URI,
+    origin: process.env.REACT_APP_FRONTEND_URI_PUBLIC,
     credentials: true,
 }));
 
