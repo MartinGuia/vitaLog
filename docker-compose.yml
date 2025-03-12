@@ -2,21 +2,21 @@ services:
   frontend:
     image: frontend:1.0 #Carpeta del frontend
     ports:
-      - "3000:3000"
+      - "3001:3000"
     depends_on:
       - backend
       
   backend:
     image: backend:1.0 # Carpeta del backend
     ports:
-      - "4000:4000"
+      - "4001:4000"
     environment:
       - PORT=4000
-      - MONGODB_URI=mongodb://mongodb:27017/vitalogdb # Conexión a MongoDB en el puerto 27017
+      - MONGODB_URI=mongodb://mongo:27017/vitalogdb # Conexión a MongoDB en el puerto 27017
     depends_on:
-      - mongodb
+      - mongo
       
-  mongodb:
+  mongo:
     # Imagen de MongoDB
     image: mongo:latest
     ports:
@@ -29,5 +29,5 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/adminvitabajio/vitalogdb  # Usar este directorio en el servidor
+      device: /home/adminvitabajio/volume_vitalog  # Usar este directorio en el servidor
       o: bind
