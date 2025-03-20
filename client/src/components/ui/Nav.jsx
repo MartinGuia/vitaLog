@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   Users,
   NotebookPen,
+  UserRoundCog,
   Settings,
   Flag,
   BookMarked,
@@ -100,23 +101,29 @@ useEffect(() => {
       allowedRoles: [roleIds.master,], // Administrador y Ventas
     },
     {
-      path: "/productionInitial",
-      icon: <Search size={20} color="white" />,
-      text: "Inspección inicial",
-      allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
+      path: "/production",
+      icon: <UserRoundCog size={20} color="white" />,
+      text: "Producción",
+      allowedRoles: [roleIds.master, roleIds.operador]
     },
-    {
-      path: "/productionRepairs",
-      icon: <Settings size={20} color="white" />,
-      text: "Reparación",
-      allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
-    },
-    {
-      path: "/productionFinal",
-      icon: <Flag size={20} color="white" />,
-      text: "Inspección Final",
-      allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
-    },
+    // {
+    //   path: "/productionInitial",
+    //   icon: <Search size={20} color="white" />,
+    //   text: "Inspección inicial",
+    //   allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
+    // },
+    // {
+    //   path: "/productionRepairs",
+    //   icon: <Settings size={20} color="white" />,
+    //   text: "Reparación",
+    //   allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
+    // },
+    // {
+    //   path: "/productionFinal",
+    //   icon: <Flag size={20} color="white" />,
+    //   text: "Inspección Final",
+    //   allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
+    // },
     {
       path: "/workorders",
       icon: <BookMarked size={20} color="white" />,

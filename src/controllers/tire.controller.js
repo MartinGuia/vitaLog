@@ -15,19 +15,18 @@ export const getTires = async (req, res) => {
 };
 
 export const createTire = async (req, res) => {
+  const {
+    itemCode,
+    barCode,
+    antiquityDot,
+    requiredBand,
+    helmetMeasurement,
+    brand,
+    modelTire,
+    // state,
+    date,
+  } = req.body;
   try {
-    const {
-      itemCode,
-      barCode,
-      helmetMeasurement,
-      brand,
-      helmetDesign,
-      requiredBand,
-      antiquityDot,
-      state,
-      date,
-    } = req.body;
-
     // Buscar la orden de trabajo abierta
     const workOrder = await WorkOrder.findOne({ isOpen: true }).populate(
       "tires"
@@ -37,6 +36,14 @@ export const createTire = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "No hay una orden de trabajo abierta.",
+      });
+    }
+
+    const tireFound = await Tire.findOne({barCode});
+    if (tireFound) {
+      return res.status(400).json({
+        success: false,
+        message: "La llanta con el código de barras ingresado ya existe.",
       });
     }
 
@@ -58,10 +65,11 @@ export const createTire = async (req, res) => {
       barCode,
       helmetMeasurement,
       brand,
-      helmetDesign,
+      // helmetDesign,
       requiredBand,
       antiquityDot,
-      state,
+      modelTire,
+      // state,
       date,
       user: req.user.id, // Referenciar la llanta al usuario
       workOrder: workOrder._id, // Asignar la referencia de la orden de trabajo
@@ -204,6 +212,8 @@ export const getHelmetDesignCounts = async (req, res) => {
 
     res.json(helmetDesignCounts);
   } catch (error) {
-    res.status(500).json({ message: "Error al obtener los diseños de casco", error });
+    res
+      .status(500)
+      .json({ message: "Error al obtener los diseños de casco", error });
   }
 };

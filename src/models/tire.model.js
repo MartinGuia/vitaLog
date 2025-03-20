@@ -18,6 +18,7 @@ const tireSchema = new Schema(
     barCode: {
       type: String,
       required: true,
+      // unique: true,
     },
     helmetMeasurement: {
       type: String,
@@ -34,6 +35,10 @@ const tireSchema = new Schema(
     antiquityDot: {
       type: String,
       required: true,
+    },
+    modelTire: {
+      type: String,
+      required:true,
     },
     date: {
       type: Date,
@@ -96,6 +101,7 @@ const tireSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "WorkOrder",
     },
+   
   },
   {
     timestamps: true,

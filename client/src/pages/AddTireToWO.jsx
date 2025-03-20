@@ -77,10 +77,12 @@ function AddTireToWO() {
                 Datos de la llanta
               </h1>
               <div className="flex items-center w-[70%] sm:w-full">
-                <hr className="border-[1px] w-full border-sky-800 mt-1"/>
+                <hr className="border-[1px] w-full border-sky-800 mt-1" />
               </div>
             </div>
-            <h1 className="font-bold text-2xl sm:text-3xl">Codigo item y Barras</h1>
+            <h1 className="font-bold text-2xl sm:text-3xl">
+              Servicio y Barras
+            </h1>
             <p>Complete los datos del registro de la llanta.</p>
           </div>
           <div className="w-[100%] pt-8 text-xl"></div>
@@ -90,19 +92,21 @@ function AddTireToWO() {
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
                 <div className="relative w-[40%] ">
                   <label className="block mb-2 text-sm font-medium">
-                    Codigo de item
+                    Servicio
                   </label>
                   <select
-                    {...register("itemCode", { required: true })}
+                    {...register("itemCode", {
+                      required: "Debe seleccionar un Servicio.",
+                    })}
                     id="small"
                     className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
                     <option defaultValue={"Seleccionar"}>Seleccionar...</option>
-                    <option value="Reparacion">Reparación</option>
-                    <option value="Ronovado">Renovado</option>
+                    <option value="Reparación">Reparación</option>
+                    <option value="Renovado">Renovado</option>
                     <option value="Desecho">Desecho</option>
                   </select>
-                  {errors.address2 && (
+                  {errors.itemCode && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
@@ -142,8 +146,8 @@ function AddTireToWO() {
                         Escanea el código
                       </h1>
                       <BarcodeScannerComponent
-                        width={300}
-                        delay={300} // Reduce el número de intentos por segundo
+                        width={600}
+                        delay={600} // Reduce el número de intentos por segundo
                         videoConstraints={{
                           facingMode: "environment",
                           width: { ideal: 1280 },
@@ -172,24 +176,58 @@ function AddTireToWO() {
           {/* DOT Y BANDA REQUERIDA */}
           <div>
             <div className="mt-10">
-              <h1 className="font-bold text-2xl sm:text-3xl">Dot y banda requerida</h1>
-              <p>Complete el usuario y contraseña.</p>
+              <h1 className="font-bold text-2xl sm:text-3xl">
+                Dot y banda requerida
+              </h1>
+              <p>Complete el dot y la banda requerida.</p>
             </div>
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
                 <div className="relative md:w-5/12 w-auto">
                   <InputField
-                    label="Antiguedad"
+                    label="DOT"
                     id="dot"
                     {...register("antiquityDot", { required: true })}
                   />
-                  {errors.helmetMeasurement && (
+                  {errors.antiquityDot && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
                   )}
                 </div>
+
                 <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
+                  <select
+                    {...register("requiredBand", { required: false })}
+                    className="block shadow-md w-full p-2 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    //size="4" /* Controla cuántas opciones se muestran sin scroll */
+                  >
+                    <option className="p-1" value="">
+                      Banda usada...
+                    </option>
+                    <option className="p-1" value="HT3">
+                      HT3
+                    </option>
+                    <option className="p-1" value="HDL">
+                      HDL
+                    </option>
+                    <option className="p-1" value="HSC">
+                      HSC
+                    </option>
+                    <option className="p-1" value="HSR">
+                      HSR
+                    </option>
+                    <option className="p-1" value="HTL">
+                      HTL
+                    </option>
+                  </select>
+                  {errors.requiredBand && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>
+                {/* <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
                   <InputField
                     label="Banda requerida"
                     id="banda"
@@ -200,7 +238,7 @@ function AddTireToWO() {
                       Este campo es requerido
                     </p>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -212,7 +250,7 @@ function AddTireToWO() {
             </div>
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative md:w-5/12 w-auto">
+                <div className="relative md:w-1/4 w-auto">
                   <InputField
                     label="Medida del casco"
                     id="medida"
@@ -225,13 +263,26 @@ function AddTireToWO() {
                   )}
                 </div>
 
-                <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
+                <div className="relative md:w-1/4 w-auto mt-5 sm:mt-0">
                   <InputField
                     label="Marca"
                     id="marca"
                     {...register("brand", { required: true })}
                   />
-                  {errors.lastName && (
+                  {errors.brand && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>
+
+                <div className="relative md:w-1/4 w-auto mt-5 sm:mt-0">
+                  <InputField
+                    label="Modelo"
+                    id="modelo"
+                    {...register("modelTire", { required: true })}
+                  />
+                  {errors.modelTire && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>

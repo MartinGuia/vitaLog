@@ -47,12 +47,12 @@ export default function Sidebar({ children, additionalContent }) {
               src={images.logoVB}
               alt=""
               className={`overflow-hidden transition-all ${
-                expanded ? "w-28" : "w-0"
+                expanded ? "w-24" : "w-0"
               }`}
             />
             <button
               onClick={() => setExpanded((curr) => !curr)}
-              className="p-1.5 rounded-lg bg-vbYellow duration-500 hover:bg-yellow-500"
+              className="p-1.5 rounded-lg bg-buttonPrimary duration-500 hover:duration-500 hover:bg-buttonPrimaryHover"
             >
               {expanded ? <Menu className="w-10" /> : <ChevronLast />}
             </button>
@@ -128,10 +128,10 @@ export function SidebarItem({ icon, text2, text, active, alert }) {
   const { expanded } = useContext(SidebarContext);
   return (
     <li
-      className={`relative flex items-center py-3 md:py-5 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
+      className={`relative flex items-center py-3 md:py-4 my-1 px-3 font-medium rounded-md cursor-pointer transition-colors group ${
         active
           ? "bg-gradient-to-tr from-indigo-200 to-indigo-200 text-indigo-800"
-          : "hover:bg-sky-800 text-gray-600"
+          : "hover:bg-hoverSecundary text-gray-600"
       }`}
     >
       {icon}
