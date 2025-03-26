@@ -4,6 +4,7 @@ import { StepBack, UserRoundPen, Trash2 } from "lucide-react";
 import { useDepartment } from "../context/DepartmentContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta
+import { Input } from "@heroui/react";
 
 function ViewDepartmentByIdPage() {
   const { getDepartmentById } = useDepartment();
@@ -83,16 +84,14 @@ function ViewDepartmentByIdPage() {
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
         {/* Alerta de la aplicación */}
         {alert && <Alert message={alert.message} type={alert.type} />}
-
-        <div>
+        <div className="flex items-center gap-3 mb-6">
           <Link to="/departments">
-            <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
+            <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary rounded-md px-4 py-1 duration-500  hover:duration-500 shadow-md">
               <StepBack color="white" />
             </button>
           </Link>
-          <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
-            {department}
-          </h2>
+          <h1 className="text-2xl md:text-4xl font-bold">{department}</h1>
+         
         </div>
         <div className="p-4 w-full">
           {users.length === 0 ? (
@@ -112,10 +111,7 @@ function ViewDepartmentByIdPage() {
                 </thead>
                 <tbody>
                   {currentOrders.map((user, id) => (
-                    <tr
-                      key={id}
-                      className="border-t border-gray-200 hover:bg-gray-50"
-                    >
+                    <tr key={id} className="border-t border-gray-200">
                       <td className=" py-3 px-6 text-sm text-gray-900">
                         {user.name}
                       </td>
@@ -202,12 +198,20 @@ function ViewDepartmentByIdPage() {
               Escribe el nombre del usuario <strong>{userToDelete.name}</strong>{" "}
               para confirmar:
             </p>
-            <input
+            <Input
+              
+              label="Nombre de usuario"
+              type="text"
+              variant={"underlined"}
+              value={confirmationName}
+              onChange={(e) => setConfirmationName(e.target.value)}
+            />
+            {/* <input
               type="text"
               value={confirmationName}
               onChange={(e) => setConfirmationName(e.target.value)}
               className="border border-gray-300 rounded-md px-2 py-1 mt-2 w-full"
-            />
+            /> */}
             <div className="flex justify-end space-x-4 mt-4">
               <button
                 onClick={() => {

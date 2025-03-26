@@ -1,4 +1,3 @@
-import InputField from "../components/ui/InputField.jsx";
 import { useForm } from "react-hook-form";
 import { StepBack } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -7,6 +6,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta
 import { useNavigate } from "react-router-dom";
+import { Input, Select, SelectItem } from "@heroui/react";
 
 function AddUserPage() {
   const [alert, setAlert] = useState(null); // Estado para manejar la alerta
@@ -16,7 +16,7 @@ function AddUserPage() {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm();
 
   const { getDepartments, allDepartments } = useDepartment();
@@ -30,7 +30,7 @@ function AddUserPage() {
 
   const onSubmit = handleSubmit(async (values) => {
     signup(values);
-    reset()
+    reset();
     setAlert({
       message: "Usuario registrao exitosamente",
       type: "success",
@@ -51,6 +51,15 @@ function AddUserPage() {
             </div>
           ))}
         </div>
+
+        <div className="flex items-center gap-3 mb-6">
+          <Link to="/departments">
+            <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary shadow-md rounded-md px-4 py-1 duration-500 hover:duration-500">
+              <StepBack color="white" />
+            </button>
+          </Link>
+          <h1 className="text-2xl md:text-4xl font-bold">Añadir Usuario</h1>
+        </div>
         {alert && (
           <Alert
             message={alert.message}
@@ -58,40 +67,25 @@ function AddUserPage() {
             onAccept={alert.onAccept} // Maneja el cierre de la alerta con redirección
           />
         )}
-        <div>
-          <Link to="/departments">
-            <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
-              <StepBack color="white" />
-            </button>
-          </Link>
-        </div>
-        <div>
-          <h1 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
-            Añadir Usuarios
-          </h1>
-        </div>
         <form onSubmit={onSubmit}>
           <div>
-            <div className="mt-10">
-              <div className="flex mb-3">
-                <h1 className="text-lg flex text-sky-900 font-semibold w-[50%] md:text-3xl md:w-[70%] lg:w-[25%] ">
-                  Datos de usuario
-                </h1>
-                <div className="flex items-center w-[100%]">
-                  <hr className="border-[1px] w-[100%] border-sky-800 mt-1" />
-                </div>
-              </div>
-              <h1 className="font-bold text-3xl">Nombres</h1>
-              <p>Complete el nombre y apellido del usuario.</p>
-            </div>
+            <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
+              Datos de usuario
+            </h2>
+            <p className="text-gray-600 font-medium">
+              Complete el nombre y apellido del usuario.
+            </p>
+
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
                 <div className="relative md:w-5/12 w-auto">
-                  <InputField
+                  <Input
                     label="Nombre"
-                    id="nombre"
+                    type="text"
+                    variant={"underlined"}
                     {...register("name", { required: true })}
                   />
+
                   {errors.name && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
@@ -99,11 +93,13 @@ function AddUserPage() {
                   )}
                 </div>
                 <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
-                  <InputField
+                  <Input
                     label="Apellido"
-                    id="apellido"
+                    type="text"
+                    variant={"underlined"}
                     {...register("lastName", { required: true })}
                   />
+
                   {errors.lastName && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
@@ -116,31 +112,39 @@ function AddUserPage() {
 
           {/* Apartado de usuario y contraseña */}
           <div>
-            <div className="mt-10">
-              <h1 className="font-bold text-3xl">Usuario y Contraseña</h1>
-              <p>Complete el usuario y contraseña.</p>
+            <div className="mt-8">
+              <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
+                Usuario y Contraseña
+              </h2>
+              <p className="text-gray-600 font-medium">
+                Complete el usuario y contraseña.
+              </p>
             </div>
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
                 <div className="relative md:w-5/12 w-auto">
-                  <InputField
+                  <Input
                     label="Usuario"
-                    id="usuario"
+                    type="text"
+                    variant={"underlined"}
                     {...register("userName", { required: true })}
                   />
-                  {errors.name && (
+
+                  {errors.userName && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
                   )}
                 </div>
                 <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
-                  <InputField
+                  <Input
                     label="Contraseña"
-                    id="contraseña"
+                    type="text"
+                    variant={"underlined"}
                     {...register("password", { required: true })}
                   />
-                  {errors.lastName && (
+
+                  {errors.password && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
@@ -152,54 +156,58 @@ function AddUserPage() {
           {/* Fin del apaertado de usuario y contraseña */}
 
           <div>
-            <div className="mt-10">
-              <h1 className="font-bold text-3xl">Rol y Departamento</h1>
-              <p>Complete el rol y el departamento del usuario.</p>
+            <div className="mt-8">
+              <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
+                Rol y Departamento
+              </h2>
+              <p className="text-gray-600 font-medium">
+                Complete el rol y el departamento del usuario.
+              </p>
             </div>
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex flex-col items-center sm:flex-row sm:justify-between">
-                <div className="relative w-[40%] ">
-                  <label className="block mb-2 text-sm font-medium">
-                    Departamento
-                  </label>
-                  <select
+                <div className="relative w-[80%] md:w-[40%]">
+                  <Select
+                    className="shadow-md rounded-xl "
+                    // items={allDepartments}
+                    label="Departamentos"
+                    placeholder="Selecciona un departamento"
                     {...register("department", {
                       required: "Debe seleccionar un departamento.",
                     })}
-                    id="small"
-                    className="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
-                    <option defaultValue={"Seleccionar"}>Seleccionar...</option>
-                    {allDepartments.map((department, i) => (
-                      <option key={i} value={department._id}>
+                    {allDepartments.map((department) => (
+                      <SelectItem key={department._id} value={department._id}>
                         {department.name}
-                      </option>
+                      </SelectItem>
                     ))}
-                  </select>
-                  {errors.address2 && (
-                    <p className="text-red-500 text-xs">
-                      Este campo es requerido
+                  </Select>
+
+                  {errors.department && (
+                    <p className="text-red-500 text-base">
+                      {errors.department.message}
                     </p>
                   )}
                 </div>
-                <div className="relative w-[40%] ">
-                  <label className="block mb-2 text-sm font-medium">Rol</label>
-                  <select
+                <div className="relative w-[80%] md:w-[40%] mt-5 md:mt-0">
+                  <Select
+                    className="shadow-md rounded-xl "
+                    // items={allDepartments}
+                    label="Roles"
+                    placeholder="Selecciona un rol"
                     {...register("role", {
-                      required: "Debe seleccionar un rol.",
+                      required: "Debe seleccionar un Rol.",
                     })}
-                    className="block w-full p-2 mb-6 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
-                    <option defaultValue={"Seleccionar"}>Seleccionar...</option>
-                    {allRoles.map((role, i) => (
-                      <option key={i} value={role._id}>
+                    {allRoles.map((role) => (
+                      <SelectItem key={role._id} value={role._id}>
                         {role.name}
-                      </option>
+                      </SelectItem>
                     ))}
-                  </select>
-                  {errors.address2 && (
-                    <p className="text-red-500 text-xs">
-                      Este campo es requerido
+                  </Select>
+                  {errors.role && (
+                    <p className="text-red-500 text-base">
+                      {errors.role.message}
                     </p>
                   )}
                 </div>
@@ -209,7 +217,7 @@ function AddUserPage() {
 
           <div className="flex justify-end mt-14">
             <button
-              className=" text-white font-medium bg-cyan-950 py-2 px-5 rounded-md shadow-md hover:bg-cyan-800 duration-500 hover:duration-500 "
+              className=" text-white font-medium bg-buttonSecondary py-2 px-5 rounded-md shadow-md hover:bg-buttonSecondaryHover duration-500 hover:duration-500 "
               type="submit"
             >
               Registrar

@@ -21,6 +21,7 @@ export function ClientProvider({ children }) {
   const [clients, setClients] = useState(null);
   const [errors, setErrors] = useState([]);
   const [allClients, setAllClients] = useState([]);
+  const [currentClient, setCurrentClient] = useState(null);
 
   const registerClient = async (user) => {
     try {
@@ -47,6 +48,7 @@ export function ClientProvider({ children }) {
     try {
       const res = await getClientRequest(id);
       console.log(res.data);
+      setCurrentClient(res.data); // Guardamos el cliente en el estado
       return res.data;
     } catch (error) {
       console.error(error);
@@ -89,6 +91,7 @@ export function ClientProvider({ children }) {
         getClient,
         registerClient,
         getClients,
+        currentClient,
         allClients,
         updateClient,
         deleteClient,

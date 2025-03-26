@@ -1,8 +1,16 @@
-import { CirclePlus, UserRoundPen, Trash2 } from "lucide-react";
+import { CirclePlus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useClient } from "../context/ClientContext";
 import Alert from "../components/ui/Alert"; // Importa tu componente de alerta
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button,
+  Input,
+} from "@heroui/react";
 
 function AllClientPage() {
   const { getClients, allClients, deleteClient } = useClient();
@@ -62,21 +70,23 @@ function AllClientPage() {
 
   return (
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
-      {/* Alerta */}
-      {alert && <Alert message={alert.message} type={alert.type} />}
       <div className="text-center my-8">
         <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
           Cuentas Locales
         </h2>
+        {/* Alerta */}
+        {alert && <Alert message={alert.message} type={alert.type} />}
       </div>
+
       <div className="flex justify-end">
         <Link to="/add-client">
-          <button className="flex p-2 text-sm sm:text-base sm:p-3 bg-indigo-400 rounded-lg text-white cursor-pointer hover:bg-indigo-700 duration-500 hover:duration-500">
+          <button className="flex items-center justify-center p-2 md:pd-3 bg-buttonSecondary rounded-lg text-white cursor-pointer hover:bg-buttonSecondaryHover transition shadow-md">
             <CirclePlus className="mr-2 size-5 sm:size-6" />
             Añadir nuevo
           </button>
         </Link>
       </div>
+
       <section>
         <div className="p-4 w-full">
           {allClients.length === 0 ? (
@@ -109,18 +119,32 @@ function AllClientPage() {
                       <td className="px-6">{client.city}</td>
                       <td className="px-6">{client.region}</td>
                       <td className="px-6">{client.zipCode}</td>
-                      <td className="flex py-2 justify-between items-center">
-                        <Link to={`/client/${client._id}`}>
-                          <button className="text-blue-600 hover:text-blue-800 ">
-                            <UserRoundPen />
-                          </button>
-                        </Link>
-                        <button
-                          className="text-red-600 hover:text-red-800 "
-                          onClick={() => handleDeleteClick(client)}
-                        >
-                          <Trash2 />
-                        </button>
+                      <td className="py-2">
+                        <Dropdown>
+                          <DropdownTrigger className="shadow">
+                            <Button variant="bordered">Abrir Menú</Button>
+                          </DropdownTrigger>
+                          <DropdownMenu aria-label="Acciones del Cliente">
+                            <DropdownItem key="edit">
+                              <Link
+                                to={`/client/${client._id}`}
+                                className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+                              >
+                                {/* <UserRoundPen /> */}
+                                Editar cliente
+                              </Link>
+                            </DropdownItem>
+                            <DropdownItem
+                              key="delete"
+                              className="text-danger flex items-center gap-2"
+                              color="danger"
+                              onClick={() => handleDeleteClick(client)}
+                            >
+                              {/* <Trash2 /> */}
+                              Eliminar cliente
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </Dropdown>
                       </td>
                     </tr>
                   ))}
@@ -185,12 +209,19 @@ function AllClientPage() {
               Escribe el nombre del cliente{" "}
               <strong>{clientToDelete.alias}</strong> para confirmar:
             </p>
-            <input
+            <Input
+              label="Nombre de cliente"
+              type="text"
+              variant={"underlined"}
+              value={confirmationName}
+              onChange={(e) => setConfirmationName(e.target.value)}
+            />
+            {/* <input
               type="text"
               value={confirmationName}
               onChange={(e) => setConfirmationName(e.target.value)}
               className="border border-gray-300 rounded-md px-2 py-1 mt-2 w-full"
-            />
+            /> */}
             <div className="flex justify-end space-x-4 mt-4">
               <button
                 onClick={() => {

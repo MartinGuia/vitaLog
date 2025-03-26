@@ -9,11 +9,15 @@ module.exports = {
   theme: {
     extend: {
       colors:{
-        // primary: "#383A63",
-        hoverprimary:"#0A0F1F",
+        colorPrimary:"#0A0F1F",
         buttonPrimary: "#BEBEBE",
         buttonPrimaryHover: "#9E9E9E",
-        hoverSecundary:"#3E3E3E",
+        hoverPrimary:"#3E3E3E",
+        buttonSecondary: "#00ADB5",
+        buttonSecondaryHover: "#008A92",
+        buttonTertiary: "#FF5722",
+        buttonTertiaryHover: "#E64A19",
+        buttonSubmitted: "#00CED1",
         
         secondary: "#16325B",
         third:"#533483",

@@ -57,6 +57,7 @@ function ScannerFinalProduction() {
               value={scannedCode}
               onChange={(e) => setScannedCode(e.target.value)} // Actualizar estado
               onKeyDown={handleKeyDown} // Detectar tecla Enter o Tab
+              autoFocus
             />
           </div>
 

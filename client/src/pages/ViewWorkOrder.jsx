@@ -69,13 +69,15 @@ function ViewWorkOrder() {
   return (
     <>
       <div className="px-4 pt-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
-        <div>
+        <div className="flex items-center gap-3 mb-6">
           <Link to={`/workOrders`}>
-            <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
+            <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary shadow-md rounded-md px-4 py-1 duration-500 hover:duration-500">
               <StepBack color="white" />
             </button>
           </Link>
+          <h1 className="text-2xl md:text-4xl font-bold">Imprimir Orden</h1>
         </div>
+       
         <header className="w-full mt-3 flex justify-center">
           <div className=" w-full p-2 flex justify-between border-b-2 border-blue-600 ">
             <section className="">

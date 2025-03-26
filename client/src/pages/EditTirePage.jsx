@@ -56,7 +56,27 @@ function EditTirePage() {
   return (
     <>
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
-        <div>
+        <div className="flex items-center gap-3 mb-6">
+          <Link to="/clients">
+            <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary shadow-md rounded-md px-4 py-1 duration-500 hover:duration-500">
+              <StepBack color="white" />
+            </button>
+          </Link>
+          <h1 className="text-2xl md:text-4xl font-bold">
+            Añadir Cuenta Local
+          </h1>
+        </div>
+        <div className="flex top-10 absolute w-[100%]">
+          {tireErrors.map((error, i) => (
+            <div
+              className="bg-red-500 py-2 text-white w-[100%] flex justify-center"
+              key={i}
+            >
+              {error}
+            </div>
+          ))}
+        </div>
+        {/* <div>
           <Link to={`/workOrder/${workOrder}`}>
             <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
               <StepBack color="white" />
@@ -77,26 +97,21 @@ function EditTirePage() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
         <form onSubmit={onSubmit}>
           <div>
-            <div className="mt-10">
-              <div className="flex mb-3">
-                <h1 className="text-lg flex text-sky-900 font-semibold w-[50%] md:text-3xl md:w-[70%] lg:w-[25%] ">
-                  Datos de la llanta
-                </h1>
-                <div className="flex items-center w-[100%]">
-                  <hr className="border-[1px] w-[100%] border-sky-800 mt-1" />
-                </div>
-              </div>
-              <h1 className="font-bold text-3xl">Codigo item y Barras</h1>
-              <p>Complete los datos del registro de la llanta.</p>
-            </div>
-            <div className="w-[100%] pt-8 text-xl">
+            <h2 className="text-lg md:text-2xl font-semibold mb-2 text-sky-900 mt-12">
+              Servicio y Código de Barras
+            </h2>
+            <p className="text-gray-600 font-medium">
+              Complete el registro de la llanta.
+            </p>
+
+            <div className="w-[100%] pt-5 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
                 <div className="relative w-[40%] ">
                   <label className="block mb-2 text-sm font-medium">
-                    Codigo de item
+                    Servicio
                   </label>
                   <select
                     {...register("itemCode")}
@@ -134,9 +149,15 @@ function EditTirePage() {
 
           {/* DOT Y BANDA REQUERIDA */}
           <div>
-            <div className="mt-10">
-              <h1 className="font-bold text-3xl">Dot y banda requerida</h1>
-              <p>Complete el usuario y contraseña.</p>
+            <div className="mt-8">
+              <h2 className="text-lg md:text-2xl font-semibold mb-2 text-sky-900 mt-12">
+                DOT y banda requerida
+              </h2>
+              <p className="text-gray-600 font-medium">
+                Complete usuario y banda requerida.
+              </p>
+              {/* <h1 className="font-bold text-3xl">Dot y banda requerida</h1>
+              <p>Complete el usuario y contraseña.</p> */}
             </div>
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
@@ -175,9 +196,15 @@ function EditTirePage() {
           </div>
 
           <div>
-            <div className="mt-10">
-              <h1 className="font-bold text-3xl">Medida </h1>
-              <p>Complete el usuario y contraseña.</p>
+            <div className="mt-8">
+              <h2 className="text-lg md:text-2xl font-semibold mb-2 text-sky-900 mt-12">
+                Medida y Marca
+              </h2>
+              <p className="text-gray-600 font-medium">
+                Complete medida y marca
+              </p>
+              {/* <h1 className="font-bold text-3xl">Medida </h1>
+              <p>Complete el usuario y contraseña.</p> */}
             </div>
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
@@ -216,15 +243,13 @@ function EditTirePage() {
             </div>
           </div>
           <div className="flex justify-end mt-14 ">
-            <div className="flex justify-between w-[100%] md:w-[40%]">
-              <div>
-                <button
-                  className=" text-white font-medium bg-cyan-950 py-2 px-5 rounded-md shadow-md hover:bg-cyan-800 duration-500 hover:duration-500 "
-                  type="submit"
-                >
-                  Editar
-                </button>
-              </div>
+            <div className="flex justify-end ">
+              <button
+                className=" text-white font-medium bg-buttonSecondary py-3 px-8 rounded-md shadow-md hover:bg-buttonSecondaryHover duration-500 hover:duration-500 "
+                type="submit"
+              >
+                Actualizar
+              </button>
             </div>
           </div>
         </form>

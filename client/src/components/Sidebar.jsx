@@ -41,7 +41,7 @@ export default function Sidebar({ children, additionalContent }) {
             : "sticky top-0 w-20 h-screen" // Se mueve con el scroll cuando está colapsado
         }`}
       >
-        <nav className="h-full flex flex-col  border shadow-lg  bg-hoverprimary">
+        <nav className="h-full flex flex-col  border shadow-lg  bg-colorPrimary">
           <div className="p-4 pb-2 flex justify-between items-center">
             <img
               src={images.logoVB}
@@ -52,7 +52,7 @@ export default function Sidebar({ children, additionalContent }) {
             />
             <button
               onClick={() => setExpanded((curr) => !curr)}
-              className="p-1.5 rounded-lg bg-buttonPrimary duration-500 hover:duration-500 hover:bg-buttonPrimaryHover"
+              className="p-1.5 rounded-lg bg-buttonPrimary duration-500 hover:duration-500 hover:bg-buttonPrimaryHover shadow-md shadow-gray-600"
             >
               {expanded ? <Menu className="w-10" /> : <ChevronLast />}
             </button>
@@ -80,12 +80,12 @@ export default function Sidebar({ children, additionalContent }) {
               </div>
               <Link
                 to="/"
-                className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 duration-500 shadow-md"
+                className="p-1.5 rounded-lg bg-buttonTertiary duration-500 hover:duration-500 hover:bg-buttonTertiaryHover shadow-md shadow-gray-600"
                 onClick={() => {
                   logout();
                 }}
               >
-                <LogOut size={20} className="mr-3" />
+                <LogOut size={20} className="mr-3" color="white"/>
               </Link>
             </div>
           </div>
@@ -131,7 +131,7 @@ export function SidebarItem({ icon, text2, text, active, alert }) {
       className={`relative flex items-center py-3 md:py-4 my-1 px-3 font-medium rounded-md cursor-pointer transition-colors group ${
         active
           ? "bg-gradient-to-tr from-indigo-200 to-indigo-200 text-indigo-800"
-          : "hover:bg-hoverSecundary text-gray-600"
+          : "hover:bg-hoverPrimary text-gray-600"
       }`}
     >
       {icon}
