@@ -41,7 +41,7 @@ export default function Sidebar({ children, additionalContent }) {
             : "sticky top-0 w-20 h-screen" // Se mueve con el scroll cuando está colapsado
         }`}
       >
-        <nav className="h-full flex flex-col  border shadow-lg  bg-colorPrimary">
+        <nav className="h-full flex flex-col border shadow-lg  bg-colorPrimary">
           <div className="p-4 pb-2 flex justify-between items-center">
             <img
               src={images.logoVB}
@@ -63,7 +63,7 @@ export default function Sidebar({ children, additionalContent }) {
           <div className="border-t flex p-3">
             <img
               src={images.userIcon}
-              className="w-10 h-10 rounded-md color filter grayscale invert"
+              className="w-8 h-8 md:w-10 md:h-10 rounded-md color filter grayscale invert"
               alt=""
             />
             <div
@@ -72,7 +72,7 @@ export default function Sidebar({ children, additionalContent }) {
               }`}
             >
               <div className="leading-4">
-                <h4 className="font-semibold text-white">
+                <h4 className="font-semibold text-white text-xs md:text-normal">
                   {user.name} {user.lastName}
                 </h4>
                 {/* <span className="text-xs text-gray-600 ">{user.userName}</span> */}

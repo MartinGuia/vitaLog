@@ -36,44 +36,46 @@ import store from "./store";
 import PrintLabel from "./pages/PrintLabel";
 import ReportPage from "./pages/ReportPage";
 import React, { useState, useEffect } from "react";
-import {jwtDecode} from "jwt-decode"; // Asegúrate del import correcto
+import { jwtDecode } from "jwt-decode"; // Asegúrate del import correcto
 import ProductionPage from "./pages/ProductionPage";
 
 function AppRoutes() {
   const { role, getRoles } = useAuth(); // Ahora sí está dentro de AuthProvider
   const [userRoleId, setUserRoleId] = useState(null);
-   const [roleIds, setRoleIds] = useState({
-      master: null,
-      administradorP: null,
-      administradorF: null,
-      ventas: null,
-      almacenista: null,
-      operador: null,
-    });
+  const [roleIds, setRoleIds] = useState({
+    master: null,
+    administradorP: null,
+    administradorF: null,
+    ventas: null,
+    almacenista: null,
+    operador: null,
+  });
 
-    useEffect(() => {
-      const fetchRoles = async () => {
-        try {
-          const res = await getRoles();
-          if (res) {
-            const rolesMap = {};
-            for (const role of res) {
-              if (role.name === "Master") rolesMap.master = role._id;
-              if (role.name === "AdministradorP") rolesMap.administradorP = role._id;
-              if (role.name === "AdministradorF") rolesMap.administradorF = role._id;
-              if (role.name === "Vendedor") rolesMap.ventas = role._id;
-              if (role.name === "Operador") rolesMap.operador = role._id;
-              if (role.name === "Almacenista") rolesMap.almacenista = role._id;
-            }
-            setRoleIds(rolesMap);
-            // console.log(user)
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const res = await getRoles();
+        if (res) {
+          const rolesMap = {};
+          for (const role of res) {
+            if (role.name === "Master") rolesMap.master = role._id;
+            if (role.name === "AdministradorP")
+              rolesMap.administradorP = role._id;
+            if (role.name === "AdministradorF")
+              rolesMap.administradorF = role._id;
+            if (role.name === "Vendedor") rolesMap.ventas = role._id;
+            if (role.name === "Operador") rolesMap.operador = role._id;
+            if (role.name === "Almacenista") rolesMap.almacenista = role._id;
           }
-        } catch (error) {
-          console.error("Error al obtener los roles:", error);
+          setRoleIds(rolesMap);
+          // console.log(user)
         }
-      };
-      fetchRoles();
-    }, [role]);
+      } catch (error) {
+        console.error("Error al obtener los roles:", error);
+      }
+    };
+    fetchRoles();
+  }, [role]);
 
   useEffect(() => {
     if (role) {
@@ -88,30 +90,132 @@ function AppRoutes() {
 
   const routes = [
     { path: "/register", element: <AddUserPage />, roles: [roleIds.master] },
-    { path: "/add-tire", element: <AddTireToWO />, roles: [roleIds.master,  roleIds.ventas, roleIds.administradorP, roleIds.administradorF] },
-    { path: "/workorders", element: <AllWorkOrdersPage />, roles: [roleIds.master,  roleIds.administradorP, roleIds.administradorF] },
-    { path: "/workorder/:id", element: <ViewWorkOrder />, roles: [roleIds.master,  roleIds.administradorP, roleIds.administradorF] },
-    { path: "/profile/:id", element: <EditUserPage />, roles: [roleIds.master] },
+    {
+      path: "/add-tire",
+      element: <AddTireToWO />,
+      roles: [
+        roleIds.master,
+        roleIds.ventas,
+        roleIds.administradorP,
+        roleIds.administradorF,
+      ],
+    },
+    {
+      path: "/workorders",
+      element: <AllWorkOrdersPage />,
+      roles: [roleIds.master, roleIds.administradorP, roleIds.administradorF],
+    },
+    {
+      path: "/workorder/:id",
+      element: <ViewWorkOrder />,
+      roles: [roleIds.master, roleIds.administradorP, roleIds.administradorF],
+    },
+    {
+      path: "/profile/:id",
+      element: <EditUserPage />,
+      roles: [roleIds.master],
+    },
     { path: "/clients", element: <AllClientPage />, roles: [roleIds.master] },
-    { path: "/add-client", element: <AddClientPage />, roles: [roleIds.master] },
-    { path: "/departments", element: <AllDepartmentsPage />, roles: [roleIds.master] },
-    { path: "/department/:id", element: <ViewDepartmentByIdPage />, roles: [roleIds.master] },
-    { path: "/createWorkOrder", element: <CreateWorkOrderPage />, roles: [roleIds.master,  roleIds.ventas, roleIds.administradorP, roleIds.administradorF] },
-    { path: "/client/:id", element: <EditClientPage />, roles: [roleIds.master] },
-    { path: "/tire/:id", element: <EditTirePage />, roles: [roleIds.master, roleIds.administradorP, roleIds.administradorF] },
-    { path: "/productionInitial", element: <ScannerInitialPage />, roles: [roleIds.master, roleIds.operador] },
-    { path: "/editInitial/:id", element: <EditInitialPage />, roles: [roleIds.master, roleIds.operador] },
-    { path: "/productionRepairs", element: <ScannerInspectionPage />, roles: [roleIds.master, roleIds.operador] },
-    { path: "/editRepairs/:id", element: <EditRepairsPage />, roles: [roleIds.master, roleIds.operador] },
-    { path: "/productionFinal", element: <ScannerFinalProduction />, roles: [roleIds.master, roleIds.operador] },
-    { path: "/editFinal/:id", element: <EditFinalPage />, roles: [roleIds.master, roleIds.operador] },
-    { path: "/deliveryOrders", element: <CreateDeliveryOrderPage />, roles: [roleIds.master] },
-    { path: "/add-tires", element: <AddTiresPage />, roles: [roleIds.master,  roleIds.almacenista] },
-    { path: "/allDeliveryOrders", element: <AllDeliveryOrders />, roles: [roleIds.master, roleIds.almacenista, roleIds.administradorF] },
-    { path: "/viewDeliveryOrder/:id", element: <ViewDeliveryOrderPage />, roles: [roleIds.master,  roleIds.almacenista] },
-    { path: "/printlabel/:id", element: <PrintLabel />, roles: [roleIds.master, roleIds.operador] },
-    { path: "/reports", element: <ReportPage/>, roles: [roleIds.master, roleIds.administradorF] },
-    { path: "/production", element: <ProductionPage/>, roles: [roleIds.master, roleIds.operador] },
+    {
+      path: "/add-client",
+      element: <AddClientPage />,
+      roles: [roleIds.master],
+    },
+    {
+      path: "/departments",
+      element: <AllDepartmentsPage />,
+      roles: [roleIds.master],
+    },
+    {
+      path: "/department/:id",
+      element: <ViewDepartmentByIdPage />,
+      roles: [roleIds.master],
+    },
+    {
+      path: "/createWorkOrder",
+      element: <CreateWorkOrderPage />,
+      roles: [
+        roleIds.master,
+        roleIds.ventas,
+        roleIds.administradorP,
+        roleIds.administradorF,
+      ],
+    },
+    {
+      path: "/client/:id",
+      element: <EditClientPage />,
+      roles: [roleIds.master],
+    },
+    {
+      path: "/tire/:id",
+      element: <EditTirePage />,
+      roles: [roleIds.master, roleIds.administradorP, roleIds.administradorF],
+    },
+    {
+      path: "/productionInitial",
+      element: <ScannerInitialPage />,
+      roles: [roleIds.master, roleIds.operador],
+    },
+    {
+      path: "/editInitial/:id",
+      element: <EditInitialPage />,
+      roles: [roleIds.master, roleIds.operador],
+    },
+    {
+      path: "/productionRepairs",
+      element: <ScannerInspectionPage />,
+      roles: [roleIds.master, roleIds.operador],
+    },
+    {
+      path: "/editRepairs/:id",
+      element: <EditRepairsPage />,
+      roles: [roleIds.master, roleIds.operador],
+    },
+    {
+      path: "/productionFinal",
+      element: <ScannerFinalProduction />,
+      roles: [roleIds.master, roleIds.operador],
+    },
+    {
+      path: "/editFinal/:id",
+      element: <EditFinalPage />,
+      roles: [roleIds.master, roleIds.operador],
+    },
+    {
+      path: "/deliveryOrders",
+      element: <CreateDeliveryOrderPage />,
+      roles: [roleIds.master],
+    },
+    {
+      path: "/add-tires",
+      element: <AddTiresPage />,
+      roles: [roleIds.master, roleIds.almacenista],
+    },
+    {
+      path: "/allDeliveryOrders",
+      element: <AllDeliveryOrders />,
+      roles: [roleIds.master, roleIds.almacenista, roleIds.administradorF],
+    },
+    {
+      path: "/viewDeliveryOrder/:id",
+      element: <ViewDeliveryOrderPage />,
+      roles: [roleIds.master, roleIds.almacenista],
+    },
+    {
+      path: "/printlabel/:id",
+      element: <PrintLabel />,
+      roles: [roleIds.master, roleIds.operador],
+    },
+    {
+      path: "/reports",
+      element: <ReportPage />,
+      roles: [roleIds.master, roleIds.administradorF],
+    },
+    {
+      path: "/production",
+      element: <ProductionPage />,
+      roles: [roleIds.master, roleIds.operador],
+    },
   ];
 
   return (
@@ -141,7 +245,7 @@ function App() {
             <ClientProvider>
               <DepartmentProvider>
                 <DeliveryOrderProvider>
-                   <AppRoutes />
+                  <AppRoutes />
                 </DeliveryOrderProvider>
               </DepartmentProvider>
             </ClientProvider>

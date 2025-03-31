@@ -81,7 +81,7 @@ useEffect(() => {
     } else if (userRoleId === roleIds.administradorF) {
       navigate("/workorders"); // Página para Administrador
     } else if (userRoleId === roleIds.operador) {
-      navigate("/productionInitial"); // Página para Operador
+      navigate("/production"); // Página para Operador
     }
   }
 }, [userRoleId, roleIds]);
@@ -133,19 +133,19 @@ useEffect(() => {
     {
       path: "/createWorkOrder",
       icon: <NotebookPen size={20} color="white" />,
-      text: "Crear Orden de Trabajo",
+      text: "Crear Orden de T.",
       allowedRoles: [roleIds.master, roleIds.ventas], // Administrador y Operador
     },
     {
       path: "/deliveryOrders",
       icon: <PackageCheck size={20} color="white" />,
-      text: "Crear orden de Entrega",
+      text: "Crear Orden de E.",
       allowedRoles: [roleIds.master, roleIds.almacenista], // Administrador y Almacén
     },
     {
       path: "/allDeliveryOrders",
       icon: <FileInput size={20} color="white" />,
-      text: "Ver Orden de Entrega",
+      text: "Orden de Entrega",
       allowedRoles: [roleIds.master, roleIds.almacenista, roleIds.administradorP, roleIds.administradorF], // Administrador, Ventas y Almacén
     },
     {

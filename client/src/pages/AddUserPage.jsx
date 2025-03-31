@@ -192,7 +192,7 @@ function AddUserPage() {
                 <div className="relative w-[80%] md:w-[40%] mt-5 md:mt-0">
                   <Select
                     className="shadow-md rounded-xl "
-                    // items={allDepartments}
+                    items={allRoles}
                     label="Roles"
                     placeholder="Selecciona un rol"
                     {...register("role", {
