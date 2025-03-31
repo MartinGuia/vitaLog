@@ -158,7 +158,7 @@ function ViewDeliveryOrderPage() {
                         <td className="py-3 px-6">{tire.status}</td>
                         <td className="py-3 px-6">{tire.helmetMeasurement}</td>
                         <td className="py-3 px-6">{tire.brand}</td>
-                        <td className="py-3 px-6">{tire.helmetDesign || "-"}</td>
+                        <td className="py-3 px-6">{tire.appliedBand || tire.appliedBandBandag || "-"}</td>
                         <td className="py-3 px-6">{tire.antiquityDot}</td>
                         {/* <td className="sm:flex py-2 px-3 justify-between">
                               <Link to={`/tire/${tire._id}`}>

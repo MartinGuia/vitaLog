@@ -2,9 +2,10 @@ import * as images from "../img";
 import { useWorkOrder } from "../context/WorkOrderContext.jsx";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { UserRoundPen, StepBack } from "lucide-react";
+import { UserRoundPen, StepBack, Check, X } from "lucide-react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import WorkOrderPDF from "../components/PDF/WorkOrderPDF.jsx";
+import { useAuth } from "../context/AuthContext";
 
 function ViewWorkOrder() {
   const { getWorkOrderById } = useWorkOrder();
@@ -23,6 +24,39 @@ function ViewWorkOrder() {
   const [clientRegion, setClientRegion] = useState();
   const [clientCity, setClientCity] = useState();
   const [clientZipCode, setClientZipCode] = useState();
+  const [roleMaster, setRoleMaster] = useState();
+  const [roleAdminP, setRoleAdminP] = useState();
+  // const [roleAdminF, setRoleAdminF] = useState();
+  // const [roleProduction, setRoleProduction] = useState();
+  // const [roleSeller, setRoleSeller] = useState();
+  // const [roleA, setRoleA] = useState();
+  const { getRoles, user } = useAuth();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getRoles();
+
+      if (res) {
+        for (const role of res) {
+          if (role.name === "Master") {
+            setRoleMaster(role._id);
+          } else if (role.name === "AdministradorP") {
+            setRoleAdminP(role._id);
+          }
+          // } else if (role.name === "AdministradorF") {
+          //   setRoleAdminF(role._id);
+          // } else if (role.name === "Operador") {
+          //   setRoleProduction(role._id);
+          // } else if (role.name === "Vendedor") {
+          //   setRoleSeller(role._id);
+          // } else if (role.name === "Almacenista") {
+          //   setRoleA(role._id);
+          // }
+        }
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     async function loadWorkOrder() {
@@ -41,7 +75,7 @@ function ViewWorkOrder() {
             setClientRegion(workOrder.client.region);
             setClientCity(workOrder.client.city);
             setClientZipCode(workOrder.client.zipCode);
-            // setDataWorkOrder(getWorkOrderById(workOrder.data));
+            // setStatus(workOrder.tires)
           }
         }
       } catch (error) {
@@ -69,13 +103,15 @@ function ViewWorkOrder() {
   return (
     <>
       <div className="px-4 pt-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
-        <div>
+        <div className="flex items-center gap-3 mb-6">
           <Link to={`/workOrders`}>
-            <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
+            <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary shadow-md rounded-md px-4 py-1 duration-500 hover:duration-500">
               <StepBack color="white" />
             </button>
           </Link>
+          <h1 className="text-2xl md:text-4xl font-bold">Imprimir Orden</h1>
         </div>
+
         <header className="w-full mt-3 flex justify-center">
           <div className=" w-full p-2 flex justify-between border-b-2 border-blue-600 ">
             <section className="">
@@ -146,6 +182,7 @@ function ViewWorkOrder() {
                       <th className="py-3 px-6">Marca</th>
                       <th className="py-3 px-6">Banda Requerida</th>
                       <th className="py-3 px-6">DOT</th>
+                      <th className="py-3 px-6">Estatus</th>
                       <th className="py-3 px-6"></th>
                     </tr>
                   </thead>
@@ -159,12 +196,34 @@ function ViewWorkOrder() {
                         <td className="py-3 px-6">{tire.brand}</td>
                         <td className="py-3 px-6">{tire.requiredBand}</td>
                         <td className="py-3 px-6">{tire.antiquityDot}</td>
+                        <td className=" text-center">
+                          {tire.status === "Rechazo" ? (
+                            <div className="flex justify-center">
+                              <X color="#ff0000" />
+                            </div>
+                          ) : tire.status === "Pasa" ? (
+                            <div className="flex justify-center">
+                              <Check color="#ff0000" />
+                            </div>
+                          ) : (
+                            "Falta Inspección"
+                          )}
+                        </td>
                         <td className="sm:flex py-2 px-3 justify-between">
-                          <Link to={`/tire/${tire._id}`}>
+                          {user.role === roleMaster || user.role === roleAdminP ? (
+                            <Link to={`/tire/${tire._id}`}>
                             <button className="text-blue-600 hover:text-blue-800 ">
                               <UserRoundPen />
                             </button>
                           </Link>
+                          ):(
+                            null
+                          )}
+                          {/* <Link to={`/tire/${tire._id}`}>
+                            <button className="text-blue-600 hover:text-blue-800 ">
+                              <UserRoundPen />
+                            </button>
+                          </Link> */}
                         </td>
                       </tr>
                     ))}
