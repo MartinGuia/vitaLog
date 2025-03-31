@@ -41,18 +41,18 @@ export default function Sidebar({ children, additionalContent }) {
             : "sticky top-0 w-20 h-screen" // Se mueve con el scroll cuando está colapsado
         }`}
       >
-        <nav className="h-full flex flex-col  border shadow-lg  bg-hoverprimary">
+        <nav className="h-full flex flex-col border shadow-lg  bg-colorPrimary">
           <div className="p-4 pb-2 flex justify-between items-center">
             <img
               src={images.logoVB}
               alt=""
               className={`overflow-hidden transition-all ${
-                expanded ? "w-28" : "w-0"
+                expanded ? "w-24" : "w-0"
               }`}
             />
             <button
               onClick={() => setExpanded((curr) => !curr)}
-              className="p-1.5 rounded-lg bg-vbYellow duration-500 hover:bg-yellow-500"
+              className="p-1.5 rounded-lg bg-buttonPrimary duration-500 hover:duration-500 hover:bg-buttonPrimaryHover shadow-md shadow-gray-600"
             >
               {expanded ? <Menu className="w-10" /> : <ChevronLast />}
             </button>
@@ -63,7 +63,7 @@ export default function Sidebar({ children, additionalContent }) {
           <div className="border-t flex p-3">
             <img
               src={images.userIcon}
-              className="w-10 h-10 rounded-md color filter grayscale invert"
+              className="w-8 h-8 md:w-10 md:h-10 rounded-md color filter grayscale invert"
               alt=""
             />
             <div
@@ -72,7 +72,7 @@ export default function Sidebar({ children, additionalContent }) {
               }`}
             >
               <div className="leading-4">
-                <h4 className="font-semibold text-white">
+                <h4 className="font-semibold text-white text-xs md:text-normal">
                   {user.name} {user.lastName}
                 </h4>
                 {/* <span className="text-xs text-gray-600 ">{user.userName}</span> */}
@@ -80,12 +80,12 @@ export default function Sidebar({ children, additionalContent }) {
               </div>
               <Link
                 to="/"
-                className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 duration-500 shadow-md"
+                className="p-1.5 rounded-lg bg-buttonTertiary duration-500 hover:duration-500 hover:bg-buttonTertiaryHover shadow-md shadow-gray-600"
                 onClick={() => {
                   logout();
                 }}
               >
-                <LogOut size={20} className="mr-3" />
+                <LogOut size={20} className="mr-3" color="white"/>
               </Link>
             </div>
           </div>
@@ -128,10 +128,10 @@ export function SidebarItem({ icon, text2, text, active, alert }) {
   const { expanded } = useContext(SidebarContext);
   return (
     <li
-      className={`relative flex items-center py-3 md:py-5 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group ${
+      className={`relative flex items-center py-3 md:py-4 my-1 px-3 font-medium rounded-md cursor-pointer transition-colors group ${
         active
           ? "bg-gradient-to-tr from-indigo-200 to-indigo-200 text-indigo-800"
-          : "hover:bg-sky-800 text-gray-600"
+          : "hover:bg-hoverPrimary text-gray-600"
       }`}
     >
       {icon}

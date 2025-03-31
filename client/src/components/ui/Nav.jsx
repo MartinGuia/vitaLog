@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   Users,
   NotebookPen,
+  UserRoundCog,
   Settings,
   Flag,
   BookMarked,
@@ -80,7 +81,7 @@ useEffect(() => {
     } else if (userRoleId === roleIds.administradorF) {
       navigate("/workorders"); // Página para Administrador
     } else if (userRoleId === roleIds.operador) {
-      navigate("/productionInitial"); // Página para Operador
+      navigate("/production"); // Página para Operador
     }
   }
 }, [userRoleId, roleIds]);
@@ -100,23 +101,29 @@ useEffect(() => {
       allowedRoles: [roleIds.master,], // Administrador y Ventas
     },
     {
-      path: "/productionInitial",
-      icon: <Search size={20} color="white" />,
-      text: "Inspección inicial",
-      allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
+      path: "/production",
+      icon: <UserRoundCog size={20} color="white" />,
+      text: "Producción",
+      allowedRoles: [roleIds.master, roleIds.operador]
     },
-    {
-      path: "/productionRepairs",
-      icon: <Settings size={20} color="white" />,
-      text: "Reparación",
-      allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
-    },
-    {
-      path: "/productionFinal",
-      icon: <Flag size={20} color="white" />,
-      text: "Inspección Final",
-      allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
-    },
+    // {
+    //   path: "/productionInitial",
+    //   icon: <Search size={20} color="white" />,
+    //   text: "Inspección inicial",
+    //   allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
+    // },
+    // {
+    //   path: "/productionRepairs",
+    //   icon: <Settings size={20} color="white" />,
+    //   text: "Reparación",
+    //   allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
+    // },
+    // {
+    //   path: "/productionFinal",
+    //   icon: <Flag size={20} color="white" />,
+    //   text: "Inspección Final",
+    //   allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
+    // },
     {
       path: "/workorders",
       icon: <BookMarked size={20} color="white" />,
@@ -126,19 +133,19 @@ useEffect(() => {
     {
       path: "/createWorkOrder",
       icon: <NotebookPen size={20} color="white" />,
-      text: "Crear Orden de Trabajo",
+      text: "Crear Orden de T.",
       allowedRoles: [roleIds.master, roleIds.ventas], // Administrador y Operador
     },
     {
       path: "/deliveryOrders",
       icon: <PackageCheck size={20} color="white" />,
-      text: "Crear orden de Entrega",
+      text: "Crear Orden de E.",
       allowedRoles: [roleIds.master, roleIds.almacenista], // Administrador y Almacén
     },
     {
       path: "/allDeliveryOrders",
       icon: <FileInput size={20} color="white" />,
-      text: "Ver Orden de Entrega",
+      text: "Orden de Entrega",
       allowedRoles: [roleIds.master, roleIds.almacenista, roleIds.administradorP, roleIds.administradorF], // Administrador, Ventas y Almacén
     },
     {

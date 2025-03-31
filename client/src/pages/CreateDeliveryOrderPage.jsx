@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { useClient } from "../context/ClientContext";
 import { useDeliveryOrder } from "../context/DeliveryOrderContext";
+import { Input } from "@heroui/react";
 
 function CreateDeliveryOrderPage() {
   const {
@@ -72,7 +73,10 @@ function CreateDeliveryOrderPage() {
         {registerErrors.length > 0 && (
           <div className="flex top-10 absolute w-full">
             {registerErrors.map((error, i) => (
-              <div className="bg-red-500 py-2 text-white w-full flex justify-center" key={i}>
+              <div
+                className="bg-red-500 py-2 text-white w-full flex justify-center"
+                key={i}
+              >
                 {error}
               </div>
             ))}
@@ -88,17 +92,19 @@ function CreateDeliveryOrderPage() {
           </div>
 
           {/* Buscador de clientes con lista de selección */}
-          <div className="relative w-full lg:w-[30%] mx-auto mt-8" ref={dropdownRef}>
+          <div
+            className="relative w-full lg:w-[30%] mx-auto mt-8"
+            ref={dropdownRef}
+          >
             <label className="block mb-2 text-sm font-medium">Cliente</label>
 
             {/* Input de búsqueda */}
-            <input
+            <Input
               type="text"
-              placeholder="Buscar cliente..."
+              label="Buscar cliente..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowDropdown(true)}
-              className="block w-full p-2 text-sm border text-white shadow-md border-gray-300 rounded-lg bg-primary focus:ring-blue-500 focus:border-blue-500"
             />
 
             {/* Dropdown de clientes */}
@@ -115,13 +121,20 @@ function CreateDeliveryOrderPage() {
                     </li>
                   ))
                 ) : (
-                  <li className="p-2 text-gray-500">No se encontraron clientes</li>
+                  <li className="p-2 text-gray-500">
+                    No se encontraron clientes
+                  </li>
                 )}
               </ul>
             )}
 
             {/* Campo oculto para almacenar el ID del cliente */}
-            <input type="hidden" {...register("client", { required: "Debe seleccionar un cliente." })} />
+            <input
+              type="hidden"
+              {...register("client", {
+                required: "Debe seleccionar un cliente.",
+              })}
+            />
 
             {errors.client && (
               <p className="text-red-500 text-base">{errors.client.message}</p>

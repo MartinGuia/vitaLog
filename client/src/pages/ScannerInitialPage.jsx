@@ -1,18 +1,14 @@
 import { useTire } from "../context/TireContext";
-import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import React, { useState } from "react";
 import InputField from "../components/ui/InputField";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { StepBack } from "lucide-react";
 
 function ScannerInitialPage() {
   const { getTireByBarcode } = useTire();
   const [scannedCode, setScannedCode] = useState(""); // Estado para el código escaneado
   const [error, setError] = useState(null); // Estado para errores
-  const [isScannerOpen, setIsScannerOpen] = useState(false); // Control del modal
   const navigate = useNavigate();
-
-  const handleScannerOpen = () => setIsScannerOpen(true);
-  const handleScannerClose = () => setIsScannerOpen(false);
 
   const normalizeBarcode = (barcode) => {
     return barcode.replace("'", "-"); // Reemplaza apóstrofes con guiones
@@ -41,8 +37,13 @@ function ScannerInitialPage() {
   };
 
   return (
-    <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
-      <div className="text-center my-8">
+    <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
+      <div className="">
+        <Link to="/production">
+          <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary shadow-md rounded-md px-4 py-1 duration-500 hover:duration-500">
+            <StepBack color="white" />
+          </button>
+        </Link>
         <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
           Inspección Inicial
         </h2>
@@ -57,69 +58,14 @@ function ScannerInitialPage() {
               value={scannedCode}
               onChange={(e) => setScannedCode(e.target.value)} // Actualizar estado
               onKeyDown={handleKeyDown} // Detectar tecla Enter o Tab
-              autoFocus // Asegura que el campo tenga foco al cargar
+              autoFocus // Auto-foco en el input al cargar la página
             />
-            <button
-              type="button"
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md"
-              onClick={handleScannerOpen}
-            >
-              Escanear Código de Barras
-            </button>
           </div>
 
           {/* Mostrar mensaje de error si hay */}
           {error && (
             <div className="mt-4 p-4 bg-red-100 text-red-700 rounded-md">
               {error}
-            </div>
-          )}
-
-          {isScannerOpen && (
-            <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-              <div className="bg-white p-6 rounded-md shadow-lg z-[100]">
-                <h1 className="text-xl font-bold mb-4">Escanea el código</h1>
-                {/* <BarcodeScannerComponent
-                  width={500}
-                  height={500}
-                  onUpdate={(err, result) => {
-                    if (result) {
-                      const scannedValue = result.text; // Código escaneado
-                      setScannedCode(scannedValue); // Actualizar el estado
-                      handleScan(scannedValue); // Llamar a handleScan con el código
-                      handleScannerClose(); // Cerrar el escáner
-                    } else if (err) {
-                      console.error("Error al escanear:", err);
-                      setError("Error al escanear el código.");
-                    }
-                  }}
-                /> */}
-                <BarcodeScannerComponent
-                  width={600}
-                  height={600}
-                  videoConstraints={{
-                    facingMode: "environment", // Usa la cámara trasera
-                    width: { ideal: 1920 },
-                    height: { ideal: 1080 },
-                  }}
-                  onUpdate={(err, result) => {
-                    if (result) {
-                      setScannedCode(result.text.trim());
-                      handleScan(result.text.trim());
-                      handleScannerClose();
-                    } else if (err) {
-                      console.error("Error al escanear:", err);
-                      setError("Error al escanear el código.");
-                    }
-                  }}
-                />
-                <button
-                  className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md"
-                  onClick={handleScannerClose}
-                >
-                  Cerrar
-                </button>
-              </div>
             </div>
           )}
         </div>

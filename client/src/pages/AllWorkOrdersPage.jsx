@@ -6,6 +6,14 @@ import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de aler
 import { useDispatch, useSelector } from "react-redux";
 import { removeWorkOrder } from "../store/slices/workOrderSlice.js";
 import socket from "../socket";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button,
+  Input,
+} from "@heroui/react";
 
 function AllWorkOrdersPage() {
   const { deleteWorkOrder, getWorkOrders, setAllWorkOrders } = useWorkOrder();
@@ -137,8 +145,33 @@ function AllWorkOrdersPage() {
                           workOrder.client.zipCode}
                       </td>
                       <td>{workOrder.formattedCreatedAt}</td>
-                      <td className="flex flex-col items-center md:flex-row md:items-center md:justify-around ">
-                        <Link to={`/workorder/${workOrder._id}`}>
+                      <td className="py-2">
+                        <Dropdown>
+                          <DropdownTrigger className="shadow">
+                            <Button variant="bordered">Abrir Menú</Button>
+                          </DropdownTrigger>
+                          <DropdownMenu aria-label="Acciones del Cliente">
+                            <DropdownItem key="edit">
+                              <Link
+                                to={`/workorder/${workOrder._id}`}
+                                className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+                              >
+                                {/* <UserRoundPen /> */}
+                                Imprimir Orden
+                              </Link>
+                            </DropdownItem>
+                            <DropdownItem
+                              key="delete"
+                              className="text-danger flex items-center gap-2"
+                              color="danger"
+                              onClick={() => handleDeleteClick(workOrder)}
+                            >
+                              {/* <Trash2 /> */}
+                              Eliminar Orden
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </Dropdown>
+                        {/* <Link to={`/workorder/${workOrder._id}`}>
                           <button className="hover:text-slate-500 mt-2 sm:mt-0 duration-500 hover:duration-500">
                             <Printer />
                           </button>
@@ -148,7 +181,7 @@ function AllWorkOrdersPage() {
                           onClick={() => handleDeleteClick(workOrder)}
                         >
                           <Trash2 />
-                        </button>
+                        </button> */}
                       </td>
                     </tr>
                   ))}

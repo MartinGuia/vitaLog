@@ -8,6 +8,7 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import * as images from "../../img";
+import { Check, X } from "lucide-react";
 
 const styles = StyleSheet.create({
   page: {
@@ -29,12 +30,12 @@ const styles = StyleSheet.create({
     width: 80,
     height: 40,
   },
-  textClient:{
+  textClient: {
     fontSize: 11,
     color: "#000000",
     fontWeight: "bold",
   },
-  textAddress:{
+  textAddress: {
     fontSize: 8,
     color: "#000000",
     fontWeight: "medium",
@@ -166,7 +167,9 @@ const WorkOrderPDF = ({ workOrder }) => {
             <Text style={styles.textClient}>{workOrder.client.name}</Text>
             <Text style={styles.textAddress}>{workOrder.client.address1}</Text>
             <Text style={styles.textAddress}>{workOrder.client.region}</Text>
-            <Text style={styles.textAddress}>{workOrder.client.city}{" "}{workOrder.client.zipCode}</Text>
+            <Text style={styles.textAddress}>
+              {workOrder.client.city} {workOrder.client.zipCode}
+            </Text>
           </View>
         </View>
         <View style={styles.table}>
@@ -179,6 +182,7 @@ const WorkOrderPDF = ({ workOrder }) => {
             <Text style={styles.tableCell}>Marca</Text>
             <Text style={styles.tableCell}>Banda Requerida</Text>
             <Text style={styles.tableCell}>DOT</Text>
+            <Text style={styles.tableCell}>Estatus</Text>
           </View>
           {workOrder.tires.map((tire, index) => (
             <React.Fragment key={index}>
@@ -189,9 +193,7 @@ const WorkOrderPDF = ({ workOrder }) => {
                 ]}
               >
                 {/* <Text style={styles.tableCellDO}>{tire.linea || "-"}</Text> */}
-                <Text style={styles.tableCellWO}>
-                  {tire.linea || "-"}
-                </Text>
+                <Text style={styles.tableCellWO}>{tire.linea || "-"}</Text>
                 <Text style={styles.tableCell}>{tire.itemCode || "-"}</Text>
                 <Text style={styles.tableCell}>{tire.barCode || "-"}</Text>
                 <Text style={styles.tableCell}>
@@ -200,8 +202,16 @@ const WorkOrderPDF = ({ workOrder }) => {
                 <Text style={styles.tableCell}>{tire.brand || "-"}</Text>
                 <Text style={styles.tableCell}>{tire.requiredBand || "-"}</Text>
                 <Text style={styles.tableCell}>{tire.antiquityDot || "-"}</Text>
+                <Text style={styles.tableCell}>
+                  {tire.status === "Rechazo" ? (
+                    <Image src={images.x} style={styles.tableCell}/>
+                  ) : tire.status === "Pasa" ? (
+                    <Image src={images.check} style={styles.tableCell}/>
+                  ) : (
+                    "Falta Inspección"
+                  )}
+                </Text>
               </View>
-             
             </React.Fragment>
           ))}
         </View>
