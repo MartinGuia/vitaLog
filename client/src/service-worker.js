@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> develop
 /* eslint-disable no-restricted-globals */
 
 // This service worker can be customized!
@@ -125,8 +121,4 @@ self.addEventListener('message', (event) => {
 //                 return fetch(e.request)
 //             })
 //     )
-<<<<<<< HEAD
 // })
-=======
-// })
->>>>>>> develop
