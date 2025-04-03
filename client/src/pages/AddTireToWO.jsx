@@ -176,7 +176,7 @@ function AddTireToWO() {
           <div>
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative w-[40%] ">
+                <div className="relative w-[50%] md:w-[40%] ">
                   <label className="block mb-2 text-sm font-medium">
                     Servicio
                   </label>
@@ -185,7 +185,7 @@ function AddTireToWO() {
                     label="Servicio"
                     placeholder="Servicios..."
                     items={services}
-                    {...register("role", {
+                    {...register("itemCode", {
                       required: "Debe seleccionar un Servicio.",
                     })}
                   >
@@ -308,14 +308,14 @@ function AddTireToWO() {
                   )}
                 </div>
 
-                <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
+                <div className="relative w-[50%] md:w-[40%] mt-5 sm:mt-0">
                   <Select
                     className="shadow-md rounded-xl "
                     items={bandContinental}
                     label="banda requerida"
                     placeholder="Banda requerida..."
                     {...register("requiredBand", {
-                      required: "Debe seleccionar un Rol.",
+                      required: "Debe seleccionar una banda.",
                     })}
                   >
                     {bandContinental.map((bandC) => (
@@ -380,7 +380,7 @@ function AddTireToWO() {
             </div>
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative md:w-1/4 w-[50%]">
+                <div className="relative w-[50%] md:w-[40%]">
                   <Select
                     className="shadow-md rounded-xl"
                     items={hullMeasurements}
