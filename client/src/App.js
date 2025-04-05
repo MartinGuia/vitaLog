@@ -209,7 +209,7 @@ function AppRoutes() {
     {
       path: "/reports",
       element: <ReportPage />,
-      roles: [roleIds.master, roleIds.administradorF],
+      roles: [roleIds.master, roleIds.administradorF, roleIds.administradorP],
     },
     {
       path: "/production",

@@ -7,12 +7,12 @@ function ProductionPage() {
     {
       to: "/productionInitial",
       name: "Inspección Inicial",
-      icon: <Settings />,
+      icon: <Flag />,
     },
     {
       to: "/productionRepairs",
       name: "Reparaciones",
-      icon: <Flag />,
+      icon: <Settings />,
     },
     {
       to: "/productionFinal",
