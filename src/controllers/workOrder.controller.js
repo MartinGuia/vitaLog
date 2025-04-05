@@ -188,3 +188,11 @@ export const deleteWorkOrder = async (req, res) => {
     res.status(500).json({ success: false, message: "Error del servidor" });
   }
 };
+
+// export const getWorkOrdersBySeller = async (req, res) => {
+//   try {
+//     // const seller = await User.findOne({ role: "Vendedor" });
+//   } catch (error) {
+    
+//   }
+// };

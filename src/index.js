@@ -14,7 +14,7 @@ const server = http.createServer(app);
 // Configurar Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: process.env.REACT_APP_FRONTEND_URI,
+    origin: process.env.REACT_APP_FRONTEND_URI_PUBLIC,
     credentials: true,
   },
 });
