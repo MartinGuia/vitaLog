@@ -185,7 +185,7 @@ function AddTireToWO() {
                     label="Servicio"
                     placeholder="Servicios..."
                     items={services}
-                    {...register("role", {
+                    {...register("itemCode", {
                       required: "Debe seleccionar un Servicio.",
                     })}
                   >
