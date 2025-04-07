@@ -255,6 +255,26 @@ export const editUser = async (req, res) => {
   }
 };
 
+export const getWorkOrderById = async (req, res) => {
+  const { id } = req.params; // ID del usuario a editar
+
+  try {
+    // Verifica si el usuario existe
+    const userFound = await User.findById(id);
+    if (!userFound) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Responde con los datos del usuario
+    res.json({
+      id: userFound._id,
+      workOrders: userFound.workOrders,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 export const verifyToken = async (req, res) => {
   const { token } = req.cookies;
 

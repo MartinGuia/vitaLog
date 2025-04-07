@@ -8,6 +8,7 @@ export const loginRequest = (user) => axios.post(`/login`, user);
 export const verifyTokenRequest = () => axios.get(`/verify`);
 export const getUsersRequest = () => axios.get(`/getUsers`);
 export const getUserRequest = (id) => axios.get(`/profile/${id}`);
+export const getWorkOrderByUserRequest = (id) => axios.get(`/workOrdersByUser/${id}`);
 
 export const updateUserRequest = (id, user) =>
   axios.put(`/editUser/${id}`, user);

@@ -38,6 +38,7 @@ import ReportPage from "./pages/ReportPage";
 import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode"; // Asegúrate del import correcto
 import ProductionPage from "./pages/ProductionPage";
+import ViewWOBySeller from "./pages/ViewWOBySeller";
 
 function AppRoutes() {
   const { role, getRoles } = useAuth(); // Ahora sí está dentro de AuthProvider
@@ -215,6 +216,11 @@ function AppRoutes() {
       path: "/production",
       element: <ProductionPage />,
       roles: [roleIds.master, roleIds.operador],
+    },
+    {
+      path: "/workOrderByUser/:id",
+      element: <ViewWOBySeller />,
+      roles: [roleIds.master],
     },
   ];
 

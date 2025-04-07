@@ -25,6 +25,13 @@ const userSchema = new Schema(
       type: Schema.Types.ObjectId,
       required: false,
     },
+    workOrders: [
+      {
+        ref: "WorkOrder",
+        type: Schema.Types.ObjectId,
+        required: false,
+      },
+    ],
     role: {
       ref: "Role",
       type: Schema.Types.ObjectId,
