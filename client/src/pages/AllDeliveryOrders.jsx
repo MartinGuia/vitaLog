@@ -119,12 +119,7 @@ function AllDeliveryOrders() {
                     >
                       <td className="px-6">{deliveryOrders.numero}</td>
                       <td className="px-6 text-sm text-gray-900">
-                        <Link
-                          className="h-auto w-auto"
-                          to={`/deliveryOrders/${deliveryOrders._id}`}
-                        >
-                          <button>{deliveryOrders.createdBy.name}</button>
-                        </Link>
+                        <button>{deliveryOrders.createdBy.name}</button>
                       </td>
                       <td className="px-6">{deliveryOrders.tires.length}</td>
                       <td className="px-6">{deliveryOrders.client.name}</td>

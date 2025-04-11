@@ -109,7 +109,7 @@ function AppRoutes() {
     {
       path: "/workorder/:id",
       element: <ViewWorkOrder />,
-      roles: [roleIds.master, roleIds.administradorP, roleIds.administradorF],
+      roles: [roleIds.master, roleIds.administradorP, roleIds.administradorF, roleIds.ventas],
     },
     {
       path: "/profile/:id",
@@ -185,7 +185,7 @@ function AppRoutes() {
     {
       path: "/deliveryOrders",
       element: <CreateDeliveryOrderPage />,
-      roles: [roleIds.master],
+      roles: [roleIds.master, roleIds.almacenista,],
     },
     {
       path: "/add-tires",
@@ -220,7 +220,7 @@ function AppRoutes() {
     {
       path: "/workOrderByUser/:id",
       element: <ViewWOBySeller />,
-      roles: [roleIds.master],
+      roles: [roleIds.ventas],
     },
   ];
 

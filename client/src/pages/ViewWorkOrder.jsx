@@ -26,11 +26,8 @@ function ViewWorkOrder() {
   const [clientZipCode, setClientZipCode] = useState();
   const [roleMaster, setRoleMaster] = useState();
   const [roleAdminP, setRoleAdminP] = useState();
-  // const [roleAdminF, setRoleAdminF] = useState();
-  // const [roleProduction, setRoleProduction] = useState();
-  // const [roleSeller, setRoleSeller] = useState();
-  // const [roleA, setRoleA] = useState();
   const { getRoles, user } = useAuth();
+  const [workOrdersByUser, setWorkOrdersByUser] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,8 +40,6 @@ function ViewWorkOrder() {
           } else if (role.name === "AdministradorP") {
             setRoleAdminP(role._id);
           }
-          // } else if (role.name === "AdministradorF") {
-          //   setRoleAdminF(role._id);
           // } else if (role.name === "Operador") {
           //   setRoleProduction(role._id);
           // } else if (role.name === "Vendedor") {
@@ -77,6 +72,7 @@ function ViewWorkOrder() {
             setClientZipCode(workOrder.client.zipCode);
             // setStatus(workOrder.tires)
           }
+          setWorkOrdersByUser(user.id || user._id);
         }
       } catch (error) {
         console.error(error);
@@ -104,11 +100,20 @@ function ViewWorkOrder() {
     <>
       <div className="px-4 pt-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
         <div className="flex items-center gap-3 mb-6">
-          <Link to={`/workOrders`}>
-            <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary shadow-md rounded-md px-4 py-1 duration-500 hover:duration-500">
-              <StepBack color="white" />
-            </button>
-          </Link>
+          {user.role === roleMaster || user.role === roleAdminP ? (
+            <Link to={`/workOrders`}>
+              <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary shadow-md rounded-md px-4 py-1 duration-500 hover:duration-500">
+                <StepBack color="white" />
+              </button>
+            </Link>
+          ) : (
+            <Link to={`/workOrderByUser/${workOrdersByUser}`}>
+              <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary shadow-md rounded-md px-4 py-1 duration-500 hover:duration-500">
+                <StepBack color="white" />
+              </button>
+            </Link>
+          )}
+
           <h1 className="text-2xl md:text-4xl font-bold">Imprimir Orden</h1>
         </div>
 
@@ -210,15 +215,14 @@ function ViewWorkOrder() {
                           )}
                         </td>
                         <td className="sm:flex py-2 px-3 justify-between">
-                          {user.role === roleMaster || user.role === roleAdminP ? (
+                          {user.role === roleMaster ||
+                          user.role === roleAdminP ? (
                             <Link to={`/tire/${tire._id}`}>
-                            <button className="text-blue-600 hover:text-blue-800 ">
-                              <UserRoundPen />
-                            </button>
-                          </Link>
-                          ):(
-                            null
-                          )}
+                              <button className="text-blue-600 hover:text-blue-800 ">
+                                <UserRoundPen />
+                              </button>
+                            </Link>
+                          ) : null}
                           {/* <Link to={`/tire/${tire._id}`}>
                             <button className="text-blue-600 hover:text-blue-800 ">
                               <UserRoundPen />
