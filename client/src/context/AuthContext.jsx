@@ -8,6 +8,7 @@ import {
   deleteUserRequest,
   updateUserRequest,
   getRolesRequest,
+  getWorkOrderByUserRequest,
 } from "../api/auth.js";
 import Cookies from "js-cookie";
 
@@ -29,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   const [getAllUsers, setGetAllUsers] = useState([]);
   const [role, setRole] = useState(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true); // Nuevo estado
-  const [allRoles, setAllRoles] = useState([]); // Nuevo estado
+  const [allRoles, setAllRoles] = useState([]);
 
   const signup = async (user) => {
     try {
@@ -70,7 +71,18 @@ export const AuthProvider = ({ children }) => {
   const getUser = async (id) => {
     try {
       const res = await getUserRequest(id);
-      // console.log(res.data);
+      console.log(res.data);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getWorkOrderByUser = async (id) => {
+    try {
+      const res = await getWorkOrderByUserRequest(id);
+      console.log(res.data);
+      
       return res.data;
     } catch (error) {
       console.error(error);
@@ -174,6 +186,7 @@ export const AuthProvider = ({ children }) => {
         user,
         isAuthenticated,
         errors,
+        getWorkOrderByUser,
       }}
     >
       {children}

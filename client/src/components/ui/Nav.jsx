@@ -21,6 +21,7 @@ import { jwtDecode } from "jwt-decode"; // Asegúrate del import correcto
 function Nav({ children }) {
   const { isAuthenticated, role, user, getRoles } = useAuth();
   const [userRoleId, setUserRoleId] = useState(null); // ID del rol del usuario
+  const [userWorkOrder, setUserWorkOrder] = useState()
   const [roleIds, setRoleIds] = useState({
     master: null,
     administradorP: null,
@@ -49,6 +50,7 @@ function Nav({ children }) {
             if (role.name === "Almacenista") rolesMap.almacenista = role._id;
           }
           setRoleIds(rolesMap);
+          setUserWorkOrder(user.id || user._id)
           // console.log(user)
         }
       } catch (error) {
@@ -132,7 +134,6 @@ function Nav({ children }) {
       text: "Orden de trabajo",
       allowedRoles: [
         roleIds.master,
-        roleIds.almacenista,
         roleIds.administradorP,
         roleIds.administradorF,
       ], // Administrador, Ventas y Operador
@@ -165,6 +166,15 @@ function Nav({ children }) {
       text: "Estadística",
       allowedRoles: [
         roleIds.master,
+        // roleIds.administradorP, roleIds.administradorF
+      ], // Administrador, Ventas y Almacén
+    },
+    {
+      path: `/workOrderByUser/${userWorkOrder}`,
+      icon: <BookMarked size={20} color="white" />,
+      text: "Estadística",
+      allowedRoles: [
+        roleIds.ventas,
         // roleIds.administradorP, roleIds.administradorF
       ], // Administrador, Ventas y Almacén
     },

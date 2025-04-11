@@ -38,6 +38,7 @@ import ReportPage from "./pages/ReportPage";
 import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode"; // Asegúrate del import correcto
 import ProductionPage from "./pages/ProductionPage";
+import ViewWOBySeller from "./pages/ViewWOBySeller";
 
 function AppRoutes() {
   const { role, getRoles } = useAuth(); // Ahora sí está dentro de AuthProvider
@@ -108,7 +109,7 @@ function AppRoutes() {
     {
       path: "/workorder/:id",
       element: <ViewWorkOrder />,
-      roles: [roleIds.master, roleIds.administradorP, roleIds.administradorF],
+      roles: [roleIds.master, roleIds.administradorP, roleIds.administradorF, roleIds.ventas],
     },
     {
       path: "/profile/:id",
@@ -184,7 +185,7 @@ function AppRoutes() {
     {
       path: "/deliveryOrders",
       element: <CreateDeliveryOrderPage />,
-      roles: [roleIds.master],
+      roles: [roleIds.master, roleIds.almacenista,],
     },
     {
       path: "/add-tires",
@@ -215,6 +216,11 @@ function AppRoutes() {
       path: "/production",
       element: <ProductionPage />,
       roles: [roleIds.master, roleIds.operador],
+    },
+    {
+      path: "/workOrderByUser/:id",
+      element: <ViewWOBySeller />,
+      roles: [roleIds.ventas],
     },
   ];
 
