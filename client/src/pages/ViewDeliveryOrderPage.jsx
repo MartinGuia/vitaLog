@@ -68,13 +68,22 @@ function ViewDeliveryOrderPage() {
   return (
     <>
       <div className="px-4 pt-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
-        <div>
+        <div className="flex items-center gap-3 mb-6">
+          <Link to={`/allDeliveryOrders`}>
+            <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary shadow-md rounded-md px-4 py-1 duration-500 hover:duration-500">
+              <StepBack color="white" />
+            </button>
+          </Link>
+
+          <h1 className="text-2xl md:text-4xl font-bold">Imprimir Orden De Entrega</h1>
+        </div>
+        {/* <div>
           <Link to={`/allDeliveryOrders`}>
             <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
               <StepBack color="white" />
             </button>
           </Link>
-        </div>
+        </div> */}
         <header className="w-full mt-3 flex justify-center">
           <div className=" w-full p-2 flex justify-between border-b-2 border-blue-600 ">
             <section className="">
@@ -121,9 +130,11 @@ function ViewDeliveryOrderPage() {
                   <div>
                     <p className="font-bold">{clientName}</p>
                     <div className="text-xs">
-                    <p>{clientAddress}</p>
-                    <p>{clientRegion}, {clientCity}</p>
-                    <p>{clientZipCode}</p>
+                      <p>{clientAddress}</p>
+                      <p>
+                        {clientRegion}, {clientCity}
+                      </p>
+                      <p>{clientZipCode}</p>
                     </div>
                   </div>
                 </div>
@@ -137,7 +148,9 @@ function ViewDeliveryOrderPage() {
                   <thead>
                     <tr className="bg-blue-600 text-white text-sm text-center">
                       <th className="py-3 flex-1"></th>
-                      <th className="py-3 flex-1 text-center">Orden de trabajo</th>
+                      <th className="py-3 flex-1 text-center">
+                        Orden de trabajo
+                      </th>
                       <th className="py-3 px-6">Código de Ítem</th>
                       <th className="py-3 px-6">Código de Barras</th>
                       <th className="py-3 px-6">Estado</th>
@@ -152,13 +165,17 @@ function ViewDeliveryOrderPage() {
                     {currentOrders.map((tire, index) => (
                       <tr key={index} className="border-t border-gray-200">
                         <td className="py-3 px-2">{tire.linea}</td>
-                        <td className="py-3 px-6 flex-1">{tire.workOrder.numero}</td>
+                        <td className="py-3 px-6 flex-1">
+                          {tire.workOrder.numero}
+                        </td>
                         <td className="py-3 px-6">{tire.itemCode}</td>
                         <td className="py-3 px-6">{tire.barCode}</td>
                         <td className="py-3 px-6">{tire.status}</td>
                         <td className="py-3 px-6">{tire.helmetMeasurement}</td>
                         <td className="py-3 px-6">{tire.brand}</td>
-                        <td className="py-3 px-6">{tire.appliedBand || tire.appliedBandBandag || "-"}</td>
+                        <td className="py-3 px-6">
+                          {tire.appliedBand || tire.appliedBandBandag || "-"}
+                        </td>
                         <td className="py-3 px-6">{tire.antiquityDot}</td>
                         {/* <td className="sm:flex py-2 px-3 justify-between">
                               <Link to={`/tire/${tire._id}`}>
@@ -219,25 +236,25 @@ function ViewDeliveryOrderPage() {
               </div>
             </div>
           </section>
-            <div>
-              {/* Tu diseño actual */}
-              {deliveryOrder && (
-                <PDFDownloadLink
-                  document={<DeliveryOrderPDF deliveryOrder={deliveryOrder} />}
-                  fileName={`OrdenEntrega_${deliveryOrder.numero}.pdf`}
-                >
-                  {({ loading }) =>
-                    loading ? (
-                      "Generando PDF..."
-                    ) : (
-                      <button className="flex mt-2 sm:mt-0 shadow p-2 text-sm sm:text-base sm:p-3 bg-red-400 rounded-lg text-white cursor-pointer hover:bg-red-600 duration-500 hover:duration-500">
-                        Descargar PDF
-                      </button>
-                    )
-                  }
-                </PDFDownloadLink>
-              )}
-            </div>
+          <div>
+            {/* Tu diseño actual */}
+            {deliveryOrder && (
+              <PDFDownloadLink
+                document={<DeliveryOrderPDF deliveryOrder={deliveryOrder} />}
+                fileName={`OrdenEntrega_${deliveryOrder.numero}.pdf`}
+              >
+                {({ loading }) =>
+                  loading ? (
+                    "Generando PDF..."
+                  ) : (
+                    <button className="flex mt-2 sm:mt-0 shadow p-2 text-sm sm:text-base sm:p-3 bg-red-400 rounded-lg text-white cursor-pointer hover:bg-red-600 duration-500 hover:duration-500">
+                      Descargar PDF
+                    </button>
+                  )
+                }
+              </PDFDownloadLink>
+            )}
+          </div>
         </main>
       </div>
     </>

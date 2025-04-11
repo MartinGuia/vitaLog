@@ -16,6 +16,7 @@
     "axios": "^1.7.2",
     "client": "file:",
     "clsx": "^2.1.1",
+    "env-cmd": "^10.1.0",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.461.0",
@@ -26,6 +27,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
+    "recharts": "^2.15.2",
     "socket.io-client": "^4.8.1",
     "web-vitals": "^2.1.4"
   },

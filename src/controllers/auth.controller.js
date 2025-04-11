@@ -8,6 +8,7 @@ import config from "../config.js";
 import Role from "../models/roles.model.js";
 import { validationResult } from "express-validator";
 import sanitizeInput from "../middlewares/sanitize.js";
+import { format } from 'date-fns'; 
 
 export const register = async (req, res) => {
   const { name, lastName, userName, password, department, role } = req.body;
@@ -256,24 +257,36 @@ export const editUser = async (req, res) => {
 };
 
 export const getWorkOrderById = async (req, res) => {
-  const { id } = req.params; // ID del usuario a editar
+  const { id } = req.params;
 
   try {
-    // Verifica si el usuario existe
-    const userFound = await User.findById(id);
+    const userFound = await User.findById(id).populate({
+      path: 'workOrders',
+      populate: [
+        { path: 'client' },
+        { path: 'tires' },
+        { path: 'createdBy', select: "name lastName" },
+      ]
+    });
+
     if (!userFound) {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    // Responde con los datos del usuario
+    // Formatear las fechas de cada orden de trabajo
+    const formattedOrders = userFound.workOrders.map(order => ({
+      ...order.toObject(),
+      formattedCreatedAt: format(new Date(order.createdAt), "dd/MM/yyyy")
+    }));
+
     res.json({
       id: userFound._id,
-      workOrders: userFound.workOrders,
+      workOrders: formattedOrders,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};
 
 export const verifyToken = async (req, res) => {
   const { token } = req.cookies;

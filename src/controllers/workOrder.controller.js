@@ -5,50 +5,49 @@ import { format } from "date-fns";
 
 export const createOrOpenWorkOrder = async (req, res) => {
   try {
-    const { client, userId } = req.body;
+    const { client } = req.body;
 
-    // Buscar si ya hay una orden abierta
-    let workOrder = await WorkOrder.findOne({ isOpen: true });
+    const userId = req.user._id || req.user.id;
+
+    // Buscar si ya hay una orden abierta del mismo usuario
+    let workOrder = await WorkOrder.findOne({ isOpen: true, createdBy: userId });
 
     if (!workOrder) {
-      // Buscar la última orden para calcular el nuevo número
-      const ultimaOrden = await WorkOrder.findOne().sort({ numero: -1 });
-      const nuevoNumero = ultimaOrden?.numero ? ultimaOrden.numero + 1 : 1;
+      const ultimaOrdenDeTrabajo = await WorkOrder.findOne().sort({ numero: -1 });
+      const nuevoNumero = ultimaOrdenDeTrabajo?.numero ? ultimaOrdenDeTrabajo.numero + 1 : 1;
 
-      // Crear nueva orden asociada al usuario
+      // Crear nueva orden
       workOrder = await WorkOrder.create({
         numero: nuevoNumero,
         isOpen: true,
         createdBy: userId,
+        client: client ,
       });
 
-      // Agregar la orden al usuario (relación inversa)
-      await User.findByIdAndUpdate(userId, {
-        $push: { workOrders: workOrder._id },
-      });
+      console.log("Orden creada con ID:", workOrder._id);
+
+      // Asociar la orden al usuario
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { $push: { workOrders: workOrder._id } },
+        { new: true }
+      );
+
+      console.log("Usuario actualizado:", updatedUser);
+    } else {
+      if (client && !workOrder.client) {
+        workOrder.client = client;
+        await workOrder.save();
+      }
     }
 
-    // Si se envió un cliente desde el frontend, asociarlo
-    if (client) {
-      workOrder.client = client;
-      await workOrder.save();
-    }
-
-    // Opcional: devolver la orden con info del usuario creador
-    await workOrder.populate("createdBy", "name lastName userName");
-
-    res.status(200).json({
-      success: true,
-      workOrder,
-    });
+    res.json({ success: true, workOrder });
   } catch (error) {
     console.error("Error al crear/abrir orden de trabajo:", error);
-    res.status(500).json({
-      success: false,
-      message: "Error interno del servidor",
-    });
+    res.status(500).json({ success: false, message: "Error interno del servidor" });
   }
 };
+
 // export const createOrOpenWorkOrder = async (req, res) => {
 //   try {
 //     const { client,  } = req.body;
@@ -234,3 +233,11 @@ export const deleteWorkOrder = async (req, res) => {
     res.status(500).json({ success: false, message: "Error del servidor" });
   }
 };
+
+// export const getWorkOrdersBySeller = async (req, res) => {
+//   try {
+//     // const seller = await User.findOne({ role: "Vendedor" });
+//   } catch (error) {
+    
+//   }
+// };

@@ -27,9 +27,9 @@ services:
       - volume_vitalog:/data/db # Montaje del volumen en el contenedor para persistencia de datos
 
 volumes:
-  volume_vitalog: # Volumen para MongoDB
+  volume_vitalog:
     driver: local
     driver_opts:
       type: none
-      device: /home/adminvitabajio/vitalogdb # Usar este directorio en el servidor para persistencia
+      device: /home/adminvitabajio/volume_vitalog  # Usar este directorio en el servidor
       o: bind

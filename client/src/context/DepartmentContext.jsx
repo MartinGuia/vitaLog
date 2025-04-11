@@ -40,7 +40,7 @@ export function DepartmentProvider({ children }) {
   const getDepartmentById = async (id) => {
     try {
       const res = await getDepartmentByIdRequest(id);
-      console.log(res.data)
+      // console.log(res.data)
       return res.data;
     } catch (error) {
       console.error(error);
