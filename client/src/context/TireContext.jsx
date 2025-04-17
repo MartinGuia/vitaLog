@@ -60,6 +60,7 @@ export function TiresProvider({ children }) {
     try {
       const res = await createTireRequest(workOrders);
       console.log(res);
+      return res.data
     } catch (error) {
       console.log(error);
       setErrors(error.response.data);

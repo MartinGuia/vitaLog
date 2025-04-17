@@ -3,7 +3,6 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useTire } from "../context/TireContext";
 import { useWorkOrder } from "../context/WorkOrderContext";
-import InputField from "../components/ui/InputField";
 import React, { useState } from "react";
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import socket from "../socket";
@@ -17,18 +16,26 @@ function AddTireToWO() {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm();
-  const { errors: registerErrors, user } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const { closeWorkOrder } = useWorkOrder();
-  const { createTire } = useTire();
+  const { createTire, errors: registerErrors } = useTire();
 
   const onSubmit = handleSubmit((values) => {
-    const formData = { ...values, scannedCode };
+    // Combinar los valores del formulario con el código de barras actual
+    const formData = { ...values, barCode: scannedCode };
     createTire(formData);
-    reset();
-    setScannedCode("");
+
+    // Incrementar el código de barras si es numérico, de lo contrario dejar en blanco o mantener el valor.
+    const numericCode = Number(scannedCode);
+    if (!isNaN(numericCode)) {
+      const newCode = numericCode + 1;
+      setScannedCode(newCode.toString());
+    } else {
+      // Si no es un número, puedes optar por resetear el campo o mantenerlo
+      setScannedCode("");
+    }
   });
 
   const handleScannerOpen = () => setIsScannerOpen(true);
@@ -36,15 +43,13 @@ function AddTireToWO() {
 
   const handleClick = async () => {
     try {
-      // const user = JSON.parse(localStorage.getItem("user")); // Obtener el usuario almacenado
       if (!user || !user.name) {
         console.error("No se encontró el usuario");
         return;
       }
-
       await closeWorkOrder({
-        socketId: socket.id, // Enviar el socketId
-        username: user.name, // Enviar el nombre del usuario
+        socketId: socket.id,
+        username: user.name,
       });
       navigate("/createWorkOrder");
       console.log(`Orden de trabajo creada por: ${user.name}`);
@@ -52,6 +57,8 @@ function AddTireToWO() {
       console.error("Error al cerrar la orden de trabajo:", error.message);
     }
   };
+
+  const brandOfTire = [{ value: "Bridgestone", label: "Bridgestone" }];
 
   const services = [
     { value: "Reparación", label: "Reparación" },
@@ -195,18 +202,6 @@ function AddTireToWO() {
                       </SelectItem>
                     ))}
                   </Select>
-                  {/* <select
-                    {...register("itemCode", {
-                      required: "Debe seleccionar un Servicio.",
-                    })}
-                    id="small"
-                    className="block w-full p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  >
-                    <option defaultValue={"Seleccionar"}>Seleccionar...</option>
-                    <option value="Reparación">Reparación</option>
-                    <option value="Renovado">Renovado</option>
-                    <option value="Desecho">Desecho</option>
-                  </select> */}
                   {errors.itemCode && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
@@ -216,27 +211,19 @@ function AddTireToWO() {
                 <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0 md:flex sm:justify-between">
                   <div className="sm:w-[85%]">
                     <Input
-                      label="Código de Barras"
-                      id="barcode"
+                      type="text"
+                      label="Escanea o escribe el código..."
                       value={scannedCode}
-                      readOnly
                       variant={"underlined"}
                       {...register("barCode", { required: true })}
+                      onChange={(e) => setScannedCode(e.target.value)}
                     />
-                    {/* <InputField
-                      label="Código de Barras"
-                      id="barcode"
-                      value={scannedCode}
-                      readOnly
-                      {...register("barCode", { required: true })}
-                    /> */}
                   </div>
                   {errors.barCode && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
                   )}
-
                   <div className="flex justify-center mt-4 md:mt-0">
                     <button
                       type="button"
@@ -247,7 +234,6 @@ function AddTireToWO() {
                     </button>
                   </div>
                 </div>
-
                 {isScannerOpen && (
                   <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
                     <div className="bg-white p-6 rounded-md shadow-lg z-[100]">
@@ -256,7 +242,7 @@ function AddTireToWO() {
                       </h1>
                       <BarcodeScannerComponent
                         width={600}
-                        delay={600} // Reduce el número de intentos por segundo
+                        delay={600}
                         videoConstraints={{
                           facingMode: "environment",
                           width: { ideal: 1280 },
@@ -307,7 +293,6 @@ function AddTireToWO() {
                     </p>
                   )}
                 </div>
-
                 <div className="relative w-[50%] md:w-[40%] mt-5 sm:mt-0">
                   <Select
                     className="shadow-md rounded-xl "
@@ -324,47 +309,12 @@ function AddTireToWO() {
                       </SelectItem>
                     ))}
                   </Select>
-                  {/* <select
-                    {...register("requiredBand", { required: false })}
-                    className="block shadow-md w-full p-2 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  >
-                    <option className="p-1" value="">
-                      Banda usada...
-                    </option>
-                    <option className="p-1" value="HT3">
-                      HT3
-                    </option>
-                    <option className="p-1" value="HDL">
-                      HDL
-                    </option>
-                    <option className="p-1" value="HSC">
-                      HSC
-                    </option>
-                    <option className="p-1" value="HSR">
-                      HSR
-                    </option>
-                    <option className="p-1" value="HTL">
-                      HTL
-                    </option>
-                  </select> */}
                   {errors.requiredBand && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
                   )}
                 </div>
-                {/* <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
-                  <InputField
-                    label="Banda requerida"
-                    id="banda"
-                    {...register("requiredBand", { required: true })}
-                  />
-                  {errors.lastName && (
-                    <p className="text-red-500 text-xs">
-                      Este campo es requerido
-                    </p>
-                  )}
-                </div> */}
               </div>
             </div>
           </div>
@@ -399,47 +349,30 @@ function AddTireToWO() {
                       </SelectItem>
                     ))}
                   </Select>
-                  {/* <InputField
-                    label="Medida del casco"
-                    id="medida"
-                    {...register("helmetMeasurement", { required: true })}
-                  /> */}
                   {errors.helmetMeasurement && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
                   )}
                 </div>
-
                 <div className="relative md:w-1/4 w-auto mt-5 sm:mt-0">
                   <Input
                     label="Marca"
                     variant={"underlined"}
                     {...register("brand", { required: true })}
                   />
-                  {/* <InputField
-                    label="Marca"
-                    id="marca"
-                    {...register("brand", { required: true })}
-                  /> */}
                   {errors.brand && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
                   )}
                 </div>
-
                 <div className="relative md:w-1/4 w-auto mt-5 sm:mt-0">
                   <Input
                     label="Modelo"
                     variant={"underlined"}
                     {...register("modelTire", { required: true })}
                   />
-                  {/* <InputField
-                    label="Modelo"
-                    id="modelo"
-                    {...register("modelTire", { required: true })}
-                  /> */}
                   {errors.modelTire && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
