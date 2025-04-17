@@ -1,8 +1,6 @@
 import Tire from "../models/tire.model.js";
 import WorkOrder from "../models/workOrders.model.js";
 import { format } from "date-fns";
-// import User from "../models/user.model.js";
-// import Client from "../models/client.model.js";
 
 export const getTires = async (req, res) => {
   const tires = await Tire.find({
@@ -23,7 +21,6 @@ export const createTire = async (req, res) => {
     helmetMeasurement,
     brand,
     modelTire,
-    // state,
     date,
   } = req.body;
   try {
@@ -41,10 +38,9 @@ export const createTire = async (req, res) => {
 
     const tireFound = await Tire.findOne({barCode});
     if (tireFound) {
-      return res.status(400).json({
-        success: false,
-        message: "La llanta con el código de barras ingresado ya existe.",
-      });
+      return res.status(400).json([
+        "La llanta con el código de barras ingresado ya existe.",
+      ]);
     }
 
     // Calcular la nueva línea dentro de esta orden de trabajo
@@ -65,11 +61,9 @@ export const createTire = async (req, res) => {
       barCode,
       helmetMeasurement,
       brand,
-      // helmetDesign,
       requiredBand,
       antiquityDot,
       modelTire,
-      // state,
       date,
       user: req.user.id, // Referenciar la llanta al usuario
       workOrder: workOrder._id, // Asignar la referencia de la orden de trabajo
@@ -155,7 +149,6 @@ export const getTireByBarcode = async (req, res) => {
 
     // Busca un registro de llanta que coincida con el código de barras
     const tire = await Tire.findOne({ barCode })
-      // .populate("user")
       .populate("workOrder");
 
     if (!tire) {
