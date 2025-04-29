@@ -21,32 +21,36 @@ export const createTire = async (req, res) => {
     helmetMeasurement,
     brand,
     modelTire,
+    serialNumber,
+    millimeterFootage,
     date,
   } = req.body;
+
   try {
-    // Buscar la orden de trabajo abierta
-    const workOrder = await WorkOrder.findOne({ isOpen: true }).populate(
-      "tires"
-    );
+    const userId = req.user._id || req.user.id;
+
+    // Buscar la orden de trabajo abierta del usuario actual
+    const workOrder = await WorkOrder.findOne({
+      isOpen: true,
+      createdBy: userId,
+    }).populate("tires");
 
     if (!workOrder) {
       return res.status(400).json({
         success: false,
-        message: "No hay una orden de trabajo abierta.",
+        message: "No hay una orden de trabajo abierta para este usuario.",
       });
     }
 
-    const tireFound = await Tire.findOne({barCode});
+    const tireFound = await Tire.findOne({ barCode });
     if (tireFound) {
-      return res.status(400).json([
-        "La llanta con el código de barras ingresado ya existe.",
-      ]);
+      return res
+        .status(400)
+        .json(["La llanta con el código de barras ingresado ya existe."]);
     }
 
-    // Calcular la nueva línea dentro de esta orden de trabajo
     let nuevaLinea = 1;
     if (workOrder.tires.length > 0) {
-      // Buscar el número máximo en las llantas de esta orden
       const ultimaLlanta = workOrder.tires.reduce(
         (max, tire) => (tire.linea > max ? tire.linea : max),
         0
@@ -54,7 +58,6 @@ export const createTire = async (req, res) => {
       nuevaLinea = ultimaLlanta + 1;
     }
 
-    // Crear la nueva llanta
     const newTire = new Tire({
       linea: nuevaLinea,
       itemCode,
@@ -64,14 +67,15 @@ export const createTire = async (req, res) => {
       requiredBand,
       antiquityDot,
       modelTire,
+      serialNumber,
+      millimeterFootage,
       date,
-      user: req.user.id, // Referenciar la llanta al usuario
-      workOrder: workOrder._id, // Asignar la referencia de la orden de trabajo
+      user: userId,
+      workOrder: workOrder._id,
     });
 
     const savedTire = await newTire.save();
 
-    // Agregar la llanta a la orden de trabajo
     workOrder.tires.push(savedTire);
     await workOrder.save();
 
@@ -121,19 +125,23 @@ export const updateTire = async (req, res) => {
   res.json(tire);
 };
 
-export const updateFinalTire = async (req, res) => {
-  // Asegúrate de que el campo inspection se actualice a true
-  const updatedData = {
-    ...req.body,
-    inspection: true, // Forzar el valor de inspection a true
-  };
+export const updateProductionTire = async (req, res) => {
+  try {
+    // Asegúrate de que el campo inspection se actualice a true
+    const updatedData = {
+      ...req.body,
+      inspection: true, // Forzar el valor de inspection a true
+    };
 
-  const tire = await Tire.findByIdAndUpdate(req.params.id, updatedData, {
-    new: true, // Devuelve el documento actualizado
-  });
+    const tire = await Tire.findByIdAndUpdate(req.params.id, updatedData, {
+      new: true, // Devuelve el documento actualizado
+    });
 
-  if (!tire) return res.status(404).json({ message: "Tire not found" });
-  res.json(tire);
+    if (!tire) return res.status(404).json({ message: "Tire not found" });
+    res.json(tire);
+  } catch (error) {
+    res.status(500).json({ message: "Error interno del servidor", error });
+  }
 };
 
 export const getTireByBarcode = async (req, res) => {
@@ -148,8 +156,7 @@ export const getTireByBarcode = async (req, res) => {
     }
 
     // Busca un registro de llanta que coincida con el código de barras
-    const tire = await Tire.findOne({ barCode })
-      .populate("workOrder");
+    const tire = await Tire.findOne({ barCode }).populate("workOrder");
 
     if (!tire) {
       return res.status(404).json({
@@ -193,6 +200,11 @@ export const getHelmetDesignCounts = async (req, res) => {
   try {
     const helmetDesignCounts = await Tire.aggregate([
       {
+        $match: {
+          inspection: true,
+        },
+      },
+      {
         $group: {
           _id: "$appliedBand",
           count: { $sum: 1 },
@@ -205,8 +217,54 @@ export const getHelmetDesignCounts = async (req, res) => {
 
     res.json(helmetDesignCounts);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error al obtener los diseños de casco", error });
+    res.status(500).json({ message: "Error al obtener las llantas", error });
+  }
+};
+
+export const updateQuoteTires = async (req, res) => {
+  try {
+    const { tireIds } = req.body; // arreglo de IDs de llantas
+
+    if (!Array.isArray(tireIds) || tireIds.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "No se proporcionaron llantas a actualizar." });
+    }
+
+    const result = await Tire.updateMany(
+      { _id: { $in: tireIds } }, // condición: múltiples IDs
+      { $set: { quoteTires: true } } // actualización
+    );
+
+    res.json({ success: true, updatedCount: result.modifiedCount });
+  } catch (error) {
+    console.error("Error al actualizar quoteTires:", error);
+    res.status(500).json({
+      message: "Error al actualizar las llantas para cotización",
+      error,
+    });
+  }
+};
+
+export const getQuoteTires = async (req, res) => {
+  try {
+    const tires = await Tire.find({ 
+      quoteTires: true, 
+      inspection: true 
+    }).populate({
+      path: "workOrder",
+      select: "numero",
+    });
+
+    if (!tires || tires.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No tires found with both quoteTires and inspection set to true" });
+    }
+
+    res.json(tires);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving tires" });
   }
 };

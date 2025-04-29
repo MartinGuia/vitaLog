@@ -2,6 +2,7 @@ import { model, Schema } from "mongoose";
 
 const tireSchema = new Schema(
   {
+    //! ---------------- Datos para orden de trabajo ---------------------
     user: {
       ref: "User",
       type: Schema.Types.ObjectId,
@@ -38,12 +39,22 @@ const tireSchema = new Schema(
     },
     modelTire: {
       type: String,
-      required:true,
+      required: true,
+    },
+    serialNumber: {
+      type: String,
+      required: true,
+    },
+    millimeterFootage: {
+      type: String,
+      required: true,
     },
     date: {
       type: Date,
       default: Date.now,
     },
+    
+    //! ---------------- Datos para produccion ---------------------
     status: {
       type: String,
       required: false,
@@ -84,11 +95,6 @@ const tireSchema = new Schema(
       type: String,
       required: false,
     },
-    inspection: {
-      type: Boolean,
-      required: false,
-      default: false, // Configurar el valor predeterminado como false
-    },
     appliedBand: {
       type: String,
       required: false,
@@ -101,12 +107,24 @@ const tireSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "WorkOrder",
     },
-   
+
+    //! ----------------Cambia al pasar por producción ---------------------
+    inspection: {
+      type: Boolean,
+      required: false,
+      default: false, // Configurar el valor predeterminado como false
+    },
+
+    //! ----------------Cambia al cotizar ---------------------
+    quoteTires: {
+      type: Boolean,
+      required: false,
+    },
   },
   {
     timestamps: true,
     versionKey: false,
-  },
+  }
 );
 
 export default model("Tire", tireSchema);

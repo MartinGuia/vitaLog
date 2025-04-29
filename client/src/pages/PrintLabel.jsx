@@ -23,13 +23,6 @@ function PrintLabel() {
     }
     loadTire();
   }, []);
-  // useEffect(() => {
-  //   const fetchTire = async () => {
-  //     const tireData = await getTire(params.id);
-  //     setTire(tireData);
-  //   };
-  //   fetchTire();
-  // }, [ getTire]);
 
   const generateZPL = (tire) => {
     return `

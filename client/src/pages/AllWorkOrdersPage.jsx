@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useWorkOrder } from "../context/WorkOrderContext";
 import { useEffect, useState } from "react";
-import { Printer, Trash2 } from "lucide-react";
 import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta
 import { useDispatch, useSelector } from "react-redux";
 import { removeWorkOrder } from "../store/slices/workOrderSlice.js";
@@ -12,7 +11,6 @@ import {
   DropdownMenu,
   DropdownItem,
   Button,
-  Input,
 } from "@heroui/react";
 
 function AllWorkOrdersPage() {
@@ -171,17 +169,6 @@ function AllWorkOrdersPage() {
                             </DropdownItem>
                           </DropdownMenu>
                         </Dropdown>
-                        {/* <Link to={`/workorder/${workOrder._id}`}>
-                          <button className="hover:text-slate-500 mt-2 sm:mt-0 duration-500 hover:duration-500">
-                            <Printer />
-                          </button>
-                        </Link>
-                        <button
-                          className="text-red-600 hover:text-red-800 mt-2 sm:mt-0"
-                          onClick={() => handleDeleteClick(workOrder)}
-                        >
-                          <Trash2 />
-                        </button> */}
                       </td>
                     </tr>
                   ))}
@@ -237,7 +224,7 @@ function AllWorkOrdersPage() {
       </section>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h3 className="text-lg font-bold mb-4">Confirmar eliminación</h3>
             <p>

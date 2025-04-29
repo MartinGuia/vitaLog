@@ -76,28 +76,6 @@ function EditTirePage() {
             </div>
           ))}
         </div>
-        {/* <div>
-          <Link to={`/workOrder/${workOrder}`}>
-            <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
-              <StepBack color="white" />
-            </button>
-          </Link>
-        </div>
-        <div>
-          <h1 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
-            Editar Llanta
-          </h1>
-          <div className="flex top-10 absolute w-[100%]">
-            {tireErrors.map((error, i) => (
-              <div
-                className="bg-red-500 py-2 text-white w-[100%] flex justify-center"
-                key={i}
-              >
-                {error}
-              </div>
-            ))}
-          </div>
-        </div> */}
         <form onSubmit={onSubmit}>
           <div>
             <h2 className="text-lg md:text-2xl font-semibold mb-2 text-sky-900 mt-12">
@@ -156,8 +134,6 @@ function EditTirePage() {
               <p className="text-gray-600 font-medium">
                 Complete usuario y banda requerida.
               </p>
-              {/* <h1 className="font-bold text-3xl">Dot y banda requerida</h1>
-              <p>Complete el usuario y contraseña.</p> */}
             </div>
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
@@ -166,8 +142,6 @@ function EditTirePage() {
                     DOT
                   </label>
                   <InputField
-                    // label="Antiguedad"
-                    // id="dot"
                     {...register("antiquityDot")}
                   />
                   {errors.helmetMeasurement && (
@@ -181,8 +155,6 @@ function EditTirePage() {
                     Banda requerida
                   </label>
                   <InputField
-                    // label="Banda requerida"
-                    // id="banda"
                     {...register("requiredBand")}
                   />
                   {errors.lastName && (
@@ -203,8 +175,6 @@ function EditTirePage() {
               <p className="text-gray-600 font-medium">
                 Complete medida y marca
               </p>
-              {/* <h1 className="font-bold text-3xl">Medida </h1>
-              <p>Complete el usuario y contraseña.</p> */}
             </div>
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
@@ -229,8 +199,6 @@ function EditTirePage() {
                     Marca
                   </label>
                   <InputField
-                    // label="Marca"
-                    // id="marca"
                     {...register("brand", { required: true })}
                   />
                   {errors.lastName && (

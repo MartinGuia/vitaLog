@@ -3,11 +3,14 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { useTire } from "../context/TireContext";
 import { StepBack } from "lucide-react";
 import React, { useState, useEffect } from "react";
-import { Select, SelectItem, Input } from "@heroui/react";
+import {
+  Autocomplete,
+  AutocompleteItem,
+} from "@heroui/react";
 
 function EditInitialPage() {
   const { setValue, handleSubmit, register } = useForm();
-  const { updateTire, getTire, errors: tireErrors } = useTire();
+  const { updateProductionTire, getTire, errors: tireErrors } = useTire();
   const params = useParams();
   const navigate = useNavigate();
   const [tireData, setTireData] = useState({});
@@ -40,8 +43,8 @@ function EditInitialPage() {
     );
 
     try {
-      await updateTire(params.id, updatedValues);
-      // navigate("/productionRepairs");
+      await updateProductionTire(params.id, updatedValues);
+      navigate("/productionInitial");
       alert("Registro actualizado exitosamente");
     } catch (error) {
       console.error(error);
@@ -53,21 +56,6 @@ function EditInitialPage() {
     setValue("status", status);
     await onSubmit({ ...tireData, status });
   };
-  // const onSubmit = async (values) => {
-  //   try {
-  //     await updateTire(params.id, values);
-  //     navigate("/productionInitial");
-  //     alert("Registro actualizado exitosamente");
-  //   } catch (error) {
-  //     console.error(error);
-  //     alert("Error al actualizar el registro");
-  //   }
-  // };
-
-  // const handleStatusChange = async (status) => {
-  //   setValue("status", status);
-  //   await onSubmit({ ...tireData, status });
-  // };
 
   const rejections = [
     {
@@ -362,21 +350,22 @@ function EditInitialPage() {
       </p>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex justify-center">
-          <Select
-            className="shadow-md rounded-xl mb-10 w-[50%] "
-            items={rejections}
-            label="Rechazo"
-            placeholder="Selecciona la razón de rechazo..."
-            {...register("rejection", {
-              required: false,
-            })}
+          <Autocomplete
+            className="shadow-md rounded-xl mb-10 w-[50%]"
+            defaultItems={rejections}
+            label="Rechazos"
+            placeholder="Selecciona un rechazo"
+            listboxProps={{
+              emptyContent: "Rechazo no encontrado",
+            }}
+            {...register("rejection", { required: false })}
           >
-            {rejections.map((rejection) => (
-              <SelectItem key={rejection.value} value={rejection.value}>
+            {(rejection) => (
+              <AutocompleteItem key={rejection.value} value={rejection.value}>
                 {rejection.label}
-              </SelectItem>
-            ))}
-          </Select>
+              </AutocompleteItem>
+            )}
+          </Autocomplete>
         </div>
         <div className="flex gap-4">
           <button

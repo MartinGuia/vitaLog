@@ -99,10 +99,22 @@ function Nav({ children }) {
       allowedRoles: [roleIds.master], // Solo Administrador
     },
     {
+      path: "/deliveryOrders",
+      icon: <PackageCheck size={20} color="white" />,
+      text: "Crear Nota de E.",
+      allowedRoles: [roleIds.master, roleIds.almacenista], 
+    },
+    {
+      path: "/createWorkOrder",
+      icon: <NotebookPen size={20} color="white" />,
+      text: "Crear Orden de T.",
+      allowedRoles: [roleIds.master, roleIds.ventas], 
+    },
+    {
       path: "/clients",
       icon: <Users size={20} color="white" />,
       text: "Clientes",
-      allowedRoles: [roleIds.master], // Administrador y Ventas
+      allowedRoles: [roleIds.master], 
     },
     {
       path: "/production",
@@ -110,24 +122,6 @@ function Nav({ children }) {
       text: "Producción",
       allowedRoles: [roleIds.master, roleIds.operador],
     },
-    // {
-    //   path: "/productionInitial",
-    //   icon: <Search size={20} color="white" />,
-    //   text: "Inspección inicial",
-    //   allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
-    // },
-    // {
-    //   path: "/productionRepairs",
-    //   icon: <Settings size={20} color="white" />,
-    //   text: "Reparación",
-    //   allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
-    // },
-    // {
-    //   path: "/productionFinal",
-    //   icon: <Flag size={20} color="white" />,
-    //   text: "Inspección Final",
-    //   allowedRoles: [roleIds.master, roleIds.operador], // Administrador y Operador
-    // },
     {
       path: "/workorders",
       icon: <BookMarked size={20} color="white" />,
@@ -136,19 +130,7 @@ function Nav({ children }) {
         roleIds.master,
         roleIds.administradorP,
         roleIds.administradorF,
-      ], // Administrador, Ventas y Operador
-    },
-    {
-      path: "/createWorkOrder",
-      icon: <NotebookPen size={20} color="white" />,
-      text: "Crear Orden de T.",
-      allowedRoles: [roleIds.master, roleIds.ventas], // Administrador y Operador
-    },
-    {
-      path: "/deliveryOrders",
-      icon: <PackageCheck size={20} color="white" />,
-      text: "Crear Orden de E.",
-      allowedRoles: [roleIds.master, roleIds.almacenista], // Administrador y Almacén
+      ], 
     },
     {
       path: "/allDeliveryOrders",
@@ -158,7 +140,7 @@ function Nav({ children }) {
         roleIds.master,
         roleIds.almacenista,
         roleIds.administradorF,
-      ], // Administrador, Ventas y Almacén
+      ], 
     },
     {
       path: "/reports",
@@ -167,16 +149,23 @@ function Nav({ children }) {
       allowedRoles: [
         roleIds.master,
         // roleIds.administradorP, roleIds.administradorF
-      ], // Administrador, Ventas y Almacén
+      ],
     },
     {
       path: `/workOrderByUser/${userWorkOrder}`,
       icon: <BookMarked size={20} color="white" />,
-      text: "Estadística",
+      text: "Ordenes de Trabajo",
       allowedRoles: [
         roleIds.ventas,
-        // roleIds.administradorP, roleIds.administradorF
-      ], // Administrador, Ventas y Almacén
+      ], 
+    },
+    {
+      path: `/quoteTires`,
+      icon: <BookMarked size={20} color="white" />,
+      text: "Ordenes de Trabajo",
+      allowedRoles: [
+        roleIds.master, roleIds.administradorF,
+      ], 
     },
   ];
 

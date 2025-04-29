@@ -3,11 +3,17 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useTire } from "../context/TireContext";
 import { useWorkOrder } from "../context/WorkOrderContext";
-import React, { useState } from "react";
+import { useState } from "react";
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import socket from "../socket";
 import { Focus } from "lucide-react";
-import { Input, Select, SelectItem } from "@heroui/react";
+import {
+  Input,
+  Select,
+  SelectItem,
+  Autocomplete,
+  AutocompleteItem,
+} from "@heroui/react";
 
 function AddTireToWO() {
   const [scannedCode, setScannedCode] = useState(""); // Estado para el código escaneado
@@ -58,7 +64,273 @@ function AddTireToWO() {
     }
   };
 
-  const brandOfTire = [{ value: "Bridgestone", label: "Bridgestone" }];
+  const brandOfTire = [
+    { value: "ADVANCE", label: "ADVANCE" },
+    { value: "ADVENTUR", label: "ADVENTUR" },
+    { value: "AEMSTRONG", label: "AEMSTRONG" },
+    { value: "AEOLUS", label: "AEOLUS" },
+    { value: "AGATE", label: "AGATE" },
+    { value: "AMBERSTONE  ", label: "AMBERSTONE  " },
+    { value: "AMEN STEEL", label: "AMEN STEEL" },
+    { value: "AMERICA", label: "AMERICA" },
+    { value: "AMORSTEEL", label: "AMORSTEEL" },
+    { value: "ANNAITE", label: "ANNAITE" },
+    { value: "ANTYRE", label: "ANTYRE" },
+    { value: "APLUS", label: "APLUS" },
+    { value: "APOLLO", label: "APOLLO" },
+    { value: "ARDUZZA", label: "ARDUZZA" },
+    { value: "ARISUN", label: "ARISUN" },
+    { value: "ARMOR STEEL", label: "ARMOR STEEL" },
+    { value: "ARSENAL", label: "ARSENAL" },
+    { value: "ASTIRE", label: "ASTIRE" },
+    { value: "ATANI", label: "ATANI" },
+    { value: "ATHREE-A", label: "ATHREE-A" },
+    { value: "ATLAS", label: "ATLAS" },
+    { value: "AUFINE", label: "AUFINE" },
+    { value: "AURORA", label: "AURORA" },
+    { value: "AUSTO", label: "AUSTO" },
+    { value: "AUSTONE", label: "AUSTONE" },
+    { value: "AXMILLE", label: "AXMILLE" },
+    { value: "BALCKHAWK", label: "BALCKHAWK" },
+    { value: "BANNERS", label: "BANNERS" },
+    { value: "BARKLEY", label: "BARKLEY" },
+    { value: "BBTIRES", label: "BBTIRES" },
+    { value: "BENCHMARK", label: "BENCHMARK" },
+    { value: "BF GOODRICH", label: "BF GOODRICH" },
+    { value: "BFGOODRIDE", label: "BFGOODRIDE" },
+    { value: "BLACK LION", label: "BLACK LION" },
+    { value: "BLACKHAWK ", label: "BLACKHAWK " },
+    { value: "BLACKLION ", label: "BLACKLION " },
+    { value: "BOSSWAY TIRES", label: "BOSSWAY TIRES" },
+    { value: "BRIDGESTONE", label: "BRIDGESTONE" },
+    { value: "BULLONE", label: "BULLONE" },
+    { value: "CACALRY", label: "CACALRY" },
+    { value: "CACHILAND", label: "CACHILAND" },
+    { value: "CAMSO", label: "CAMSO" },
+    { value: "CARBON SERIES", label: "CARBON SERIES" },
+    { value: "CARGO MILLER", label: "CARGO MILLER" },
+    { value: "CARGOFORCE", label: "CARGOFORCE" },
+    { value: "CAVARLY", label: "CAVARLY" },
+    { value: "CEIPORT", label: "CEIPORT" },
+    { value: "CENTARA", label: "CENTARA" },
+    { value: "CERCA", label: "CERCA" },
+    { value: "CEREX ", label: "CEREX " },
+    { value: "CEWALRY", label: "CEWALRY" },
+    { value: "CHAO YANG", label: "CHAO YANG" },
+    { value: "CHENGSON", label: "CHENGSON" },
+    { value: "CHEROKE", label: "CHEROKE" },
+    { value: "CHINA", label: "CHINA" },
+    { value: "CHINA MAKE", label: "CHINA MAKE" },
+    { value: "COAT", label: "COAT" },
+    { value: "COLDSHIELD", label: "COLDSHIELD" },
+    { value: "COMPASAL ", label: "COMPASAL " },
+    { value: "CONSTANCY", label: "CONSTANCY" },
+    { value: "CONSTELATION", label: "CONSTELATION" },
+    { value: "CONTINENTAL", label: "CONTINENTAL" },
+    { value: "COOPERTIRES", label: "COOPERTIRES" },
+    { value: "COSMO", label: "COSMO" },
+    { value: "CROSS WIND", label: "CROSS WIND" },
+    { value: "CROWN", label: "CROWN" },
+    { value: "DAWTONWN", label: "DAWTONWN" },
+    { value: "DAYTON", label: "DAYTON" },
+    { value: "DEARLY", label: "DEARLY" },
+    { value: "DELTA POWER", label: "DELTA POWER" },
+    { value: "DINA TRACK", label: "DINA TRACK" },
+    { value: "DOUBLE  STAR", label: "DOUBLE  STAR" },
+    { value: "DOUBLE COIN", label: "DOUBLE COIN" },
+    { value: "DRIVEMASTER", label: "DRIVEMASTER" },
+    { value: "DUNLOP", label: "DUNLOP" },
+    { value: "DURATION", label: "DURATION" },
+    { value: "DURUN", label: "DURUN" },
+    { value: "DYNACARGO", label: "DYNACARGO" },
+    { value: "DYNATRAC", label: "DYNATRAC" },
+    { value: "EMPIRE", label: "EMPIRE" },
+    { value: "ENERGY", label: "ENERGY" },
+    { value: "ESMILLE", label: "ESMILLE" },
+    { value: "EUDEMON", label: "EUDEMON" },
+    { value: "EUZAKDI ", label: "EUZAKDI " },
+    { value: "EVERTONE", label: "EVERTONE" },
+    { value: "EVERTOUR", label: "EVERTOUR" },
+    { value: "FALKEN", label: "FALKEN" },
+    { value: "FESTIE", label: "FESTIE" },
+    { value: "FIRE HAWK", label: "FIRE HAWK" },
+    { value: "FIRESTONE", label: "FIRESTONE" },
+    { value: "FORTUNE", label: "FORTUNE" },
+    { value: "FRON WAY", label: "FRON WAY" },
+    { value: "FULL RUN", label: "FULL RUN" },
+    { value: "GALAXY", label: "GALAXY" },
+    { value: "GALDIATOR", label: "GALDIATOR" },
+    { value: "GENERAL", label: "GENERAL" },
+    { value: "GFT RIDER", label: "GFT RIDER" },
+    { value: "GINAKOY", label: "GINAKOY" },
+    { value: "GLADIATOR", label: "GLADIATOR" },
+    { value: "GMX", label: "GMX" },
+    { value: "GOLD PANTER", label: "GOLD PANTER" },
+    { value: "GOLD SHIELD", label: "GOLD SHIELD" },
+    { value: "GOLD WAY", label: "GOLD WAY" },
+    { value: "GOLDEN  CROWN  ", label: "GOLDEN  CROWN  " },
+    { value: "GOLDWAY", label: "GOLDWAY" },
+    { value: "GOODRIDE", label: "GOODRIDE" },
+    { value: "GOODYEAR ", label: "GOODYEAR " },
+    { value: "GRAND STONE", label: "GRAND STONE" },
+    { value: "GREAD WAY", label: "GREAD WAY" },
+    { value: "GREEN DRAGON", label: "GREEN DRAGON" },
+    { value: "GREEN MAX", label: "GREEN MAX" },
+    { value: "GREMAX", label: "GREMAX" },
+    { value: "GT RADIAL", label: "GT RADIAL" },
+    { value: "GUTE ROAD ", label: "GUTE ROAD " },
+    { value: "HANKOOK ", label: "HANKOOK " },
+    { value: "HANKSUNGI", label: "HANKSUNGI" },
+    { value: "HAPPY ROAD", label: "HAPPY ROAD" },
+    { value: "HAWKWAY", label: "HAWKWAY" },
+    { value: "HERCULES", label: "HERCULES" },
+    { value: "INTERSTATE", label: "INTERSTATE" },
+    { value: "IOYROAD", label: "IOYROAD" },
+    { value: "IRON HEAD", label: "IRON HEAD" },
+    { value: "IRON MAN", label: "IRON MAN" },
+    { value: "JET RIB", label: "JET RIB" },
+    { value: "JET STEEL", label: "JET STEEL" },
+    { value: "JET TIRE", label: "JET TIRE" },
+    { value: "JET TRAK", label: "JET TRAK" },
+    { value: "JET WAY", label: "JET WAY" },
+    { value: "JINYU", label: "JINYU" },
+    { value: "JK TIRE", label: "JK TIRE" },
+    { value: "JOGROAD", label: "JOGROAD" },
+    { value: "JOYALL", label: "JOYALL" },
+    { value: "JOYROAD", label: "JOYROAD" },
+    { value: "JOYUS", label: "JOYUS" },
+    { value: "JR TIRE", label: "JR TIRE" },
+    { value: "JUMBO", label: "JUMBO" },
+    { value: "KAPSEN", label: "KAPSEN" },
+    { value: "KARO", label: "KARO" },
+    { value: "KELLY", label: "KELLY" },
+    { value: "KHUMO", label: "KHUMO" },
+    { value: "KJTYRE", label: "KJTYRE" },
+    { value: "KORYO", label: "KORYO" },
+    { value: "LAN VIGATOR", label: "LAN VIGATOR" },
+    { value: "LANDSCAPE", label: "LANDSCAPE" },
+    { value: "LANDYTIRE", label: "LANDYTIRE" },
+    { value: "LANVIGATOR", label: "LANVIGATOR" },
+    { value: "LAUFEN", label: "LAUFEN" },
+    { value: "LING LONG", label: "LING LONG" },
+    { value: "LONG MARCH", label: "LONG MARCH" },
+    { value: "LONG TRACK", label: "LONG TRACK" },
+    { value: "LUCKYRIVER", label: "LUCKYRIVER" },
+    { value: "LUNG TRACK", label: "LUNG TRACK" },
+    { value: "LUNIS", label: "LUNIS" },
+    { value: "MAGNA", label: "MAGNA" },
+    { value: "MATADOR", label: "MATADOR" },
+    { value: "MAX WIND", label: "MAX WIND" },
+    { value: "MAXXIS ", label: "MAXXIS " },
+    { value: "MEXTROAD", label: "MEXTROAD" },
+    { value: "MICHELIN", label: "MICHELIN" },
+    { value: "MILE PRO ", label: "MILE PRO " },
+    { value: "MILERSTONE", label: "MILERSTONE" },
+    { value: "MIRAGE", label: "MIRAGE" },
+    { value: "MMEWAY", label: "MMEWAY" },
+    { value: "NAVITRAC", label: "NAVITRAC" },
+    { value: "NEXT ROAD", label: "NEXT ROAD" },
+    { value: "NOVA MAXX", label: "NOVA MAXX" },
+    { value: "NOWTRAC", label: "NOWTRAC" },
+    { value: "ONYX", label: "ONYX" },
+    { value: "OTANI", label: "OTANI" },
+    { value: "OVATION", label: "OVATION" },
+    { value: "PACE", label: "PACE" },
+    { value: "PEARLY", label: "PEARLY" },
+    { value: "PIRELLI", label: "PIRELLI" },
+    { value: "PNESTONE", label: "PNESTONE" },
+    { value: "POLO", label: "POLO" },
+    { value: "POWER", label: "POWER" },
+    { value: "PRIME WELL", label: "PRIME WELL" },
+    { value: "PRINX", label: "PRINX" },
+    { value: "RACE", label: "RACE" },
+    { value: "RACE ALONE", label: "RACE ALONE" },
+    { value: "RADAR", label: "RADAR" },
+    { value: "RANDSTONE", label: "RANDSTONE" },
+    { value: "REACEALONE", label: "REACEALONE" },
+    { value: "REARLY", label: "REARLY" },
+    { value: "REAZAION", label: "REAZAION" },
+    { value: "RED MAX", label: "RED MAX" },
+    { value: "REGAL", label: "REGAL" },
+    { value: "REMINGTONE", label: "REMINGTONE" },
+    { value: "RIGURUS", label: "RIGURUS" },
+    { value: "RNKING", label: "RNKING" },
+    { value: "ROAD LUX", label: "ROAD LUX" },
+    { value: "ROAD MASTER  ", label: "ROAD MASTER  " },
+    { value: "ROAD ONE", label: "ROAD ONE" },
+    { value: "ROADSHINE ", label: "ROADSHINE " },
+    { value: "ROUTE WAY", label: "ROUTE WAY" },
+    { value: "ROYAL BLACK", label: "ROYAL BLACK" },
+    { value: "ROYAL MEGA", label: "ROYAL MEGA" },
+    { value: "ROYALE", label: "ROYALE" },
+    { value: "RUNKING", label: "RUNKING" },
+    { value: "RURUN", label: "RURUN" },
+    { value: "SAFECESS", label: "SAFECESS" },
+    { value: "SAFEKING", label: "SAFEKING" },
+    { value: "SAILUN", label: "SAILUN" },
+    { value: "SAKUN", label: "SAKUN" },
+    { value: "SALMAX", label: "SALMAX" },
+    { value: "SAMSON", label: "SAMSON" },
+    { value: "SEBA", label: "SEBA" },
+    { value: "SENTERA", label: "SENTERA" },
+    { value: "SIERRA", label: "SIERRA" },
+    { value: "SILVER KING", label: "SILVER KING" },
+    { value: "SINERGY", label: "SINERGY" },
+    { value: "SKY FIRES", label: "SKY FIRES" },
+    { value: "SKYPOWER", label: "SKYPOWER" },
+    { value: "SMARK", label: "SMARK" },
+    { value: "SOLAPSHIELD", label: "SOLAPSHIELD" },
+    { value: "SPORTRACK", label: "SPORTRACK" },
+    { value: "STAR LINE", label: "STAR LINE" },
+    { value: "STEEL MARK", label: "STEEL MARK" },
+    { value: "SUMITOMO", label: "SUMITOMO" },
+    { value: "SUN FULL", label: "SUN FULL" },
+    { value: "SUNSHINE", label: "SUNSHINE" },
+    { value: "SUPER CARGO", label: "SUPER CARGO" },
+    { value: "SUPER HAWK", label: "SUPER HAWK" },
+    { value: "SUPER MAX", label: "SUPER MAX" },
+    { value: "SYNERGY", label: "SYNERGY" },
+    { value: "TAITONG", label: "TAITONG" },
+    { value: "TBB TIRES", label: "TBB TIRES" },
+    { value: "TERAFLEX", label: "TERAFLEX" },
+    { value: "TERRA KING", label: "TERRA KING" },
+    { value: "THREE-A", label: "THREE-A" },
+    { value: "THUNDERE", label: "THUNDERE" },
+    { value: "TOLEDO", label: "TOLEDO" },
+    { value: "TORCH", label: "TORCH" },
+    { value: "TORNEL", label: "TORNEL" },
+    { value: "TORQUE TYRES", label: "TORQUE TYRES" },
+    { value: "TOYO", label: "TOYO" },
+    { value: "TRAN MON", label: "TRAN MON" },
+    { value: "TRANCEALONE", label: "TRANCEALONE" },
+    { value: "TRANPORTER", label: "TRANPORTER" },
+    { value: "TRANSTERRA", label: "TRANSTERRA" },
+    { value: "TRIANGLE", label: "TRIANGLE" },
+    { value: "TRINGLE", label: "TRINGLE" },
+    { value: "TRUCK MASTER", label: "TRUCK MASTER" },
+    { value: "TURN PIKE", label: "TURN PIKE" },
+    { value: "TYRES", label: "TYRES" },
+    { value: "UNIROYAL", label: "UNIROYAL" },
+    { value: "VIGOURIUS", label: "VIGOURIUS" },
+    { value: "VIKRAN TYRES", label: "VIKRAN TYRES" },
+    { value: "WANLI", label: "WANLI" },
+    { value: "WARRIOR", label: "WARRIOR" },
+    { value: "WELLOESEA", label: "WELLOESEA" },
+    { value: "WELLP", label: "WELLP" },
+    { value: "WESLAKE", label: "WESLAKE" },
+    { value: "WIND FORCE", label: "WIND FORCE" },
+    { value: "WIND POWER", label: "WIND POWER" },
+    { value: "WOSEN ", label: "WOSEN " },
+    { value: "XMILLE", label: "XMILLE" },
+    { value: "XWORKS", label: "XWORKS" },
+    { value: "YELLOW SEA", label: "YELLOW SEA" },
+    { value: "YOKOHAMA", label: "YOKOHAMA" },
+    { value: "ZEEMAX", label: "ZEEMAX" },
+    { value: "ZELDA", label: "ZELDA" },
+    { value: "ZENNA", label: "ZENNA" },
+    { value: "ZETUM", label: "ZETUM" },
+    { value: "ZWARTZ", label: "ZWARTZ" },
+  ];
 
   const services = [
     { value: "Reparación", label: "Reparación" },
@@ -74,7 +346,7 @@ function AddTireToWO() {
     { value: "HTL", label: "HTL" },
   ];
 
-  const hullMeasurements = [
+  const helmetMeasurements = [
     { value: "11R22.5", label: "11R22.5" },
     { value: "11R24.5", label: "11R24.5" },
     { value: "295/75R22.5", label: "295/75R22.5" },
@@ -272,13 +544,10 @@ function AddTireToWO() {
           <div>
             <div className="mt-8">
               <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
-                DOT y Banda Requerida
+                DOT y Quemado
               </h2>
-              <p className="text-gray-600 font-medium">
-                Complete el dot y la banda requerida.
-              </p>
             </div>
-            <div className="w-[100%] pt-8 text-xl">
+            <div className="w-[100%] pt-6 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
                 <div className="relative md:w-5/12 w-auto">
                   <Input
@@ -294,11 +563,59 @@ function AddTireToWO() {
                   )}
                 </div>
                 <div className="relative w-[50%] md:w-[40%] mt-5 sm:mt-0">
+                  <Input
+                    label="Quemado"
+                    type="text"
+                    variant={"underlined"}
+                    {...register("serialNumber", { required: true })}
+                  />
+                  {errors.serialNumber && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="mt-8">
+              <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
+                Marca y Banda Requerida
+              </h2>
+            </div>
+            <div className="w-[100%] pt-6 text-xl">
+              <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
+                <div className="relative w-[60%] md:w-[40%]">
+                  <Autocomplete
+                    className="shadow-md rounded-xl "
+                    defaultItems={brandOfTire}
+                    label="Marcas"
+                    listboxProps={{
+                      emptyContent: "Marca no encontrada",
+                    }}
+                    {...register("brand", {
+                      required: "Debe seleccionar una marca.",
+                    })}
+                  >
+                    {(item) => (
+                      <AutocompleteItem key={item.value} value={item.value}>
+                        {item.label}
+                      </AutocompleteItem>
+                    )}
+                  </Autocomplete>
+                  {errors.brand && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>
+                <div className="relative w-[60%] md:w-[40%] mt-5 sm:mt-0">
                   <Select
                     className="shadow-md rounded-xl "
                     items={bandContinental}
-                    label="banda requerida"
-                    placeholder="Banda requerida..."
+                    label="Banda Requerida"
                     {...register("requiredBand", {
                       required: "Debe seleccionar una banda.",
                     })}
@@ -322,52 +639,34 @@ function AddTireToWO() {
           <div>
             <div className="mt-8">
               <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
-                Medida, Marca y Modelo
+                Medida y Modelo
               </h2>
-              <p className="text-gray-600 font-medium">
-                Complete la marca de la llanta, la medida del casco y el modelo.
-              </p>
             </div>
-            <div className="w-[100%] pt-8 text-xl">
+            <div className="w-[100%] pt-6 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative w-[50%] md:w-[40%]">
-                  <Select
+                <div className="relative w-[60%] md:w-[40%]">
+                  <Autocomplete
                     className="shadow-md rounded-xl"
-                    items={hullMeasurements}
-                    label="Medidas del casco"
-                    placeholder="Medidas..."
+                    items={helmetMeasurements}
+                    label="Medidas"
                     {...register("helmetMeasurement", {
-                      required: "Debe seleccionar un Rol.",
+                      required: "Debe seleccionar una medida.",
                     })}
                   >
-                    {hullMeasurements.map((measurement) => (
-                      <SelectItem
-                        key={measurement.value}
-                        value={measurement.value}
-                      >
-                        {measurement.label}
-                      </SelectItem>
-                    ))}
-                  </Select>
+                    {(item) => (
+                      <AutocompleteItem key={item.value} value={item.value}>
+                        {item.label}
+                      </AutocompleteItem>
+                    )}
+                  </Autocomplete>
                   {errors.helmetMeasurement && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
                   )}
                 </div>
-                <div className="relative md:w-1/4 w-auto mt-5 sm:mt-0">
-                  <Input
-                    label="Marca"
-                    variant={"underlined"}
-                    {...register("brand", { required: true })}
-                  />
-                  {errors.brand && (
-                    <p className="text-red-500 text-xs">
-                      Este campo es requerido
-                    </p>
-                  )}
-                </div>
-                <div className="relative md:w-1/4 w-auto mt-5 sm:mt-0">
+
+                <div className="relative w-[50%] md:w-[40%] mt-5 sm:mt-0">
                   <Input
                     label="Modelo"
                     variant={"underlined"}
@@ -382,6 +681,36 @@ function AddTireToWO() {
               </div>
             </div>
           </div>
+
+          <div>
+            <div className="mt-8">
+              <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
+                Milimetraje
+              </h2>
+            </div>
+            <div className="w-[100%] pt-6 text-xl">
+              <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
+                <div className="relative w-[60%] md:w-[40%]">
+                  <Input
+                    items={helmetMeasurements}
+                    label="Milimetraje"
+                    variant={"underlined"}
+                    {...register("millimeterFootage", {
+                      required: "Debe seleccionar un milimetraje.",
+                    })}
+                  />
+                  {errors.helmetMeasurement && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+
           <div className="flex flex-col sm:flex-row justify-end mt-5">
             <button
               className="bg-buttonSecondary hover:bg-buttonSecondaryHover text-white font-medium py-2 px-5 rounded-md shadow-md"

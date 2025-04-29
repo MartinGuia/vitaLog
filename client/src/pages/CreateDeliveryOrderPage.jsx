@@ -4,63 +4,35 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { useClient } from "../context/ClientContext";
 import { useDeliveryOrder } from "../context/DeliveryOrderContext";
-import { Input } from "@heroui/react";
+import { Autocomplete, AutocompleteItem } from "@heroui/react";
 
 function CreateDeliveryOrderPage() {
   const {
-    register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm();
   const { errors: registerErrors } = useAuth();
   const navigate = useNavigate();
   const { openDeliveryOrder } = useDeliveryOrder();
   const { getClients, allClients } = useClient();
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredClients, setFilteredClients] = useState([]);
-  const [showDropdown, setShowDropdown] = useState(false);
-  const dropdownRef = useRef(null); // Referencia para cerrar dropdown
+  const [selectedClientId, setSelectedClientId] = useState(null);
 
   useEffect(() => {
     getClients(); // Cargar clientes
   }, []);
 
-  useEffect(() => {
-    if (searchQuery.trim() === "") {
-      setFilteredClients([]);
-      setShowDropdown(false);
-    } else {
-      const results = allClients.filter((client) =>
-        client.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredClients(results);
-      setShowDropdown(results.length > 0);
-    }
-  }, [searchQuery, allClients]);
-
-  // Detectar clics fuera del dropdown
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleSelectClient = (client) => {
-    setSearchQuery(client.name); // Mostrar el nombre en el input
-    setValue("client", client._id); // Guardar el ID del cliente
-    setShowDropdown(false);
-  };
-
   const onSubmit = handleSubmit((values) => {
-    openDeliveryOrder(values);
+    if (!selectedClientId) {
+      alert("Debe seleccionar un cliente.");
+      return;
+    }
+
+    const formData = {
+      ...values,
+      client: selectedClientId, // lo agregas aquí manualmente
+    };
+
+    openDeliveryOrder(formData);
     navigate("/add-tires");
   });
 
@@ -68,7 +40,7 @@ function CreateDeliveryOrderPage() {
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
       <div className="text-center my-8">
         <h1 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
-          Crear Orden de Entrega
+          Crear Nota de Entrega
         </h1>
         {registerErrors.length > 0 && (
           <div className="flex top-10 absolute w-full">
@@ -87,54 +59,28 @@ function CreateDeliveryOrderPage() {
       <form onSubmit={onSubmit}>
         <div className="p-4 w-full">
           <div className="mt-10">
-            <h1 className="font-bold text-2xl md:text-3xl">Orden de entrega</h1>
-            <p>Seleccione el cliente para la orden de entrega.</p>
+            <h1 className="font-bold text-2xl md:text-3xl">Nota de Entrega</h1>
+            <p>Seleccione el cliente para la nota de entrega.</p>
           </div>
 
-          {/* Buscador de clientes con lista de selección */}
-          <div
-            className="relative w-full lg:w-[30%] mx-auto mt-8"
-            ref={dropdownRef}
-          >
+          <div className="abso w-full lg:w-[30%] mx-auto mt-8">
             <label className="block mb-2 text-sm font-medium">Cliente</label>
 
-            {/* Input de búsqueda */}
-            <Input
-              type="text"
-              label="Buscar cliente..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => setShowDropdown(true)}
-            />
-
-            {/* Dropdown de clientes */}
-            {showDropdown && (
-              <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg shadow-md mt-1 max-h-40 overflow-y-auto">
-                {filteredClients.length > 0 ? (
-                  filteredClients.map((client) => (
-                    <li
-                      key={client._id}
-                      onClick={() => handleSelectClient(client)}
-                      className="p-2 hover:bg-gray-200 cursor-pointer"
-                    >
-                      {client.name}
-                    </li>
-                  ))
-                ) : (
-                  <li className="p-2 text-gray-500">
-                    No se encontraron clientes
-                  </li>
-                )}
-              </ul>
-            )}
-
-            {/* Campo oculto para almacenar el ID del cliente */}
-            <input
-              type="hidden"
-              {...register("client", {
-                required: "Debe seleccionar un cliente.",
-              })}
-            />
+            <Autocomplete
+              className="shadow-md rounded-xl "
+              defaultItems={allClients}
+              label="Selecciona un cliente"
+              listboxProps={{
+                emptyContent: "Cliente no encontrado",
+              }}
+              onSelectionChange={(key) => setSelectedClientId(key)} // aquí guardas el _id
+            >
+              {(item) => (
+                <AutocompleteItem key={item._id} value={item._id}>
+                  {item.name}
+                </AutocompleteItem>
+              )}
+            </Autocomplete>
 
             {errors.client && (
               <p className="text-red-500 text-base">{errors.client.message}</p>

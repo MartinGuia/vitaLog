@@ -15,8 +15,12 @@ export const deleteTireRequest = (id) => axios.delete(`/tires/${id}`);
 
 export const updateTireRequest = (id, tire) => axios.put(`/tire/${id}`, tire);
 
-export const updateFinalTireRequest = (id, tire) =>
+export const updateProductionTireRequest = (id, tire) =>
   axios.put(`/editTire/${id}`, tire);
 
 export const getTireByBarcodeRequest = (barCode) =>
   axios.post("/tireBarcode", { barCode });
+
+export const quoteTiresRequest = (value) => axios.put("/quoteTires", value);
+
+export const getQuoteTiresRequest = () => axios.get("/quoteTires");

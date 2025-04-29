@@ -2,8 +2,12 @@ import { useForm } from "react-hook-form";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useTire } from "../context/TireContext";
 import { StepBack } from "lucide-react";
-import { Input, Select, SelectItem } from "@heroui/react";
+import {
+  Autocomplete,
+  AutocompleteItem,
+} from "@heroui/react";
 import React, { useState, useEffect } from "react";
+import  PrintLabelComponent  from "../components/ui/PrintLabelComponent";
 
 function EditFinalPage() {
   const {
@@ -12,7 +16,7 @@ function EditFinalPage() {
     setValue,
     // reset,
   } = useForm();
-  const { updateFinalTire, getTire, errors: tireErrors } = useTire();
+  const { updateProductionTire, getTire } = useTire();
   const params = useParams();
   const navigate = useNavigate();
   const [workOrderNumber, setWorkOrderNumber] = useState();
@@ -26,7 +30,7 @@ function EditFinalPage() {
     );
 
     try {
-      await updateFinalTire(params.id, updatedValues);
+      await updateProductionTire(params.id, updatedValues);
       // navigate("/productionFinal");
       alert("Registro actualizado exitosamente");
     } catch (error) {
@@ -58,11 +62,6 @@ function EditFinalPage() {
     }
     loadTire();
   }, [params.id, getTire]);
-
-  const statusOfTire = [
-    { value: "Pasa", label: "Pasa" },
-    { value: "Rechazo", label: "Rechazo" },
-  ];
 
   const rejections = [
     {
@@ -278,11 +277,25 @@ function EditFinalPage() {
   ];
 
   const bandContinental = [
-    { value: "HT3", label: "HT3" },
-    { value: "HDL", label: "HDL" },
-    { value: "HSC", label: "HSC" },
-    { value: "HSR", label: "HSR" },
-    { value: "HTL", label: "HTL" },
+    { value: "HDL - 225", label: "HDL - 225" },
+    { value: "HDL - 210", label: "HDL - 210" },
+    { value: "HDL - 215", label: "HDL - 215" },
+    { value: "HDL - 235", label: "HDL - 235" },
+    { value: "HDL - 245", label: "HDL - 245" },
+    { value: "HT3 - 210", label: "HT3 - 210" },
+    { value: "HT3 - 220", label: "HT3 - 220" },
+    { value: "HT3 - 230", label: "HT3 - 230" },
+    { value: "HT3 - 240", label: "HT3 - 240" },
+    { value: "HSC - 215", label: "HSC - 215" },
+    { value: "HSC - 220", label: "HSC - 220" },
+    { value: "HSC - 225", label: "HSC - 225" },
+    { value: "HSC - 230", label: "HSC - 230" },
+    { value: "HSC - 235", label: "HSC - 235" },
+    { value: "HSC - 245", label: "HSC - 245" },
+    { value: "HSR - 195", label: "HSR - 195" },
+    { value: "HSR - 180", label: "HSR - 180" },
+    { value: "HTL - 230", label: "HTL - 230" },
+    { value: "HTL - 260", label: "HTL - 260" },
   ];
 
   const bandBandag = [
@@ -543,58 +556,66 @@ function EditFinalPage() {
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
                 <div className="relative w-[90%] sm:w-[50%] ">
                   <div className="relative w-full">
-                    <Select
+                    <Autocomplete
                       className="shadow-md rounded-xl "
-                      items={rejections}
-                      label="Rechazo"
-                      placeholder="Selecciona la razón de rechazo..."
-                      {...register("rejection", {
-                        required: false,
-                      })}
+                      defaultItems={rejections}
+                      label="Rechazos"
+                      placeholder="Selecciona un rechazo"
+                      listboxProps={{
+                        emptyContent: "Rechazo no encontrado",
+                      }}
+                      {...register("rejection", { required: false })}
                     >
-                      {rejections.map((rejection) => (
-                        <SelectItem
+                      {(rejection) => (
+                        <AutocompleteItem
                           key={rejection.value}
                           value={rejection.value}
                         >
                           {rejection.label}
-                        </SelectItem>
-                      ))}
-                    </Select>
+                        </AutocompleteItem>
+                      )}
+                    </Autocomplete>
                   </div>
                 </div>
                 <div className="relative w-[90%] sm:w-[40%] mt-10 sm:mt-0">
-                  <Select
+                  <Autocomplete
                     className="shadow-md rounded-xl "
+                    defaultItems={bandContinental}
                     label="Banda continental"
-                    items={bandContinental}
-                    placeholder="Selecciona la banda usada..."
-                    {...register("appliedBand", {
-                      required: false,
-                    })}
+                    placeholder="Selecciona una banda"
+                    listboxProps={{
+                      emptyContent: "Banda no encontrada",
+                    }}
+                    {...register("appliedBand", { required: false })}
                   >
-                    {bandContinental.map((band) => (
-                      <SelectItem key={band.value} value={band.value}>
-                        {band.label}
-                      </SelectItem>
-                    ))}
-                  </Select>
-
-                  <Select
+                    {(bandConti) => (
+                      <AutocompleteItem
+                        key={bandConti.value}
+                        value={bandConti.value}
+                      >
+                        {bandConti.label}
+                      </AutocompleteItem>
+                    )}
+                  </Autocomplete>
+                  <Autocomplete
                     className="shadow-md rounded-xl mt-10"
-                    label="Banda Bandag"
-                    items={bandBandag}
-                    placeholder="Selecciona la banda usada..."
-                    {...register("appliedBandBandag", {
-                      required: false,
-                    })}
+                    defaultItems={bandBandag}
+                    label="Banda bandag"
+                    placeholder="Selecciona una banda"
+                    listboxProps={{
+                      emptyContent: "Banda no encontrada",
+                    }}
+                    {...register("appliedBandBandag", { required: false })}
                   >
-                    {bandBandag.map((bandB) => (
-                      <SelectItem key={bandB.value} value={bandB.value}>
+                    {(bandB) => (
+                      <AutocompleteItem
+                        key={bandB.value}
+                        value={bandB.value}
+                      >
                         {bandB.label}
-                      </SelectItem>
-                    ))}
-                  </Select>
+                      </AutocompleteItem>
+                    )}
+                  </Autocomplete>
                 </div>
               </div>
             </div>
@@ -607,22 +628,23 @@ function EditFinalPage() {
                 className="text-white font-medium bg-buttonSecondary py-3 px-9 mr-4 rounded-md shadow-md hover:bg-buttonSecondaryHover duration-500 hover:duration-500"
                 onClick={() => handleStatusChange("Pasa")}
               >
-                Pasa
+                PASA
               </button>
               <button
                 type="button"
                 className="text-white font-medium bg-buttonTertiary py-3 px-9 rounded-md shadow-md hover:bg-buttonTertiaryHover"
                 onClick={() => handleStatusChange("Rechazo")}
               >
-                Rechazo
+                RECHAZO
               </button>
             </div>
             <div>
-              <Link to={`/printlabel/${params.id}`}>
+            <PrintLabelComponent tire={tireData} />
+              {/* <Link to={`/printlabel/${params.id}`}>
                 <button className="bg-buttonPrimary hover:bg-buttonPrimaryHover text-black font-bold py-3 px-9 rounded-md shadow-md duration-500 hover:duration-500">
                   Imprimir Etiqueta
                 </button>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </form>
