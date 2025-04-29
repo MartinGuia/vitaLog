@@ -6,6 +6,8 @@ import { UserRoundPen, StepBack, Check, X } from "lucide-react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import WorkOrderPDF from "../components/PDF/WorkOrderPDF.jsx";
 import { useAuth } from "../context/AuthContext";
+import { Checkbox } from "@heroui/react";
+import { useTire } from "../context/TireContext.jsx";
 
 function ViewWorkOrder() {
   const { getWorkOrderById } = useWorkOrder();
@@ -28,6 +30,8 @@ function ViewWorkOrder() {
   const [roleAdminP, setRoleAdminP] = useState();
   const { getRoles, user } = useAuth();
   const [workOrdersByUser, setWorkOrdersByUser] = useState();
+  const { quoteTires } = useTire();
+  const [selectedTireIds, setSelectedTireIds] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -185,10 +189,16 @@ function ViewWorkOrder() {
                       <th className="py-3 px-6">Código de Barras</th>
                       <th className="py-3 px-6">Medida de Casco</th>
                       <th className="py-3 px-6">Marca</th>
+                      <th className="py-3 px-6">Modelo</th>
                       <th className="py-3 px-6">Banda Requerida</th>
+                      <th className="py-3 px-6">Quemado</th>
                       <th className="py-3 px-6">DOT</th>
                       <th className="py-3 px-6">Estatus</th>
-                      <th className="py-3 px-6"></th>
+                      <th className="py-3 px-6">
+                        {user.role === roleMaster || user.role === roleAdminP
+                          ? null
+                          : "Cotizar"}
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="text-center">
@@ -199,7 +209,9 @@ function ViewWorkOrder() {
                         <td className="py-3 px-6">{tire.barCode}</td>
                         <td className="py-3 px-6">{tire.helmetMeasurement}</td>
                         <td className="py-3 px-6">{tire.brand}</td>
+                        <td className="py-3 px-6">{tire.modelTire}</td>
                         <td className="py-3 px-6">{tire.requiredBand}</td>
+                        <td className="py-3 px-6">{tire.serialNumber}</td>
                         <td className="py-3 px-6">{tire.antiquityDot}</td>
                         <td className=" text-center">
                           {tire.status === "Rechazo" ? (
@@ -214,7 +226,7 @@ function ViewWorkOrder() {
                             "Falta Inspección"
                           )}
                         </td>
-                        <td className="sm:flex py-2 px-3 justify-between">
+                        <td className="py-3 px-6">
                           {user.role === roleMaster ||
                           user.role === roleAdminP ? (
                             <Link to={`/tire/${tire._id}`}>
@@ -222,12 +234,27 @@ function ViewWorkOrder() {
                                 <UserRoundPen />
                               </button>
                             </Link>
-                          ) : null}
-                          {/* <Link to={`/tire/${tire._id}`}>
-                            <button className="text-blue-600 hover:text-blue-800 ">
-                              <UserRoundPen />
-                            </button>
-                          </Link> */}
+                          ) : (
+                            <Checkbox
+                              color="warning"
+                              defaultSelected={tire.quoteTires === true}
+                              onChange={(e) => {
+                                const checked = e.target.checked;
+                                const tireId = tire._id;
+
+                                if (checked) {
+                                  setSelectedTireIds((prev) => [
+                                    ...prev,
+                                    tireId,
+                                  ]);
+                                } else {
+                                  setSelectedTireIds((prev) =>
+                                    prev.filter((id) => id !== tireId)
+                                  );
+                                }
+                              }}
+                            />
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -281,7 +308,7 @@ function ViewWorkOrder() {
               </div>
             </div>
           </section>
-          <div>
+          <div className="mb-10">
             {/* Tu diseño actual */}
             {workOrder && (
               <PDFDownloadLink
@@ -302,6 +329,16 @@ function ViewWorkOrder() {
               </PDFDownloadLink>
             )}
           </div>
+          {selectedTireIds.length > 0 && (
+            <div className="mt-4">
+              <button
+                onClick={() => quoteTires({ tireIds: selectedTireIds })}
+                className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
+              >
+                Enviar a cotización
+              </button>
+            </div>
+          )}
         </main>
       </div>
     </>

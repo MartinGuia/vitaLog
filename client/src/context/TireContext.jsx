@@ -6,9 +6,11 @@ import {
   getTireRequest,
   updateTireRequest,
   getTireByBarcodeRequest,
-  updateFinalTireRequest,
+  updateProductionTireRequest,
   getTiresByInspectionRequest,
-  getTiresByHelmetDesignRequest
+  getTiresByHelmetDesignRequest,
+  quoteTiresRequest,
+  getQuoteTiresRequest,
 } from "../api/tires.js";
 import { printLabelRequest } from "../api/print.js";
 
@@ -29,17 +31,17 @@ export function TiresProvider({ children }) {
   const getTires = async () => {
     try {
       const res = await getTiresRequest();
-      console.log(res);
+      // console.log(res);
       setTires(res.data);
     } catch (error) {
       console.error(error);
     }
   };
- 
+
   const getTiresByHelmetDesign = async () => {
     try {
       const res = await getTiresByHelmetDesignRequest();
-      console.log(res);
+      // console.log(res);
       setTires(res.data);
     } catch (error) {
       console.error(error);
@@ -49,7 +51,7 @@ export function TiresProvider({ children }) {
   const getTiresByInspection = async () => {
     try {
       const res = await getTiresByInspectionRequest();
-      console.log(res);
+      // console.log(res);
       setTires(res.data);
     } catch (error) {
       console.error(error);
@@ -59,8 +61,8 @@ export function TiresProvider({ children }) {
   const createTire = async (workOrders) => {
     try {
       const res = await createTireRequest(workOrders);
-      console.log(res);
-      return res.data
+      // console.log(res);
+      return res.data;
     } catch (error) {
       console.log(error);
       setErrors(error.response.data);
@@ -70,7 +72,7 @@ export function TiresProvider({ children }) {
   const getTire = async (id) => {
     try {
       const res = await getTireRequest(id);
-      console.log(res);
+      // console.log(res);
       return res.data;
     } catch (error) {
       console.error(error);
@@ -85,9 +87,9 @@ export function TiresProvider({ children }) {
     }
   };
 
-  const updateFinalTire = async (id, tire) => {
+  const updateProductionTire = async (id, tire) => {
     try {
-      await updateFinalTireRequest(id, tire);
+      await updateProductionTireRequest(id, tire);
     } catch (error) {
       console.error(error);
     }
@@ -97,7 +99,7 @@ export function TiresProvider({ children }) {
   const getTireByBarcode = async (barCode) => {
     try {
       const res = await getTireByBarcodeRequest(barCode);
-      console.log("Registro encontrado:", res.data);
+      // console.log("Registro encontrado:", res.data);
       return res.data; // Devuelve los datos de la llanta
     } catch (error) {
       console.error("Error al buscar la llanta por código de barras:", error);
@@ -112,6 +114,21 @@ export function TiresProvider({ children }) {
     } catch (error) {
       console.error("Error al imprimir:", error);
       alert("Hubo un error al imprimir");
+    }
+  };
+
+  const quoteTires = (values) => {
+    quoteTiresRequest(values);
+    console.log("Llantas enviadas a cotización");
+  };
+
+  const getQuoteTires = async () => {
+    try {
+      const res = await getQuoteTiresRequest();
+      console.log(res);
+      setTires(res.data);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -132,13 +149,15 @@ export function TiresProvider({ children }) {
         updateTire,
         getTiresByInspection,
         printLabel,
-        updateFinalTire,
+        updateProductionTire,
         getTireByBarcode,
         tires,
         getTires,
         getTire,
         createTire,
         getTiresByHelmetDesign,
+        quoteTires,
+        getQuoteTires,
         errors,
       }}
     >

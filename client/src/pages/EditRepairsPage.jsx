@@ -2,12 +2,16 @@ import { useForm } from "react-hook-form";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useTire } from "../context/TireContext";
 import { StepBack } from "lucide-react";
-import { Select, SelectItem, Input } from "@heroui/react";
+import {
+  Input,
+  Autocomplete,
+  AutocompleteItem,
+} from "@heroui/react";
 import React, { useState, useEffect } from "react";
 
 function EditRepairsPage() {
   const { register, handleSubmit, setValue } = useForm();
-  const { updateTire, getTire, errors: tireErrors } = useTire();
+  const { updateProductionTire, getTire, errors: tireErrors } = useTire();
   const params = useParams();
   const navigate = useNavigate();
   const [tireData, setTireData] = useState({});
@@ -280,8 +284,8 @@ function EditRepairsPage() {
     );
 
     try {
-      await updateTire(params.id, updatedValues);
-      // navigate("/productionRepairs");
+      await updateProductionTire(params.id, updatedValues);
+      navigate("/productionRepairs");
       alert("Registro actualizado exitosamente");
     } catch (error) {
       console.error(error);
@@ -378,17 +382,22 @@ function EditRepairsPage() {
             <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
               <div className=" w-[80%] sm:w-[40%]">
                 <div className="relative w-full">
-                  <Select
-                    className="shadow-md rounded-xl"
-                    items={repairs}
+                  <Autocomplete
+                    className="shadow-md rounded-xl "
+                    defaultItems={repairs}
                     label="Reparaciones"
                     placeholder="Selecciona un parche"
+                    listboxProps={{
+                      emptyContent: "Parche no encontrada",
+                    }}
                     {...register("patch", { required: false })}
                   >
                     {(repair) => (
-                      <SelectItem key={repair.value}>{repair.label}</SelectItem>
+                      <AutocompleteItem key={repair.value} value={repair.value}>
+                        {repair.label}
+                      </AutocompleteItem>
                     )}
-                  </Select>
+                  </Autocomplete>
                 </div>
               </div>
               <div className="relative md:w-5/12 w-auto">
@@ -402,17 +411,22 @@ function EditRepairsPage() {
 
             <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between mt-6">
               <div className="w-[80%] sm:w-[40%]">
-                <Select
-                  className="shadow-md rounded-xl"
-                  items={repairs}
+                <Autocomplete
+                  className="shadow-md rounded-xl "
+                  defaultItems={repairs}
                   label="Reparaciones"
                   placeholder="Selecciona un parche"
+                  listboxProps={{
+                    emptyContent: "Parche no encontrada",
+                  }}
                   {...register("patch2", { required: false })}
                 >
                   {(repair) => (
-                    <SelectItem key={repair.value}>{repair.label}</SelectItem>
+                    <AutocompleteItem key={repair.value} value={repair.value}>
+                      {repair.label}
+                    </AutocompleteItem>
                   )}
-                </Select>
+                </Autocomplete>
               </div>
               <div className="relative md:w-5/12 w-auto">
                 <Input
@@ -425,17 +439,22 @@ function EditRepairsPage() {
 
             <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between mt-6">
               <div className="relative w-[80%] sm:w-[40%] ">
-                <Select
-                  className="shadow-md rounded-xl"
-                  items={repairs}
+                <Autocomplete
+                  className="shadow-md rounded-xl "
+                  defaultItems={repairs}
                   label="Reparaciones"
                   placeholder="Selecciona un parche"
+                  listboxProps={{
+                    emptyContent: "Parche no encontrada",
+                  }}
                   {...register("patch3", { required: false })}
                 >
                   {(repair) => (
-                    <SelectItem key={repair.value}>{repair.label}</SelectItem>
+                    <AutocompleteItem key={repair.value} value={repair.value}>
+                      {repair.label}
+                    </AutocompleteItem>
                   )}
-                </Select>
+                </Autocomplete>
               </div>
               <div className="relative md:w-5/12 w-auto ">
                 <Input
@@ -448,17 +467,22 @@ function EditRepairsPage() {
 
             <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between mt-6">
               <div className="relative w-[80%] sm:w-[40%] ">
-                <Select
-                  className="shadow-md rounded-xl"
-                  items={repairs}
+                <Autocomplete
+                  className="shadow-md rounded-xl "
+                  defaultItems={repairs}
                   label="Reparaciones"
                   placeholder="Selecciona un parche"
+                  listboxProps={{
+                    emptyContent: "Parche no encontrada",
+                  }}
                   {...register("patch4", { required: false })}
                 >
                   {(repair) => (
-                    <SelectItem key={repair.value}>{repair.label}</SelectItem>
+                    <AutocompleteItem key={repair.value} value={repair.value}>
+                      {repair.label}
+                    </AutocompleteItem>
                   )}
-                </Select>
+                </Autocomplete>
               </div>
               <div className="relative md:w-5/12 w-auto sm:mt-0">
                 <Input
@@ -489,21 +513,22 @@ function EditRepairsPage() {
             </button>
           </div>
           <div className="w-[41.5%]">
-            <Select
+            <Autocomplete
               className="shadow-md rounded-xl "
-              items={rejections}
-              label="Rechazo"
-              placeholder="Selecciona la razón de rechazo..."
-              {...register("rejection", {
-                required: false,
-              })}
+              defaultItems={rejections}
+              label="Rechazos"
+              placeholder="Selecciona un rechazo"
+              listboxProps={{
+                emptyContent: "Rechazo no encontrado",
+              }}
+              {...register("rejection", { required: false })}
             >
-              {rejections.map((rejection) => (
-                <SelectItem key={rejection.value} value={rejection.value}>
+              {(rejection) => (
+                <AutocompleteItem key={rejection.value} value={rejection.value}>
                   {rejection.label}
-                </SelectItem>
-              ))}
-            </Select>
+                </AutocompleteItem>
+              )}
+            </Autocomplete>
           </div>
         </div>
       </form>
