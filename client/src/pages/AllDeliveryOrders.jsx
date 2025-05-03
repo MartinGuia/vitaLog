@@ -102,13 +102,17 @@ function AllDeliveryOrders() {
               <table className="min-w-full bg-white border border-gray-200 rounded-lg">
                 <thead>
                   <tr className="bg-gray-100 text-gray-600 text-sm text-left">
-                    <th className="py-2 px-6">#</th>
-                    <th className="px-6">Nombre</th>
-                    <th className="px-6">Registros</th>
-                    <th className="px-6">Cliente</th>
-                    <th className="px-6">Dirección</th>
-                    <th className="px-6">Recolección</th>
-                    <th className="px-6">Acciones</th>
+                  <th className="py-2 px-6">Código De cliente</th>
+                    <th className="py-2 px-6">Nombre de Cuenta</th>
+                    <th className="py-2 px-6">RFC</th>
+                    <th className="py-2 px-6">Número Interior</th>
+                    <th className="py-2 px-6">Número Exterior</th>
+                    <th className="py-2 px-6">Colonia</th>
+                    <th className="py-2 px-6">Código Postal</th>
+                    <th className="py-2 px-6">Ciudad</th>
+                    <th className="py-2 px-6">Municipio</th>
+                    <th className="py-2 px-6">Estado</th>
+                    <th className="py-2 px-6">Email</th>
                   </tr>
                 </thead>
                 <tbody>

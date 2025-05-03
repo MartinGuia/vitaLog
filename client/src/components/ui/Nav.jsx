@@ -5,13 +5,11 @@ import {
   Users,
   NotebookPen,
   UserRoundCog,
-  Settings,
-  Flag,
   BookMarked,
-  Search,
   PackageCheck,
   FileInput,
   ChartColumnBig,
+  ReceiptText
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -161,8 +159,8 @@ function Nav({ children }) {
     },
     {
       path: `/quoteTires`,
-      icon: <BookMarked size={20} color="white" />,
-      text: "Ordenes de Trabajo",
+      icon: <ReceiptText size={20} color="white" />,
+      text: "Cotizar",
       allowedRoles: [
         roleIds.master, roleIds.administradorF,
       ], 

@@ -1,26 +1,46 @@
 import Client from "../models/client.model.js";
 
 export const registerClient = async (req, res) => {
-  const { name, alias, address1, city, region, zipCode, country } = req.body;
+  const {
+    clientCode,
+    companyName,
+    Rfc,
+    interiorNumber,
+    externalNumber,
+    street,
+    suburb,
+    zipCode,
+    city,
+    municipality,
+    state,
+    eMail,
+  } = req.body;
 
   try {
-    const clientFound = await Client.findOne({ name });
+    const clientFound = await Client.findOne({ clientCode });
     if (clientFound)
       return res.status(409).json({ message: "Client already exists" });
 
     const newClient = new Client({
-      name,
-      alias,
-      address1,
-      city,
-      region,
+      clientCode,
+      companyName,
+      Rfc,
+      interiorNumber,
+      externalNumber,
+      street,
+      suburb,
       zipCode,
-      country,
+      city,
+      municipality,
+      state,
+      eMail,
     });
 
     const clientSaved = await newClient.save();
 
-    return res.status(200).json({ message: "El cliente se creo correctamente"})
+    return res
+      .status(200)
+      .json({ message: "El cliente se creo correctamente" });
     // res.json({
     //   id: clientSaved._id,
     //   name: clientSaved.name,
