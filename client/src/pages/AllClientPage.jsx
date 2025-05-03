@@ -1,4 +1,4 @@
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, Menu} from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useClient } from "../context/ClientContext";
@@ -69,7 +69,7 @@ function AllClientPage() {
   };
 
   return (
-    <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
+    <div className="px-4 lg:px-14 mx-auto select-none">
       <div className="text-center my-8">
         <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
           Cuentas Locales
@@ -88,7 +88,7 @@ function AllClientPage() {
       </div>
 
       <section>
-        <div className="p-4 w-full">
+        <div className="mt-5 w-full">
           {allClients.length === 0 ? (
             <div className="text-center text-gray-600 text-lg">
               No hay clientes registrados
@@ -98,12 +98,21 @@ function AllClientPage() {
               <table className="min-w-full bg-white border border-gray-200 rounded-lg">
                 <thead>
                   <tr className="bg-gray-100 text-gray-600 text-xs text-left">
+                    <th className="py-2 px-6">Código De cliente</th>
                     <th className="py-2 px-6">Nombre de Cuenta</th>
-                    <th className="px-6">Cuenta (Nombre corto)</th>
-                    <th className="px-6">Dirección</th>
-                    <th className="px-6">Ciudad</th>
-                    <th className="px-6">Region</th>
-                    <th className="px-6">Codigo Postal</th>
+                    <th className="py-2 px-6">RFC</th>
+
+                    <th className="py-2 px-6">Número Interior</th>
+                    <th className="py-2 px-6">Número Exterior</th>
+                    <th className="py-2 px-6">Código Postal</th>
+                    <th className="py-2 px-6">Calle</th>
+                    
+                    <th className="py-2 px-6">Colonia</th>
+                    <th className="py-2 px-6">Ciudad</th>
+                    <th className="py-2 px-6">Municipio</th>
+                    <th className="py-2 px-6">Estado</th>
+                    
+                    <th className="py-2 px-6">Email</th>
                     <th className="px-6"></th>
                   </tr>
                 </thead>
@@ -113,16 +122,22 @@ function AllClientPage() {
                       key={index}
                       className="border-t border-gray-200 text-xs"
                     >
-                      <td className="px-6">{client.name}</td>
-                      <td className="px-6">{client.alias}</td>
-                      <td className="px-6">{client.address1}</td>
-                      <td className="px-6">{client.city}</td>
-                      <td className="px-6">{client.region}</td>
+                      <td className="px-6">{client.clientCode}</td>
+                      <td className="px-6">{client.companyName}</td>
+                      <td className="px-6">{client.Rfc}</td>
+                      <td className="px-6">{client.interiorNumber}</td>
+                      <td className="px-6">{client.externalNumber}</td>
                       <td className="px-6">{client.zipCode}</td>
-                      <td className="py-2">
+                      <td className="px-6">{client.street}</td>
+                      <td className="px-6">{client.suburb}</td>
+                      <td className="px-6">{client.city}</td>
+                      <td className="px-6">{client.municipality}</td>
+                      <td className="px-6">{client.state}</td>
+                      <td className="px-6">{client.eMail}</td>
+                      <td className="py-1">
                         <Dropdown>
                           <DropdownTrigger className="shadow">
-                            <Button variant="bordered">Abrir Menú</Button>
+                            <Button variant="bordered"><Menu/></Button>
                           </DropdownTrigger>
                           <DropdownMenu aria-label="Acciones del Cliente">
                             <DropdownItem key="edit">
@@ -151,7 +166,7 @@ function AllClientPage() {
                 </tbody>
               </table>
               {allClients.length >= 10 && (
-                <div className="flex justify-between items-center mt-4">
+                <div className="flex justify-between items-center mt-4 ">
                   <div className="text-sm text-gray-600">
                     Página {currentPage} de {totalPages}
                   </div>
@@ -167,19 +182,33 @@ function AllClientPage() {
                     >
                       Anterior
                     </button>
-                    {Array.from({ length: totalPages }, (_, i) => (
-                      <button
-                        key={i + 1}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`px-4 py-2 rounded-lg border ${
-                          currentPage === i + 1
-                            ? "bg-blue-600 text-white"
-                            : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                        }`}
-                      >
-                        {i + 1}
-                      </button>
-                    ))}
+                    {(() => {
+                      const pageNumbers = [];
+                      let startPage = Math.max(1, currentPage - 2);
+                      let endPage = Math.min(totalPages, startPage + 4);
+
+                      if (endPage - startPage < 4) {
+                        startPage = Math.max(1, endPage - 4);
+                      }
+
+                      for (let i = startPage; i <= endPage; i++) {
+                        pageNumbers.push(i);
+                      }
+
+                      return pageNumbers.map((pageNum) => (
+                        <button
+                          key={pageNum}
+                          onClick={() => handlePageChange(pageNum)}
+                          className={`px-4 py-2 rounded-lg border ${
+                            currentPage === pageNum
+                              ? "bg-blue-600 text-white"
+                              : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      ));
+                    })()}
                     <button
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}
@@ -216,12 +245,6 @@ function AllClientPage() {
               value={confirmationName}
               onChange={(e) => setConfirmationName(e.target.value)}
             />
-            {/* <input
-              type="text"
-              value={confirmationName}
-              onChange={(e) => setConfirmationName(e.target.value)}
-              className="border border-gray-300 rounded-md px-2 py-1 mt-2 w-full"
-            /> */}
             <div className="flex justify-end space-x-4 mt-4">
               <button
                 onClick={() => {
