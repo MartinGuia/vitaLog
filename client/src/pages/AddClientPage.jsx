@@ -61,46 +61,65 @@ function AddClientPage() {
         <form onSubmit={onSubmit}>
           <div>
             <h2 className="text-lg md:text-2xl font-semibold mb-2 text-sky-900 mt-12">
-              Nombre y Alias
+              Nombre y datos
             </h2>
             <p className="text-gray-600 font-medium">
-              Complete el nombre de la cuenta.
+              Complete el nombre de la cuenta y datos fiscales.
             </p>
-            <div className="w-[100%] pt-8 text-xl">
-              <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative md:w-5/12 w-auto">
+
+            <div className="flex items-center flex-col pt-5 md:pt-2 sm:w-auto sm:flex-row sm:justify-between">
+              <div className="relative w-5/6 sm:w-5/12">
+                <Input
+                  label="Nombre del cliente"
+                  type="text"
+                  variant={"underlined"}
+                  {...register("companyName", { required: true })}
+                />
+                {/* <InputField
+                    label="Dirección 1"
+                    id="dirección1"
+                    {...register("address1", { required: true })}
+                  /> */}
+                {errors.companyName && (
+                  <p className="text-red-500 text-xs">
+                    Este campo es requerido
+                  </p>
+                )}
+              </div>
+              <div className="flex-col flex items-center w-[100%] sm:flex sm:w-[50%] sm:flex-row justify-between">
+                <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
                   <Input
-                    label="Nombre"
+                    label="Código del cliente"
                     type="text"
                     variant={"underlined"}
-                    {...register("name", { required: true })}
+                    {...register("clientCode", { required: true })}
                   />
                   {/* <InputField
-                    label="Nombre"
-                    id="nombre"
-                    {...register("name", { required: true })}
-                  /> */}
-                  {errors.name && (
+                      label="Ciudad"
+                      id="Ciudad"
+                      {...register("city", { required: true })}
+                    /> */}
+                  {errors.clientCode && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
                   )}
                 </div>
-                <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
+                <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
                   <Input
-                    label="Alias"
+                    label="RFC"
                     type="text"
                     variant={"underlined"}
-                    {...register("alias", { required: true })}
+                    {...register("Rfc", { required: true })}
                   />
                   {/* <InputField
-                    label="Alias"
-                    id="alias"
-                    {...register("alias", { required: true })}
-                  /> */}
-                  {errors.alias && (
+                      label="Región"
+                      id="Region"
+                      {...register("region", { required: true })}
+                    /> */}
+                  {errors.Rfc && (
                     <p className="text-red-500 text-xs">
-                      Este campo es requerido
+                      Este campo es opcional
                     </p>
                   )}
                 </div>
@@ -109,115 +128,208 @@ function AddClientPage() {
           </div>
           <div>
             <h2 className="text-lg md:text-2xl font-semibold mb-2 text-sky-900 mt-12">
-              Dirección y datos
+              Dirección 
             </h2>
             <p className="text-gray-600 font-medium">
-              Complete la dirección de la cuenta. Esta dirección se mostrará en
-              todas partes en el sistema al seleccionar la cuenta.
+              Complete los datos de dirección
             </p>
-            <div className="w-[100%] pt-8 text-xl">
-              <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative w-auto sm:w-5/12">
+            <div className="w-[100%] pt-5 md:pt-2 text-xl">
+              <div className="flex-col flex items-center sm:flex sm:w-[100%] sm:flex-row justify-between md:gap-16">
+                <div className="relative w-5/6 sm:w-5/12">
                   <Input
-                    label="Dirección"
+                    label="Número Interior"
                     type="text"
                     variant={"underlined"}
-                    {...register("address1", { required: true })}
+                    {...register("interiorNumber", { required: true })}
                   />
                   {/* <InputField
                     label="Dirección 1"
                     id="dirección1"
                     {...register("address1", { required: true })}
                   /> */}
-                  {errors.address1 && (
+                  {errors.interiorNumber && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
                   )}
                 </div>
-                <div className="flex-col flex items-center sm:flex sm:w-[50%] sm:flex-row justify-between">
-                  <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
-                    <Input
-                      label="Ciudad"
-                      type="text"
-                      variant={"underlined"}
-                      {...register("city", { required: true })}
-                    />
-                    {/* <InputField
+                <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
+                  <Input
+                    label="Número Externo"
+                    type="text"
+                    variant={"underlined"}
+                    {...register("externalNumber", { required: true })}
+                  />
+                  {/* <InputField
                       label="Ciudad"
                       id="Ciudad"
                       {...register("city", { required: true })}
                     /> */}
-                    {errors.city && (
-                      <p className="text-red-500 text-xs">
-                        Este campo es requerido
-                      </p>
-                    )}
-                  </div>
-                  <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
-                    <Input
-                      label="Región"
-                      type="text"
-                      variant={"underlined"}
-                      {...register("region", { required: true })}
-                    />
-                    {/* <InputField
+                  {errors.externalNumber && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>
+                <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
+                  <Input
+                    label="Código Postal"
+                    type="text"
+                    variant={"underlined"}
+                    {...register("zipCode", { required: true })}
+                  />
+                  {/* <InputField
                       label="Región"
                       id="Region"
                       {...register("region", { required: true })}
                     /> */}
-                    {errors.region && (
-                      <p className="text-red-500 text-xs">
-                        Este campo es opcional
-                      </p>
-                    )}
-                  </div>
+                  {errors.zipCode && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es opcional
+                    </p>
+                  )}
                 </div>
-              </div>
-
-              <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between mt-5">
-                <div className="flex-col flex items-center sm:flex sm:w-[50%] sm:flex-row justify-between">
-                  <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
-                    <Input
-                      label="Código Postal"
-                      type="text"
-                      variant={"underlined"}
-                      {...register("zipCode", { required: true })}
-                    />
-                    {/* <InputField
-                      label="Codigo Postal"
-                      id="CodigoPostal"
-                      {...register("zipCode", { required: true })}
+                <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
+                  <Input
+                    label="Calle"
+                    type="text"
+                    variant={"underlined"}
+                    {...register("street", { required: true })}
+                  />
+                  {/* <InputField
+                      label="Región"
+                      id="Region"
+                      {...register("region", { required: true })}
                     /> */}
-                    {errors.zipCode && (
-                      <p className="text-red-500 text-xs">
-                        Este campo es requerido
-                      </p>
-                    )}
-                  </div>
-                  <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
-                    <Input
-                      label="País"
-                      type="text"
-                      variant={"underlined"}
-                      {...register("country", { required: true })}
-                    />
-                    {/* <InputField
-                      label="País"
-                      id="País"
-                      {...register("country", { required: true })}
-                    /> */}
-                    {errors.zipCode && (
-                      <p className="text-red-500 text-xs">
-                        Este campo es requerido
-                      </p>
-                    )}
-                  </div>
+                  {errors.street && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es opcional
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
           </div>
-          <div className="flex justify-end mt-14">
+          
+          <div>
+            <h2 className="text-lg md:text-2xl font-semibold mb-2 text-sky-900 mt-12">
+              Dirección 
+            </h2>
+            <p className="text-gray-600 font-medium">
+              Complete la dirección de la cuenta. Esta dirección se mostrará en
+              todas partes en el sistema al seleccionar la cuenta.
+            </p>
+            <div className="w-[100%] pt-5 md:pt-2 text-xl">
+              <div className="flex-col flex items-center sm:flex sm:w-[100%] sm:flex-row justify-between md:gap-16">
+                <div className="relative w-5/6 sm:w-5/12 ">
+                  <Input
+                    label="Colonia"
+                    type="text"
+                    variant={"underlined"}
+                    {...register("suburb", { required: true })}
+                  />
+                  {/* <InputField
+                    label="Dirección 1"
+                    id="dirección1"
+                    {...register("address1", { required: true })}
+                  /> */}
+                  {errors.suburb && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>
+                <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
+                  <Input
+                    label="Ciudad"
+                    type="text"
+                    variant={"underlined"}
+                    {...register("city", { required: true })}
+                  />
+                  {/* <InputField
+                      label="Ciudad"
+                      id="Ciudad"
+                      {...register("city", { required: true })}
+                    /> */}
+                  {errors.city && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>
+                <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
+                  <Input
+                    label="Municipio"
+                    type="text"
+                    variant={"underlined"}
+                    {...register("municipality", { required: true })}
+                  />
+                  {/* <InputField
+                      label="Región"
+                      id="Region"
+                      {...register("region", { required: true })}
+                    /> */}
+                  {errors.municipality && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es opcional
+                    </p>
+                  )}
+                </div>
+                <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
+                  <Input
+                    label="Estado"
+                    type="text"
+                    variant={"underlined"}
+                    {...register("state", { required: true })}
+                  />
+                  {/* <InputField
+                      label="Región"
+                      id="Region"
+                      {...register("region", { required: true })}
+                    /> */}
+                  {errors.state && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es opcional
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h2 className="text-lg md:text-2xl font-semibold mb-2 text-sky-900 mt-12">
+              Correo
+            </h2>
+            <p className="text-gray-600 font-medium">
+              Complete la dirección de correo electronica de la empresa
+            </p>
+            <div className="w-[100%] pt-5 md:pt-2 text-xl">
+              <div className="flex-col flex items-center sm:flex sm:w-[100%] sm:flex-row justify-between md:gap-16">
+                <div className="relative w-5/6 sm:w-5/12">
+                  <Input
+                    label="Correo"
+                    type="email"
+                    variant={"underlined"}
+                    {...register("eMail", { required: true })}
+                  />
+                  {/* <InputField
+                    label="Dirección 1"
+                    id="dirección1"
+                    {...register("address1", { required: true })}
+                  /> */}
+                  {errors.eMail && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>        
+              </div>
+            </div>
+          </div>
+
+
+          <div className="flex justify-end mt-10">
             <button
               className=" text-white font-medium bg-buttonSecondary py-3 px-8 rounded-md shadow-md hover:bg-buttonSecondaryHover duration-500 hover:duration-500 "
               type="submit"
