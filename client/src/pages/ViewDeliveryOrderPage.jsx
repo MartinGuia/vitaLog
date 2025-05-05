@@ -51,9 +51,9 @@ function ViewDeliveryOrderPage() {
             setLastName(deliveryOrder.createdBy.lastName);
             setDeliveryOrder(deliveryOrder);
             setDate(deliveryOrder.formattedCreatedAt);
-            setNameClient(deliveryOrder.client.name);
-            setClientAddress(deliveryOrder.client.address1);
-            setClientRegion(deliveryOrder.client.region);
+            setNameClient(deliveryOrder.client.companyName);
+            setClientAddress(deliveryOrder.client.street);
+            setClientRegion(deliveryOrder.client.state);
             setClientCity(deliveryOrder.client.city);
             setClientZipCode(deliveryOrder.client.zipCode);
           }
@@ -77,13 +77,6 @@ function ViewDeliveryOrderPage() {
 
           <h1 className="text-2xl md:text-4xl font-bold">Imprimir Orden De Entrega</h1>
         </div>
-        {/* <div>
-          <Link to={`/allDeliveryOrders`}>
-            <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
-              <StepBack color="white" />
-            </button>
-          </Link>
-        </div> */}
         <header className="w-full mt-3 flex justify-center">
           <div className=" w-full p-2 flex justify-between border-b-2 border-blue-600 ">
             <section className="">
@@ -177,13 +170,6 @@ function ViewDeliveryOrderPage() {
                           {tire.appliedBand || tire.appliedBandBandag || "-"}
                         </td>
                         <td className="py-3 px-6">{tire.antiquityDot}</td>
-                        {/* <td className="sm:flex py-2 px-3 justify-between">
-                              <Link to={`/tire/${tire._id}`}>
-                                <button className="text-blue-600 hover:text-blue-800 ">
-                                  <UserRoundPen />
-                                </button>
-                              </Link>
-                            </td> */}
                       </tr>
                     ))}
                   </tbody>

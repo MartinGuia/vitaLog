@@ -8,7 +8,6 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import * as images from "../../img";
-import { Check, X } from "lucide-react";
 
 const styles = StyleSheet.create({
   page: {
@@ -164,9 +163,9 @@ const WorkOrderPDF = ({ workOrder }) => {
           </View>
           <View>
             <Text style={styles.sectionContent}>Para:</Text>
-            <Text style={styles.textClient}>{workOrder.client.name}</Text>
-            <Text style={styles.textAddress}>{workOrder.client.address1}</Text>
-            <Text style={styles.textAddress}>{workOrder.client.region}</Text>
+            <Text style={styles.textClient}>{workOrder.client.companyName}</Text>
+            <Text style={styles.textAddress}>{workOrder.client.street}</Text>
+            <Text style={styles.textAddress}>{workOrder.client.state}</Text>
             <Text style={styles.textAddress}>
               {workOrder.client.city} {workOrder.client.zipCode}
             </Text>
@@ -180,7 +179,9 @@ const WorkOrderPDF = ({ workOrder }) => {
             <Text style={styles.tableCell}>Código de Barras</Text>
             <Text style={styles.tableCell}>Medida</Text>
             <Text style={styles.tableCell}>Marca</Text>
+            <Text style={styles.tableCell}>Modelo</Text>
             <Text style={styles.tableCell}>Banda Requerida</Text>
+            <Text style={styles.tableCell}>Quemado</Text>
             <Text style={styles.tableCell}>DOT</Text>
             <Text style={styles.tableCell}>Estatus</Text>
           </View>
@@ -200,7 +201,9 @@ const WorkOrderPDF = ({ workOrder }) => {
                   {tire.helmetMeasurement || "-"}
                 </Text>
                 <Text style={styles.tableCell}>{tire.brand || "-"}</Text>
+                <Text style={styles.tableCell}>{tire.modelTire || "-"}</Text>
                 <Text style={styles.tableCell}>{tire.requiredBand || "-"}</Text>
+                <Text style={styles.tableCell}>{tire.serialNumber || "-"}</Text>
                 <Text style={styles.tableCell}>{tire.antiquityDot || "-"}</Text>
                 <Text style={styles.tableCell}>
                   {tire.status === "Rechazo" ? (

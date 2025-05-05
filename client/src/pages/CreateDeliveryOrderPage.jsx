@@ -77,7 +77,7 @@ function CreateDeliveryOrderPage() {
             >
               {(item) => (
                 <AutocompleteItem key={item._id} value={item._id}>
-                  {item.name}
+                  {item.companyName}
                 </AutocompleteItem>
               )}
             </Autocomplete>
