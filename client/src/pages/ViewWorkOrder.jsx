@@ -69,12 +69,11 @@ function ViewWorkOrder() {
             setNumero(workOrder.numero);
             setDate(workOrder.formattedCreatedAt);
             setWorkOrder(workOrder);
-            setNameClient(workOrder.client.name);
-            setClientAddress(workOrder.client.address1);
-            setClientRegion(workOrder.client.region);
+            setNameClient(workOrder.client.companyName);
+            setClientAddress(workOrder.client.street);
+            setClientRegion(workOrder.client.state);
             setClientCity(workOrder.client.city);
             setClientZipCode(workOrder.client.zipCode);
-            // setStatus(workOrder.tires)
           }
           setWorkOrdersByUser(user.id || user._id);
         }

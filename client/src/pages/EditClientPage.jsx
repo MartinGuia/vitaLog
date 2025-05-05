@@ -29,13 +29,18 @@ function EditClientPage() {
         const clientById = await getClient(params.id);
         if (clientById) {
           reset({
-            name: clientById.name,
-            alias: clientById.alias,
-            address1: clientById.address1,
-            city: clientById.city,
-            region: clientById.region,
+            clientCode: clientById.clientCode,
+            companyName: clientById.companyName,
+            Rfc: clientById.Rfc,
+            interiorNumber: clientById.interiorNumber,
+            externalNumber: clientById.externalNumber,
+            street: clientById.street,
+            suburb: clientById.suburb,
             zipCode: clientById.zipCode,
-            country: clientById.country,
+            city: clientById.city,
+            municipality: clientById.municipality,
+            state: clientById.state,
+            eMail: clientById.eMail,
           });
         }
       }
@@ -89,26 +94,37 @@ function EditClientPage() {
         <form onSubmit={onSubmit}>
           <div>
             <h2 className="text-lg md:text-2xl font-semibold mb-2 text-sky-900 mt-12">
-              Nombre y Alias
+              Nombre y datos
             </h2>
             <p className="text-gray-600 font-medium">
-              Actualicé el nombre de la cuenta.
+              Complete el nombre de la cuenta y datos fiscales.
             </p>
-            <div className="w-[100%] mt-6 text-xl">
-              <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative md:w-5/12 w-auto">
-                  <InputField {...register("name", { required: true })} />
-                  {errors.name && (
+
+            <div className="flex items-center flex-col pt-5 md:pt-2 sm:w-auto sm:flex-row sm:justify-between">
+              <div className="relative w-5/6 sm:w-5/12">
+                <InputField
+                  {...register("companyName", { required: true })}
+                />
+                {errors.companyName && (
+                  <p className="text-red-500 text-xs">
+                    Este campo es requerido
+                  </p>
+                )}
+              </div>
+              <div className="flex-col flex items-center w-[100%] sm:flex sm:w-[50%] sm:flex-row justify-between">
+                <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
+                  <InputField {...register("clientCode", { required: true })} />
+                  {errors.clientCode && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
                   )}
                 </div>
-                <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
-                  <InputField {...register("alias", { required: true })} />
-                  {errors.alias && (
+                <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
+                  <InputField {...register("Rfc", { required: true })} />
+                  {errors.Rfc && (
                     <p className="text-red-500 text-xs">
-                      Este campo es requerido
+                      Este campo es opcional
                     </p>
                   )}
                 </div>
@@ -117,64 +133,122 @@ function EditClientPage() {
           </div>
           <div>
             <h2 className="text-lg md:text-2xl font-semibold mb-2 text-sky-900 mt-12">
-              Dirección y datos
+              Dirección
             </h2>
             <p className="text-gray-600 font-medium">
-              Actualice la dirección de la cuenta. Esta dirección se mostrará en
-              todas partes en el sistema al seleccionar la cuenta.
+              Complete los datos de dirección
             </p>
-            <div className="w-[100%] mt-6 text-xl">
-              <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative w-auto sm:w-5/12">
-                  <InputField {...register("address1", { required: true })} />
-                  {errors.address1 && (
+            <div className="w-[100%] pt-5 md:pt-2 text-xl">
+              <div className="flex-col flex items-center sm:flex sm:w-[100%] sm:flex-row justify-between md:gap-16">
+                <div className="relative w-5/6 sm:w-5/12">
+                  <InputField
+                    {...register("interiorNumber", { required: false })}
+                  />
+                  {errors.interiorNumber && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
                   )}
                 </div>
-                <div className="flex-col flex items-center sm:flex sm:w-[50%] sm:flex-row justify-between">
-                  <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
-                    <InputField {...register("city", { required: true })} />
-                    {errors.city && (
-                      <p className="text-red-500 text-xs">
-                        Este campo es requerido
-                      </p>
-                    )}
-                  </div>
-                  <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
-                    <InputField {...register("region", { required: true })} />
-                    {errors.region && (
-                      <p className="text-red-500 text-xs">
-                        Este campo es opcional
-                      </p>
-                    )}
-                  </div>
+                <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
+                  <InputField
+                    {...register("externalNumber", { required: false })}
+                  />
+                  {errors.externalNumber && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
                 </div>
-              </div>
-
-              <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between mt-5">
-                <div className="flex-col flex items-center sm:flex sm:w-[50%] sm:flex-row justify-between">
-                  <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
-                    <InputField {...register("zipCode", { required: true })} />
-                    {errors.zipCode && (
-                      <p className="text-red-500 text-xs">
-                        Este campo es requerido
-                      </p>
-                    )}
-                  </div>
-                  <div className="relative w-auto sm:w-5/12 mt-4 sm:mt-0">
-                    <InputField {...register("country", { required: true })} />
-                    {errors.zipCode && (
-                      <p className="text-red-500 text-xs">
-                        Este campo es requerido
-                      </p>
-                    )}
-                  </div>
+                <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
+                  <InputField {...register("zipCode", { required: false })} />
+                  {errors.zipCode && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es opcional
+                    </p>
+                  )}
+                </div>
+                <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
+                  <InputField {...register("street", { required: false })} />
+                  {errors.street && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es opcional
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
           </div>
+
+          <div>
+            <h2 className="text-lg md:text-2xl font-semibold mb-2 text-sky-900 mt-12">
+              Dirección
+            </h2>
+            <p className="text-gray-600 font-medium">
+              Complete la dirección de la cuenta. Esta dirección se mostrará en
+              todas partes en el sistema al seleccionar la cuenta.
+            </p>
+            <div className="w-[100%] pt-5 md:pt-2 text-xl">
+              <div className="flex-col flex items-center sm:flex sm:w-[100%] sm:flex-row justify-between md:gap-16">
+                <div className="relative w-5/6 sm:w-5/12 ">
+                  <InputField {...register("suburb", { required: false })} />
+                  {errors.suburb && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>
+                <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
+                  <InputField {...register("city", { required: false })} />
+                  {errors.city && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>
+                <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
+                  <InputField
+                    {...register("municipality", { required: false })}
+                  />
+                  {errors.municipality && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es opcional
+                    </p>
+                  )}
+                </div>
+                <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
+                  <InputField {...register("state", { required: false })} />
+                  {errors.state && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es opcional
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h2 className="text-lg md:text-2xl font-semibold mb-2 text-sky-900 mt-12">
+              Correo
+            </h2>
+            <p className="text-gray-600 font-medium">
+              Complete la dirección de correo electronica de la empresa
+            </p>
+            <div className="w-[100%] pt-5 md:pt-2 text-xl">
+              <div className="flex-col flex items-center sm:flex sm:w-[100%] sm:flex-row justify-between md:gap-16">
+                <div className="relative w-5/6 sm:w-5/12">
+                  <InputField {...register("eMail", { required: false })} />
+                  {errors.eMail && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+         
           <div className="flex justify-end mt-14">
             <button
               className=" text-white font-medium bg-buttonSecondary py-3 px-8 rounded-md shadow-md hover:bg-buttonSecondaryHover duration-500 hover:duration-500 "

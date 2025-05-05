@@ -75,11 +75,6 @@ function AddClientPage() {
                   variant={"underlined"}
                   {...register("companyName", { required: true })}
                 />
-                {/* <InputField
-                    label="Dirección 1"
-                    id="dirección1"
-                    {...register("address1", { required: true })}
-                  /> */}
                 {errors.companyName && (
                   <p className="text-red-500 text-xs">
                     Este campo es requerido
@@ -94,11 +89,6 @@ function AddClientPage() {
                     variant={"underlined"}
                     {...register("clientCode", { required: true })}
                   />
-                  {/* <InputField
-                      label="Ciudad"
-                      id="Ciudad"
-                      {...register("city", { required: true })}
-                    /> */}
                   {errors.clientCode && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
@@ -112,11 +102,6 @@ function AddClientPage() {
                     variant={"underlined"}
                     {...register("Rfc", { required: true })}
                   />
-                  {/* <InputField
-                      label="Región"
-                      id="Region"
-                      {...register("region", { required: true })}
-                    /> */}
                   {errors.Rfc && (
                     <p className="text-red-500 text-xs">
                       Este campo es opcional
@@ -140,13 +125,8 @@ function AddClientPage() {
                     label="Número Interior"
                     type="text"
                     variant={"underlined"}
-                    {...register("interiorNumber", { required: true })}
+                    {...register("interiorNumber", { required: false })}
                   />
-                  {/* <InputField
-                    label="Dirección 1"
-                    id="dirección1"
-                    {...register("address1", { required: true })}
-                  /> */}
                   {errors.interiorNumber && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
@@ -158,13 +138,8 @@ function AddClientPage() {
                     label="Número Externo"
                     type="text"
                     variant={"underlined"}
-                    {...register("externalNumber", { required: true })}
+                    {...register("externalNumber", { required: false })}
                   />
-                  {/* <InputField
-                      label="Ciudad"
-                      id="Ciudad"
-                      {...register("city", { required: true })}
-                    /> */}
                   {errors.externalNumber && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
@@ -176,13 +151,8 @@ function AddClientPage() {
                     label="Código Postal"
                     type="text"
                     variant={"underlined"}
-                    {...register("zipCode", { required: true })}
+                    {...register("zipCode", { required: false })}
                   />
-                  {/* <InputField
-                      label="Región"
-                      id="Region"
-                      {...register("region", { required: true })}
-                    /> */}
                   {errors.zipCode && (
                     <p className="text-red-500 text-xs">
                       Este campo es opcional
@@ -194,13 +164,8 @@ function AddClientPage() {
                     label="Calle"
                     type="text"
                     variant={"underlined"}
-                    {...register("street", { required: true })}
+                    {...register("street", { required: false })}
                   />
-                  {/* <InputField
-                      label="Región"
-                      id="Region"
-                      {...register("region", { required: true })}
-                    /> */}
                   {errors.street && (
                     <p className="text-red-500 text-xs">
                       Este campo es opcional
@@ -226,13 +191,8 @@ function AddClientPage() {
                     label="Colonia"
                     type="text"
                     variant={"underlined"}
-                    {...register("suburb", { required: true })}
+                    {...register("suburb", { required: false })}
                   />
-                  {/* <InputField
-                    label="Dirección 1"
-                    id="dirección1"
-                    {...register("address1", { required: true })}
-                  /> */}
                   {errors.suburb && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
@@ -244,13 +204,8 @@ function AddClientPage() {
                     label="Ciudad"
                     type="text"
                     variant={"underlined"}
-                    {...register("city", { required: true })}
+                    {...register("city", { required: false })}
                   />
-                  {/* <InputField
-                      label="Ciudad"
-                      id="Ciudad"
-                      {...register("city", { required: true })}
-                    /> */}
                   {errors.city && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
@@ -262,13 +217,8 @@ function AddClientPage() {
                     label="Municipio"
                     type="text"
                     variant={"underlined"}
-                    {...register("municipality", { required: true })}
+                    {...register("municipality", { required: false })}
                   />
-                  {/* <InputField
-                      label="Región"
-                      id="Region"
-                      {...register("region", { required: true })}
-                    /> */}
                   {errors.municipality && (
                     <p className="text-red-500 text-xs">
                       Este campo es opcional
@@ -280,13 +230,8 @@ function AddClientPage() {
                     label="Estado"
                     type="text"
                     variant={"underlined"}
-                    {...register("state", { required: true })}
+                    {...register("state", { required: false })}
                   />
-                  {/* <InputField
-                      label="Región"
-                      id="Region"
-                      {...register("region", { required: true })}
-                    /> */}
                   {errors.state && (
                     <p className="text-red-500 text-xs">
                       Este campo es opcional
@@ -311,13 +256,8 @@ function AddClientPage() {
                     label="Correo"
                     type="email"
                     variant={"underlined"}
-                    {...register("eMail", { required: true })}
+                    {...register("eMail", { required: false })}
                   />
-                  {/* <InputField
-                    label="Dirección 1"
-                    id="dirección1"
-                    {...register("address1", { required: true })}
-                  /> */}
                   {errors.eMail && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido

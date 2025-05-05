@@ -163,12 +163,12 @@ const DeliveryOrderPDF = ({ deliveryOrder }) => {
           </View>
           <View>
             <Text style={styles.sectionContent}>Envíe a:</Text>
-            <Text style={styles.textClient}>{deliveryOrder.client.name}</Text>
+            <Text style={styles.textClient}>{deliveryOrder.client.companyName}</Text>
             <Text style={styles.textAddress}>
-              {deliveryOrder.client.address1}
+              {deliveryOrder.client.street}
             </Text>
             <Text style={styles.textAddress}>
-              {deliveryOrder.client.region}
+              {deliveryOrder.client.state}
             </Text>
             <Text style={styles.textAddress}>
               {deliveryOrder.client.city} {deliveryOrder.client.zipCode}

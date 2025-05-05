@@ -16,35 +16,35 @@ const clientSchema = new Schema(
     },
     interiorNumber: {
       type: String,
-      required: true,
+      required: false,
     },
     externalNumber: {
       type: String,
-      required: true,
+      required: false,
     },
     street: {
       type: String,
-      required: true,
+      required: false,
     },
     suburb: {
       type: String,
-      required: true,
+      required: false,
     },
     zipCode: {
       type: String,
-      required: true,
+      required: false,
     },
     city: {
       type: String,
-      required: true,
+      required: false,
     },
     municipality: {
       type: String,
-      required: true,
+      required: false,
     },
     state: {
       type: String,
-      required: true,
+      required: false,
     },
     eMail: {
       type: String,

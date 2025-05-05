@@ -37,8 +37,8 @@ export default function Sidebar({ children, additionalContent }) {
       <aside
         className={`sticky top-0 ${
           expanded
-            ? "max-[500px]:w-52 h-screen" // No se mueve cuando está expandido
-            : "sticky top-0 w-20 h-screen" // Se mueve con el scroll cuando está colapsado
+            ? "w-48 md:w-52 h-screen" // No se mueve cuando está expandido
+            : "sticky top-0 w-16 h-screen" // Se mueve con el scroll cuando está colapsado
         }`}
       >
         <nav className="h-full flex flex-col border shadow-lg  bg-colorPrimary">
@@ -47,7 +47,7 @@ export default function Sidebar({ children, additionalContent }) {
               src={images.logoVB}
               alt=""
               className={`overflow-hidden transition-all ${
-                expanded ? "w-24" : "w-0"
+                expanded ? "w-20" : "w-0"
               }`}
             />
             <button
@@ -128,7 +128,7 @@ export function SidebarItem({ icon, text2, text, active, alert }) {
   const { expanded } = useContext(SidebarContext);
   return (
     <li
-      className={`relative flex items-center py-3 md:py-4 my-1 px-3 font-medium rounded-md cursor-pointer transition-colors group ${
+      className={`relative flex items-center py-3 md:py-3 my-1 px-3 font-medium rounded-md cursor-pointer transition-colors group ${
         active
           ? "bg-gradient-to-tr from-indigo-200 to-indigo-200 text-indigo-800"
           : "hover:bg-hoverPrimary text-gray-600"
