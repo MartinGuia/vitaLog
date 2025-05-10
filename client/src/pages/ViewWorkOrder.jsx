@@ -25,6 +25,7 @@ function ViewWorkOrder() {
   const [clientAddress, setClientAddress] = useState();
   const [clientRegion, setClientRegion] = useState();
   const [clientCity, setClientCity] = useState();
+  const [clientMunicipality, setClientMunicipality] = useState();
   const [clientZipCode, setClientZipCode] = useState();
   const [roleMaster, setRoleMaster] = useState();
   const [roleAdminP, setRoleAdminP] = useState();
@@ -73,6 +74,7 @@ function ViewWorkOrder() {
             setClientAddress(workOrder.client.street);
             setClientRegion(workOrder.client.state);
             setClientCity(workOrder.client.city);
+            setClientMunicipality(workOrder.client.municipality);
             setClientZipCode(workOrder.client.zipCode);
           }
           setWorkOrdersByUser(user.id || user._id);
@@ -168,7 +170,7 @@ function ViewWorkOrder() {
                     <div className="text-xs">
                       <p>{clientAddress}</p>
                       <p>
-                        {clientRegion}, {clientCity}
+                        {clientRegion}, { clientCity || clientMunicipality}
                       </p>
                       <p>{clientZipCode}</p>
                     </div>

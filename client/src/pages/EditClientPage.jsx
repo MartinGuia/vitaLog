@@ -49,9 +49,7 @@ function EditClientPage() {
   }, []);
 
   const onSubmit = handleSubmit(async (values) => {
-    const updatedValues = Object.fromEntries(
-      Object.entries(values).filter(([key, value]) => value !== "")
-    );
+    const updatedValues = values;
 
     try {
       await updateClient(params.id, updatedValues);

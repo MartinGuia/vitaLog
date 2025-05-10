@@ -130,18 +130,16 @@ function PrintLabel() {
                   {tire.helmetMeasurement}
                 </p>
                 <p>{tire.appliedBand || tire.appliedBandBandag}</p>
-                <p>210</p>
                 <div className="flex justify-between">
                   <p>{tire.brand}</p>
                   <p>DOT: {tire.antiquityDot}</p>
                 </div>
-                <p>
-                  CAPS:{" "}
-                  {(tire.numberPatches || 0) +
-                    (tire.numberPatches2 || 0) +
-                    (tire.numberPatches3 || 0) +
-                    (tire.numberPatches4 || 0)}
-                </p>
+                {tire.status === "Rechazo" && (
+                  <>
+                    <p>RECHAZO</p>
+                    <p>{tire.rejection || "-"}</p>
+                  </>
+                )}
                 <p className="flex justify-end mt-4">
                   {tire.formattedUpdatedAt}
                 </p>

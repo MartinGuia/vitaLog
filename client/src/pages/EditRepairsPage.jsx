@@ -80,8 +80,8 @@ function EditRepairsPage() {
       label: "Sobrecarga/sobre inflado",
     },
     {
-      value: "Separación en cej inducido por rebordes",
-      label: "Separación en cej inducido por rebordes",
+      value: "Separación en ceja inducido por rebordes",
+      label: "Separación en ceja inducido por rebordes",
     },
     {
       value:

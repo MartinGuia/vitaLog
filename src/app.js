@@ -9,6 +9,7 @@ import departmentRoutes from "./routes/department.routes.js";
 import deliveryOrderRoutes from "./routes/deliveryOrder.routes.js";
 import printRoutes from "./routes/print.routes.js";
 import rolesRoutes from "./routes/role.routes.js";
+import reportsRoutes from "./routes/reports.routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import 'dotenv/config'
@@ -35,5 +36,6 @@ app.use("/api", departmentRoutes);
 app.use("/api", deliveryOrderRoutes);
 app.use("/api", rolesRoutes);
 app.use("/api", printRoutes);
+app.use("/api", reportsRoutes);
 
 export default app;

@@ -338,12 +338,65 @@ function AddTireToWO() {
     { value: "Desecho", label: "Desecho" },
   ];
 
-  const bandContinental = [
+  const allContinental = [
     { value: "HT3", label: "HT3" },
     { value: "HDL", label: "HDL" },
     { value: "HSC", label: "HSC" },
     { value: "HSR", label: "HSR" },
     { value: "HTL", label: "HTL" },
+    { value: "B123 FUELTECH ", label: "B123 FUELTECH " },
+    { value: "B197", label: "B197 " },
+    { value: "B440", label: "B440 " },
+    { value: "B710", label: "B710 " },
+    { value: "B713 FUELTECH ", label: "B713 FUELTECH" },
+    { value: "B736 ", label: "B736" },
+    { value: "BDL  ", label: "BDL " },
+    { value: "BDM  ", label: "BDM " },
+    { value: "BDR AS", label: "BDR AS " },
+    { value: "BDR HG", label: "BDR HG " },
+    { value: "BDV ", label: "BDV " },
+    { value: "Brawny Rib", label: "Brawny Rib" },
+    { value: "Brawny Trac ", label: "Brawny Trac" },
+    { value: "BRMS", label: "BRMS" },
+    { value: "BRMS2", label: "BRMS2 " },
+    { value: "BRR13", label: "BRR13 " },
+    { value: "BRSS ", label: "BRSS" },
+    { value: "BSS", label: "BSS" },
+    { value: "BTL", label: "BTL" },
+    { value: "BTL SA ", label: "BTL SA  " },
+    { value: "BTL SA2", label: "BTL SA2 " },
+    { value: "BTL3 ", label: "BTL3 " },
+    { value: "BTR     ", label: "BTR   " },
+    { value: "BTR SA ", label: "BTR SA " },
+    { value: "BTRA SA", label: "BTRA SA s " },
+    { value: "BZY", label: "BZY" },
+    {
+      value: "CT (Comercial Traction)",
+      label: "CT (Comercial Traction) ",
+    },
+    { value: "D4300", label: " D4300" },
+    { value: "DR5.3", label: " DR5.3" },
+    { value: "ECL Drive", label: " ECL Drive" },
+    { value: "Econo Drive", label: " Econo Drive" },
+    { value: "FCR-T2 ", label: " FCR-T2 " },
+    { value: "Highway (HW) ", label: " Highway (HW)" },
+    { value: "LIGHT S", label: " LIGHT S" },
+    { value: "Megatreck", label: " Megatreck" },
+    {
+      value: "      Metromax Rib (MMR)",
+      label: " Metromax Rib (MMR)",
+    },
+
+    { value: "R4200 ", label: " R4200" },
+    { value: "T4100", label: " T4100" },
+
+    { value: "TR4.1", label: " TR4.1" },
+
+    { value: "UAP ", label: " UAP " },
+    { value: "UAP2", label: " UAP2 " },
+
+    { value: "UDR ", label: " UDR" },
+    { value: "BDX2", label: " BDX2 " },
   ];
 
   const helmetMeasurements = [
@@ -612,7 +665,24 @@ function AddTireToWO() {
                   )}
                 </div>
                 <div className="relative w-[60%] md:w-[40%] mt-5 sm:mt-0">
-                  <Select
+                   <Autocomplete
+                    className="shadow-md rounded-xl "
+                    defaultItems={allContinental}
+                    label="Banda Requerida"
+                    listboxProps={{
+                      emptyContent: "Banda no encontrada",
+                    }}
+                    {...register("requiredBand", {
+                      required: "Debe seleccionar una banda.",
+                    })}
+                  >
+                    {(item) => (
+                      <AutocompleteItem key={item.value} value={item.value}>
+                        {item.label}
+                      </AutocompleteItem>
+                    )}
+                  </Autocomplete>
+                  {/* <Select
                     className="shadow-md rounded-xl "
                     items={bandContinental}
                     label="Banda Requerida"
@@ -625,7 +695,7 @@ function AddTireToWO() {
                         {bandC.label}
                       </SelectItem>
                     ))}
-                  </Select>
+                  </Select> */}
                   {errors.requiredBand && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
@@ -705,11 +775,9 @@ function AddTireToWO() {
                     </p>
                   )}
                 </div>
-
               </div>
             </div>
           </div>
-
 
           <div className="flex flex-col sm:flex-row justify-end mt-5">
             <button

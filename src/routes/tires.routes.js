@@ -8,7 +8,6 @@ import {
   updateProductionTire,
   getTiresWithInspection,
   getTireByBarcode,
-  getHelmetDesignCounts,
   updateQuoteTires,
   getQuoteTires,
 } from "../controllers/tire.controller.js";
@@ -20,12 +19,10 @@ const router = Router();
 router.get("/tires", authRequired, getTires);
 router.get("/tires/:id", authRequired ,getTire);
 router.get("/tiresByInspection", authRequired , getTiresWithInspection);
-// router.delete("/tires/:id", authRequired ,deleteTire);
 router.put("/tire/:id", authRequired ,updateTire);
 router.put("/editTire/:id", authRequired , updateProductionTire);
 router.post("/tires", authRequired, createTire);
 router.post("/tireBarcode", authRequired , getTireByBarcode);
-router.get("/tiresByHelmetDesign", authRequired , getHelmetDesignCounts);
 router.put("/quoteTires", authRequired , updateQuoteTires);
 router.get("/quoteTires", authRequired , getQuoteTires);
 

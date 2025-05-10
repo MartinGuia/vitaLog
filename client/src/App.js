@@ -40,6 +40,7 @@ import { jwtDecode } from "jwt-decode"; // Asegúrate del import correcto
 import ProductionPage from "./pages/ProductionPage";
 import ViewWOBySeller from "./pages/ViewWOBySeller";
 import QuotesTiresPage from "./pages/QuotesTiresPage";
+import ReportByClientPage from "./pages/ReportByClientPage";
 
 function AppRoutes() {
   const { role, getRoles } = useAuth(); // Ahora sí está dentro de AuthProvider
@@ -204,7 +205,7 @@ function AppRoutes() {
       roles: [roleIds.master, roleIds.almacenista],
     },
     {
-      path: "/printlabel/:id",
+      path: "/printLabel/:id",
       element: <PrintLabel />,
       roles: [roleIds.master, roleIds.operador],
     },
@@ -226,6 +227,11 @@ function AppRoutes() {
     {
       path: "/quoteTires",
       element: <QuotesTiresPage />,
+      roles: [roleIds.administradorF, roleIds.master],
+    },
+    {
+      path: "/reportByClient",
+      element: <ReportByClientPage />,
       roles: [roleIds.administradorF, roleIds.master],
     },
   ];

@@ -167,7 +167,7 @@ const WorkOrderPDF = ({ workOrder }) => {
             <Text style={styles.textAddress}>{workOrder.client.street}</Text>
             <Text style={styles.textAddress}>{workOrder.client.state}</Text>
             <Text style={styles.textAddress}>
-              {workOrder.client.city} {workOrder.client.zipCode}
+              {workOrder.client.city || workOrder.client.municipality} {workOrder.client.zipCode}
             </Text>
           </View>
         </View>

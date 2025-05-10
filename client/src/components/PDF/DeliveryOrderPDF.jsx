@@ -171,7 +171,7 @@ const DeliveryOrderPDF = ({ deliveryOrder }) => {
               {deliveryOrder.client.state}
             </Text>
             <Text style={styles.textAddress}>
-              {deliveryOrder.client.city} {deliveryOrder.client.zipCode}
+              {deliveryOrder.client.city || deliveryOrder.client.municipality} {deliveryOrder.client.zipCode}
             </Text>
           </View>
         </View>

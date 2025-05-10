@@ -130,9 +130,9 @@ function AllClientPage() {
   return (
     <div className="px-4 lg:px-14 mx-auto select-none">
       <div className="text-center my-8">
-        <h2 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
-          Cuentas Locales
-        </h2>
+        <div className="flex items-center gap-3 mb-6">
+          <h1 className="text-2xl md:text-4xl font-bold">Cuentas Locales</h1>
+        </div>
         {/* Alerta */}
         {alert && <Alert message={alert.message} type={alert.type} />}
       </div>
@@ -191,7 +191,9 @@ function AllClientPage() {
                       <td className="py-1">
                         <Dropdown>
                           <DropdownTrigger>
-                            <Button variant="bordered"><Menu/></Button>
+                            <Button variant="bordered">
+                              <Menu />
+                            </Button>
                           </DropdownTrigger>
                           <DropdownMenu
                             aria-label="Dropdown menu with description"
@@ -208,7 +210,9 @@ function AllClientPage() {
                                 to={`/client/${client._id}`}
                                 className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
                               >
-                                <EditDocumentIcon className={cn(iconClasses, "text-primary")} />
+                                <EditDocumentIcon
+                                  className={cn(iconClasses, "text-primary")}
+                                />
                                 Ver Cliente
                               </Link>
                             </DropdownItem>
@@ -234,7 +238,7 @@ function AllClientPage() {
                 </tbody>
               </table>
               {allClients.length >= 10 && (
-                <div className="flex justify-between items-center mt-4 ">
+                <div className="flex justify-between items-center mt-4 mb-4">
                   <div className="text-sm text-gray-600">
                     Página {currentPage} de {totalPages}
                   </div>

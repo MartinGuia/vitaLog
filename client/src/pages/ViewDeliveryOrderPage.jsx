@@ -21,6 +21,7 @@ function ViewDeliveryOrderPage() {
   const [clientAddress, setClientAddress] = useState();
   const [clientRegion, setClientRegion] = useState();
   const [clientCity, setClientCity] = useState();
+  const [clientMunicipality, setClientMunicipality] = useState();
   const [clientZipCode, setClientZipCode] = useState();
 
   // Validar datos y calcular total de páginas
@@ -55,6 +56,7 @@ function ViewDeliveryOrderPage() {
             setClientAddress(deliveryOrder.client.street);
             setClientRegion(deliveryOrder.client.state);
             setClientCity(deliveryOrder.client.city);
+            setClientMunicipality(deliveryOrder.client.municipality);
             setClientZipCode(deliveryOrder.client.zipCode);
           }
         }
@@ -125,7 +127,7 @@ function ViewDeliveryOrderPage() {
                     <div className="text-xs">
                       <p>{clientAddress}</p>
                       <p>
-                        {clientRegion}, {clientCity}
+                        {clientRegion}, {clientCity || clientMunicipality}
                       </p>
                       <p>{clientZipCode}</p>
                     </div>
@@ -149,6 +151,7 @@ function ViewDeliveryOrderPage() {
                       <th className="py-3 px-6">Estado</th>
                       <th className="py-3 px-6">Medida de Casco</th>
                       <th className="py-3 px-6">Marca</th>
+                      <th className="py-3 px-6">Quemado</th>
                       <th className="py-3 px-6">Banda aplicada</th>
                       <th className="py-3 px-6">DOT</th>
                       {/* <th className="py-3 px-6"></th> */}
@@ -166,6 +169,7 @@ function ViewDeliveryOrderPage() {
                         <td className="py-3 px-6">{tire.status}</td>
                         <td className="py-3 px-6">{tire.helmetMeasurement}</td>
                         <td className="py-3 px-6">{tire.brand}</td>
+                        <td className="py-3 px-6">{tire.serialNumber}</td>
                         <td className="py-3 px-6">
                           {tire.appliedBand || tire.appliedBandBandag || "-"}
                         </td>
