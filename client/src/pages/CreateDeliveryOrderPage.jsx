@@ -16,9 +16,10 @@ function CreateDeliveryOrderPage() {
   const { openDeliveryOrder } = useDeliveryOrder();
   const { getClients, allClients } = useClient();
   const [selectedClientId, setSelectedClientId] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    getClients(); // Cargar clientes
+    getClients().finally(() => setIsLoading(false));
   }, []);
 
   const onSubmit = handleSubmit((values) => {
@@ -66,21 +67,25 @@ function CreateDeliveryOrderPage() {
           <div className="abso w-full lg:w-[30%] mx-auto mt-8">
             <label className="block mb-2 text-sm font-medium">Cliente</label>
 
-            <Autocomplete
-              className="shadow-md rounded-xl "
-              defaultItems={allClients}
-              label="Selecciona un cliente"
-              listboxProps={{
-                emptyContent: "Cliente no encontrado",
-              }}
-              onSelectionChange={(key) => setSelectedClientId(key)} // aquí guardas el _id
-            >
-              {(item) => (
-                <AutocompleteItem key={item._id} value={item._id}>
-                  {item.companyName}
-                </AutocompleteItem>
-              )}
-            </Autocomplete>
+            {isLoading ? (
+              <p className="text-center mt-10">Cargando clientes...</p>
+            ) : (
+              <Autocomplete
+                className="shadow-md rounded-xl "
+                defaultItems={allClients}
+                label="Selecciona un cliente"
+                listboxProps={{
+                  emptyContent: "Cliente no encontrado",
+                }}
+                onSelectionChange={(key) => setSelectedClientId(key)} // aquí guardas el _id
+              >
+                {(item) => (
+                  <AutocompleteItem key={item._id} value={item._id}>
+                    {item.companyName}
+                  </AutocompleteItem>
+                )}
+              </Autocomplete>
+            )}
 
             {errors.client && (
               <p className="text-red-500 text-base">{errors.client.message}</p>

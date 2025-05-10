@@ -146,7 +146,7 @@ function AllWorkOrdersPage() {
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
       <div className="text-center my-8">
         <h2 className="md:text-4xl text-2xl font-bold mb-2">
-          Órdenes de Trabajo
+          Ordenes de Trabajo
         </h2>
       </div>
       {alert && (
@@ -160,19 +160,19 @@ function AllWorkOrdersPage() {
         <div className="p-4 w-full">
           {allWorkOrders.length === 0 ? (
             <div className="text-center text-gray-600 text-lg">
-              No hay órdenes de trabajo registradas.
+              No hay ordenes de trabajo registradas.
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full bg-white border border-gray-200 rounded-lg">
                 <thead>
                   <tr className="bg-gray-100 text-gray-600 text-sm text-center">
-                    <th className="py-2 ">#</th>
-                    <th className="">Nombre</th>
-                    <th className="">Registros</th>
-                    <th className="">Cliente</th>
-                    <th className="">Dirección</th>
-                    <th className="px-5">Recolección</th>
+                    <th className="py-2 px-2">#</th>
+                    <th className="py-2 px-2">Nombre</th>
+                    <th className="py-2 px-2">Registros</th>
+                    <th className="py-2 px-2">Cliente</th>
+                    <th className="py-2 px-3">Dirección</th>
+                    <th className="py-2 px-5">Recolección</th>
                     <th className="">Acciones</th>
                   </tr>
                 </thead>
@@ -182,8 +182,8 @@ function AllWorkOrdersPage() {
                       key={index}
                       className="border-t border-gray-200 text-sm text-center"
                     >
-                      <td className="">{workOrder.numero}</td>
-                      <td className=" text-sm text-gray-900">
+                      <td className="py-2 px-2">{workOrder.numero}</td>
+                      <td className=" text-sm text-gray-900 py-2 px-2">
                         <Link
                           className="h-auto w-auto"
                           to={`/workOrder/${workOrder._id}`}
@@ -191,10 +191,10 @@ function AllWorkOrdersPage() {
                           <button>{workOrder.createdBy.name}</button>
                         </Link>
                       </td>
-                      <td className="">{workOrder.tires.length}</td>
-                      <td className="">{workOrder.client.companyName}</td>
-                      <td className=" text-xs">
-                        {workOrder.client.street + ", " + workOrder.client.city}
+                      <td className="py-2 px-2">{workOrder.tires.length}</td>
+                      <td className="py-2 px-2">{workOrder.client.companyName}</td>
+                      <td className=" text-xs px-3">
+                        {workOrder.client.street + ", " + workOrder.client.city || workOrder.client.municipality}
                         , <br />
                         {workOrder.client.state +
                           ", " +
@@ -235,7 +235,8 @@ function AllWorkOrdersPage() {
                               key="delete"
                               className="text-danger flex items-center gap-2"
                               color="danger"
-                              onClick={() => handleDeleteClick(workOrder)}
+                              // onClick={() => handleDeleteClick(workOrder)}
+                              onPress={() => handleDeleteClick(workOrder)}
                               description="Eliminar del sistema"
                               startContent={
                                 <DeleteDocumentIcon

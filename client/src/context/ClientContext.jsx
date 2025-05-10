@@ -5,6 +5,7 @@ import {
   getClientRequest,
   updateClientRequest,
   deleteClientRequest,
+  getClientReportRequest,
 } from "../api/client.js";
 
 const ClientContext = createContext();
@@ -73,6 +74,18 @@ export function ClientProvider({ children }) {
     }
   };
 
+  const getClientReport = async ({ clientId, startDate, endDate }) => {
+    try {
+      const res = await getClientReportRequest({ clientId, startDate, endDate });
+      console.log("Reporte:", res.data.report);
+      return res.data.report;
+    } catch (error) {
+      console.error("Error al obtener el reporte:", error);
+      setErrors([error.response?.data?.message || "Error desconocido"]);
+      return null;
+    }
+  };
+
   useEffect(() => {
     if (errors.length > 0) {
       const timer = setTimeout(() => {
@@ -95,6 +108,7 @@ export function ClientProvider({ children }) {
         allClients,
         updateClient,
         deleteClient,
+        getClientReport,
         errors,
       }}
     >

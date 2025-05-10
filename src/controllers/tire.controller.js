@@ -152,7 +152,7 @@ export const getTireByBarcode = async (req, res) => {
     if (!barCode) {
       return res
         .status(400)
-        .json({ message: "El código de barras es requerido." });
+        .json({ message: ["El código de barras es requerido."] });
     }
 
     // Busca un registro de llanta que coincida con el código de barras
@@ -160,7 +160,7 @@ export const getTireByBarcode = async (req, res) => {
 
     if (!tire) {
       return res.status(404).json({
-        message: "No se encontró ninguna llanta con ese código de barras.",
+        message: ["No se encontró ninguna llanta con ese código de barras."],
       });
     }
 
@@ -168,7 +168,7 @@ export const getTireByBarcode = async (req, res) => {
     return res.status(200).json(tire);
   } catch (error) {
     console.error("Error al buscar la llanta por código de barras:", error);
-    return res.status(500).json({ message: "Error interno del servidor." });
+    return res.status(500).json({ message: ["Error interno del servidor."] });
   }
 };
 
@@ -193,31 +193,6 @@ export const getTiresWithInspection = async (req, res) => {
     // Manejo de errores
     console.error(error);
     res.status(500).json({ message: "Error retrieving tires" });
-  }
-};
-
-export const getHelmetDesignCounts = async (req, res) => {
-  try {
-    const helmetDesignCounts = await Tire.aggregate([
-      {
-        $match: {
-          inspection: true,
-        },
-      },
-      {
-        $group: {
-          _id: "$appliedBand",
-          count: { $sum: 1 },
-        },
-      },
-      {
-        $sort: { count: -1 },
-      },
-    ]);
-
-    res.json(helmetDesignCounts);
-  } catch (error) {
-    res.status(500).json({ message: "Error al obtener las llantas", error });
   }
 };
 
@@ -248,9 +223,9 @@ export const updateQuoteTires = async (req, res) => {
 
 export const getQuoteTires = async (req, res) => {
   try {
-    const tires = await Tire.find({ 
-      quoteTires: true, 
-      inspection: true 
+    const tires = await Tire.find({
+      quoteTires: true,
+      inspection: true,
     }).populate({
       path: "workOrder",
       select: "numero",
@@ -259,7 +234,10 @@ export const getQuoteTires = async (req, res) => {
     if (!tires || tires.length === 0) {
       return res
         .status(404)
-        .json({ message: "No tires found with both quoteTires and inspection set to true" });
+        .json({
+          message:
+            "No tires found with both quoteTires and inspection set to true",
+        });
     }
 
     res.json(tires);

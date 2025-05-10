@@ -72,6 +72,7 @@ function AddTiresPage() {
               <th className="px-6 py-2 text-left">Código de Barras</th>
               <th className="px-6 py-2 text-left">Código Item</th>
               <th className="px-6 py-2 text-left">Medida</th>
+              <th className="px-6 py-2 text-left">Quemado</th>
               <th className="px-6 py-2 text-left">Banda Aplicada</th>
               <th className="px-6 py-2 text-left">Marca</th>
             </tr>
@@ -80,7 +81,7 @@ function AddTiresPage() {
             {tires.map((tire, i) => (
               <tr
                 key={i}
-                className={`hover:bg-blue-50 transition duration-150 ${
+                className={`hover:bg-blue-50 transition duration-150 text-sm ${
                   i % 2 === 0 ? "bg-gray-50 text-sm" : ""
                 }`}
               >
@@ -97,6 +98,7 @@ function AddTiresPage() {
                 <td className="px-6">{tire.barCode}</td>
                 <td className="px-6">{tire.itemCode}</td>
                 <td className="px-6">{tire.helmetMeasurement}</td>
+                <td className="px-6">{tire.serialNumber}</td>
                 <td className="px-6">{tire.appliedBand || tire.appliedBandBandag}</td>
                 <td className="px-6">{tire.brand}</td>
               </tr>

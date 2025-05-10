@@ -2,13 +2,11 @@ import { useEffect, useState } from "react";
 // import { useTire } from "../context/TireContext";
 import { useTire } from "../../context/TireContext";
 import { useParams, Link } from "react-router-dom";
-import { StepBack } from "lucide-react";
 
 function PrintLabelComponent({ tire }) {
   const { getTire, printLabel } = useTire();
   const params = useParams();
   const [tireData, setTireData] = useState(null);
-  
 
   useEffect(() => {
     async function loadTire() {
@@ -43,13 +41,15 @@ function PrintLabelComponent({ tire }) {
 ^FD${tireData.barCode}^FS
 
 ; **Cliente (izquierda, separado un poco más del código de barras)**
-^FO20,380^A0N,50,40^FD${tireData.workOrder.client.name}^FS
+^FO20,380^A0N,50,40^FD${tireData.workOrder.client.companyName}^FS
 
 ; **Número de orden (izquierda, debajo del cliente)**
 ^FO20,470^A0N,50,40^FDWO# ${tireData.workOrder.numero}^FS
 
 ; **Número de registro**
-^FO120,470^A0N,50,40^FD (${tireData.linea}/${tireData.workOrder.tires.length})^FS
+^FO120,470^A0N,50,40^FD (${tireData.linea}/${
+      tireData.workOrder.tires.length
+    })^FS
 
 ; **ItemCode (izquierda, debajo del número de orden)**
 ^FO350,470^A0N,50,40^FD${tireData.itemCode}^FS
@@ -61,7 +61,9 @@ function PrintLabelComponent({ tire }) {
 ^FO120,620^A0N,110,90^FD${tireData.helmetMeasurement}^FS
 
 ; **Banda Aplicada (izquierda, tamaño pequeño)**
-^FO20,720^A0N,50,30^FD${tireData.appliedBand || tireData.appliedBandBandag}^FS
+^FO20,720^A0N,50,30^FD${
+      tireData.appliedBand || tireData.appliedBandBandag || "-"
+    }^FS
 
 ; **Ancho (izquierda, tamaño pequeño)**
 ^FO20,770^A0N,50,30^FD${tireData.width}^FS
@@ -73,12 +75,10 @@ function PrintLabelComponent({ tire }) {
 ^FO400,820^A0N,50,30^FDDOT: ${tireData.antiquityDot}^FS
 
 ; **Suma de patches (izquierda, tamaño pequeño)**
-^FO20,870^A0N,50,30^FDCAPS: ${
-      (tireData.numberPatches || 0) +
-      (tireData.numberPatches2 || 0) +
-      (tireData.numberPatches3 || 0) +
-      (tireData.numberPatches4 || 0)
-    }^FS
+${tireData.status === "Rechazo" ? `
+^FO20,870^A0N,50,30^FDRECHAZO^FS
+^FO20,920^A0N,50,30^FD${tireData.rejection || "-"}^FS
+` : ""}
 
 ^MD30
 ; **Antiquity Dot (derecha, al nivel del brand)**
@@ -88,6 +88,13 @@ function PrintLabelComponent({ tire }) {
 
     `;
   };
+
+  // ^FO20,870^A0N,50,30^FDCAPS: ${
+  //     (tireData.numberPatches || 0) +
+  //     (tireData.numberPatches2 || 0) +
+  //     (tireData.numberPatches3 || 0) +
+  //     (tireData.numberPatches4 || 0)
+  //   }^FS
 
   const handlePrint = () => {
     if (!tireData) {
@@ -100,9 +107,9 @@ function PrintLabelComponent({ tire }) {
 
   return (
     <>
-      <div className="flex justify-center mt-5">
+      <div className="flex justify-center">
         <button
-          className="bg-buttonPrimary hover:bg-buttonPrimaryHover text-black font-bold py-3 px-9 rounded-md shadow-md duration-500 hover:duration-500"
+          className=" bg-buttonPrimary hover:bg-buttonPrimaryHover text-black font-bold py-3 px-9 rounded-md shadow-md duration-500 hover:duration-500"
           onClick={handlePrint}
         >
           Imprimir

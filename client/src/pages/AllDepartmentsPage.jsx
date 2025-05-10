@@ -111,9 +111,7 @@ function AllDepartmentsPage() {
 
   return (
     <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
-      <h1 className="md:text-4xl text-2xl font-bold text-center mb-6">
-        Departamentos
-      </h1>
+      <h1 className="text-2xl md:text-4xl font-bold">Departamentos</h1>
 
       {/*  Botones superiores */}
       <div className="flex justify-end mt-6">

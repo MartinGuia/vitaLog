@@ -2,12 +2,9 @@ import { useForm } from "react-hook-form";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useTire } from "../context/TireContext";
 import { StepBack } from "lucide-react";
-import {
-  Autocomplete,
-  AutocompleteItem,
-} from "@heroui/react";
-import React, { useState, useEffect } from "react";
-import  PrintLabelComponent  from "../components/ui/PrintLabelComponent";
+import { Autocomplete, AutocompleteItem } from "@heroui/react";
+import { useState, useEffect } from "react";
+import PrintLabelComponent from "../components/ui/PrintLabelComponent";
 
 function EditFinalPage() {
   const {
@@ -18,7 +15,6 @@ function EditFinalPage() {
   } = useForm();
   const { updateProductionTire, getTire } = useTire();
   const params = useParams();
-  const navigate = useNavigate();
   const [workOrderNumber, setWorkOrderNumber] = useState();
   const [linea, setLinea] = useState();
   const [numberOfTires, setNumberOfTires] = useState();
@@ -105,8 +101,8 @@ function EditFinalPage() {
       label: "Sobrecarga/sobre inflado",
     },
     {
-      value: "Separación en cej inducido por rebordes",
-      label: "Separación en cej inducido por rebordes",
+      value: "Separación en ceja inducido por rebordes",
+      label: "Separación en ceja inducido por rebordes",
     },
     {
       value:
@@ -299,44 +295,44 @@ function EditFinalPage() {
   ];
 
   const bandBandag = [
-    { value: "B123 FUELTECH - 220", label: "B123 FUELTECH - 220" },
-    { value: "B123 FUELTECH - 230", label: "B123 FUELTECH - 230" },
-    { value: "B197 - 230", label: "B197 - 230" },
-    { value: "B197 - 210", label: "B197 - 210" },
-    { value: "B197 - 220", label: "B197 - 220" },
-    { value: "B440 - 250", label: "B440 - 250" },
-    { value: "B440 - 240", label: "B440 - 240" },
-    { value: "B440 - 230", label: "B440 - 230" },
-    { value: "B440 - 220", label: "B440 - 220" },
-    { value: "B440 - 210", label: "B440 - 210" },
-    { value: "B710 - 230", label: "B710 - 230" },
-    { value: "B710 - 220", label: "B710 - 220" },
-    { value: "B710 - 210", label: "B710 - 210" },
+    { value: "B123 FUELTECH - 220  ", label: "B123 FUELTECH - 220" },
+    { value: "B123 FUELTECH - 230  ", label: "B123 FUELTECH - 230" },
+    { value: "B197 - 230 ", label: "B197 - 230" },
+    { value: "B197 - 210 ", label: "B197 - 210" },
+    { value: "B197 - 220 ", label: "B197 - 220" },
+    { value: "B440 - 250 ", label: "B440 - 250" },
+    { value: "B440 - 240 ", label: "B440 - 240" },
+    { value: "B440 - 230 ", label: "B440 - 230" },
+    { value: "B440 - 220 ", label: "B440 - 220" },
+    { value: "B440 - 210 ", label: "B440 - 210" },
+    { value: "B710 - 230 ", label: "B710 - 230" },
+    { value: "B710 - 220 ", label: "B710 - 220" },
+    { value: "B710 - 210 ", label: "B710 - 210" },
     { value: "B713 FUELTECH - 240", label: " B713 FUELTECH - 240" },
     { value: "B713 FUELTECH - 230", label: " B713 FUELTECH - 230" },
     { value: "B713 FUELTECH - 220", label: " B713 FUELTECH - 220" },
     { value: "B713 FUELTECH - 210", label: " B713 FUELTECH - 210" },
-    { value: "B736 - 230 ", label: " B736 - 230" },
-    { value: "B736 - 270 ", label: " B736 - 270" },
-    { value: "B736 - 240 ", label: " B736 - 240" },
-    { value: "B736 - 250 ", label: " B736 - 250" },
+    { value: "B736 - 230", label: " B736 - 230" },
+    { value: "B736 - 270", label: " B736 - 270" },
+    { value: "B736 - 240", label: " B736 - 240" },
+    { value: "B736 - 250", label: " B736 - 250" },
     { value: "B736 - 260", label: " B736 - 260 " },
     { value: "BDL - 210 ", label: " BDL - 210  " },
     { value: "BDL - 230 ", label: " BDL - 230  " },
     { value: "BDL - 220 ", label: " BDL - 220  " },
-    { value: "BDM - 220 ", label: " BDM - 220  " },
-    { value: "BDM - 230 ", label: " BDM - 230  " },
-    { value: "BDM - 240 ", label: " BDM - 240  " },
-    { value: "BDM - 250 ", label: " BDM - 250" },
-    { value: "BDR AS - 230 ", label: " BDR AS - 230" },
-    { value: "BDR HG - 260 ", label: " BDR HG - 260" },
-    { value: "BDR HG - 230      ", label: " BDR HG - 230     " },
-    { value: "BDR HG - 240      ", label: " BDR HG - 240     " },
-    { value: "BDV - 260         ", label: " BDV - 260        " },
-    { value: "BDV - 210         ", label: " BDV - 210        " },
-    { value: "BDV - 230         ", label: " BDV - 230        " },
-    { value: "BDV - 240         ", label: " BDV - 240        " },
-    { value: "BDV - 220         ", label: " BDV - 220        " },
+    { value: "BDM - 220", label: " BDM - 220  " },
+    { value: "BDM - 230", label: " BDM - 230  " },
+    { value: "BDM - 240", label: " BDM - 240  " },
+    { value: "BDM - 250", label: " BDM - 250" },
+    { value: "BDR AS - 230", label: " BDR AS - 230" },
+    { value: "BDR HG - 260", label: " BDR HG - 260" },
+    { value: "BDR HG - 230", label: " BDR HG - 230     " },
+    { value: "BDR HG - 240", label: " BDR HG - 240     " },
+    { value: "BDV - 260", label: " BDV - 260"},
+    { value: "BDV - 210", label: " BDV - 210"},
+    { value: "BDV - 230", label: " BDV - 230"},
+    { value: "BDV - 240", label: " BDV - 240"},
+    { value: "BDV - 220", label: " BDV - 220"},
     { value: "Brawny Rib - 600  ", label: " Brawny Rib - 600 " },
     { value: "Brawny Rib - 800  ", label: " Brawny Rib - 800 " },
     { value: "Brawny Rib - 750  ", label: " Brawny Rib - 750 " },
@@ -344,42 +340,42 @@ function EditFinalPage() {
     { value: "Brawny Rib - 850  ", label: " Brawny Rib - 850 " },
     { value: "Brawny Trac - 150 ", label: " Brawny Trac - 150" },
     { value: "Brawny Trac - 140 ", label: " Brawny Trac - 140" },
-    { value: "BRMS - 240        ", label: " BRMS - 240       " },
-    { value: "BRMS2 - 250       ", label: " BRMS2 - 250      " },
-    { value: "BRR13 - 230       ", label: " BRR13 - 230      " },
-    { value: "BRR13 - 250       ", label: " BRR13 - 250      " },
-    { value: "BRR13 - 260       ", label: " BRR13 - 260      " },
-    { value: "BRR13 - 240       ", label: " BRR13 - 240      " },
-    { value: "BRR13 - 220  ", label: " BRR13 - 220  " },
-    { value: "BRSS - 230   ", label: " BRSS - 230   " },
-    { value: "BRSS - 200   ", label: " BRSS - 200   " },
-    { value: "BRSS - 220   ", label: " BRSS - 220   " },
-    { value: "BRSS 210     ", label: " BRSS 210     " },
-    { value: "BSS - 230    ", label: " BSS - 230    " },
-    { value: "BSS - 220    ", label: " BSS - 220    " },
-    { value: "BTL - 230    ", label: " BTL - 230    " },
-    { value: "BTL - 220    ", label: " BTL - 220    " },
-    { value: "BTL - 210    ", label: " BTL - 210    " },
-    { value: "BTL SA - 210 ", label: " BTL SA - 210 " },
-    { value: "BTL SA - 220 ", label: " BTL SA - 220 " },
-    { value: "BTL SA - 230 ", label: " BTL SA - 230 " },
-    { value: "BTL SA2 - 230", label: " BTL SA2 - 230" },
-    { value: "BTL SA2 - 240", label: " BTL SA2 - 240" },
-    { value: "BTL SA2 - 210", label: " BTL SA2 - 210" },
-    { value: "BTL SA2 - 220", label: " BTL SA2 - 220" },
-    { value: "BTL3 - 240   ", label: " BTL3 - 240   " },
-    { value: "BTL3 - 220   ", label: " BTL3 - 220   " },
-    { value: "BTL3 - 230   ", label: " BTL3 - 230   " },
-    { value: "BTL3 - 250     ", label: " BTL3 - 250     " },
-    { value: "BTR SA - 260   ", label: " BTR SA - 260   " },
-    { value: "BTR - 230      ", label: " BTR - 230      " },
-    { value: "BTR SA - 240   ", label: " BTR SA - 240   " },
-    { value: "BTR SA - 250   ", label: " BTR SA - 250   " },
-    { value: "BTRA SA s - 220", label: " BTRA SA s - 220" },
-    { value: "BZY - 9        ", label: " BZY - 9        " },
-    { value: "BZY - 8.5      ", label: " BZY - 8.5      " },
-    { value: "BZY - 8        ", label: " BZY - 8        " },
-    { value: "BZY - 10.5     ", label: " BZY - 10.5     " },
+    { value: "BRMS - 240  ", label: " BRMS - 240 " },
+    { value: "BRMS2 - 250 ", label: " BRMS2 - 250" },
+    { value: "BRR13 - 230 ", label: " BRR13 - 230" },
+    { value: "BRR13 - 250 ", label: " BRR13 - 250" },
+    { value: "BRR13 - 260 ", label: " BRR13 - 260" },
+    { value: "BRR13 - 240 ", label: " BRR13 - 240" },
+    { value: "BRR13 - 220", label: " BRR13 - 220" },
+    { value: "BRSS - 230 ", label: " BRSS - 230 " },
+    { value: "BRSS - 200 ", label: " BRSS - 200 " },
+    { value: "BRSS - 220 ", label: " BRSS - 220 " },
+    { value: "BRSS - 210", label: " BRSS - 210" },
+    { value: "BSS - 230 ", label: " BSS - 230 " },
+    { value: "BSS - 220 ", label: " BSS - 220 " },
+    { value: "BTL - 230 ", label: " BTL - 230 " },
+    { value: "BTL - 220 ", label: " BTL - 220 " },
+    { value: "BTL - 210 ", label: " BTL - 210 " },
+    { value: "BTL SA - 210  ", label: " BTL SA - 210 " },
+    { value: "BTL SA - 220  ", label: " BTL SA - 220 " },
+    { value: "BTL SA - 230  ", label: " BTL SA - 230 " },
+    { value: "BTL SA2 - 230 ", label: " BTL SA2 - 230" },
+    { value: "BTL SA2 - 240 ", label: " BTL SA2 - 240" },
+    { value: "BTL SA2 - 210 ", label: " BTL SA2 - 210" },
+    { value: "BTL SA2 - 220 ", label: " BTL SA2 - 220" },
+    { value: "BTL3 - 240", label: " BTL3 - 240" },
+    { value: "BTL3 - 220", label: " BTL3 - 220" },
+    { value: "BTL3 - 230", label: " BTL3 - 230" },
+    { value: "BTL3 - 250", label: " BTL3 - 250" },
+    { value: "BTR SA - 260 ", label: " BTR SA - 260" },
+    { value: "BTR - 230", label: " BTR - 230" },
+    { value: "BTR SA - 240", label: " BTR SA - 240" },
+    { value: "BTR SA - 250", label: " BTR SA - 250" },
+    { value: "BTRA SA s - 220  ", label: " BTRA SA s - 220" },
+    { value: "BZY - 9", label: " BZY - 9" },
+    { value: "BZY - 8.5", label: " BZY - 8.5" },
+    { value: "BZY - 8", label: " BZY - 8" },
+    { value: "BZY - 10.5", label: " BZY - 10.5" },
     {
       value: "      CT (Comercial Traction) - 600 ",
       label: " CT (Comercial Traction) - 600",
@@ -450,25 +446,25 @@ function EditFinalPage() {
     { value: "TR4.1 - 200 ", label: " TR4.1 - 200 " },
     { value: "TR4.1 - 210", label: " TR4.1 - 210" },
     { value: "TR4.1 - 240", label: " TR4.1 - 240" },
-    { value: "UAP - 210  ", label: " UAP - 210  " },
-    { value: "UAP - 230  ", label: " UAP - 230  " },
-    { value: "UAP - 210  ", label: " UAP - 210  " },
-    { value: "UAP - 220  ", label: " UAP - 220  " },
-    { value: "UAP - 260  ", label: " UAP - 260  " },
-    { value: "UAP - 250  ", label: " UAP - 250  " },
-    { value: "UAP2 - 240 ", label: " UAP2 - 240 " },
-    { value: "UAP2 - 220 ", label: " UAP2 - 220 " },
-    { value: "UAP2 - 230 ", label: " UAP2 - 230 " },
-    { value: "UAP2 - 210 ", label: " UAP2 - 210 " },
-    { value: "UDR - 240  ", label: " UDR - 240  " },
-    { value: "UDR - 230  ", label: " UDR - 230  " },
-    { value: "UDR - 210  ", label: " UDR - 210  " },
-    { value: "UDR - 250  ", label: " UDR - 250  " },
-    { value: "UDR - 220  ", label: " UDR - 220  " },
-    { value: "UDR - 200  ", label: " UDR - 200  " },
-    { value: "BDX2 - 240 ", label: " BDX2 - 240 " },
-    { value: "BDX2 - 260 ", label: " BDX2 - 260 " },
-    { value: "BDX2 - 250 ", label: " BDX2 - 250 " },
+    { value: "UAP - 210  ", label: " UAP - 210" },
+    { value: "UAP - 230  ", label: " UAP - 230" },
+    { value: "UAP - 210  ", label: " UAP - 210" },
+    { value: "UAP - 220  ", label: " UAP - 220" },
+    { value: "UAP - 260  ", label: " UAP - 260" },
+    { value: "UAP - 250  ", label: " UAP - 250" },
+    { value: "UAP2 - 240 ", label: " UAP2 - 240" },
+    { value: "UAP2 - 220 ", label: " UAP2 - 220" },
+    { value: "UAP2 - 230 ", label: " UAP2 - 230" },
+    { value: "UAP2 - 210 ", label: " UAP2 - 210" },
+    { value: "UDR - 240  ", label: " UDR - 240" },
+    { value: "UDR - 230  ", label: " UDR - 230" },
+    { value: "UDR - 210  ", label: " UDR - 210" },
+    { value: "UDR - 250  ", label: " UDR - 250" },
+    { value: "UDR - 220  ", label: " UDR - 220" },
+    { value: "UDR - 200  ", label: " UDR - 200" },
+    { value: "BDX2 - 240 ", label: " BDX2 - 240" },
+    { value: "BDX2 - 260 ", label: " BDX2 - 260" },
+    { value: "BDX2 - 250 ", label: " BDX2 - 250" },
   ];
 
   return (
@@ -608,10 +604,7 @@ function EditFinalPage() {
                     {...register("appliedBandBandag", { required: false })}
                   >
                     {(bandB) => (
-                      <AutocompleteItem
-                        key={bandB.value}
-                        value={bandB.value}
-                      >
+                      <AutocompleteItem key={bandB.value} value={bandB.value}>
                         {bandB.label}
                       </AutocompleteItem>
                     )}
@@ -621,30 +614,33 @@ function EditFinalPage() {
             </div>
           </div>
 
-          <div className="flex justify-between mt-14">
-            <div className="flex justify-between w-[20%]">
-              <button
-                type="button"
-                className="text-white font-medium bg-buttonSecondary py-3 px-9 mr-4 rounded-md shadow-md hover:bg-buttonSecondaryHover duration-500 hover:duration-500"
-                onClick={() => handleStatusChange("Pasa")}
-              >
-                PASA
-              </button>
-              <button
-                type="button"
-                className="text-white font-medium bg-buttonTertiary py-3 px-9 rounded-md shadow-md hover:bg-buttonTertiaryHover"
-                onClick={() => handleStatusChange("Rechazo")}
-              >
-                RECHAZO
-              </button>
-            </div>
-            <div>
-            <PrintLabelComponent tire={tireData} />
-              {/* <Link to={`/printlabel/${params.id}`}>
-                <button className="bg-buttonPrimary hover:bg-buttonPrimaryHover text-black font-bold py-3 px-9 rounded-md shadow-md duration-500 hover:duration-500">
-                  Imprimir Etiqueta
+          <div className="flex flex-wrap gap-4 justify-between mt-14">
+            <div className="flex">
+              <div>
+                <button
+                  type="button"
+                  className="text-white font-medium bg-buttonSecondary py-3 px-9 mr-4 rounded-md shadow-md hover:bg-buttonSecondaryHover duration-500 hover:duration-500"
+                  onClick={() => handleStatusChange("Pasa")}
+                >
+                  PASA
                 </button>
-              </Link> */}
+              </div>
+              <div>
+                {" "}
+                <button
+                  type="button"
+                  className="text-white font-medium bg-buttonTertiary py-3 px-5 rounded-md shadow-md hover:bg-buttonTertiaryHover"
+                  onClick={() => handleStatusChange("Rechazo")}
+                >
+                  RECHAZO
+                </button>
+              </div>
+            </div>
+            <div className="">
+              
+                <PrintLabelComponent tire={tireData} />
+              
+              
             </div>
           </div>
         </form>

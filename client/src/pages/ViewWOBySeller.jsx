@@ -93,7 +93,7 @@ function ViewWOBySeller() {
                       <td className="px-6 text-xs">
                         {workOrder.client.address1 +
                           ", " +
-                          workOrder.client.city}
+                          workOrder.client.city || workOrder.client.municipality}
                         , <br />
                         {workOrder.client.region +
                           ", " +
