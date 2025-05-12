@@ -184,14 +184,25 @@ export const deleteWorkOrder = async (req, res) => {
       .json({ success: true, message: "Orden eliminada correctamente" });
   } catch (error) {
     console.error("Error al eliminar la orden:", error);
-    res.status(500).json({ success: false, message: "Error del servidor" });
+    res.status(500).json({ success: false, message: ["Error del servidor"] });
   }
 };
 
-// export const getWorkOrdersBySeller = async (req, res) => {
-//   try {
-//     // const seller = await User.findOne({ role: "Vendedor" });
-//   } catch (error) {
-    
-//   }
-// };
+export const quoteWorkOrder = async (req, res) => {
+  try {
+    const workOrder = await WorkOrder.findByIdAndUpdate(
+      req.params.id,
+      { quoteWorkOrder: true },
+      { new: true }
+    );
+
+    if (!workOrder) {
+      return res.status(404).json({ message: "Orden de trabajo no encontrada" });
+    }
+
+    res.status(200).json(workOrder);
+  } catch (error) {
+    console.error("Error al cotizar la orden de trabajo:", error);
+    res.status(500).json({ message: ["Error interno del servidor"] });
+  }
+};

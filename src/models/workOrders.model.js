@@ -30,6 +30,10 @@ const workOrderSchema = new Schema(
       ref: "User", // Referenciar al modelo de usuario
       required: true,
     },
+    quoteWorkOrder: {
+      type: Boolean,
+      required: false,
+    },
   },
   {
     versionKey: false,

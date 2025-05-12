@@ -186,7 +186,7 @@ function ViewWorkOrder() {
                   <thead>
                     <tr className="bg-blue-600 text-white text-sm text-center">
                       <th className="py-3 px-1">Línea</th>
-                      <th className="py-3 px-6">Código de Ítem</th>
+                      <th className="py-3 px-3">Código de Ítem</th>
                       <th className="py-3 px-6">Código de Barras</th>
                       <th className="py-3 px-6">Medida de Casco</th>
                       <th className="py-3 px-6">Marca</th>
@@ -206,7 +206,7 @@ function ViewWorkOrder() {
                     {currentOrders.map((tire, index) => (
                       <tr key={index} className="border-t border-gray-200">
                         <td className="py-3 px-1">{tire.linea}</td>
-                        <td className="py-3 px-6">{tire.itemCode}</td>
+                        <td className="py-3 px-3">{tire.itemCode}</td>
                         <td className="py-3 px-6">{tire.barCode}</td>
                         <td className="py-3 px-6">{tire.helmetMeasurement}</td>
                         <td className="py-3 px-6">{tire.brand}</td>

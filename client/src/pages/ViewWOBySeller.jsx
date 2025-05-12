@@ -89,13 +89,11 @@ function ViewWOBySeller() {
                         </Link>
                       </td>
                       <td className="px-6">{workOrder.tires.length}</td>
-                      <td className="px-6">{workOrder.client.name}</td>
+                      <td className="px-6">{workOrder.client.companyName}</td>
                       <td className="px-6 text-xs">
-                        {workOrder.client.address1 +
-                          ", " +
-                          workOrder.client.city || workOrder.client.municipality}
+                         {workOrder.client.street + ", " + workOrder.client.city || workOrder.client.municipality}
                         , <br />
-                        {workOrder.client.region +
+                        {workOrder.client.state +
                           ", " +
                           workOrder.client.zipCode}
                       </td>
@@ -111,7 +109,6 @@ function ViewWOBySeller() {
                                 to={`/workorder/${workOrder._id}`}
                                 className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
                               >
-                                {/* <UserRoundPen /> */}
                                 Imprimir Orden
                               </Link>
                             </DropdownItem>
@@ -172,55 +169,6 @@ function ViewWOBySeller() {
         </div>
       </section>
     </div>
-    // <div className="p-4">
-    //   <h1 className="text-2xl font-semibold mb-4">Órdenes de trabajo del vendedor</h1>
-    //   <div className="overflow-x-auto">
-    //     <table className="min-w-full bg-white rounded-lg shadow-md">
-    //       <thead className="bg-gray-100 text-gray-600 text-left">
-    //         <tr>
-    //           <th className="py-3 px-4">#</th>
-    //           <th className="py-3 px-4">Cliente</th>
-    //           <th className="py-3 px-4">Número</th>
-    //           <th className="py-3 px-4">Abierta</th>
-    //           <th className="py-3 px-4">Creada por</th>
-    //           <th className="py-3 px-4">Fecha</th>
-    //           <th className="py-3 px-4">Acciones</th>
-    //         </tr>
-    //       </thead>
-    //       <tbody>
-    //         {workOrders.map((order, index) => (
-    //           <tr key={order._id} className="border-t hover:bg-gray-50">
-    //             <td className="py-2 px-4">{index + 1}</td>
-    //             <td className="py-2 px-4">{order.client?.name || "Sin nombre"}</td>
-    //             <td className="py-2 px-4">{order.numero}</td>
-    //             <td className="py-2 px-4">
-    //               <span className={`px-2 py-1 rounded text-white text-xs ${order.isOpen ? "bg-green-500" : "bg-red-500"}`}>
-    //                 {order.isOpen ? "Sí" : "No"}
-    //               </span>
-    //             </td>
-    //             <td className="py-2 px-4">{order.createdBy.name + " " +order.createdBy.lastName}</td>
-    //             <td className="py-2 px-4">{new Date(order.createdAt).toLocaleDateString()}</td>
-    //             <td className="py-2 px-4">
-    //               <Link
-    //                 to={`/ordenes/${order._id}`}
-    //                 className="text-blue-600 hover:underline text-sm"
-    //               >
-    //                 Ver detalles
-    //               </Link>
-    //             </td>
-    //           </tr>
-    //         ))}
-    //         {workOrders.length === 0 && (
-    //           <tr>
-    //             <td colSpan="7" className="text-center text-gray-500 py-6">
-    //               No hay órdenes registradas para este usuario.
-    //             </td>
-    //           </tr>
-    //         )}
-    //       </tbody>
-    //     </table>
-    //   </div>
-    // </div>
   );
 }
 

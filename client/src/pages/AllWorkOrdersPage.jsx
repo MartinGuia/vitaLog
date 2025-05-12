@@ -218,8 +218,6 @@ function AllWorkOrdersPage() {
                               key="edit"
                               showDivider
                               description="Ver y editar Orden de Trabajo"
-                              // startContent={
-                              // }
                             >
                               <Link
                                to={`/workorder/${workOrder._id}`}
@@ -248,29 +246,6 @@ function AllWorkOrdersPage() {
                             </DropdownItem>
                           </DropdownMenu>
                         </Dropdown>
-                        {/* <Dropdown>
-                          <DropdownTrigger className="shadow">
-                            <Button variant="bordered">Abrir Menú</Button>
-                          </DropdownTrigger>
-                          <DropdownMenu aria-label="Acciones del Cliente">
-                            <DropdownItem key="edit">
-                              <Link
-                                to={`/workorder/${workOrder._id}`}
-                                className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
-                              >
-                                Imprimir Orden
-                              </Link>
-                            </DropdownItem>
-                            <DropdownItem
-                              key="delete"
-                              className="text-danger flex items-center gap-2"
-                              color="danger"
-                              onClick={() => handleDeleteClick(workOrder)}
-                            >
-                              Eliminar Orden
-                            </DropdownItem>
-                          </DropdownMenu>
-                        </Dropdown> */}
                       </td>
                     </tr>
                   ))}
