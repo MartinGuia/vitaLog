@@ -10,7 +10,7 @@ import {
 import {  Link } from "react-router-dom";
 
 function QuotesTiresPage() {
-  const { getQuoteWorkOrder, allWorkOrders } = useWorkOrder();
+  const { getQuoteWorkOrder, allQuotingWorkOrders } = useWorkOrder();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Mostrar 10 elementos por página
 
@@ -18,10 +18,10 @@ function QuotesTiresPage() {
     getQuoteWorkOrder();
   }, []);
 
-  const totalPages = Math.ceil(allWorkOrders.length / itemsPerPage);
+  const totalPages = Math.ceil(allQuotingWorkOrders.length / itemsPerPage);
 
   // Obtener los datos de la página actual
-  const currentOrders = allWorkOrders.slice(
+  const currentOrders = allQuotingWorkOrders.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -31,7 +31,7 @@ function QuotesTiresPage() {
     setCurrentPage(pageNumber);
   };
 
-  if (allWorkOrders.length === 0) {
+  if (allQuotingWorkOrders.length === 0) {
     return (
       <div className="px-4 pt-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
         <div className="text-center my-8">
@@ -57,7 +57,7 @@ function QuotesTiresPage() {
         
         <section>
           <div className="p-4 w-full">
-            {allWorkOrders.length === 0 ? (
+            {allQuotingWorkOrders.length === 0 ? (
               <div className="text-center text-gray-600 text-lg">
                 No hay ordenes de trabajo registradas.
               </div>
@@ -115,7 +115,7 @@ function QuotesTiresPage() {
                             <DropdownMenu aria-label="Acciones del Cliente">
                               <DropdownItem key="edit">
                                 <Link
-                                  to={`/workorder/${workOrder._id}`}
+                                  to={`/quotingWorkOrders/${workOrder._id}`}
                                   className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
                                 >
                                   Imprimir Orden
@@ -128,7 +128,7 @@ function QuotesTiresPage() {
                     ))}
                   </tbody>
                 </table>
-                {allWorkOrders.length >= itemsPerPage && (
+                {allQuotingWorkOrders.length >= itemsPerPage && (
                   <div className="flex justify-between items-center mt-4">
                     <div className="text-sm text-gray-600">
                       Página {currentPage} de {totalPages}

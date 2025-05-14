@@ -206,7 +206,7 @@ const DeliveryOrderPDF = ({ deliveryOrder }) => {
                   {tire.helmetMeasurement || "-"}
                 </Text>
                 <Text style={styles.tableCell}>{tire.brand || "-"}</Text>
-                <Text style={styles.tableCell}>{tire.helmetDesign || "-"}</Text>
+                <Text style={styles.tableCell}>{tire.appliedBand || tire.appliedBandBandag || "-"}</Text>
                 <Text style={styles.tableCell}>{tire.antiquityDot || "-"}</Text>
                 <Text style={styles.tableCell}>
                   <Text style={styles.tableCell}>

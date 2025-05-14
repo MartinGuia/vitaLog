@@ -27,6 +27,7 @@ export const useWorkOrder = () => {
 
 export function WorkOrderProvider({ children }) {
   const [allWorkOrders, setAllWorkOrders] = useState([]);
+  const [allQuotingWorkOrders, setAllQuotingWorkOrders] = useState([]);
   const dispatch = useDispatch();
 
   const openWorkOrder = (values) => {
@@ -81,7 +82,7 @@ export function WorkOrderProvider({ children }) {
       try {
         const res = await getQuoteWorkOrderRequest();
         console.log(res);
-        setAllWorkOrders(res.data);
+        setAllQuotingWorkOrders(res.data);
       } catch (error) {
         console.error(error);
       }
@@ -110,6 +111,7 @@ export function WorkOrderProvider({ children }) {
         getWorkOrderById,
         quoteWorkOrder,
         getQuoteWorkOrder,
+        allQuotingWorkOrders,
       }}
     >
       {children}

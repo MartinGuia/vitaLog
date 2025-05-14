@@ -41,6 +41,7 @@ import ProductionPage from "./pages/ProductionPage";
 import AllWOBySeller from "./pages/AllWOBySeller";
 import QuotedWorkOrdersPage from "./pages/QuotedWorkOrdersPage";
 import ReportByClientPage from "./pages/ReportByClientPage";
+import ViewQuotedWO from "./pages/ViewQuotedWO";
 
 function AppRoutes() {
   const { role, getRoles } = useAuth(); // Ahora sí está dentro de AuthProvider
@@ -227,6 +228,11 @@ function AppRoutes() {
     {
       path: "/quoteWorkOrders",
       element: <QuotedWorkOrdersPage />,
+      roles: [roleIds.administradorF, roleIds.master],
+    },
+    {
+      path: "/quotingWorkOrders/:id",
+      element: <ViewQuotedWO />,
       roles: [roleIds.administradorF, roleIds.master],
     },
     {
