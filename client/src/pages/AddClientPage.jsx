@@ -87,7 +87,7 @@ function AddClientPage() {
                     label="Código del cliente"
                     type="text"
                     variant={"underlined"}
-                    {...register("clientCode", { required: true })}
+                    {...register("clientCode", { required: false })}
                   />
                   {errors.clientCode && (
                     <p className="text-red-500 text-xs">
@@ -100,7 +100,7 @@ function AddClientPage() {
                     label="RFC"
                     type="text"
                     variant={"underlined"}
-                    {...register("Rfc", { required: true })}
+                    {...register("Rfc", { required: false })}
                   />
                   {errors.Rfc && (
                     <p className="text-red-500 text-xs">

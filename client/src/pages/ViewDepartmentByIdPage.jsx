@@ -206,12 +206,7 @@ function ViewDepartmentByIdPage() {
               value={confirmationName}
               onChange={(e) => setConfirmationName(e.target.value)}
             />
-            {/* <input
-              type="text"
-              value={confirmationName}
-              onChange={(e) => setConfirmationName(e.target.value)}
-              className="border border-gray-300 rounded-md px-2 py-1 mt-2 w-full"
-            /> */}
+           
             <div className="flex justify-end space-x-4 mt-4">
               <button
                 onClick={() => {

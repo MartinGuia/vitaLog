@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useTire } from "../../context/TireContext";
 import { useParams, Link } from "react-router-dom";
 
-function PrintLabelComponent({ tire }) {
+function PrintLabelComponent({ tire, disabled }) {
   const { getTire, printLabel } = useTire();
   const params = useParams();
   const [tireData, setTireData] = useState(null);
@@ -74,8 +74,11 @@ function PrintLabelComponent({ tire }) {
 ; **Antiquity Dot (derecha, al nivel del brand)**
 ^FO400,820^A0N,50,30^FDDOT: ${tireData.antiquityDot}^FS
 
-; **Suma de patches (izquierda, tamaño pequeño)**
+; **Estatus de llanta (izquierda, tamaño pequeño)**
 ${tireData.status === "Rechazo" ? `
+^FO20,870^A0N,50,30^FDRECHAZO^FS
+^FO20,920^A0N,50,30^FD${tireData.rejection || "-"}^FS
+` : tireData.status === "Sin Costo" ? `
 ^FO20,870^A0N,50,30^FDRECHAZO^FS
 ^FO20,920^A0N,50,30^FD${tireData.rejection || "-"}^FS
 ` : ""}

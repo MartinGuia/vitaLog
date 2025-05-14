@@ -163,15 +163,16 @@ const DeliveryOrderPDF = ({ deliveryOrder }) => {
           </View>
           <View>
             <Text style={styles.sectionContent}>Envíe a:</Text>
-            <Text style={styles.textClient}>{deliveryOrder.client.companyName}</Text>
+            <Text style={styles.textClient}>
+              {deliveryOrder.client.companyName}
+            </Text>
             <Text style={styles.textAddress}>
               {deliveryOrder.client.street}
             </Text>
+            <Text style={styles.textAddress}>{deliveryOrder.client.state}</Text>
             <Text style={styles.textAddress}>
-              {deliveryOrder.client.state}
-            </Text>
-            <Text style={styles.textAddress}>
-              {deliveryOrder.client.city || deliveryOrder.client.municipality} {deliveryOrder.client.zipCode}
+              {deliveryOrder.client.city || deliveryOrder.client.municipality}{" "}
+              {deliveryOrder.client.zipCode}
             </Text>
           </View>
         </View>
@@ -185,6 +186,7 @@ const DeliveryOrderPDF = ({ deliveryOrder }) => {
             <Text style={styles.tableCell}>Marca</Text>
             <Text style={styles.tableCell}>Banda Aplicada</Text>
             <Text style={styles.tableCell}>DOT</Text>
+            <Text style={styles.tableCell}>status</Text>
           </View>
           {deliveryOrder.tires.map((tire, index) => (
             <React.Fragment key={index}>
@@ -206,6 +208,19 @@ const DeliveryOrderPDF = ({ deliveryOrder }) => {
                 <Text style={styles.tableCell}>{tire.brand || "-"}</Text>
                 <Text style={styles.tableCell}>{tire.helmetDesign || "-"}</Text>
                 <Text style={styles.tableCell}>{tire.antiquityDot || "-"}</Text>
+                <Text style={styles.tableCell}>
+                  <Text style={styles.tableCell}>
+                    {tire.status === "Rechazo" ? (
+                      <Image src={images.x} style={styles.tableCell} />
+                    ) : tire.status === "Pasa" ? (
+                      <Image src={images.check} style={styles.tableCell} />
+                    ) : tire.status === "Sin Costo" ? (
+                      "Sin Costo"
+                    ) : (
+                      " Sin inspección"
+                    )}
+                  </Text>
+                </Text>
               </View>
               {(tire.rejection ||
                 tire.patch ||

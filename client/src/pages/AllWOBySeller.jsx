@@ -8,6 +8,8 @@ import {
   DropdownItem,
   Button
 } from "@heroui/react";
+import { useWorkOrder } from "../context/WorkOrderContext.jsx";
+import { Checkbox } from "@heroui/react";
 
 function ViewWOBySeller() {
   const { getWorkOrderByUser } = useAuth();
@@ -15,6 +17,8 @@ function ViewWOBySeller() {
   const [workOrders, setWorkOrders] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const {quoteWorkOrder} = useWorkOrder()
+   const [selectedWorkOrderIds, setSelectedWorkOrderIds] = useState([]);
   
 
   useEffect(() => {
@@ -54,6 +58,7 @@ function ViewWOBySeller() {
       </div>
       
       <section>
+      
         <div className="p-4 w-full">
           {currentOrders.length === 0 ? (
             <div className="text-center text-gray-600 text-lg">
@@ -64,6 +69,7 @@ function ViewWOBySeller() {
               <table className="min-w-full bg-white border border-gray-200 rounded-lg">
                 <thead>
                   <tr className="bg-gray-100 text-gray-600 text-sm text-left">
+                    <th className="py-2 px-6"></th>
                     <th className="py-2 px-6">#</th>
                     <th className="px-6">Nombre</th>
                     <th className="px-6">Registros</th>
@@ -74,11 +80,32 @@ function ViewWOBySeller() {
                   </tr>
                 </thead>
                 <tbody>
-                  {workOrders.map((workOrder, index) => (
+                  {currentOrders.map((workOrder, index) => (
                     <tr
                       key={index}
                       className="border-t border-gray-200 text-sm"
                     >
+                      <td className="px-6">
+                        <Checkbox
+                              color="warning"
+                              defaultSelected={workOrder.quoteWorkOrder === true}
+                              onChange={(e) => {
+                                const checked = e.target.checked;
+                                const workOrdersIds = workOrder._id;
+
+                                if (checked) {
+                                  setSelectedWorkOrderIds((prev) => [
+                                    ...prev,
+                                    workOrdersIds,
+                                  ]);
+                                } else {
+                                  setSelectedWorkOrderIds((prev) =>
+                                    prev.filter((id) => id !== workOrdersIds)
+                                  );
+                                }
+                              }}
+                            />
+                      </td>
                       <td className="px-6">{workOrder.numero}</td>
                       <td className="px-6 text-sm text-gray-900">
                         <Link
@@ -120,7 +147,7 @@ function ViewWOBySeller() {
                   ))}
                 </tbody>
               </table>
-              {workOrders.length >= itemsPerPage && (
+              {workOrders.length >= 10 && (
                 <div className="flex justify-between items-center mt-4">
                   <div className="text-sm text-gray-600">
                     Página {currentPage} de {totalPages}
@@ -137,19 +164,33 @@ function ViewWOBySeller() {
                     >
                       Anterior
                     </button>
-                    {Array.from({ length: totalPages }, (_, i) => (
-                      <button
-                        key={i + 1}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`px-4 py-2 rounded-lg border ${
-                          currentPage === i + 1
-                            ? "bg-blue-600 text-white"
-                            : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                        }`}
-                      >
-                        {i + 1}
-                      </button>
-                    ))}
+                   {(() => {
+                      const pageNumbers = [];
+                      let startPage = Math.max(1, currentPage - 2);
+                      let endPage = Math.min(totalPages, startPage + 4);
+
+                      if (endPage - startPage < 4) {
+                        startPage = Math.max(1, endPage - 4);
+                      }
+
+                      for (let i = startPage; i <= endPage; i++) {
+                        pageNumbers.push(i);
+                      }
+
+                      return pageNumbers.map((pageNum) => (
+                        <button
+                          key={pageNum}
+                          onClick={() => handlePageChange(pageNum)}
+                          className={`px-4 py-2 rounded-lg border ${
+                            currentPage === pageNum
+                              ? "bg-blue-600 text-white"
+                              : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      ));
+                    })()}
                     <button
                       onClick={() => handlePageChange(currentPage + 1)}
                       disabled={currentPage === totalPages}
@@ -164,8 +205,21 @@ function ViewWOBySeller() {
                   </div>
                 </div>
               )}
+              
             </div>
           )}
+          {selectedWorkOrderIds.length > 0 && (
+                <div className="mt-4">
+                  <button
+                    onClick={() =>
+                      quoteWorkOrder({ workOrdersIds: selectedWorkOrderIds })
+                    }
+                    className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
+                  >
+                    Enviar a cotización
+                  </button>
+                </div>
+              )}
         </div>
       </section>
     </div>

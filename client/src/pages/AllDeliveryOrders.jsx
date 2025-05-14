@@ -126,13 +126,11 @@ function AllDeliveryOrders() {
                         <button>{deliveryOrders.createdBy.name}</button>
                       </td>
                       <td className="px-6">{deliveryOrders.tires.length}</td>
-                      <td className="px-6">{deliveryOrders.client.name}</td>
-                      <td className="px-6 text-xs">
-                        {deliveryOrders.client.address1 +
-                          ", " +
-                          deliveryOrders.client.city}
+                      <td className="py-2 px-2">{deliveryOrders.client.companyName}</td>
+                      <td className=" text-xs px-3">
+                        {deliveryOrders.client.street + ", " + deliveryOrders.client.city || deliveryOrders.client.municipality}
                         , <br />
-                        {deliveryOrders.client.region +
+                        {deliveryOrders.client.state +
                           ", " +
                           deliveryOrders.client.zipCode}
                       </td>

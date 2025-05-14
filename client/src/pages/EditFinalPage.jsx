@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams,} from "react-router-dom";
 import { useTire } from "../context/TireContext";
 import { StepBack } from "lucide-react";
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
@@ -328,11 +328,11 @@ function EditFinalPage() {
     { value: "BDR HG - 260", label: " BDR HG - 260" },
     { value: "BDR HG - 230", label: " BDR HG - 230     " },
     { value: "BDR HG - 240", label: " BDR HG - 240     " },
-    { value: "BDV - 260", label: " BDV - 260"},
-    { value: "BDV - 210", label: " BDV - 210"},
-    { value: "BDV - 230", label: " BDV - 230"},
-    { value: "BDV - 240", label: " BDV - 240"},
-    { value: "BDV - 220", label: " BDV - 220"},
+    { value: "BDV - 260", label: " BDV - 260" },
+    { value: "BDV - 210", label: " BDV - 210" },
+    { value: "BDV - 230", label: " BDV - 230" },
+    { value: "BDV - 240", label: " BDV - 240" },
+    { value: "BDV - 220", label: " BDV - 220" },
     { value: "Brawny Rib - 600  ", label: " Brawny Rib - 600 " },
     { value: "Brawny Rib - 800  ", label: " Brawny Rib - 800 " },
     { value: "Brawny Rib - 750  ", label: " Brawny Rib - 750 " },
@@ -615,11 +615,11 @@ function EditFinalPage() {
           </div>
 
           <div className="flex flex-wrap gap-4 justify-between mt-14">
-            <div className="flex">
+            <div className="flex gap-4">
               <div>
                 <button
                   type="button"
-                  className="text-white font-medium bg-buttonSecondary py-3 px-9 mr-4 rounded-md shadow-md hover:bg-buttonSecondaryHover duration-500 hover:duration-500"
+                  className="text-white font-medium bg-buttonSecondary py-3 px-9 rounded-md shadow-md hover:bg-buttonSecondaryHover duration-500 hover:duration-500"
                   onClick={() => handleStatusChange("Pasa")}
                 >
                   PASA
@@ -629,18 +629,28 @@ function EditFinalPage() {
                 {" "}
                 <button
                   type="button"
-                  className="text-white font-medium bg-buttonTertiary py-3 px-5 rounded-md shadow-md hover:bg-buttonTertiaryHover"
+                  className="text-white font-medium bg-buttonTertiary py-3 px-5 rounded-md shadow-md hover:bg-buttonTertiaryHover duration-500 hover:duration-500"
                   onClick={() => handleStatusChange("Rechazo")}
                 >
                   RECHAZO
                 </button>
               </div>
+              
             </div>
-            <div className="">
-              
-                <PrintLabelComponent tire={tireData} />
-              
-              
+            
+            <div className=" flex gap-4">
+              <div>
+                {" "}
+                <button
+                  type="button"
+                  className="text-white font-medium bg-colorPrimary py-3 px-5 rounded-md shadow-md hover:bg-blue-900 duration-500 hover:duration-500"
+                  onClick={() => handleStatusChange("Sin Costo")}
+                >
+                  SIN COSTO
+                </button>
+              </div>
+             <PrintLabelComponent tire={tireData} />
+
             </div>
           </div>
         </form>
