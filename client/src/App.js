@@ -38,8 +38,8 @@ import ReportPage from "./pages/ReportPage";
 import React, { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode"; // Asegúrate del import correcto
 import ProductionPage from "./pages/ProductionPage";
-import ViewWOBySeller from "./pages/ViewWOBySeller";
-import QuotesTiresPage from "./pages/QuotesTiresPage";
+import AllWOBySeller from "./pages/AllWOBySeller";
+import QuotedWorkOrdersPage from "./pages/QuotedWorkOrdersPage";
 import ReportByClientPage from "./pages/ReportByClientPage";
 
 function AppRoutes() {
@@ -221,12 +221,12 @@ function AppRoutes() {
     },
     {
       path: "/workOrderByUser/:id",
-      element: <ViewWOBySeller />,
+      element: <AllWOBySeller />,
       roles: [roleIds.ventas],
     },
     {
-      path: "/quoteTires",
-      element: <QuotesTiresPage />,
+      path: "/quoteWorkOrders",
+      element: <QuotedWorkOrdersPage />,
       roles: [roleIds.administradorF, roleIds.master],
     },
     {

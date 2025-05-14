@@ -5,6 +5,8 @@ import {
   getWorkOrderRequest,
   openWorkOrderRequest,
   deleteWorkOrderRequest,
+  quoteWorkOrderRequest,
+  getQuoteWorkOrderRequest
 } from "../api/workOrders.js";
 import { useDispatch } from "react-redux";
 import {
@@ -66,6 +68,25 @@ export function WorkOrderProvider({ children }) {
     }
   };
 
+  const quoteWorkOrder = async (data) => {
+    try {
+      await quoteWorkOrderRequest(data)
+      console.log("Ordenes de trabajo enviadas a cotización")
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  
+   const getQuoteWorkOrder = async () => {
+      try {
+        const res = await getQuoteWorkOrderRequest();
+        console.log(res);
+        setAllWorkOrders(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
   useEffect(() => {
     socket.on("workOrderDeleted", ({ id }) => {
       console.log("Orden de trabajo eliminada:", id);
@@ -87,6 +108,8 @@ export function WorkOrderProvider({ children }) {
         getWorkOrders,
         allWorkOrders,
         getWorkOrderById,
+        quoteWorkOrder,
+        getQuoteWorkOrder,
       }}
     >
       {children}

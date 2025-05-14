@@ -163,11 +163,14 @@ const WorkOrderPDF = ({ workOrder }) => {
           </View>
           <View>
             <Text style={styles.sectionContent}>Para:</Text>
-            <Text style={styles.textClient}>{workOrder.client.companyName}</Text>
+            <Text style={styles.textClient}>
+              {workOrder.client.companyName}
+            </Text>
             <Text style={styles.textAddress}>{workOrder.client.street}</Text>
             <Text style={styles.textAddress}>{workOrder.client.state}</Text>
             <Text style={styles.textAddress}>
-              {workOrder.client.city || workOrder.client.municipality} {workOrder.client.zipCode}
+              {workOrder.client.city || workOrder.client.municipality}{" "}
+              {workOrder.client.zipCode}
             </Text>
           </View>
         </View>
@@ -207,14 +210,45 @@ const WorkOrderPDF = ({ workOrder }) => {
                 <Text style={styles.tableCell}>{tire.antiquityDot || "-"}</Text>
                 <Text style={styles.tableCell}>
                   {tire.status === "Rechazo" ? (
-                    <Image src={images.x} style={styles.tableCell}/>
+                    <Image src={images.x} style={styles.tableCell} />
                   ) : tire.status === "Pasa" ? (
-                    <Image src={images.check} style={styles.tableCell}/>
+                    <Image src={images.check} style={styles.tableCell} />
+                  ) : tire.status === "Sin Costo" ? (
+                    "Sin Costo"
                   ) : (
-                    "Falta Inspección"
+                    " Sin inspección"
                   )}
                 </Text>
               </View>
+              {(tire.rejection ||
+                tire.patch ||
+                tire.patch2 ||
+                tire.patch3 ||
+                tire.patch4) && (
+                <View style={styles.rejectionRow}>
+                  {tire.rejection && (
+                    <Text style={styles.rejectionCell}>
+                      Razón del rechazo: {tire.rejection}
+                    </Text>
+                  )}
+                  {[
+                    { patch: tire.patch, quantity: tire.numberPatches },
+                    { patch: tire.patch2, quantity: tire.numberPatches2 },
+                    { patch: tire.patch3, quantity: tire.numberPatches3 },
+                    { patch: tire.patch4, quantity: tire.numberPatches4 },
+                  ]
+                    .filter(({ patch, quantity }) => patch || quantity)
+                    .map(({ patch, quantity }, patchIndex) => (
+                      <Text
+                        key={patchIndex}
+                        style={styles.rejectionCell}
+                      >{`Reparación ${patchIndex + 1}: ${
+                        patch || "-"
+                      } Cantidad: ${quantity || "-"}`}</Text>
+                    ))}
+                  <Text style={styles.emptyCell}></Text>
+                </View>
+              )}
             </React.Fragment>
           ))}
         </View>

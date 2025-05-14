@@ -45,7 +45,6 @@ function EditInitialPage() {
     try {
       await updateProductionTire(params.id, updatedValues);
       navigate("/productionInitial");
-      alert("Registro actualizado exitosamente");
     } catch (error) {
       console.error(error);
       alert("Error al actualizar el registro");

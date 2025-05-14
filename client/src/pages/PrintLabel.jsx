@@ -134,12 +134,25 @@ function PrintLabel() {
                   <p>{tire.brand}</p>
                   <p>DOT: {tire.antiquityDot}</p>
                 </div>
-                {tire.status === "Rechazo" && (
+                {tire.status === "Rechazo" ? (
                   <>
                     <p>RECHAZO</p>
                     <p>{tire.rejection || "-"}</p>
                   </>
+                ) : tire.status === "Sin Costo" ?(
+                  <>
+                    <p>Sin Costo</p>
+                    <p>{tire.rejection || "-"}</p>
+                  </>
+                ):(
+                  ""
                 )}
+                {/* {tire.status === "Rechazo" && (
+                  <>
+                    <p>RECHAZO</p>
+                    <p>{tire.rejection || "-"}</p>
+                  </>
+                )} */}
                 <p className="flex justify-end mt-4">
                   {tire.formattedUpdatedAt}
                 </p>

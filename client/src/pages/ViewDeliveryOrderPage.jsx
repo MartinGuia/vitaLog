@@ -4,7 +4,7 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import DeliveryOrderPDF from "../components/PDF/DeliveryOrderPDF.jsx";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { StepBack } from "lucide-react";
+import { StepBack, Check, X  } from "lucide-react";
 
 function ViewDeliveryOrderPage() {
   const { getDeliveryOrder } = useDeliveryOrder();
@@ -77,7 +77,9 @@ function ViewDeliveryOrderPage() {
             </button>
           </Link>
 
-          <h1 className="text-2xl md:text-4xl font-bold">Imprimir Orden De Entrega</h1>
+          <h1 className="text-2xl md:text-4xl font-bold">
+            Imprimir Orden De Entrega
+          </h1>
         </div>
         <header className="w-full mt-3 flex justify-center">
           <div className=" w-full p-2 flex justify-between border-b-2 border-blue-600 ">
@@ -148,12 +150,13 @@ function ViewDeliveryOrderPage() {
                       </th>
                       <th className="py-3 px-6">Código de Ítem</th>
                       <th className="py-3 px-6">Código de Barras</th>
-                      <th className="py-3 px-6">Estado</th>
                       <th className="py-3 px-6">Medida de Casco</th>
                       <th className="py-3 px-6">Marca</th>
+                      <th className="py-3 px-6">Modelo</th>
                       <th className="py-3 px-6">Quemado</th>
                       <th className="py-3 px-6">Banda aplicada</th>
                       <th className="py-3 px-6">DOT</th>
+                      <th className="py-3 px-6">status</th>
                       {/* <th className="py-3 px-6"></th> */}
                     </tr>
                   </thead>
@@ -166,14 +169,32 @@ function ViewDeliveryOrderPage() {
                         </td>
                         <td className="py-3 px-6">{tire.itemCode}</td>
                         <td className="py-3 px-6">{tire.barCode}</td>
-                        <td className="py-3 px-6">{tire.status}</td>
                         <td className="py-3 px-6">{tire.helmetMeasurement}</td>
                         <td className="py-3 px-6">{tire.brand}</td>
+                        <td className="py-3 px-6">{tire.modelTire}</td>
                         <td className="py-3 px-6">{tire.serialNumber}</td>
                         <td className="py-3 px-6">
                           {tire.appliedBand || tire.appliedBandBandag || "-"}
                         </td>
                         <td className="py-3 px-6">{tire.antiquityDot}</td>
+                        <td className="py-3 px-6">
+                          {" "}
+                          <td className=" text-center">
+                            {tire.status === "Rechazo" ? (
+                              <div className="flex justify-center">
+                                <X color="#ff0000" />
+                              </div>
+                            ) : tire.status === "Pasa" ? (
+                              <div className="flex justify-center">
+                                <Check color="#ff0000" />
+                              </div>
+                            ) : tire.status === "Sin Costo" ? (
+                              "Sin Costo"
+                            ) : (
+                              "Falta Inspección"
+                            )}
+                          </td>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

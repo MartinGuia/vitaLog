@@ -286,7 +286,6 @@ function EditRepairsPage() {
     try {
       await updateProductionTire(params.id, updatedValues);
       navigate("/productionRepairs");
-      alert("Registro actualizado exitosamente");
     } catch (error) {
       console.error(error);
       alert("Error al actualizar el registro");

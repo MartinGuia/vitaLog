@@ -190,19 +190,69 @@ export const deleteWorkOrder = async (req, res) => {
 
 export const quoteWorkOrder = async (req, res) => {
   try {
-    const workOrder = await WorkOrder.findByIdAndUpdate(
-      req.params.id,
-      { quoteWorkOrder: true },
-      { new: true }
-    );
+      const { workOrdersIds } = req.body; // arreglo de IDs de llantas
+  
+      if (!Array.isArray(workOrdersIds) || workOrdersIds.length === 0) {
+        return res
+          .status(400)
+          .json({ message: "No se proporcionaron ordenes de trabajo a actualizar." });
+      }
+  
+      const result = await WorkOrder.updateMany(
+        { _id: { $in: workOrdersIds } }, // condición: múltiples IDs
+        { $set: { quoteWorkOrder: true } } // actualización
+      );
+  
+      res.json({ success: true, updatedCount: result.modifiedCount });
+    } catch (error) {
+      console.error("Error al actualizar quoteWorkOrder:", error);
+      res.status(500).json({
+        message: "Error al actualizar las ordenes de trabajo para cotización",
+        error,
+      });
+    }
+};
 
-    if (!workOrder) {
-      return res.status(404).json({ message: "Orden de trabajo no encontrada" });
+export const getQuotedWorkOrders = async (req,res) =>{
+  try {
+    const workOrders = await WorkOrder.find(
+      {
+        quoteWorkOrder: true
+      }
+    ).populate({
+      path: "tires",
+      select: "-user -createdAt -updatedAt -inspection -date"
+    }).populate({
+      path: "client",
+      select: "-zipCode -Rfc -clientCode -eMail"
+    }).populate({
+      path: "createdBy",
+      select: "name"
+    })
+    // .populate({path: "tires client createdBy"})
+    // .populate({
+    //   path: "createdBy", select: "name"
+    // })
+
+    if(!workOrders || workOrders.length === 0){
+      return res
+        .status(404)
+        .json({
+          message:
+            "No Work Orders found with both quoteWorkOrder set to true",
+        });
     }
 
-    res.status(200).json(workOrder);
+    // Formatear la fecha de creación
+    const formattedWorkOrders = workOrders.map((order) => ({
+      ...order.toObject(),
+      // formattedCreatedAt: format(new Date(order.createdAt), "yyyy-MM-dd HH:mm:ss"),
+      formattedCreatedAt: format(new Date(order.createdAt), "dd/MM/yyyy"),
+    }));
+
+    res.json(formattedWorkOrders);
   } catch (error) {
-    console.error("Error al cotizar la orden de trabajo:", error);
-    res.status(500).json({ message: ["Error interno del servidor"] });
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving workOrders" });
   }
-};
+}
