@@ -29,6 +29,7 @@ function ViewWorkOrder() {
   const [clientZipCode, setClientZipCode] = useState();
   const [roleMaster, setRoleMaster] = useState();
   const [roleAdminP, setRoleAdminP] = useState();
+  const [roleAdminF, setRoleAdminF] = useState();
   const { getRoles, user } = useAuth();
   const [workOrdersByUser, setWorkOrdersByUser] = useState();
   const { quoteTires } = useTire();
@@ -44,10 +45,10 @@ function ViewWorkOrder() {
             setRoleMaster(role._id);
           } else if (role.name === "AdministradorP") {
             setRoleAdminP(role._id);
+          } else if (role.name === "AdministradorF") {
+            setRoleAdminF(role._id);
           }
-          // } else if (role.name === "Operador") {
-          //   setRoleProduction(role._id);
-          // } else if (role.name === "Vendedor") {
+          //  else if (role.name === "Vendedor") {
           //   setRoleSeller(role._id);
           // } else if (role.name === "Almacenista") {
           //   setRoleA(role._id);
@@ -111,6 +112,12 @@ function ViewWorkOrder() {
                 <StepBack color="white" />
               </button>
             </Link>
+          ) : user.role === roleAdminF ? (
+            <Link to={`/quoteWorkOrders`}>
+              <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary shadow-md rounded-md px-4 py-1 duration-500 hover:duration-500">
+                <StepBack color="white" />
+              </button>
+            </Link>
           ) : (
             <Link to={`/workOrderByUser/${workOrdersByUser}`}>
               <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary shadow-md rounded-md px-4 py-1 duration-500 hover:duration-500">
@@ -118,7 +125,6 @@ function ViewWorkOrder() {
               </button>
             </Link>
           )}
-
           <h1 className="text-2xl md:text-4xl font-bold">Imprimir Orden</h1>
         </div>
 
@@ -170,7 +176,7 @@ function ViewWorkOrder() {
                     <div className="text-xs">
                       <p>{clientAddress}</p>
                       <p>
-                        {clientRegion}, { clientCity || clientMunicipality}
+                        {clientRegion}, {clientCity || clientMunicipality}
                       </p>
                       <p>{clientZipCode}</p>
                     </div>
@@ -196,9 +202,7 @@ function ViewWorkOrder() {
                       <th className="py-3 px-6">DOT</th>
                       <th className="py-3 px-6">Estatus</th>
                       <th className="py-3 px-6">
-                        {user.role === roleMaster || user.role === roleAdminP
-                          ? null
-                          : "Cotizar"}
+                        {user.role === roleAdminF ? "Cotizar" : null}
                       </th>
                     </tr>
                   </thead>
@@ -223,6 +227,8 @@ function ViewWorkOrder() {
                             <div className="flex justify-center">
                               <Check color="#ff0000" />
                             </div>
+                          ) : tire.status === "Sin Costo" ? (
+                            "Sin Costo"
                           ) : (
                             "Falta Inspección"
                           )}
@@ -235,27 +241,35 @@ function ViewWorkOrder() {
                                 <UserRoundPen />
                               </button>
                             </Link>
-                          ) : (
-                            <Checkbox
-                              color="warning"
-                              defaultSelected={tire.quoteTires === true}
-                              onChange={(e) => {
-                                const checked = e.target.checked;
-                                const tireId = tire._id;
+                          ) : user.role === roleAdminF ? (
+                            <div className="flex justify-between">
+                              <Link to={`/tire/${tire._id}`}>
+                                <button className="text-blue-600 hover:text-blue-800 ">
+                                  <UserRoundPen />
+                                </button>
+                              </Link>
+                              <Checkbox
+                                color="warning"
+                                defaultSelected={tire.quoteTires === true}
+                                onChange={(e) => {
+                                  const checked = e.target.checked;
+                                  const tireId = tire._id;
 
-                                if (checked) {
-                                  setSelectedTireIds((prev) => [
-                                    ...prev,
-                                    tireId,
-                                  ]);
-                                } else {
-                                  setSelectedTireIds((prev) =>
-                                    prev.filter((id) => id !== tireId)
-                                  );
-                                }
-                              }}
-                            />
-                          )}
+                                  if (checked) {
+                                    setSelectedTireIds((prev) => [
+                                      ...prev,
+                                      tireId,
+                                    ]);
+                                  } else {
+                                    setSelectedTireIds((prev) =>
+                                      prev.filter((id) => id !== tireId)
+                                    );
+                                  }
+                                }}
+                              />
+                            </div>
+                          ) : null}
+                        
                         </td>
                       </tr>
                     ))}

@@ -158,7 +158,7 @@ function Nav({ children }) {
       ], 
     },
     {
-      path: `/quoteTires`,
+      path: `/quoteWorkOrders`,
       icon: <ReceiptText size={20} color="white" />,
       text: "Cotizar",
       allowedRoles: [

@@ -682,20 +682,6 @@ function AddTireToWO() {
                       </AutocompleteItem>
                     )}
                   </Autocomplete>
-                  {/* <Select
-                    className="shadow-md rounded-xl "
-                    items={bandContinental}
-                    label="Banda Requerida"
-                    {...register("requiredBand", {
-                      required: "Debe seleccionar una banda.",
-                    })}
-                  >
-                    {bandContinental.map((bandC) => (
-                      <SelectItem key={bandC.value} value={bandC.value}>
-                        {bandC.label}
-                      </SelectItem>
-                    ))}
-                  </Select> */}
                   {errors.requiredBand && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido

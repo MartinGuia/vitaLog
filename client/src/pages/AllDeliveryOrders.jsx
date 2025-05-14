@@ -102,17 +102,13 @@ function AllDeliveryOrders() {
               <table className="min-w-full bg-white border border-gray-200 rounded-lg">
                 <thead>
                   <tr className="bg-gray-100 text-gray-600 text-sm text-left">
-                  <th className="py-2 px-6">Código De cliente</th>
-                    <th className="py-2 px-6">Nombre de Cuenta</th>
-                    <th className="py-2 px-6">RFC</th>
-                    <th className="py-2 px-6">Número Interior</th>
-                    <th className="py-2 px-6">Número Exterior</th>
-                    <th className="py-2 px-6">Colonia</th>
-                    <th className="py-2 px-6">Código Postal</th>
-                    <th className="py-2 px-6">Ciudad</th>
-                    <th className="py-2 px-6">Municipio</th>
-                    <th className="py-2 px-6">Estado</th>
-                    <th className="py-2 px-6">Email</th>
+                    <th className="py-2 px-6"> # </th>
+                    <th className="py-2 px-6"> Nombre </th>
+                    <th className="py-2 px-6"> Registros </th>
+                    <th className="py-2 px-6"> Cliente </th>
+                    <th className="py-2 px-6"> Dirección </th>
+                    <th className="py-2 px-6"> Recolección </th>
+                    <th className="py-2 px-6"> Acciones </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -126,13 +122,16 @@ function AllDeliveryOrders() {
                         <button>{deliveryOrders.createdBy.name}</button>
                       </td>
                       <td className="px-6">{deliveryOrders.tires.length}</td>
-                      <td className="px-6">{deliveryOrders.client.name}</td>
-                      <td className="px-6 text-xs">
-                        {deliveryOrders.client.address1 +
+                      <td className="py-2 px-2">
+                        {deliveryOrders.client.companyName}
+                      </td>
+                      <td className=" text-xs px-3">
+                        {deliveryOrders.client.street +
                           ", " +
-                          deliveryOrders.client.city}
+                          deliveryOrders.client.city ||
+                          deliveryOrders.client.municipality}
                         , <br />
-                        {deliveryOrders.client.region +
+                        {deliveryOrders.client.state +
                           ", " +
                           deliveryOrders.client.zipCode}
                       </td>

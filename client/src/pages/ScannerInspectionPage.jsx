@@ -69,31 +69,6 @@ function ScannerInspectionPage() {
             </div>
           )}
         </div>
-
-        {/* Mostrar formulario de edición si está en modo edición */}
-        {/* {isEditing && tireData && (
-          
-          // <div className="mt-8 ">
-          //   <Link
-          //     to={`/editInitial/${tireData._id}`}
-          //     className="w-full h-32 flex justify-center"
-          //   >
-          //     <button className="bg-slate-100 w-[50%] h-[20] p-2 shadow rounded-lg hover:-translate-y-2 hover:duration-500 duration-500">
-          //       <div className="">
-          //         <h1 className="text-lg font-semibold">
-          //           Ir a la llanta de la orden de trabajo:{" "}
-          //           {tireData.workOrder.numero}
-          //         </h1>
-          //       </div>
-          //       <div>
-          //         <div className="flex justify-end items-end">
-          //           Registrada por: <p className="ml-2 font-semibold"> {tireData.user.name}</p>
-          //         </div>
-          //       </div>
-          //     </button>
-          //   </Link>
-          // </div>
-        )} */}
       </section>
     </div>
   );

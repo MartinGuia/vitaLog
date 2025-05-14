@@ -120,6 +120,10 @@ const tireSchema = new Schema(
       type: Boolean,
       required: false,
     },
+    quoteNumber: {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,
