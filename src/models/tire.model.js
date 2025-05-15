@@ -43,11 +43,11 @@ const tireSchema = new Schema(
     },
     serialNumber: {
       type: String,
-      required: true,
+      required: false,
     },
     millimeterFootage: {
       type: String,
-      required: true,
+      required: false,
     },
     date: {
       type: Date,

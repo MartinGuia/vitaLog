@@ -10,18 +10,25 @@ export const createOrOpenWorkOrder = async (req, res) => {
     const userId = req.user._id || req.user.id;
 
     // Buscar si ya hay una orden abierta del mismo usuario
-    let  workOrder = await WorkOrder.findOne({ isOpen: true, createdBy: userId }).populate("tires");
+    let workOrder = await WorkOrder.findOne({
+      isOpen: true,
+      createdBy: userId,
+    }).populate("tires");
 
     if (!workOrder) {
-      const ultimaOrdenDeTrabajo = await WorkOrder.findOne().sort({ numero: -1 });
-      const nuevoNumero = ultimaOrdenDeTrabajo?.numero ? ultimaOrdenDeTrabajo.numero + 1 : 1;
+      const ultimaOrdenDeTrabajo = await WorkOrder.findOne().sort({
+        numero: -1,
+      });
+      const nuevoNumero = ultimaOrdenDeTrabajo?.numero
+        ? ultimaOrdenDeTrabajo.numero + 1
+        : 1;
 
       // Crear nueva orden
       workOrder = await WorkOrder.create({
         numero: nuevoNumero,
         isOpen: true,
         createdBy: userId,
-        client: client ,
+        client: client,
       });
 
       console.log("Orden creada con ID:", workOrder._id);
@@ -44,7 +51,9 @@ export const createOrOpenWorkOrder = async (req, res) => {
     res.json({ success: true, workOrder });
   } catch (error) {
     console.error("Error al crear/abrir orden de trabajo:", error);
-    res.status(500).json({ success: false, message: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ success: false, message: "Error interno del servidor" });
   }
 };
 
@@ -64,12 +73,10 @@ export const closeWorkOrder = async (req, res) => {
     });
 
     if (!currentWorkOrder) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "No hay ninguna orden de trabajo abierta.",
-        });
+      return res.status(404).json({
+        success: false,
+        message: "No hay ninguna orden de trabajo abierta.",
+      });
     }
 
     // Cerrar la orden de trabajo
@@ -136,6 +143,7 @@ export const getWorkOrders = async (req, res) => {
   try {
     // Buscar todas las órdenes de trabajo existentes
     const workOrders = await WorkOrder.find({})
+      .sort({ createdAt: -1 })
       .populate({
         path: "createdBy",
         select: "name lastName _id",
@@ -190,32 +198,33 @@ export const deleteWorkOrder = async (req, res) => {
 
 export const quoteWorkOrder = async (req, res) => {
   try {
-      const { workOrdersIds } = req.body; // arreglo de IDs de llantas
-  
-      if (!Array.isArray(workOrdersIds) || workOrdersIds.length === 0) {
-        return res
-          .status(400)
-          .json({ message: "No se proporcionaron ordenes de trabajo a actualizar." });
-      }
-  
-      const result = await WorkOrder.updateMany(
-        { _id: { $in: workOrdersIds } }, // condición: múltiples IDs
-        { $set: { quoteWorkOrder: true } } // actualización
-      );
-  
-      res.json({ success: true, updatedCount: result.modifiedCount });
-    } catch (error) {
-      console.error("Error al actualizar quoteWorkOrder:", error);
-      res.status(500).json({
-        message: "Error al actualizar las ordenes de trabajo para cotización",
-        error,
+    const { workOrdersIds } = req.body; // arreglo de IDs de llantas
+
+    if (!Array.isArray(workOrdersIds) || workOrdersIds.length === 0) {
+      return res.status(400).json({
+        message: "No se proporcionaron ordenes de trabajo a actualizar.",
       });
     }
+
+    const result = await WorkOrder.updateMany(
+      { _id: { $in: workOrdersIds } }, // condición: múltiples IDs
+      { $set: { quoteWorkOrder: true } } // actualización
+    );
+
+    res.json({ success: true, updatedCount: result.modifiedCount });
+  } catch (error) {
+    console.error("Error al actualizar quoteWorkOrder:", error);
+    res.status(500).json({
+      message: "Error al actualizar las ordenes de trabajo para cotización",
+      error,
+    });
+  }
 };
 
 export const getQuotedWorkOrders = async (req, res) => {
   try {
     const workOrders = await WorkOrder.find({ quoteWorkOrder: true })
+      .sort({ createdAt: -1 })
       .populate({
         path: "tires",
         select: "-user -createdAt -updatedAt -inspection -date",
@@ -231,7 +240,8 @@ export const getQuotedWorkOrders = async (req, res) => {
 
     if (!workOrders.length) {
       return res.status(404).json({
-        message: "No hay órdenes de trabajo marcadas como cotización (quoteWorkOrder: true)",
+        message:
+          "No hay órdenes de trabajo marcadas como cotización (quoteWorkOrder: true)",
       });
     }
 
@@ -243,6 +253,8 @@ export const getQuotedWorkOrders = async (req, res) => {
     return res.status(200).json(formattedWorkOrders);
   } catch (error) {
     console.error("Error al obtener órdenes de trabajo cotizadas:", error);
-    return res.status(500).json({ message: "Error del servidor al recuperar las órdenes de trabajo" });
+    return res.status(500).json({
+      message: "Error del servidor al recuperar las órdenes de trabajo",
+    });
   }
 };

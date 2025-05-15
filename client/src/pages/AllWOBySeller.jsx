@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useParams, Link } from "react-router-dom";
 import {
@@ -53,7 +53,7 @@ function ViewWOBySeller() {
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
       <div className="text-center my-8">
         <h2 className="md:text-4xl text-2xl font-bold mb-2">
-          Órdenes de Trabajo
+          Órdenes de Trabajo Levantadas
         </h2>
       </div>
       
