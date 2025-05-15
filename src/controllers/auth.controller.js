@@ -256,12 +256,13 @@ export const editUser = async (req, res) => {
   }
 };
 
-export const getWorkOrderById = async (req, res) => {
+export const getWorkOrdersById = async (req, res) => {
   const { id } = req.params;
 
   try {
     const userFound = await User.findById(id).populate({
       path: 'workOrders',
+      options: { sort: { createdAt: -1 } }, // Orden descendente
       populate: [
         { path: 'client' },
         { path: 'tires' },

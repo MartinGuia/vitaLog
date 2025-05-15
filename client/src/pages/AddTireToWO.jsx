@@ -748,18 +748,12 @@ function AddTireToWO() {
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
                 <div className="relative w-[60%] md:w-[40%]">
                   <Input
-                    items={helmetMeasurements}
                     label="Milimetraje"
                     variant={"underlined"}
                     {...register("millimeterFootage", {
                       required: "Debe seleccionar un milimetraje.",
                     })}
                   />
-                  {errors.helmetMeasurement && (
-                    <p className="text-red-500 text-xs">
-                      Este campo es requerido
-                    </p>
-                  )}
                 </div>
               </div>
             </div>

@@ -135,7 +135,7 @@ const WorkOrderPDF = ({ workOrder }) => {
         <View style={styles.header}>
           <View>
             <Text style={styles.title}>
-              Nota de Entrega: {workOrder.numero}
+              Orden de Trabajo: {workOrder.numero}
             </Text>
             <Text style={styles.sectionContent}>VITA-BAJIO S.A de C.V</Text>
             <Text style={styles.sectionContent}>

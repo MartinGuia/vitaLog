@@ -101,7 +101,6 @@ function AppRoutes() {
         roleIds.master,
         roleIds.ventas,
         roleIds.administradorP,
-        roleIds.administradorF,
       ],
     },
     {
@@ -142,7 +141,6 @@ function AppRoutes() {
         roleIds.master,
         roleIds.ventas,
         roleIds.administradorP,
-        roleIds.administradorF,
       ],
     },
     {
@@ -203,7 +201,7 @@ function AppRoutes() {
     {
       path: "/viewDeliveryOrder/:id",
       element: <ViewDeliveryOrderPage />,
-      roles: [roleIds.master, roleIds.almacenista],
+      roles: [roleIds.master, roleIds.almacenista, roleIds.administradorP],
     },
     {
       path: "/printLabel/:id",
@@ -213,7 +211,7 @@ function AppRoutes() {
     {
       path: "/reports",
       element: <ReportPage />,
-      roles: [roleIds.master, roleIds.administradorF, roleIds.administradorP],
+      roles: [roleIds.master],
     },
     {
       path: "/production",
@@ -223,7 +221,7 @@ function AppRoutes() {
     {
       path: "/workOrderByUser/:id",
       element: <AllWOBySeller />,
-      roles: [roleIds.ventas],
+      roles: [roleIds.ventas, roleIds.administradorP],
     },
     {
       path: "/quoteWorkOrders",
@@ -238,7 +236,7 @@ function AppRoutes() {
     {
       path: "/reportByClient",
       element: <ReportByClientPage />,
-      roles: [roleIds.administradorF, roleIds.master],
+      roles: [, roleIds.master],
     },
   ];
 

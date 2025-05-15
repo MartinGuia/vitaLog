@@ -9,7 +9,8 @@ import {
   PackageCheck,
   FileInput,
   ChartColumnBig,
-  ReceiptText
+  ReceiptText,
+  FileStack
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -106,7 +107,7 @@ function Nav({ children }) {
       path: "/createWorkOrder",
       icon: <NotebookPen size={20} color="white" />,
       text: "Crear Orden de T.",
-      allowedRoles: [roleIds.master, roleIds.ventas], 
+      allowedRoles: [roleIds.master, roleIds.ventas, roleIds.administradorP], 
     },
     {
       path: "/clients",
@@ -122,8 +123,9 @@ function Nav({ children }) {
     },
     {
       path: "/workorders",
-      icon: <BookMarked size={20} color="white" />,
-      text: "Orden de trabajo",
+      
+      icon: <FileStack size={20} color="white" />,
+      text: "Ordenes de trabajo",
       allowedRoles: [
         roleIds.master,
         roleIds.administradorP,
@@ -146,15 +148,16 @@ function Nav({ children }) {
       text: "Estadística",
       allowedRoles: [
         roleIds.master,
-        // roleIds.administradorP, roleIds.administradorF
+        //  roleIds.administradorF
       ],
     },
     {
       path: `/workOrderByUser/${userWorkOrder}`,
       icon: <BookMarked size={20} color="white" />,
-      text: "Ordenes de Trabajo",
+      text: "Ordenes levantadas",
       allowedRoles: [
         roleIds.ventas,
+        roleIds.administradorP,
       ], 
     },
     {

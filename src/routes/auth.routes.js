@@ -8,7 +8,7 @@ import {
   getUsers,
   editUser,
   deleteUser,
-  getWorkOrderById,
+  getWorkOrdersById,
 } from "../controllers/auth.controller.js";
 import { authRequired } from "../middlewares/validateToken.js";
 import verifyRoleAdmin from "../middlewares/verifyRoleAdmin.js";
@@ -37,7 +37,7 @@ router.post("/logout", logout);
 router.get("/verify", verifyToken);
 router.get("/profile/:id", authRequired, verifyRoleAdmin, getProfileById);
 router.put("/editUser/:id", authRequired, verifyRoleAdmin, editUser);
-router.get("/workOrdersByUser/:id", authRequired, getWorkOrderById);
+router.get("/workOrdersByUser/:id", authRequired, getWorkOrdersById);
 router.delete("/deleteUser/:id", authRequired, verifyRoleAdmin, deleteUser);
 
 export default router;

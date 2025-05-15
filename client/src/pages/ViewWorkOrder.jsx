@@ -96,7 +96,7 @@ function ViewWorkOrder() {
         <div className="w-full p-2 flex justify-between border-b-2 border-blue-600">
           <section>
             <h1 className="font-bold text-xl text-blue-700">
-              Orden de Entrega: <span>{numero}</span>
+              Orden de Trabajo: <span>{numero}</span>
             </h1>
             <p className="font-medium">VITA-BAJIO S.A de C.V</p>
             <p className="font-medium text-sm">Hidalgo 1500 San Juan de La Presa, Salamanca</p>
