@@ -2,14 +2,14 @@ import { useTire } from "../context/TireContext";
 import { useDeliveryOrder } from "../context/DeliveryOrderContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Alert from "../components/ui/Alert";
+import AlertComponent from "../components/ui/AlertComponent";
 
 function AddTiresPage() {
   const { getTiresByInspection, tires } = useTire();
   const { addTiresDeliveryOrder, closeDeliveryOrder } = useDeliveryOrder();
   const [selectedTires, setSelectedTires] = useState([]);
-  const [alert, setAlert] = useState(null); // Estado para manejar la alerta
   const navigate = useNavigate();
+  const [alertData, setAlertData] = useState(null); // Para controlar si mostrar el Alert
 
   useEffect(() => {
     getTiresByInspection();
@@ -32,16 +32,18 @@ function AddTiresPage() {
     try {
       await addTiresDeliveryOrder(selectedTires);
       await closeDeliveryOrder();
-      setAlert({
-        message: "Se agregaron correctamente las llantas",
-        type: "success",
-        onAccept: () => navigate(`/allDeliveryOrders`), // Redirige tras cerrar la alerta
-      }); // Muestra la alerta
+      setAlertData({
+        title: "¡Exito!",
+        description: "Se agregaron correctamente las llantas",
+        color: "success",
+      });
+      navigate(`/allDeliveryOrders`);
     } catch (error) {
       console.error(error);
-      setAlert({
-        message: "Hubo un error al registrar las llantas",
-        type: "error",
+      setAlertData({
+        title: "Error!",
+        description: "Hubo un error al registrar las llantas",
+        color: "danger",
       });
     } finally {
       setSelectedTires([]); // Limpia la selección
@@ -50,12 +52,13 @@ function AddTiresPage() {
 
   return (
     <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
-       {/* Mostrar alerta */}
-       {alert && (
-        <Alert
-          message={alert.message}
-          type={alert.type}
-          onAccept={alert.onAccept} // Maneja el cierre de la alerta con redirección
+      {/* Mostrar alerta */}
+      {alertData && (
+        <AlertComponent
+          title={alertData.title}
+          description={alertData.description}
+          color={alertData.color}
+          onClose={() => setAlertData(null)} // Esta es la función que se ejecutará después de 3 segundos
         />
       )}
       <div>
@@ -99,7 +102,9 @@ function AddTiresPage() {
                 <td className="px-6">{tire.itemCode}</td>
                 <td className="px-6">{tire.helmetMeasurement}</td>
                 <td className="px-6">{tire.serialNumber}</td>
-                <td className="px-6">{tire.appliedBand || tire.appliedBandBandag}</td>
+                <td className="px-6">
+                  {tire.appliedBand || tire.appliedBandBandag}
+                </td>
                 <td className="px-6">{tire.brand}</td>
               </tr>
             ))}
@@ -119,8 +124,6 @@ function AddTiresPage() {
           Enviar Seleccionados
         </button>
       </div>
-
-     
     </div>
   );
 }

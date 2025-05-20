@@ -14,6 +14,7 @@ import {
   Autocomplete,
   AutocompleteItem,
 } from "@heroui/react";
+import AlertComponent from "../components/ui/AlertComponent";
 
 function AddTireToWO() {
   const [scannedCode, setScannedCode] = useState(""); // Estado para el código escaneado
@@ -27,6 +28,7 @@ function AddTireToWO() {
   const navigate = useNavigate();
   const { closeWorkOrder } = useWorkOrder();
   const { createTire, errors: registerErrors } = useTire();
+  const [alertData, setAlertData] = useState(null); // Para controlar si mostrar el Alert
 
   const onSubmit = handleSubmit((values) => {
     // Combinar los valores del formulario con el código de barras actual
@@ -35,6 +37,18 @@ function AddTireToWO() {
 
     // Incrementar el código de barras si es numérico, de lo contrario dejar en blanco o mantener el valor.
     const numericCode = Number(scannedCode);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // para que se vea mejor
+    });
+
+    setAlertData({
+      title: "¡LLanta registrada!",
+      description: "La llanta fue registrada exitosamente.",
+      color: "success",
+    });
+
     if (!isNaN(numericCode)) {
       const newCode = numericCode + 1;
       setScannedCode(newCode.toString());
@@ -482,6 +496,15 @@ function AddTireToWO() {
   return (
     <>
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
+        {/* Mostrar AlertComponent si hay alertData */}
+        {alertData && (
+          <AlertComponent
+            title={alertData.title}
+            description={alertData.description}
+            color={alertData.color}
+            onClose={() => setAlertData(null)}
+          />
+        )}
         <div className="flex items-center gap-3 mb-6">
           <h1 className="text-2xl md:text-4xl font-bold">Añadir Llanta</h1>
           <div className="flex top-10 absolute w-[100%]">
@@ -593,54 +616,36 @@ function AddTireToWO() {
             </div>
           </div>
 
-          {/* DOT Y BANDA REQUERIDA */}
           <div>
             <div className="mt-8">
               <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
-                DOT y Quemado
-              </h2>
-            </div>
-            <div className="w-[100%] pt-6 text-xl">
-              <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative md:w-5/12 w-auto">
-                  <Input
-                    label="DOT"
-                    type="text"
-                    variant={"underlined"}
-                    {...register("antiquityDot", { required: true })}
-                  />
-                  {errors.antiquityDot && (
-                    <p className="text-red-500 text-xs">
-                      Este campo es requerido
-                    </p>
-                  )}
-                </div>
-                <div className="relative w-[50%] md:w-[40%] mt-5 sm:mt-0">
-                  <Input
-                    label="Quemado"
-                    type="text"
-                    variant={"underlined"}
-                    {...register("serialNumber", { required: true })}
-                  />
-                  {errors.serialNumber && (
-                    <p className="text-red-500 text-xs">
-                      Este campo es requerido
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div className="mt-8">
-              <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
-                Marca y Banda Requerida
+                Medida y Marca
               </h2>
             </div>
             <div className="w-[100%] pt-6 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
                 <div className="relative w-[60%] md:w-[40%]">
+                  <Autocomplete
+                    className="shadow-md rounded-xl"
+                    items={helmetMeasurements}
+                    label="Medidas"
+                    {...register("helmetMeasurement", {
+                      required: "Debe seleccionar una medida.",
+                    })}
+                  >
+                    {(item) => (
+                      <AutocompleteItem key={item.value} value={item.value}>
+                        {item.label}
+                      </AutocompleteItem>
+                    )}
+                  </Autocomplete>
+                  {errors.helmetMeasurement && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>
+                <div className="relative w-[60%] md:w-[40%] mt-5 sm:mt-0">
                   <Autocomplete
                     className="shadow-md rounded-xl "
                     defaultItems={brandOfTire}
@@ -664,8 +669,32 @@ function AddTireToWO() {
                     </p>
                   )}
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="mt-8">
+              <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
+                Modelo y Banda Requerida
+              </h2>
+            </div>
+            <div className="w-[100%] pt-6 text-xl">
+              <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
+                <div className="relative w-[50%] md:w-[40%] mt-5 sm:mt-0">
+                  <Input
+                    label="Modelo"
+                    variant={"underlined"}
+                    {...register("modelTire", { required: true })}
+                  />
+                  {errors.modelTire && (
+                    <p className="text-red-500 text-xs">
+                      Este campo es requerido
+                    </p>
+                  )}
+                </div>
                 <div className="relative w-[60%] md:w-[40%] mt-5 sm:mt-0">
-                   <Autocomplete
+                  <Autocomplete
                     className="shadow-md rounded-xl "
                     defaultItems={allContinental}
                     label="Banda Requerida"
@@ -692,43 +721,36 @@ function AddTireToWO() {
             </div>
           </div>
 
+          {/* DOT Y BANDA REQUERIDA */}
           <div>
             <div className="mt-8">
               <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
-                Medida y Modelo
+                DOT y Quemado
               </h2>
             </div>
             <div className="w-[100%] pt-6 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative w-[60%] md:w-[40%]">
-                  <Autocomplete
-                    className="shadow-md rounded-xl"
-                    items={helmetMeasurements}
-                    label="Medidas"
-                    {...register("helmetMeasurement", {
-                      required: "Debe seleccionar una medida.",
-                    })}
-                  >
-                    {(item) => (
-                      <AutocompleteItem key={item.value} value={item.value}>
-                        {item.label}
-                      </AutocompleteItem>
-                    )}
-                  </Autocomplete>
-                  {errors.helmetMeasurement && (
+                <div className="relative md:w-5/12 w-auto">
+                  <Input
+                    label="DOT"
+                    type="text"
+                    variant={"underlined"}
+                    {...register("antiquityDot")}
+                  />
+                  {errors.antiquityDot && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
                   )}
                 </div>
-
                 <div className="relative w-[50%] md:w-[40%] mt-5 sm:mt-0">
                   <Input
-                    label="Modelo"
+                    label="Quemado"
+                    type="text"
                     variant={"underlined"}
-                    {...register("modelTire", { required: true })}
+                    {...register("serialNumber")}
                   />
-                  {errors.modelTire && (
+                  {errors.serialNumber && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
                     </p>
@@ -750,9 +772,7 @@ function AddTireToWO() {
                   <Input
                     label="Milimetraje"
                     variant={"underlined"}
-                    {...register("millimeterFootage", {
-                      required: "Debe seleccionar un milimetraje.",
-                    })}
+                    {...register("millimeterFootage")}
                   />
                 </div>
               </div>

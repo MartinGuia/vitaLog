@@ -1,15 +1,15 @@
-import React,{useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
-import { Link, useParams} from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import InputField from "../components/ui/InputField.jsx";
 import { useForm } from "react-hook-form";
 import { StepBack } from "lucide-react";
 import { useDepartment } from "../context/DepartmentContext.jsx";
-import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta
+import AlertComponent from "../components/ui/AlertComponent";
 import { useNavigate } from "react-router-dom";
 
 function EditUserPage() {
-  const [alert, setAlert] = useState(null); // Estado para manejar la alerta
+  const [alertData, setAlertData] = useState(null); // Para controlar si mostrar el Alert
   const [department, setDepartment] = useState(); // Estado para manejar la alerta
   const { getUser, updateUser } = useAuth();
   const params = useParams();
@@ -27,7 +27,7 @@ function EditUserPage() {
       if (params.id) {
         const userById = await getUser(params.id);
         if (userById) {
-          setDepartment(userById.department)
+          setDepartment(userById.department);
           reset({
             name: userById.name,
             lastName: userById.lastName,
@@ -48,29 +48,24 @@ function EditUserPage() {
 
     try {
       await updateUser(params.id, updatedValues);
-      setAlert({
-        message: "Usuario actualizado exitosamente",
-        type: "success",
-        onAccept: () => navigate(`/department/${department}`), // Redirige tras cerrar la alerta
+      setAlertData({
+        title: "¡Exito!",
+        description: "Usuario actualizado exitosamente",
+        color: "success",
       });
+      navigate(`/department/${department}`);
     } catch (error) {
       console.error(error);
-      setAlert({
-        message: "Hubo un error al actualizar el usuario",
-        type: "error",
+      setAlertData({
+        title: "Error!",
+        description: "Hubo un error al actualizar el usuario",
+        color: "danger",
       });
     }
   });
 
   return (
     <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
-       {alert && (
-        <Alert
-          message={alert.message}
-          type={alert.type}
-          onAccept={alert.onAccept} // Maneja el cierre de la alerta con redirección
-        />
-      )}
       <div>
         <Link to={`/department/${department}`}>
           <button className="bg-cyan-950 rounded-md px-4 py-1 duration-500 hover:bg-cyan-800 hover:duration-500">
@@ -78,19 +73,27 @@ function EditUserPage() {
           </button>
         </Link>
       </div>
-    
+
       <div>
         <h1 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
           Editar Usuario
         </h1>
       </div>
+      {alertData && (
+        <AlertComponent
+          title={alertData.title}
+          description={alertData.description}
+          color={alertData.color}
+          onClose={() => setAlertData(null)} // Esta es la función que se ejecutará después de 3 segundos
+        />
+      )}
       <form onSubmit={onSubmit}>
         <div className="mt-10">
           <h1 className="font-bold text-3xl">Datos de Usuario</h1>
           <div className="w-[100%] pt-8 text-xl">
             <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
               <div className="relative md:w-5/12 w-auto">
-                <InputField  {...register("name")} />
+                <InputField {...register("name")} />
               </div>
               <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
                 <InputField
