@@ -8,7 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { getTiresByHelmetDesignRequest } from "../api/tires"; // ajusta la ruta si es necesario
+import { getTiresByBandContinentalRequest } from "../api/tires"; // ajusta la ruta si es necesario
 
 const COLORS = {
   primary: "#0A0F1F",
@@ -24,7 +24,7 @@ export default function ReportPage() {
 
   const getTiresByHelmetDesign = async () => {
     try {
-      const res = await getTiresByHelmetDesignRequest();
+      const res = await getTiresByBandContinentalRequest();
       const formatted = res.data.map((item) => ({
         name: item._id || "Sin nombre",
         ventas: item.count,

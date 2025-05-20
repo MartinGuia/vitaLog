@@ -4,7 +4,7 @@ const clientSchema = new Schema(
   {
     clientCode: {
       type: String,
-      required: true,
+      required: false,
     },
     companyName: {
       type: String,
@@ -12,7 +12,7 @@ const clientSchema = new Schema(
     },
     Rfc: {
       type: String,
-      required: true,
+      required: false,
     },
     interiorNumber: {
       type: String,

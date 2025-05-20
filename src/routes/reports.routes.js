@@ -4,7 +4,7 @@ import { getHelmetDesignCounts, getReportByClient } from "../controllers/reports
 
 const router = Router();
 
-router.get("/tiresByHelmetDesign", authRequired , getHelmetDesignCounts);
+router.get("/tiresByBandContinental", authRequired , getHelmetDesignCounts);
 router.post('/reportByClient', authRequired,getReportByClient);
 
 export default router

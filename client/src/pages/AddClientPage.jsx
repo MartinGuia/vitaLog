@@ -2,10 +2,10 @@ import { useForm } from "react-hook-form";
 import { useClient } from "../context/ClientContext";
 import { StepBack } from "lucide-react";
 import { Link } from "react-router-dom";
-import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta}
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@heroui/react";
+import AlertComponent from "../components/ui/AlertComponent";
 
 function AddClientPage() {
   const {
@@ -14,16 +14,18 @@ function AddClientPage() {
     formState: { errors },
   } = useForm();
   const { registerClient, errors: registerClientErrors } = useClient();
-  const [alert, setAlert] = useState(null); // Estado para manejar la alerta
   const navigate = useNavigate();
+  const [alertData, setAlertData] = useState(null); // Para controlar si mostrar el Alert
 
   const onSubmit = handleSubmit(async (values) => {
     registerClient(values);
-    setAlert({
-      message: "Cliente registrado exitosamente",
-      type: "success",
-      onAccept: () => navigate(`/clients`), // Redirige tras cerrar la alerta
+    setAlertData({
+      title: "¡Exito!",
+      description: "Cliente registrado exitosamente",
+      color: "success",
     });
+    navigate(`/clients`);
+    
   });
 
   return (
@@ -40,11 +42,12 @@ function AddClientPage() {
               Añadir Cuenta Local
             </h1>
           </div>
-          {alert && (
-            <Alert
-              message={alert.message}
-              type={alert.type}
-              onAccept={alert.onAccept} // Maneja el cierre de la alerta con redirección
+          {alertData && (
+            <AlertComponent
+              title={alertData.title}
+              description={alertData.description}
+              color={alertData.color}
+              onClose={() => setAlertData(null)} // Esta es la función que se ejecutará después de 3 segundos
             />
           )}
           <div className="flex top-10 absolute w-[100%]">
@@ -113,7 +116,7 @@ function AddClientPage() {
           </div>
           <div>
             <h2 className="text-lg md:text-2xl font-semibold mb-2 text-sky-900 mt-12">
-              Dirección 
+              Dirección
             </h2>
             <p className="text-gray-600 font-medium">
               Complete los datos de dirección
@@ -175,10 +178,10 @@ function AddClientPage() {
               </div>
             </div>
           </div>
-          
+
           <div>
             <h2 className="text-lg md:text-2xl font-semibold mb-2 text-sky-900 mt-12">
-              Dirección 
+              Dirección
             </h2>
             <p className="text-gray-600 font-medium">
               Complete la dirección de la cuenta. Esta dirección se mostrará en
@@ -263,11 +266,10 @@ function AddClientPage() {
                       Este campo es requerido
                     </p>
                   )}
-                </div>        
+                </div>
               </div>
             </div>
           </div>
-
 
           <div className="flex justify-end mt-10">
             <button

@@ -4,12 +4,11 @@ import { Link } from "react-router-dom";
 import { useDepartment } from "../context/DepartmentContext.jsx";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
-import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta
 import { useNavigate } from "react-router-dom";
 import { Input, Select, SelectItem } from "@heroui/react";
+import AlertComponent from "../components/ui/AlertComponent";
 
 function AddUserPage() {
-  const [alert, setAlert] = useState(null); // Estado para manejar la alerta
   const navigate = useNavigate();
 
   const {
@@ -18,6 +17,8 @@ function AddUserPage() {
     formState: { errors },
     reset,
   } = useForm();
+
+  const [alertData, setAlertData] = useState(null); // Para controlar si mostrar el Alert
 
   const { getDepartments, allDepartments } = useDepartment();
 
@@ -31,11 +32,12 @@ function AddUserPage() {
   const onSubmit = handleSubmit(async (values) => {
     signup(values);
     reset();
-    setAlert({
-      message: "Usuario registrao exitosamente",
-      type: "success",
-      onAccept: () => navigate(`/departments`), // Redirige tras cerrar la alerta
+    setAlertData({
+      title: "¡Exito!",
+      description: "Usuario registrado exitosamente",
+      color: "success",
     });
+    navigate(`/departments`)
   });
 
   return (
@@ -60,11 +62,12 @@ function AddUserPage() {
           </Link>
           <h1 className="text-2xl md:text-4xl font-bold">Añadir Usuario</h1>
         </div>
-        {alert && (
-          <Alert
-            message={alert.message}
-            type={alert.type}
-            onAccept={alert.onAccept} // Maneja el cierre de la alerta con redirección
+        {alertData && (
+          <AlertComponent
+            title={alertData.title}
+            description={alertData.description}
+            color={alertData.color}
+            onClose={() => setAlertData(null)} // Esta es la función que se ejecutará después de 3 segundos
           />
         )}
         <form onSubmit={onSubmit}>

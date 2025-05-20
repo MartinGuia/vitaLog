@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { StepBack, UserRoundPen, Trash2 } from "lucide-react";
 import { useDepartment } from "../context/DepartmentContext.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
-import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta
+import AlertComponent from "../components/ui/AlertComponent";
 import { Input } from "@heroui/react";
 
 function ViewDepartmentByIdPage() {
@@ -16,7 +16,7 @@ function ViewDepartmentByIdPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [confirmationName, setConfirmationName] = useState("");
-  const [alert, setAlert] = useState(null); // Estado para manejar la alerta
+  const [alertData, setAlertData] = useState(null); // Para controlar si mostrar el Alert
   const ordersPerPage = 10;
 
   useEffect(() => {
@@ -52,16 +52,15 @@ function ViewDepartmentByIdPage() {
     setIsModalOpen(true);
   };
 
-  const showAlert = (message, type = "success") => {
-    setAlert({ message, type });
-    setTimeout(() => setAlert(null), 1000); // Oculta la alerta después de 3 segundos
-  };
-
   const confirmDelete = async () => {
     if (confirmationName === userToDelete.name) {
       try {
         await deleteUser(userToDelete._id);
-        showAlert("Usuario eliminado exitosamente", "success");
+        setAlertData({
+          title: "¡Exito!",
+          description: "OUsuario eliminado exitosamente",
+          color: "success",
+        });
         setUsers((prevUsers) =>
           prevUsers.filter(
             (currentUser) => currentUser._id !== userToDelete._id
@@ -69,13 +68,21 @@ function ViewDepartmentByIdPage() {
         );
       } catch (error) {
         console.error(error);
-        showAlert("Error al eliminar el usuario. Intenta nuevamente.", "error");
+        setAlertData({
+          title: "Error!",
+          description: "Error al eliminar usuario. Intente nuevamente",
+          color: "danger",
+        });
       }
       setIsModalOpen(false);
       setUserToDelete(null);
       setConfirmationName("");
     } else {
-      showAlert("El nombre no coincide. Usuario no eliminado.", "error");
+      setAlertData({
+        title: "Error!",
+        description: "El nombre no coincide. Usuario no eliminado.",
+        color: "danger",
+      });
     }
   };
 
@@ -83,7 +90,7 @@ function ViewDepartmentByIdPage() {
     <>
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
         {/* Alerta de la aplicación */}
-        {alert && <Alert message={alert.message} type={alert.type} />}
+       
         <div className="flex items-center gap-3 mb-6">
           <Link to="/departments">
             <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary rounded-md px-4 py-1 duration-500  hover:duration-500 shadow-md">
@@ -91,8 +98,15 @@ function ViewDepartmentByIdPage() {
             </button>
           </Link>
           <h1 className="text-2xl md:text-4xl font-bold">{department}</h1>
-         
         </div>
+         {alertData && (
+          <AlertComponent
+            title={alertData.title}
+            description={alertData.description}
+            color={alertData.color}
+            onClose={() => setAlertData(null)} // Esta es la función que se ejecutará después de 3 segundos
+          />
+        )}
         <div className="p-4 w-full">
           {users.length === 0 ? (
             <div className="text-center text-gray-600 text-lg">
@@ -199,14 +213,13 @@ function ViewDepartmentByIdPage() {
               para confirmar:
             </p>
             <Input
-              
               label="Nombre de usuario"
               type="text"
               variant={"underlined"}
               value={confirmationName}
               onChange={(e) => setConfirmationName(e.target.value)}
             />
-           
+
             <div className="flex justify-end space-x-4 mt-4">
               <button
                 onClick={() => {

@@ -4,7 +4,7 @@ import InputField from "../components/ui/InputField.jsx";
 import { useForm } from "react-hook-form";
 import { StepBack } from "lucide-react";
 import { useClient } from "../context/ClientContext.jsx";
-import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta
+import AlertComponent from "../components/ui/AlertComponent";
 
 function EditClientPage() {
   const params = useParams();
@@ -15,12 +15,7 @@ function EditClientPage() {
     reset,
     formState: { errors },
   } = useForm();
-  const [alert, setAlert] = useState(null); // Estado para manejar la alerta
-
-  const showAlert = (message, type = "success") => {
-    setAlert({ message, type });
-    setTimeout(() => setAlert(null), 3000);
-  };
+  const [alertData, setAlertData] = useState(null); // Para controlar si mostrar el Alert
 
   useEffect(() => {
     async function loadClient() {
@@ -52,22 +47,30 @@ function EditClientPage() {
 
     try {
       await updateClient(params.id, updatedValues);
-      showAlert("Cliente actualizado correctamente", "success");
-      // navigate("/clients");
+      setAlertData({
+        title: "¡Exito!",
+        description: "Cliente actualizado exitosamente",
+        color: "success",
+      });
     } catch (error) {
       console.error(error);
-      showAlert("Error al actualizar cliente. Intenta nuevamente.", "error");
+      setAlertData({
+        title: "¡Error!",
+        description: "Error al eliminar cliente. Intenta nuevamente.",
+        color: "danger",
+      });
     }
   });
 
   return (
     <>
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
-        {alert && (
-          <Alert
-            message={alert.message}
-            type={alert.type}
-            onClose={() => setAlert(null)}
+        {alertData && (
+          <AlertComponent
+            title={alertData.title}
+            description={alertData.description}
+            color={alertData.color}
+            onClose={() => setAlertData(null)} // Esta es la función que se ejecutará después de 3 segundos
           />
         )}
         <div className="flex items-center gap-3 mb-6">
@@ -99,9 +102,7 @@ function EditClientPage() {
 
             <div className="flex items-center flex-col pt-5 md:pt-2 sm:w-auto sm:flex-row sm:justify-between">
               <div className="relative w-5/6 sm:w-5/12">
-                <InputField
-                  {...register("companyName", { required: true })}
-                />
+                <InputField {...register("companyName", { required: true })} />
                 {errors.companyName && (
                   <p className="text-red-500 text-xs">
                     Este campo es requerido
@@ -245,7 +246,7 @@ function EditClientPage() {
               </div>
             </div>
           </div>
-         
+
           <div className="flex justify-end mt-14">
             <button
               className=" text-white font-medium bg-buttonSecondary py-3 px-8 rounded-md shadow-md hover:bg-buttonSecondaryHover duration-500 hover:duration-500 "
