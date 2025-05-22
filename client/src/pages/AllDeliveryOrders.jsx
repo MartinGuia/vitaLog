@@ -2,22 +2,22 @@ import { Link } from "react-router-dom";
 import { useDeliveryOrder } from "../context/DeliveryOrderContext.jsx";
 import { useEffect, useState } from "react";
 import { Printer, UserRoundPen, Trash2 } from "lucide-react";
-import Alert from "../components/ui/Alert.jsx"; // Importa tu componente de alerta
 import { useDispatch, useSelector } from "react-redux";
 import socket from "../socket";
 import { removeDeliveryOrder } from "../store/slices/deliveryOrderSlice.js";
+import AlertComponent from "../components/ui/AlertComponent";
 
 function AllDeliveryOrders() {
   const { getDeliveryOrders, setAllDeliveryOrders, deleteDeliveryOrder } =
     useDeliveryOrder();
   const [currentPage, setCurrentPage] = useState(1);
-  const [alert, setAlert] = useState(null); // Estado para manejar la alerta
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deliveryOrderToDelete, setDeliveryOrderToDelete] = useState(null);
   const [confirmationNumber, setConfirmationNumber] = useState("");
   const itemsPerPage = 10;
   const dispatch = useDispatch();
   const allDeliveryOrders = useSelector((state) => state.deliveryOrders.list);
+  const [alertData, setAlertData] = useState(null); // Para controlar si mostrar el Alert
 
   useEffect(() => {
     getDeliveryOrders();
@@ -32,11 +32,6 @@ function AllDeliveryOrders() {
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-  };
-
-  const showAlert = (message, type = "success") => {
-    setAlert({ message, type });
-    setTimeout(() => setAlert(null), 1000);
   };
 
   const handleDeleteClick = (deliveryOrder) => {
@@ -58,22 +53,32 @@ function AllDeliveryOrders() {
     if (confirmationNumber === String(deliveryOrderToDelete.numero)) {
       try {
         await deleteDeliveryOrder(deliveryOrderToDelete._id);
-        showAlert("Se dio de baja la O.E. exitosamente", "success");
+        setAlertData({
+          title: "¡Exito!",
+          description: "Nota de entrega dada de baja",
+          color: "success",
+        });
         setAllDeliveryOrders((prevOrders) =>
           prevOrders.filter((order) => order._id !== deliveryOrderToDelete._id)
         );
       } catch (error) {
         console.error(error);
-        showAlert(
-          "Error al dar de baja la orden de entrega. Intenta nuevamente.",
-          "error"
-        );
+        setAlertData({
+          title: "Error!",
+          description:
+            "Error al dar de baja la nota de entrega. Intente de nuevo",
+          color: "danger",
+        });
       }
       setIsModalOpen(false);
       setDeliveryOrderToDelete(null);
       setConfirmationNumber("");
     } else {
-      showAlert("El número no coincide. Orden no eliminada.", "error");
+      setAlertData({
+        title: "Error!",
+        description: "El número no coincide. Intente de nuevo.",
+        color: "danger",
+      });
     }
   };
 
@@ -84,11 +89,12 @@ function AllDeliveryOrders() {
           Ordenes de Entrega
         </h2>
       </div>
-      {alert && (
-        <Alert
-          message={alert.message}
-          type={alert.type}
-          onClose={() => setAlert(null)}
+      {alertData && (
+        <AlertComponent
+          title={alertData.title}
+          description={alertData.description}
+          color={alertData.color}
+          onClose={() => setAlertData(null)} // Esta es la función que se ejecutará después de 3 segundos
         />
       )}
       <section>
