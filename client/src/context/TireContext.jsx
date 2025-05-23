@@ -11,6 +11,7 @@ import {
   getTiresByBandContinentalRequest,
   quoteTiresRequest,
   getQuoteTiresRequest,
+  getTiresByBandBandagRequest,
 } from "../api/tires.js";
 import { printLabelRequest } from "../api/print.js";
 
@@ -27,6 +28,9 @@ export const useTire = () => {
 export function TiresProvider({ children }) {
   const [tires, setTires] = useState([]);
   const [errors, setErrors] = useState([]);
+  const [bandContinental, setBandContinental] = useState([]);
+  const [bandBandag, setBandBandag] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getTires = async () => {
     try {
@@ -41,10 +45,29 @@ export function TiresProvider({ children }) {
   const getTiresByBandContinental = async () => {
     try {
       const res = await getTiresByBandContinentalRequest();
-      // console.log(res);
-      setTires(res.data);
+      const formatted = res.data.map((item) => ({
+        name: item._id || "Sin nombre",
+        ventas: item.count,
+      }));
+      setBandContinental(formatted);
     } catch (error) {
-      console.error(error);
+      console.error("Error al cargar los datos de las bandas:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const getTiresByBandBandag = async () => {
+    try {
+      const res = await getTiresByBandBandagRequest();
+      const formatted = res.data.map((item) => ({
+        name: item._id || "Sin nombre",
+        ventas: item.count,
+      }));
+      setBandBandag(formatted);
+    } catch (error) {
+      console.error("Error al cargar los datos de las bandas:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -72,7 +95,7 @@ export function TiresProvider({ children }) {
   const getTire = async (id) => {
     try {
       const res = await getTireRequest(id);
-      // console.log(res);
+      console.log(res);
       return res.data;
     } catch (error) {
       console.error(error);
@@ -158,6 +181,10 @@ export function TiresProvider({ children }) {
         getTiresByBandContinental,
         quoteTires,
         getQuoteTires,
+        bandContinental,
+        bandBandag,
+        getTiresByBandBandag,
+        loading,
         errors,
       }}
     >

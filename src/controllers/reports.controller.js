@@ -98,17 +98,45 @@ export const getReportByClient = async (req, res) => {
   }
 };
 
-export const getHelmetDesignCounts = async (req, res) => {
+
+export const getTiresWithContinentalBand = async (req, res) => {
   try {
     const helmetDesignCounts = await Tire.aggregate([
       {
         $match: {
           inspection: true,
+          appliedBand: { $exists: true, $ne: null, $ne: "" }
         },
       },
       {
         $group: {
           _id: "$appliedBand",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { count: -1 },
+      },
+    ]);
+
+    res.json(helmetDesignCounts);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener las llantas", error });
+  }
+};
+
+export const getTiresWithBandagBand = async (req, res) => {
+  try {
+    const helmetDesignCounts = await Tire.aggregate([
+      {
+        $match: {
+          inspection: true,
+          appliedBandBandag: { $exists: true, $ne: null, $ne: "" }
+        },
+      },
+      {
+        $group: {
+          _id: "$appliedBandBandag",
           count: { $sum: 1 },
         },
       },

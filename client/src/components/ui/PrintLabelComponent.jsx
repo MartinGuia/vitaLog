@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-// import { useTire } from "../context/TireContext";
 import { useTire } from "../../context/TireContext";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 function PrintLabelComponent({ tire, disabled }) {
   const { getTire, printLabel } = useTire();
@@ -58,15 +57,12 @@ function PrintLabelComponent({ tire, disabled }) {
 ^FO420,525^A0N,50,40^FD${tireData.user.name}^FS
 
 ; **HelmetMeasurement (centrado y grande)**
-^FO120,620^A0N,110,90^FD${tireData.helmetMeasurement}^FS
+^FO100,620^A0N,110,90^FD${tireData.helmetMeasurement}^FS
 
 ; **Banda Aplicada (izquierda, tamaño pequeño)**
-^FO20,720^A0N,50,30^FD${
+^FO20,770^A0N,50,30^FD${
       tireData.appliedBand || tireData.appliedBandBandag || "-"
     }^FS
-
-; **Ancho (izquierda, tamaño pequeño)**
-^FO20,770^A0N,50,30^FD${tireData.width}^FS
 
 ; **Brand (izquierda, tamaño pequeño)**
 ^FO20,820^A0N,50,30^FD${tireData.brand}^FS
@@ -91,13 +87,6 @@ ${tireData.status === "Rechazo" ? `
 
     `;
   };
-
-  // ^FO20,870^A0N,50,30^FDCAPS: ${
-  //     (tireData.numberPatches || 0) +
-  //     (tireData.numberPatches2 || 0) +
-  //     (tireData.numberPatches3 || 0) +
-  //     (tireData.numberPatches4 || 0)
-  //   }^FS
 
   const handlePrint = () => {
     if (!tireData) {
