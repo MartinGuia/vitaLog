@@ -15,11 +15,11 @@ function ViewWorkOrder() {
   const [workOrder, setWorkOrder] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-   const [roleMaster, setRoleMaster] = useState();
+  const [roleMaster, setRoleMaster] = useState();
   const [roleAdminP, setRoleAdminP] = useState();
   const [roleAdminF, setRoleAdminF] = useState();
 
-   useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       const res = await getRoles();
 
@@ -59,30 +59,31 @@ function ViewWorkOrder() {
 
   const tires = workOrder?.tires || [];
   const totalPages = Math.ceil(tires.length / itemsPerPage);
-  const currentOrders = tires.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const currentOrders = tires.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
-  if (!workOrder) return <h1 className="text-center mt-10">Cargando orden de trabajo...</h1>;
+  if (!workOrder)
+    return <h1 className="text-center mt-10">Cargando orden de trabajo...</h1>;
 
-  const {
-    numero,
-    formattedCreatedAt,
-    createdBy,
-    client
-  } = workOrder;
+  const { numero, formattedCreatedAt, createdBy, client } = workOrder;
 
   if (tires.length === 0) <h1>No hay Ordenes de trabajo</h1>;
-  
+
   return (
     <div className="px-4 pt-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
       <div className="flex items-center gap-3 mb-6">
-        {user.role === roleMaster || user.role === roleAdminP || user.role === roleAdminF ? (
+        {user.role === roleMaster ||
+        user.role === roleAdminP ||
+        user.role === roleAdminF ? (
           <Link to="/workOrders">
             <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary shadow-md rounded-md px-4 py-1 duration-500">
               <StepBack color="white" />
             </button>
           </Link>
-        ) :  (
+        ) : (
           <Link to={`/workOrderByUser/${user.id || user._id}`}>
             <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary shadow-md rounded-md px-4 py-1 duration-500">
               <StepBack color="white" />
@@ -99,10 +100,16 @@ function ViewWorkOrder() {
               Orden de Trabajo: <span>{numero}</span>
             </h1>
             <p className="font-medium">VITA-BAJIO S.A de C.V</p>
-            <p className="font-medium text-sm">Hidalgo 1500 San Juan de La Presa, Salamanca</p>
+            <p className="font-medium text-sm">
+              Hidalgo 1500 San Juan de La Presa, Salamanca
+            </p>
           </section>
           <section className="flex justify-end mr-2">
-            <img src={images.logoVB} className="w-auto size-20 sm:w-[45%]" alt="" />
+            <img
+              src={images.logoVB}
+              className="w-auto size-20 sm:w-[45%]"
+              alt=""
+            />
           </section>
         </div>
       </header>
@@ -111,7 +118,9 @@ function ViewWorkOrder() {
         <section className="mt-4">
           <div className="bg-gray-100 sm:flex sm:justify-evenly rounded p-3">
             <article className="sm:w-[50%]">
-              <h2 className="text-lg font-semibold">Detalles de la Recolección</h2>
+              <h2 className="text-lg font-semibold">
+                Detalles de la Recolección
+              </h2>
               <div>
                 <p>
                   Recolector:{" "}
@@ -120,7 +129,8 @@ function ViewWorkOrder() {
                   </span>
                 </p>
                 <p>
-                  Fecha: <span className="font-semibold">{formattedCreatedAt}</span>
+                  Fecha:{" "}
+                  <span className="font-semibold">{formattedCreatedAt}</span>
                 </p>
               </div>
             </article>
@@ -131,7 +141,9 @@ function ViewWorkOrder() {
                   <p className="font-bold">{client?.companyName}</p>
                   <div className="text-xs">
                     <p>{client?.street}</p>
-                    <p>{client?.state}, {client?.city || client?.municipality}</p>
+                    <p>
+                      {client?.state}, {client?.city || client?.municipality}
+                    </p>
                     <p>{client?.zipCode}</p>
                   </div>
                 </div>
@@ -141,139 +153,134 @@ function ViewWorkOrder() {
         </section>
 
         <section>
-             <div className="p-4 w-full">
-               <div className="overflow-x-auto">
-                 <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-                   <thead>
-                     <tr className="bg-blue-600 text-white text-sm text-center">
-                       <th className="py-3 px-1">Línea</th>
-                       <th className="py-3 px-3">Código de Ítem</th>
-                       <th className="py-3 px-6">Código de Barras</th>
-                       <th className="py-3 px-6">Medida de Casco</th>
-                       <th className="py-3 px-6">Marca</th>
-                       <th className="py-3 px-6">Modelo</th>
-                       <th className="py-3 px-6">Banda Requerida</th>
-                       <th className="py-3 px-6">Quemado</th>
-                       <th className="py-3 px-6">DOT</th>
-                       <th className="py-3 px-6">Estatus</th>
-                       <th className="py-3 px-6">
-                        
-                       </th>
-                     </tr>
-                   </thead>
-                   <tbody className="text-center">
-                     {currentOrders.map((tire, index) => (
-                       <tr key={index} className="border-t border-gray-200">
-                         <td className="py-3 px-1">{tire.linea}</td>
-                         <td className="py-3 px-3">{tire.itemCode}</td>
-                         <td className="py-3 px-6">{tire.barCode}</td>
-                         <td className="py-3 px-6">{tire.helmetMeasurement}</td>
-                         <td className="py-3 px-6">{tire.brand}</td>
-                         <td className="py-3 px-6">{tire.modelTire}</td>
-                         <td className="py-3 px-6">{tire.requiredBand}</td>
-                         <td className="py-3 px-6">{tire.serialNumber}</td>
-                         <td className="py-3 px-6">{tire.antiquityDot}</td>
-                         <td className=" text-center">
-                           {tire.status === "Rechazo" ? (
-                             <div className="flex justify-center">
-                               <X color="#ff0000" />
-                             </div>
-                           ) : tire.status === "Pasa" ? (
-                             <div className="flex justify-center">
-                               <Check color="#ff0000" />
-                             </div>
-                           ) : tire.status === "Sin Costo" ? (
-                             "Sin Costo"
-                           ) : (
-                             "Falta Inspección"
-                           )}
-                         </td>
-                         <td className="py-3 px-6">
-                           {user.role === roleMaster ||
-                           user.role === roleAdminP ? (
-                             <Link to={`/tire/${tire._id}`}>
-                               <button className="text-blue-600 hover:text-blue-800 ">
-                                 <UserRoundPen />
-                               </button>
-                             </Link>
-                           ) :  (
-                            null
-                           ) }                      
-                         </td>
-                       </tr>
-                     ))}
-                   </tbody>
-                 </table>
-                 {/* Mostrar paginación solo si hay 10 o más usuarios */}
-                 {tires.length >= 10 && (
-                   <div className="flex justify-between items-center mt-4">
-                     <div className="text-sm text-gray-600">
-                       Página {currentPage} de {totalPages}
-                     </div>
-                     <div className="flex space-x-2">
-                       <button
-                         onClick={() => handlePageChange(currentPage - 1)}
-                         disabled={currentPage === 1}
-                         className={`px-4 py-2 rounded-lg border ${
-                           currentPage === 1
-                             ? "text-gray-400 border-gray-200"
-                             : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                         }`}
-                       >
-                         Anterior
-                       </button>
-                       {Array.from({ length: totalPages }, (_, i) => (
-                         <button
-                           key={i + 1}
-                           onClick={() => handlePageChange(i + 1)}
-                           className={`px-4 py-2 rounded-lg border ${
-                             currentPage === i + 1
-                               ? "bg-blue-600 text-white"
-                               : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                           }`}
-                         >
-                           {i + 1}
-                         </button>
-                       ))}
-                       <button
-                         onClick={() => handlePageChange(currentPage + 1)}
-                         disabled={currentPage === totalPages}
-                         className={`px-4 py-2 rounded-lg border ${
-                           currentPage === totalPages
-                             ? "text-gray-400 border-gray-200"
-                             : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                         }`}
-                       >
-                         Siguiente
-                       </button>
-                     </div>
-                   </div>
-                 )}
-               </div>
-             </div>
-           </section>
-                        <div className="mb-10">
-             {/* Tu diseño actual */}
-             {workOrder && (
-               <PDFDownloadLink
-                 document={<WorkOrderPDF workOrder={workOrder} />}
-                 fileName={`OrdenTrabajo_${workOrder.numero}.pdf`}
-               >
-                 {({ loading }) =>
-                   loading ? (
-                     <button className="flex mt-2 sm:mt-0 shadow p-2 text-sm sm:text-base sm:p-3 bg-red-400 rounded-lg text-white cursor-pointer hover:bg-red-600 duration-500 hover:duration-500">
-                       Generando PDF...
-                     </button>
-                   ) : (
-                     <button className="flex mt-2 sm:mt-0 shadow p-2 text-sm sm:text-base sm:p-3 bg-red-400 rounded-lg text-white cursor-pointer hover:bg-red-600 duration-500 hover:duration-500">
-                       Descargar PDF
-                     </button>
-                   )
-                 }
-               </PDFDownloadLink>
-             )}
-           </div>
-           
+          <div className="p-4 w-full">
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+                <thead>
+                  <tr className="bg-blue-600 text-white text-sm text-center">
+                    <th className="py-3 px-1">Línea</th>
+                    <th className="py-3 px-3">Código de Ítem</th>
+                    <th className="py-3 px-6">Código de Barras</th>
+                    <th className="py-3 px-6">Medida de Casco</th>
+                    <th className="py-3 px-6">Marca</th>
+                    <th className="py-3 px-6">Modelo</th>
+                    <th className="py-3 px-6">Banda Requerida</th>
+                    <th className="py-3 px-6">Quemado</th>
+                    <th className="py-3 px-6">DOT</th>
+                    <th className="py-3 px-6">Estatus</th>
+                    <th className="py-3 px-6"></th>
+                  </tr>
+                </thead>
+                <tbody className="text-center">
+                  {currentOrders.map((tire, index) => (
+                    <tr key={index} className="border-t border-gray-200">
+                      <td className="py-3 px-1">{tire.linea}</td>
+                      <td className="py-3 px-3">{tire.itemCode}</td>
+                      <td className="py-3 px-6">{tire.barCode}</td>
+                      <td className="py-3 px-6">{tire.helmetMeasurement}</td>
+                      <td className="py-3 px-6">{tire.brand}</td>
+                      <td className="py-3 px-6">{tire.modelTire}</td>
+                      <td className="py-3 px-6">{tire.requiredBand}</td>
+                      <td className="py-3 px-6">{tire.serialNumber}</td>
+                      <td className="py-3 px-6">{tire.antiquityDot}</td>
+                      <td className=" text-center">
+                        {tire.status === "Rechazo" ? (
+                          <div className="flex justify-center">
+                            <X color="#ff0000" />
+                          </div>
+                        ) : tire.status === "Pasa" ? (
+                          <div className="flex justify-center">
+                            <Check color="#ff0000" />
+                          </div>
+                        ) : tire.status === "Sin Costo" ? (
+                          "Sin Costo"
+                        ) : (
+                          "Falta Inspección"
+                        )}
+                      </td>
+                      <td className="py-3 px-6">
+                        {user.role === roleMaster ||
+                        user.role === roleAdminP ? (
+                          <Link to={`/editTireAdminPage/${tire._id}`}>
+                            <button className="text-blue-600 hover:text-blue-800 ">
+                              <UserRoundPen />
+                            </button>
+                          </Link>
+                        ) : null}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {/* Mostrar paginación solo si hay 10 o más usuarios */}
+              {tires.length >= 10 && (
+                <div className="flex justify-between items-center mt-4">
+                  <div className="text-sm text-gray-600">
+                    Página {currentPage} de {totalPages}
+                  </div>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className={`px-4 py-2 rounded-lg border ${
+                        currentPage === 1
+                          ? "text-gray-400 border-gray-200"
+                          : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                      }`}
+                    >
+                      Anterior
+                    </button>
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <button
+                        key={i + 1}
+                        onClick={() => handlePageChange(i + 1)}
+                        className={`px-4 py-2 rounded-lg border ${
+                          currentPage === i + 1
+                            ? "bg-blue-600 text-white"
+                            : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                        }`}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className={`px-4 py-2 rounded-lg border ${
+                        currentPage === totalPages
+                          ? "text-gray-400 border-gray-200"
+                          : "text-blue-600 border-blue-600 hover:bg-blue-50"
+                      }`}
+                    >
+                      Siguiente
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+        <div className="mb-10">
+          {/* Tu diseño actual */}
+          {workOrder && (
+            <PDFDownloadLink
+              document={<WorkOrderPDF workOrder={workOrder} />}
+              fileName={`OrdenTrabajo_${workOrder.numero}.pdf`}
+            >
+              {({ loading }) =>
+                loading ? (
+                  <button className="flex mt-2 sm:mt-0 shadow p-2 text-sm sm:text-base sm:p-3 bg-red-400 rounded-lg text-white cursor-pointer hover:bg-red-600 duration-500 hover:duration-500">
+                    Generando PDF...
+                  </button>
+                ) : (
+                  <button className="flex mt-2 sm:mt-0 shadow p-2 text-sm sm:text-base sm:p-3 bg-red-400 rounded-lg text-white cursor-pointer hover:bg-red-600 duration-500 hover:duration-500">
+                    Descargar PDF
+                  </button>
+                )
+              }
+            </PDFDownloadLink>
+          )}
+        </div>
       </main>
     </div>
   );
