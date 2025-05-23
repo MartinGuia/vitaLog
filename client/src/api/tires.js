@@ -9,6 +9,8 @@ export const getTireRequest = (id) => axios.get(`/tires/${id}`);
 
 export const getTiresByBandContinentalRequest = () => axios.get(`/tiresByBandContinental`);
 
+export const getTiresByBandBandagRequest = () => axios.get(`/tiresByBandBandag`);
+
 export const createTireRequest = (tires) => axios.post("/tires", tires);
 
 export const deleteTireRequest = (id) => axios.delete(`/tires/${id}`);

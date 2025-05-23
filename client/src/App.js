@@ -42,6 +42,7 @@ import AllWOBySeller from "./pages/AllWOBySeller";
 import QuotedWorkOrdersPage from "./pages/QuotedWorkOrdersPage";
 import ReportByClientPage from "./pages/ReportByClientPage";
 import ViewQuotedWO from "./pages/ViewQuotedWO";
+import EditTirePoductionPage from "./pages/EditTirePoductionPage";
 
 function AppRoutes() {
   const { role, getRoles } = useAuth(); // Ahora sí está dentro de AuthProvider
@@ -237,6 +238,11 @@ function AppRoutes() {
       path: "/reportByClient",
       element: <ReportByClientPage />,
       roles: [, roleIds.master],
+    },
+    {
+      path: "/editTireAdminPage/:id",
+      element: <EditTirePoductionPage />,
+      roles: [roleIds.master, roleIds.administradorP],
     },
   ];
 

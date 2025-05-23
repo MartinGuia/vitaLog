@@ -100,7 +100,7 @@ export const getTire = async (req, res) => {
         select: "client tires", // Lista de campos que deseas poblar
         populate: {
           path: "client numero",
-          select: "name",
+          select: "companyName",
         },
       });
 

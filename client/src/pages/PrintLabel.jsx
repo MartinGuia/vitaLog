@@ -40,7 +40,7 @@ function PrintLabel() {
 ^FD${tire.barCode}^FS
 
 ; **Cliente (izquierda, separado un poco más del código de barras)**
-^FO20,380^A0N,50,40^FD${tire.workOrder.client.name}^FS
+^FO20,380^A0N,50,40^FD${tire.workOrder.client.companyName}^FS
 
 ; **Número de orden (izquierda, debajo del cliente)**
 ^FO20,470^A0N,50,40^FDWO# ${tire.workOrder.numero}^FS
@@ -113,7 +113,7 @@ function PrintLabel() {
             {tire ? (
               <div className="font-semibold">
                 <p className="flex justify-center mt-2">{tire.barCode}</p>
-                <p className="mt-4 text-lg">{tire.workOrder.client.name}</p>
+                <p className="mt-4 text-lg">{tire.workOrder.client.companyName}</p>
                 <div className="flex mt-2 justify-between">
                   <div className="flex">
                     <p>WO# {tire.workOrder.numero}</p>

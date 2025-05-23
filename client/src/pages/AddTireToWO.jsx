@@ -80,6 +80,7 @@ function AddTireToWO() {
 
   const brandOfTire = [
     { value: "ADVANCE", label: "ADVANCE" },
+    { value: "ADVANTA", label: "ADVANTA" },
     { value: "ADVENTUR", label: "ADVENTUR" },
     { value: "AEMSTRONG", label: "AEMSTRONG" },
     { value: "AEOLUS", label: "AEOLUS" },
@@ -87,6 +88,7 @@ function AddTireToWO() {
     { value: "AMBERSTONE  ", label: "AMBERSTONE  " },
     { value: "AMEN STEEL", label: "AMEN STEEL" },
     { value: "AMERICA", label: "AMERICA" },
+    { value: "AMERICUS", label: "AMERICUS" },
     { value: "AMORSTEEL", label: "AMORSTEEL" },
     { value: "ANNAITE", label: "ANNAITE" },
     { value: "ANTYRE", label: "ANTYRE" },
@@ -313,6 +315,7 @@ function AddTireToWO() {
     { value: "TOLEDO", label: "TOLEDO" },
     { value: "TORCH", label: "TORCH" },
     { value: "TORNEL", label: "TORNEL" },
+    { value: "TORNADO", label: "TORNADO" },
     { value: "TORQUE TYRES", label: "TORQUE TYRES" },
     { value: "TOYO", label: "TOYO" },
     { value: "TRAN MON", label: "TRAN MON" },
