@@ -57,27 +57,38 @@ function PrintLabelComponent({ tire, disabled }) {
 ^FO420,525^A0N,50,40^FD${tireData.user.name}^FS
 
 ; **HelmetMeasurement (centrado y grande)**
-^FO100,620^A0N,110,90^FD${tireData.helmetMeasurement}^FS
+^FO80,620^A0N,110,90^FD${tireData.helmetMeasurement}^FS
 
 ; **Banda Aplicada (izquierda, tamaño pequeño)**
 ^FO20,770^A0N,50,30^FD${
-      tireData.appliedBand || tireData.appliedBandBandag || "-"
-    }^FS
+  tireData.appliedBand && tireData.appliedBand.trim() !== ""
+    ? tireData.appliedBand
+    : (tireData.appliedBandBandag || "-")
+}^FS
 
-; **Brand (izquierda, tamaño pequeño)**
-^FO20,820^A0N,50,30^FD${tireData.brand}^FS
+; **Modelo de Llanta (debajo de Banda Aplicada)**
+^FO20,820^A0N,50,30^FD${tireData.modelTire || "-"}^FS
+
+; **Brand (izquierda, debajo de modelo)**
+^FO20,870^A0N,50,30^FD${tireData.brand || "-"}^FS
 
 ; **Antiquity Dot (derecha, al nivel del brand)**
-^FO400,820^A0N,50,30^FDDOT: ${tireData.antiquityDot}^FS
+^FO400,870^A0N,50,30^FDDOT: ${tireData.antiquityDot || "-"}^FS
 
 ; **Estatus de llanta (izquierda, tamaño pequeño)**
-${tireData.status === "Rechazo" ? `
-^FO20,870^A0N,50,30^FDRECHAZO^FS
-^FO20,920^A0N,50,30^FD${tireData.rejection || "-"}^FS
-` : tireData.status === "Sin Costo" ? `
-^FO20,870^A0N,50,30^FDRECHAZO^FS
-^FO20,920^A0N,50,30^FD${tireData.rejection || "-"}^FS
-` : ""}
+${
+  tireData.status === "Rechazo"
+    ? `
+^FO20,920^A0N,50,30^FDRECHAZO^FS
+^FO20,970^A0N,50,30^FD${tireData.rejection || "-"}^FS
+`
+    : tireData.status === "Sin Costo"
+    ? `
+^FO20,920^A0N,50,30^FDRECHAZO^FS
+^FO20,970^A0N,50,30^FD${tireData.rejection || "-"}^FS
+`
+    : ""
+}
 
 ^MD30
 ; **Antiquity Dot (derecha, al nivel del brand)**
