@@ -137,6 +137,11 @@ export const addTiresToDeliveryOrder = async (req, res) => {
     // Guardar la orden de entrega actualizada
     await deliveryOrder.save();
 
+    await Tire.updateMany(
+      { _id: { $in: validTires.map((tire) => tire._id) } },
+      { $set: { inDeliveryNote: true, deliveryOrder: deliveryOrder._id } }
+    );
+
     return res.status(200).json({
       message: "Llantas agregadas a la orden de entrega con éxito.",
       deliveryOrder,
@@ -153,7 +158,8 @@ export const addTiresToDeliveryOrder = async (req, res) => {
 export const getDeliveryOrders = async (req, res) => {
   try {
     // Buscar todas las órdenes de entrega existentes
-    const deliveryOrders = await DeliveryOrder.find({})
+    const deliveryOrders = await DeliveryOrder.find()
+      .sort({ createdAt: -1 })
       .populate({
         path: "createdBy",
         select: "name lastName _id",

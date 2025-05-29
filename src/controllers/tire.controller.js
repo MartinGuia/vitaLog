@@ -175,10 +175,12 @@ export const getTireByBarcode = async (req, res) => {
 export const getTiresWithInspection = async (req, res) => {
   try {
     // Filtrar registros donde inspection sea true
-    const tires = await Tire.find({ inspection: true }).populate({
-      path: "workOrder",
-      select: "numero",
-    });
+    const tires = await Tire.find({ inDeliveryNote: false, inspection: true })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "workOrder",
+        select: "numero",
+      });
 
     // Verificar si existen registros
     if (!tires || tires.length === 0) {
@@ -232,12 +234,10 @@ export const getQuoteTires = async (req, res) => {
     });
 
     if (!tires || tires.length === 0) {
-      return res
-        .status(404)
-        .json({
-          message:
-            "No tires found with both quoteTires and inspection set to true",
-        });
+      return res.status(404).json({
+        message:
+          "No tires found with both quoteTires and inspection set to true",
+      });
     }
 
     res.json(tires);

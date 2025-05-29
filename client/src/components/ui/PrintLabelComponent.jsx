@@ -71,13 +71,19 @@ function PrintLabelComponent({ tire, disabled }) {
 ^FO400,820^A0N,50,30^FDDOT: ${tireData.antiquityDot}^FS
 
 ; **Estatus de llanta (izquierda, tamaño pequeño)**
-${tireData.status === "Rechazo" ? `
+${
+  tireData.status === "Rechazo"
+    ? `
 ^FO20,870^A0N,50,30^FDRECHAZO^FS
 ^FO20,920^A0N,50,30^FD${tireData.rejection || "-"}^FS
-` : tireData.status === "Sin Costo" ? `
+`
+    : tireData.status === "Sin Costo"
+    ? `
 ^FO20,870^A0N,50,30^FDRECHAZO^FS
 ^FO20,920^A0N,50,30^FD${tireData.rejection || "-"}^FS
-` : ""}
+`
+    : ""
+}
 
 ^MD30
 ; **Antiquity Dot (derecha, al nivel del brand)**
@@ -100,11 +106,8 @@ ${tireData.status === "Rechazo" ? `
   return (
     <>
       <div className="flex justify-center">
-        <button
-          className=" bg-buttonPrimary hover:bg-buttonPrimaryHover text-black font-bold py-3 px-9 rounded-md shadow-md duration-500 hover:duration-500"
-          onClick={handlePrint}
-        >
-          Imprimir
+        <button onClick={handlePrint}>
+          <p className="font-bold">Imprimir</p>
         </button>
       </div>
     </>
