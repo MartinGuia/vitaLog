@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useTire } from "../../context/TireContext";
 import { useParams } from "react-router-dom";
+import {
+  Button,
+} from "@heroui/react";
 
 function PrintLabelComponent({ tire, disabled }) {
   const { getTire, printLabel } = useTire();
@@ -111,9 +114,9 @@ ${
   return (
     <>
       <div className="flex justify-center">
-        <button onClick={handlePrint}>
+        <Button className="w-full shadow" onPress={handlePrint}>
           <p className="font-bold">Imprimir</p>
-        </button>
+        </Button>
       </div>
     </>
   );

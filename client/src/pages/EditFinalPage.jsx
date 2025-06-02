@@ -12,6 +12,7 @@ import {
   ModalHeader,
   ModalBody,
   Button,
+  ModalFooter,
   useDisclosure,
 } from "@heroui/react";
 
@@ -708,17 +709,9 @@ function EditFinalPage() {
               ¿Imprimir etiqueta?
             </ModalHeader>
             <ModalBody>
-              <Button
-              
-                onPress={() => {
-                  onOpenChange(); // Cierra el modal
-                  navigate("/productionFinal"); // Redirige
-                }}
-              >
-                <PrintLabelComponent tire={tireData} />
-              </Button>
+              <PrintLabelComponent tire={tireData} />
             </ModalBody>
-            {/* <ModalFooter>
+            <ModalFooter>
               <Button
                 color="primary"
                 onPress={() => {
@@ -726,9 +719,9 @@ function EditFinalPage() {
                   navigate("/productionFinal"); // Redirige
                 }}
               >
-                Imprimir y continuar
+                Cerrar
               </Button>
-            </ModalFooter> */}
+            </ModalFooter>
           </ModalContent>
         </Modal>
       }
