@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import InputField from "../components/ui/InputField";
 import { useTire } from "../context/TireContext";
 import { StepBack } from "lucide-react";
@@ -11,19 +11,19 @@ import {
   Autocomplete,
   AutocompleteItem,
 } from "@heroui/react";
+import AlertComponent from "../components/ui/AlertComponent";
 
 function EditTirePoductionPage() {
   const {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
     reset,
   } = useForm();
   const { updateTire, getTire } = useTire();
   const params = useParams();
-  const navigate = useNavigate();
   const [workOrder, setWorkOrder] = useState();
+  const [alertData, setAlertData] = useState(null);
 
   useEffect(() => {
     async function loadTire() {
@@ -56,11 +56,22 @@ function EditTirePoductionPage() {
 
     try {
       await updateTire(params.id, updatedValues);
-      navigate("/workorders");
-      alert("Registro actualizado exitosamente");
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth", // para que se vea mejor
+      });
+      setAlertData({
+        title: "¡Exito!",
+        description: "Llanta actualizada.",
+        color: "success",
+      });
     } catch (error) {
       console.error(error);
-      alert("Error al actualizar el registro");
+      setAlertData({
+        title: "¡Error!",
+        description: "Error al actualizar llanta.",
+        color: "danger",
+      });
     }
   });
 
@@ -903,7 +914,14 @@ function EditTirePoductionPage() {
           </Link>
           <h1 className="text-2xl md:text-4xl font-bold">Editar Registro</h1>
         </div>
-        <div className="flex top-10 absolute w-[100%]"></div>
+        {alertData && (
+          <AlertComponent
+            title={alertData.title}
+            description={alertData.description}
+            color={alertData.color}
+            onClose={() => setAlertData(null)}
+          />
+        )}
         <form onSubmit={onSubmit}>
           <div className="mt-8">
             <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
@@ -1198,7 +1216,7 @@ function EditTirePoductionPage() {
                 >
                   SIN COSTO
                 </button>
-              </div> 
+              </div>
             </div>
           </div>
         </form>

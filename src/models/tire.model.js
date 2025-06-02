@@ -115,6 +115,12 @@ const tireSchema = new Schema(
       default: false, // Configurar el valor predeterminado como false
     },
 
+    inDeliveryNote:{
+      type: Boolean,
+      required: false,
+      default: false
+    },  
+
     //! ----------------Cambia al cotizar ---------------------
     quoteTires: {
       type: Boolean,

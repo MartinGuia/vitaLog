@@ -6,7 +6,6 @@ export const getReportByClient = async (req, res) => {
   try {
     const { clientId, startDate, endDate } = req.body;
 
-    // Convertir fechas a objetos Date y ajustar a inicio/fin del día
     let start = new Date(startDate);
     let end = new Date(endDate);
     start.setHours(0, 0, 0, 0);
@@ -21,72 +20,93 @@ export const getReportByClient = async (req, res) => {
         },
       },
       {
-        $group: {
-          _id: "$client",
-          totalOrders: { $sum: 1 },
-          allTires: { $push: "$tires" }, // Acumula arrays de llantas
-        },
-      },
-      {
-        $project: {
-          totalOrders: 1,
-          tires: {
-            $reduce: {
-              input: "$allTires",
-              initialValue: [],
-              in: { $concatArrays: ["$$value", "$$this"] },
-            },
-          },
-        },
+        $unwind: "$tires",
       },
       {
         $lookup: {
           from: "tires",
           localField: "tires",
           foreignField: "_id",
-          as: "tireInfo",
+          as: "tire",
+        },
+      },
+      {
+        $unwind: "$tire",
+      },
+      {
+        $addFields: {
+          "tire.orderNumber": "$numero",
+        },
+      },
+      {
+        $lookup: {
+          from: "clients",
+          localField: "client",
+          foreignField: "_id",
+          as: "clientData",
+        },
+      },
+      {
+        $unwind: "$clientData",
+      },
+      {
+        $group: {
+          _id: "$client",
+          clientName: { $first: "$clientData.companyName" },
+          totalOrders: { $addToSet: "$_id" },
+          tires: { $push: "$tire" },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          clientName: 1,
+          totalOrders: { $size: "$totalOrders" },
+          tires: 1,
         },
       },
     ]);
 
-    // Si no hay resultados
-    if (workOrders.length === 0) {
+    if (!workOrders.length) {
       return res.status(404).json({
         message:
           "No se encontraron órdenes de trabajo para este cliente en el rango especificado.",
       });
     }
 
-    // Procesar los datos para el reporte
-    const report = workOrders.map((order) => {
-      const tires = order.tireInfo.map((tire) => ({
-        barCode: tire.barCode,
-        brand: tire.brand,
-        model: tire.modelTire,
-        requiredBand: tire.requiredBand,
-        appliedBand: tire.appliedBand,
-        millimeterFootage: tire.millimeterFootage,
-        helmetMeasurement: tire.helmetMeasurement,
-        appliedBandBandag: tire.appliedBandBandag || null,
-        patch: tire.patch || null,
-        patch2: tire.patch2 || null,
-        patch3: tire.patch3 || null,
-        patch4: tire.patch4 || null,
-        rejection: tire.rejection || null,
-        status: tire.status || null,
-      }));
+    const order = workOrders[0]; // Obtener el único resultado esperado
 
-      const totalRejections = tires.filter((tire) => tire.rejection).length;
-      const totalTires = tires.length;
+    const tires = order.tires.map((tire) => ({
+      barCode: tire.barCode,
+      brand: tire.brand,
+      model: tire.modelTire,
+      requiredBand: tire.requiredBand,
+      appliedBand: tire.appliedBand,
+      millimeterFootage: tire.millimeterFootage,
+      helmetMeasurement: tire.helmetMeasurement,
+      appliedBandBandag: tire.appliedBandBandag || null,
+      patch: tire.patch || null,
+      patch2: tire.patch2 || null,
+      patch3: tire.patch3 || null,
+      patch4: tire.patch4 || null,
+      rejection: tire.rejection || null,
+      status: tire.status || null,
+      antiquityDot: tire.antiquityDot || null,
+      serialNumber: tire.serialNumber || null,
+      orderNumber: tire.orderNumber || null,
+    }));
 
-      return {
-        clientId: order._id,
-        totalOrders: order.totalOrders,
-        totalRejections,
-        totalTires,
-        tires,
-      };
-    });
+    const totalRejections = tires.filter((tire) => tire.rejection).length;
+    const totalTires = tires.length;
+
+    const report = {
+      clientId: order._id,
+      clientName: order.clientName,
+      totalOrders: order.totalOrders,
+      totalRejections,
+      totalTires,
+      tires,
+    };
 
     res.status(200).json({ report });
   } catch (error) {

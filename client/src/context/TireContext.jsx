@@ -133,7 +133,7 @@ export function TiresProvider({ children }) {
   const printLabel = async (text) => {
     try {
       await printLabelRequest({ text });
-      alert("Etiqueta enviada a la impresora");
+      console.log("Etiqueta enviada a la impresora")
     } catch (error) {
       console.error("Error al imprimir:", error);
       alert("Hubo un error al imprimir");

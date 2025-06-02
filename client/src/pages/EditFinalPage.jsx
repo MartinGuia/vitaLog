@@ -1,10 +1,19 @@
 import { useForm } from "react-hook-form";
-import { Link, useParams,} from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useTire } from "../context/TireContext";
 import { StepBack } from "lucide-react";
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import { useState, useEffect } from "react";
 import PrintLabelComponent from "../components/ui/PrintLabelComponent";
+import AlertComponent from "../components/ui/AlertComponent";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  Button,
+  useDisclosure,
+} from "@heroui/react";
 
 function EditFinalPage() {
   const {
@@ -19,6 +28,9 @@ function EditFinalPage() {
   const [linea, setLinea] = useState();
   const [numberOfTires, setNumberOfTires] = useState();
   const [tireData, setTireData] = useState({});
+  const [alertData, setAlertData] = useState(null);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (values) => {
     const updatedValues = Object.fromEntries(
@@ -28,17 +40,45 @@ function EditFinalPage() {
     try {
       await updateProductionTire(params.id, updatedValues);
       // navigate("/productionFinal");
-      alert("Registro actualizado exitosamente");
+      setAlertData({
+        title: "¡Exito!",
+        description: "Registro actualizado.",
+        color: "success",
+      });
     } catch (error) {
       console.error(error);
-      alert("Error al actualizar el registro");
+      setAlertData({
+        title: "¡Error!",
+        description: "Error al actualizar registro.",
+        color: "danger",
+      });
     }
   });
 
   const handleStatusChange = async (status) => {
     setValue("status", status);
-    await onSubmit({ ...tireData, status });
+    try {
+      await onSubmit({ ...tireData, status });
+
+      // Recargar datos después de la actualización
+      const updatedTire = await getTire(params.id);
+      setTireData(updatedTire);
+
+      // Mostrar la modal
+      onOpen();
+    } catch (error) {
+      console.error(error);
+      setAlertData({
+        title: "¡Error!",
+        description: "Error al actualizar estado.",
+        color: "danger",
+      });
+    }
   };
+  // const handleStatusChange = async (status) => {
+  //   setValue("status", status);
+  //   await onSubmit({ ...tireData, status });
+  // };
 
   useEffect(() => {
     async function loadTire() {
@@ -479,6 +519,15 @@ function EditFinalPage() {
           <h1 className="text-2xl md:text-4xl font-bold">Inspección Final</h1>
         </div>
 
+        {alertData && (
+          <AlertComponent
+            title={alertData.title}
+            description={alertData.description}
+            color={alertData.color}
+            onClose={() => setAlertData(null)}
+          />
+        )}
+
         <div className="border-2 border-slate-50 py-3 px-10 rounded-md shadow-lg w-full">
           <div className="text-center text-xl font-semibold mb-2">
             <span>{tireData.itemCode}</span>
@@ -635,9 +684,8 @@ function EditFinalPage() {
                   RECHAZO
                 </button>
               </div>
-              
             </div>
-            
+
             <div className=" flex gap-4">
               <div>
                 {" "}
@@ -649,12 +697,41 @@ function EditFinalPage() {
                   SIN COSTO
                 </button>
               </div>
-             <PrintLabelComponent tire={tireData} />
-
             </div>
           </div>
         </form>
       </div>
+      {
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center">
+          <ModalContent>
+            <ModalHeader className="flex flex-col gap-1">
+              ¿Imprimir etiqueta?
+            </ModalHeader>
+            <ModalBody>
+              <Button
+              
+                onPress={() => {
+                  onOpenChange(); // Cierra el modal
+                  navigate("/productionFinal"); // Redirige
+                }}
+              >
+                <PrintLabelComponent tire={tireData} />
+              </Button>
+            </ModalBody>
+            {/* <ModalFooter>
+              <Button
+                color="primary"
+                onPress={() => {
+                  onOpenChange(); // Cierra el modal
+                  navigate("/productionFinal"); // Redirige
+                }}
+              >
+                Imprimir y continuar
+              </Button>
+            </ModalFooter> */}
+          </ModalContent>
+        </Modal>
+      }
     </>
   );
 }

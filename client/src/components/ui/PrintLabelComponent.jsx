@@ -111,11 +111,8 @@ ${
   return (
     <>
       <div className="flex justify-center">
-        <button
-          className=" bg-buttonPrimary hover:bg-buttonPrimaryHover text-black font-bold py-3 px-9 rounded-md shadow-md duration-500 hover:duration-500"
-          onClick={handlePrint}
-        >
-          Imprimir
+        <button onClick={handlePrint}>
+          <p className="font-bold">Imprimir</p>
         </button>
       </div>
     </>
