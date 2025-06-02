@@ -41,18 +41,6 @@ export const registerClient = async (req, res) => {
     return res
       .status(200)
       .json({ message: "El cliente se creo correctamente" });
-    // res.json({
-    //   id: clientSaved._id,
-    //   name: clientSaved.name,
-    //   alias: clientSaved.alias,
-    //   address1: clientSaved.address1,
-    //   city: clientSaved.city,
-    //   region: clientSaved.region,
-    //   zipCode: clientSaved.zipCode,
-    //   country: clientSaved.country,
-    //   createdAt: clientSaved.createdAt,
-    //   updateAt: clientSaved.updatedAt,
-    // });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
