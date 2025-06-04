@@ -318,6 +318,7 @@ function EditTirePoductionPage() {
     { value: "TURN PIKE", label: "TURN PIKE" },
     { value: "TYRES", label: "TYRES" },
     { value: "UNIROYAL", label: "UNIROYAL" },
+    { value: "VALIANT", label: "VALIANT" },
     { value: "VIGOURIUS", label: "VIGOURIUS" },
     { value: "VIKRAN TYRES", label: "VIKRAN TYRES" },
     { value: "WANLI", label: "WANLI" },
