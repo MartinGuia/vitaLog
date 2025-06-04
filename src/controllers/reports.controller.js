@@ -1,13 +1,14 @@
 import Tire from "../models/tire.model.js";
 import WorkOrder from "../models/workOrders.model.js";
 import mongoose from "mongoose";
+import Client from "../models/client.model.js";
 
 export const getReportByClient = async (req, res) => {
   try {
     const { clientId, startDate, endDate } = req.body;
 
-    let start = new Date(startDate);
-    let end = new Date(endDate);
+    const start = new Date(startDate);
+    const end = new Date(endDate);
     start.setHours(0, 0, 0, 0);
     end.setHours(23, 59, 59, 999);
 
@@ -20,61 +21,52 @@ export const getReportByClient = async (req, res) => {
         },
       },
       {
-        $unwind: "$tires",
-      },
-      {
         $lookup: {
           from: "tires",
-          localField: "tires",
-          foreignField: "_id",
-          as: "tire",
+          let: { tireIds: "$tires", numero: "$numero" },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $in: ["$_id", "$$tireIds"] },
+              },
+            },
+            {
+              $addFields: {
+                orderNumber: "$$numero",
+              },
+            },
+          ],
+          as: "tiresDetails",
         },
-      },
-      {
-        $unwind: "$tire",
-      },
-      {
-        $addFields: {
-          "tire.orderNumber": "$numero",
-        },
-      },
-      {
-        $lookup: {
-          from: "clients",
-          localField: "client",
-          foreignField: "_id",
-          as: "clientData",
-        },
-      },
-      {
-        $unwind: "$clientData",
       },
       {
         $group: {
           _id: "$client",
-          clientName: { $first: "$clientData.companyName" },
+          tires: { $push: "$tiresDetails" },
           totalOrders: { $addToSet: "$_id" },
-          tires: { $push: "$tire" },
         },
       },
       {
         $project: {
-          _id: 1,
-          clientName: 1,
           totalOrders: { $size: "$totalOrders" },
-          tires: 1,
+          tires: {
+            $reduce: {
+              input: "$tires",
+              initialValue: [],
+              in: { $concatArrays: ["$$value", "$$this"] },
+            },
+          },
         },
       },
     ]);
 
     if (!workOrders.length) {
       return res.status(404).json({
-        message:
-          "No se encontraron órdenes de trabajo para este cliente en el rango especificado.",
+        message: "No se encontraron órdenes de trabajo para este cliente en el rango especificado.",
       });
     }
 
-    const order = workOrders[0]; // Obtener el único resultado esperado
+    const order = workOrders[0];
 
     const tires = order.tires.map((tire) => ({
       barCode: tire.barCode,
@@ -99,9 +91,12 @@ export const getReportByClient = async (req, res) => {
     const totalRejections = tires.filter((tire) => tire.rejection).length;
     const totalTires = tires.length;
 
+    // Puedes hacer este query aparte si necesitas el nombre del cliente
+    const client = await Client.findById(clientId).select("companyName");
+
     const report = {
-      clientId: order._id,
-      clientName: order.clientName,
+      clientId,
+      clientName: client?.companyName || "Cliente desconocido",
       totalOrders: order.totalOrders,
       totalRejections,
       totalTires,
@@ -117,6 +112,7 @@ export const getReportByClient = async (req, res) => {
     });
   }
 };
+
 
 
 export const getTiresWithContinentalBand = async (req, res) => {
