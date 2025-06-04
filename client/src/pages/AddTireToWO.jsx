@@ -355,6 +355,7 @@ function AddTireToWO() {
     { value: "TURN PIKE", label: "TURN PIKE" },
     { value: "TYRES", label: "TYRES" },
     { value: "UNIROYAL", label: "UNIROYAL" },
+    { value: "VALIANT", label: "VALIANT" },
     { value: "VIGOURIUS", label: "VIGOURIUS" },
     { value: "VIKRAN TYRES", label: "VIKRAN TYRES" },
     { value: "WANLI", label: "WANLI" },
@@ -612,13 +613,6 @@ function AddTireToWO() {
                     >
                       <CameraIcon />
                     </Button>
-                    {/* <button
-                      type="button"
-                      className="bg-slate-200 hover:bg-slate-300 duration-700 hover:duration-700 shadow-md px-4 py-2 rounded-md"
-                      onClick={handleScannerOpen}
-                    >
-                     
-                    </button> */}
                   </div>
                 </div>
                 {isScannerOpen && (
@@ -664,20 +658,21 @@ function AddTireToWO() {
             <div className="w-[100%] pt-6 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
                 <div className="relative w-[60%] md:w-[40%]">
-                  <Autocomplete
+                  <Select
                     className="shadow-md rounded-xl"
-                    items={helmetMeasurements}
                     label="Medidas"
+                    id="helmetMeasurement"
+                    items={helmetMeasurements}
                     {...register("helmetMeasurement", {
                       required: "Debe seleccionar una medida.",
                     })}
                   >
                     {(item) => (
-                      <AutocompleteItem key={item.value} value={item.value}>
+                      <SelectItem key={item.value} value={item.value}>
                         {item.label}
-                      </AutocompleteItem>
+                      </SelectItem>
                     )}
-                  </Autocomplete>
+                  </Select>
                   {errors.helmetMeasurement && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
@@ -692,9 +687,7 @@ function AddTireToWO() {
                     listboxProps={{
                       emptyContent: "Marca no encontrada",
                     }}
-                    {...register("brand", {
-                      required: "Debe seleccionar una marca.",
-                    })}
+                    {...register("brand",)}
                   >
                     {(item) => (
                       <AutocompleteItem key={item.value} value={item.value}>
@@ -724,7 +717,7 @@ function AddTireToWO() {
                   <Input
                     label="Modelo"
                     variant={"underlined"}
-                    {...register("modelTire", { required: true })}
+                    {...register("modelTire", )}
                   />
                   {errors.modelTire && (
                     <p className="text-red-500 text-xs">
@@ -737,12 +730,11 @@ function AddTireToWO() {
                     className="shadow-md rounded-xl "
                     defaultItems={allContinental}
                     label="Banda Requerida"
+                    id="requiredBand"
                     listboxProps={{
                       emptyContent: "Banda no encontrada",
                     }}
-                    {...register("requiredBand", {
-                      required: "Debe seleccionar una banda.",
-                    })}
+                    {...register("requiredBand",)}
                   >
                     {(item) => (
                       <AutocompleteItem key={item.value} value={item.value}>
@@ -772,6 +764,7 @@ function AddTireToWO() {
                 <div className="relative md:w-5/12 w-auto">
                   <Input
                     label="DOT"
+                    id="antiquityDot"
                     type="text"
                     variant={"underlined"}
                     {...register("antiquityDot")}

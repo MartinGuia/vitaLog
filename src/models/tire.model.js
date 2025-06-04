@@ -27,19 +27,19 @@ const tireSchema = new Schema(
     },
     brand: {
       type: String,
-      required: true,
+      required: false,
     },
     requiredBand: {
       type: String,
-      required: true,
+      required: false,
     },
     antiquityDot: {
       type: String,
-      required: true,
+      required: false,
     },
     modelTire: {
       type: String,
-      required: true,
+      required: false,
     },
     serialNumber: {
       type: String,

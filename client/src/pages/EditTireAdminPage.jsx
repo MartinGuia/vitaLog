@@ -14,12 +14,7 @@ import {
 import AlertComponent from "../components/ui/AlertComponent";
 
 function EditTirePoductionPage() {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-  } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const { updateTire, getTire } = useTire();
   const params = useParams();
   const [workOrder, setWorkOrder] = useState();
@@ -42,6 +37,7 @@ function EditTirePoductionPage() {
             serialNumber: tire.serialNumber,
             millimeterFootage: tire.millimeterFootage,
             quoteNumber: tire.quoteNumber,
+            status: tire.status,
           });
         }
       }
@@ -74,11 +70,6 @@ function EditTirePoductionPage() {
       });
     }
   });
-
-  const handleStatusChange = async (status) => {
-    setValue("status", status);
-    await onSubmit({ status });
-  };
 
   const brandOfTire = [
     { value: "ADVANCE", label: "ADVANCE" },
@@ -352,6 +343,12 @@ function EditTirePoductionPage() {
     { value: "Reparación", label: "Reparación" },
     { value: "Renovado", label: "Renovado" },
     { value: "Desecho", label: "Desecho" },
+  ];
+
+  const statusOfTire = [
+    { value: "Pasa", label: "Pasa" },
+    { value: "Rechazo", label: "Rechazo" },
+    { value: "Sin Costo", label: "Sin Costo" },
   ];
 
   const allBand = [
@@ -958,11 +955,7 @@ function EditTirePoductionPage() {
                     <label htmlFor="" className="text-sm">
                       Código de Barras
                     </label>
-                    <InputField
-                      // label="Codigo de barras"
-                      // id="codigo"
-                      {...register("barCode")}
-                    />
+                    <InputField {...register("barCode")} />
                   </div>
                 </div>
               </div>
@@ -1060,17 +1053,19 @@ function EditTirePoductionPage() {
                   <label htmlFor="" className="text-sm">
                     Medida del casco
                   </label>
-                  <Autocomplete
+                  <Select
                     className="shadow-md rounded-xl"
+                    label="Medida del casco"
+                    id="helmetMeasurement"
                     items={helmetMeasurements}
                     {...register("helmetMeasurement")}
                   >
                     {(item) => (
-                      <AutocompleteItem key={item.value} value={item.value}>
+                      <SelectItem key={item.value} value={item.value}>
                         {item.label}
-                      </AutocompleteItem>
+                      </SelectItem>
                     )}
-                  </Autocomplete>
+                  </Select>
                 </div>
 
                 <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0">
@@ -1089,7 +1084,7 @@ function EditTirePoductionPage() {
           <div>
             <div className="mt-8">
               <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
-                Milimetraje Y razón de rechazo
+                Milimetraje Y Estado de la Llanta
               </h2>
             </div>
             <div className="w-[100%] pt-6 text-xl">
@@ -1103,27 +1098,23 @@ function EditTirePoductionPage() {
                     {...register("millimeterFootage")}
                   />
                 </div>
-                <div className="relative w-[80%] md:w-[40%] mt-5 sm:mt-0">
+                <div className="relative w-[80%] md:w-[40%] mt-10 sm:mt-0">
+                  <label className="block mb-2 text-sm font-medium">
+                    Estado
+                  </label>
                   <div className="relative w-full">
-                    <Autocomplete
-                      className="shadow-md rounded-xl "
-                      defaultItems={rejections}
-                      label="Rechazos"
-                      placeholder="Selecciona un rechazo"
-                      listboxProps={{
-                        emptyContent: "Rechazo no encontrado",
-                      }}
-                      {...register("rejection", { required: false })}
+                    <Select
+                      className="shadow-md rounded-xl"
+                      placeholder="Estado de la llanta"
+                      items={statusOfTire}
+                      {...register("status")}
                     >
-                      {(rejection) => (
-                        <AutocompleteItem
-                          key={rejection.value}
-                          value={rejection.value}
-                        >
-                          {rejection.label}
-                        </AutocompleteItem>
-                      )}
-                    </Autocomplete>
+                      {statusOfTire.map((item) => (
+                        <SelectItem key={item.value} value={item.value}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                    </Select>
                   </div>
                 </div>
               </div>
@@ -1131,6 +1122,57 @@ function EditTirePoductionPage() {
           </div>
 
           <div>
+            <div className="mt-8">
+              <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
+                Banda usada
+              </h2>
+            </div>
+            <div className="w-[100%] pt-6 text-xl">
+              <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
+                <div className="relative w-[60%] md:w-[40%]">
+                  <Autocomplete
+                    className="shadow-md rounded-xl "
+                    defaultItems={bandContinental}
+                    label="Banda continental"
+                    placeholder="Selecciona una banda"
+                    listboxProps={{
+                      emptyContent: "Banda no encontrada",
+                    }}
+                    {...register("appliedBand", { required: false })}
+                  >
+                    {(bandConti) => (
+                      <AutocompleteItem
+                        key={bandConti.value}
+                        value={bandConti.value}
+                      >
+                        {bandConti.label}
+                      </AutocompleteItem>
+                    )}
+                  </Autocomplete>
+                </div>
+                <div className="relative w-[60%] md:w-[40%] mt-5 sm:mt-0">
+                  <Autocomplete
+                    className="shadow-md rounded-xl"
+                    defaultItems={bandBandag}
+                    label="Banda bandag"
+                    placeholder="Selecciona una banda"
+                    listboxProps={{
+                      emptyContent: "Banda no encontrada",
+                    }}
+                    {...register("appliedBandBandag", { required: false })}
+                  >
+                    {(bandB) => (
+                      <AutocompleteItem key={bandB.value} value={bandB.value}>
+                        {bandB.label}
+                      </AutocompleteItem>
+                    )}
+                  </Autocomplete>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* <div>
             <div className="mt-8">
               <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
                 Banda usada
@@ -1181,42 +1223,49 @@ function EditTirePoductionPage() {
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="flex flex-wrap gap-4 justify-between mt-14">
-            <div className="flex gap-4">
-              <div>
-                <button
-                  type="button"
-                  className="text-white font-medium bg-buttonSecondary py-3 px-9 rounded-md shadow-md hover:bg-buttonSecondaryHover duration-500 hover:duration-500"
-                  onClick={() => handleStatusChange("Pasa")}
-                >
-                  PASA
-                </button>
-              </div>
-              <div>
-                {" "}
-                <button
-                  type="button"
-                  className="text-white font-medium bg-buttonTertiary py-3 px-5 rounded-md shadow-md hover:bg-buttonTertiaryHover duration-500 hover:duration-500"
-                  onClick={() => handleStatusChange("Rechazo")}
-                >
-                  RECHAZO
-                </button>
+          </div> */}
+          <div>
+            <div className="mt-8">
+              <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
+                Razón de rechazo
+              </h2>
+            </div>
+            <div className="w-[100%] pt-6 text-xl">
+              <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
+                <div className="relative w-[80%] md:w-[40%]">
+                  <div className="relative w-full">
+                    <Autocomplete
+                      className="shadow-md rounded-xl "
+                      defaultItems={rejections}
+                      label="Rechazos"
+                      placeholder="Selecciona un rechazo"
+                      listboxProps={{
+                        emptyContent: "Rechazo no encontrado",
+                      }}
+                      {...register("rejection", { required: false })}
+                    >
+                      {(rejection) => (
+                        <AutocompleteItem
+                          key={rejection.value}
+                          value={rejection.value}
+                        >
+                          {rejection.label}
+                        </AutocompleteItem>
+                      )}
+                    </Autocomplete>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div className=" flex gap-4">
-              <div>
-                {" "}
-                <button
-                  type="button"
-                  className="text-white font-medium bg-colorPrimary py-3 px-5 rounded-md shadow-md hover:bg-blue-900 duration-500 hover:duration-500"
-                  onClick={() => handleStatusChange("Sin Costo")}
-                >
-                  SIN COSTO
-                </button>
-              </div>
+          </div>
+          <div className="flex justify-end mt-14 ">
+            <div className="flex justify-end ">
+              <button
+                className=" text-white font-medium bg-buttonSecondary py-3 px-8 rounded-md shadow-md hover:bg-buttonSecondaryHover duration-500 hover:duration-500 "
+                type="submit"
+              >
+                Actualizar
+              </button>
             </div>
           </div>
         </form>
