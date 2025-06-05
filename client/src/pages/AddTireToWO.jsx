@@ -6,7 +6,6 @@ import { useWorkOrder } from "../context/WorkOrderContext";
 import { useState } from "react";
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import socket from "../socket";
-import { Focus } from "lucide-react";
 import {
   Input,
   Select,
@@ -355,6 +354,7 @@ function AddTireToWO() {
     { value: "TURN PIKE", label: "TURN PIKE" },
     { value: "TYRES", label: "TYRES" },
     { value: "UNIROYAL", label: "UNIROYAL" },
+    { value: "URATURN", label: "URATURN" },
     { value: "VALIANT", label: "VALIANT" },
     { value: "VIGOURIUS", label: "VIGOURIUS" },
     { value: "VIKRAN TYRES", label: "VIKRAN TYRES" },
