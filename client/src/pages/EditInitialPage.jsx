@@ -2,11 +2,20 @@ import { useForm } from "react-hook-form";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useTire } from "../context/TireContext";
 import { StepBack } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import AlertComponent from "../components/ui/AlertComponent";
 import {
   Autocomplete,
   AutocompleteItem,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  Button,
+  ModalFooter,
+  useDisclosure,
 } from "@heroui/react";
+import PrintLabelComponent from "../components/ui/PrintLabelComponent";
 
 function EditInitialPage() {
   const { setValue, handleSubmit, register } = useForm();
@@ -17,6 +26,9 @@ function EditInitialPage() {
   const [numberOfTires, setNumberOfTires] = useState();
   const [workOrderNumber, setWorkOrderNumber] = useState();
   const [linea, setLinea] = useState();
+  const [client, setClient] = useState();
+  const [alertData, setAlertData] = useState(null);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
     async function loadTire() {
@@ -28,6 +40,7 @@ function EditInitialPage() {
             setNumberOfTires(tireByCodeBar.workOrder.tires.length);
             setWorkOrderNumber(tireByCodeBar.workOrder.numero);
             setLinea(tireByCodeBar.linea);
+            setClient(tireByCodeBar.workOrder.client.companyName);
           }
         }
       } catch (error) {
@@ -44,16 +57,54 @@ function EditInitialPage() {
 
     try {
       await updateProductionTire(params.id, updatedValues);
-      navigate("/productionInitial");
+      // navigate("/productionFinal");
+      setAlertData({
+        title: "¡Exito!",
+        description: "Registro actualizado.",
+        color: "success",
+      });
     } catch (error) {
       console.error(error);
-      alert("Error al actualizar el registro");
+      setAlertData({
+        title: "¡Error!",
+        description: "Error al actualizar registro.",
+        color: "danger",
+      });
     }
   });
+  // const onSubmit = handleSubmit(async (values) => {
+  //   const updatedValues = Object.fromEntries(
+  //     Object.entries(values).filter(([key, value]) => value !== "")
+  //   );
+
+  //   try {
+  //     await updateProductionTire(params.id, updatedValues);
+  //     navigate("/productionInitial");
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert("Error al actualizar el registro");
+  //   }
+  // });
 
   const handleStatusChange = async (status) => {
     setValue("status", status);
-    await onSubmit({ ...tireData, status });
+    try {
+      await onSubmit({ ...tireData, status });
+
+      // Recargar datos después de la actualización
+      const updatedTire = await getTire(params.id);
+      setTireData(updatedTire);
+
+      // Mostrar la modal
+      onOpen();
+    } catch (error) {
+      console.error(error);
+      setAlertData({
+        title: "¡Error!",
+        description: "Error al actualizar estado.",
+        color: "danger",
+      });
+    }
   };
 
   const rejections = [
@@ -270,118 +321,180 @@ function EditInitialPage() {
   ];
 
   return (
-    <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
-      <div className="flex items-center gap-3 mb-6">
-        <Link to={`/productionInitial`}>
-          <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary shadow-md rounded-md px-4 py-1 duration-500">
-            <StepBack color="white" />
-          </button>
-        </Link>
-        <h1 className="text-2xl md:text-4xl font-bold">Inspección Inicial</h1>
-        {tireErrors.length > 0 && (
-          <div className="flex top-10 absolute w-full bg-red-500 py-2 text-white justify-center">
-            {tireErrors.map((error, i) => (
-              <div key={i}>{error}</div>
-            ))}
-          </div>
+    <>
+      {" "}
+      <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
+        <div className="flex items-center gap-3 mb-6">
+          <Link to={`/productionInitial`}>
+            <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary shadow-md rounded-md px-4 py-1 duration-500">
+              <StepBack color="white" />
+            </button>
+          </Link>
+          <h1 className="text-2xl md:text-4xl font-bold">Inspección Inicial</h1>
+          {tireErrors.length > 0 && (
+            <div className="flex top-10 absolute w-full bg-red-500 py-2 text-white justify-center">
+              {tireErrors.map((error, i) => (
+                <div key={i}>{error}</div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {alertData && (
+          <AlertComponent
+            title={alertData.title}
+            description={alertData.description}
+            color={alertData.color}
+            onClose={() => setAlertData(null)}
+          />
         )}
-      </div>
 
-      <div className="border-2 border-slate-50  py-3 px-10 rounded-md shadow-lg w-full">
-        <div className="text-center text-xl font-semibold mb-2">
-          <span>{tireData.itemCode}</span>
-        </div>
-        <div className="grid grid-cols-2 w-full">
-          <div>
-            <p>
-              Codigo de barras:{" "}
-              <span className="font-medium text-lg">{tireData.barCode}</span>
-            </p>
-            <p>
-              DOT :{" "}
-              <span className="font-medium text-lg">
-                {tireData.antiquityDot}
-              </span>
-            </p>
-            <p>
-              Medida del casco:{" "}
-              <span className="font-medium text-lg">
-                {tireData.helmetMeasurement}
-              </span>
-            </p>
-            <p>
-              Fecha requerida:{" "}
-              <span className="font-medium text-lg">
-                {tireData.formattedUpdatedAt}
-              </span>
-            </p>
+        <div className="border-2 border-slate-50  py-3 px-10 rounded-md shadow-lg w-full">
+          <div className="text-center text-xl font-semibold mb-2">
+            <span>{client}</span>
           </div>
-          <div className="flex flex-col items-end">
-            <p>
-              Marca:{" "}
-              <span className="font-medium text-lg">{tireData.brand}</span>
-            </p>
-            <p>
-              Banda requerida:{" "}
-              <span className="font-medium text-lg">
-                {tireData.requiredBand}
-              </span>
-            </p>
-            <p>
-              Modelo{" "}
-              <span className="font-medium text-lg">{tireData.modelTire}</span>
-            </p>
-            <p>
-              Numero de orden{" "}
-              <span className="font-medium text-lg">
-                {workOrderNumber} ({linea}/{numberOfTires})
-              </span>
-            </p>
+          <div className="grid grid-cols-2 w-full">
+            <div>
+              <p>
+                Codigo de barras:{" "}
+                <span className="font-medium text-lg">{tireData.barCode}</span>
+              </p>
+              <p>
+                DOT :{" "}
+                <span className="font-medium text-lg">
+                  {tireData.antiquityDot}
+                </span>
+              </p>
+              <p>
+                Medida del casco:{" "}
+                <span className="font-medium text-lg">
+                  {tireData.helmetMeasurement}
+                </span>
+              </p>
+              <p>
+                Fecha requerida:{" "}
+                <span className="font-medium text-lg">
+                  {tireData.formattedUpdatedAt}
+                </span>
+              </p>
+            </div>
+            <div className="flex flex-col items-end">
+              <p>
+                Marca:{" "}
+                <span className="font-medium text-lg">{tireData.brand}</span>
+              </p>
+              <p>
+                Banda requerida:{" "}
+                <span className="font-medium text-lg">
+                  {tireData.requiredBand}
+                </span>
+              </p>
+              <p>
+                Modelo{" "}
+                <span className="font-medium text-lg">
+                  {tireData.modelTire}
+                </span>
+              </p>
+              <p>
+                Numero de orden{" "}
+                <span className="font-medium text-lg">
+                  {workOrderNumber} ({linea}/{numberOfTires})
+                </span>
+              </p>
+            </div>
+          </div>
+          <div className="text-center text-xl font-semibold mb-2">
+            <span>{tireData.itemCode}</span>
           </div>
         </div>
-      </div>
 
-      <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900 mt-8">
-        Estado de la llanta
-      </h2>
-      <p className="text-gray-600 mb-4">
-        Especificar si la llanta será rechazo o pasa.
-      </p>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex justify-center">
-          <Autocomplete
-            className="shadow-md rounded-xl mb-10 w-[50%]"
-            defaultItems={rejections}
-            label="Rechazos"
-            placeholder="Selecciona un rechazo"
-            listboxProps={{
-              emptyContent: "Rechazo no encontrado",
-            }}
-            {...register("rejection", { required: false })}
-          >
-            {(rejection) => (
-              <AutocompleteItem key={rejection.value} value={rejection.value}>
-                {rejection.label}
-              </AutocompleteItem>
-            )}
-          </Autocomplete>
-        </div>
-        <div className="flex gap-4">
-          <button
-            className="text-white font-medium bg-buttonSecondary py-3 px-9 rounded-md shadow-md hover:bg-buttonSecondaryHover duration-500 hover:duration-500"
-            onClick={() => handleStatusChange("Pasa")}
-          >
-            PASA
-          </button>
-          <button
-            className="text-white font-medium bg-buttonTertiary py-3 px-9 rounded-md shadow-md hover:bg-buttonTertiaryHover"
-            onClick={() => handleStatusChange("Rechazo")}
-          >
-            RECHAZO
-          </button>
-        </div>
-      </form>
-    </div>
+        <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900 mt-8">
+          Estado de la llanta
+        </h2>
+        <p className="text-gray-600 mb-4">
+          Especificar si la llanta será rechazo o pasa.
+        </p>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex justify-center">
+            <Autocomplete
+              className="shadow-md rounded-xl mb-10 w-[50%]"
+              defaultItems={rejections}
+              label="Rechazos"
+              placeholder="Selecciona un rechazo"
+              listboxProps={{
+                emptyContent: "Rechazo no encontrado",
+              }}
+              {...register("rejection", { required: false })}
+            >
+              {(rejection) => (
+                <AutocompleteItem key={rejection.value} value={rejection.value}>
+                  {rejection.label}
+                </AutocompleteItem>
+              )}
+            </Autocomplete>
+          </div>
+          <div className="flex flex-wrap gap-4 justify-between">
+            <div className="flex gap-4">
+              <div>
+                <button
+                  type="button"
+                  className="text-white font-medium bg-buttonSecondary py-3 px-9 rounded-md shadow-md hover:bg-buttonSecondaryHover duration-500 hover:duration-500"
+                  onClick={() => handleStatusChange("Pasa")}
+                >
+                  PASA
+                </button>
+              </div>
+              <div>
+                {" "}
+                <button
+                  type="button"
+                  className="text-white font-medium bg-buttonTertiary py-3 px-5 rounded-md shadow-md hover:bg-buttonTertiaryHover duration-500 hover:duration-500"
+                  onClick={() => handleStatusChange("Rechazo")}
+                >
+                  RECHAZO
+                </button>
+              </div>
+            </div>
+
+            <div className=" flex gap-4">
+              <div>
+                {" "}
+                <button
+                  type="button"
+                  className="text-white font-medium bg-colorPrimary py-3 px-5 rounded-md shadow-md hover:bg-blue-900 duration-500 hover:duration-500"
+                  onClick={() => handleStatusChange("Sin Costo")}
+                >
+                  SIN COSTO
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      {
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="center">
+          <ModalContent>
+            <ModalHeader className="flex flex-col gap-1">
+              ¿Imprimir etiqueta?
+            </ModalHeader>
+            <ModalBody>
+              <PrintLabelComponent tire={tireData} />
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color="primary"
+                onPress={() => {
+                  onOpenChange(); // Cierra el modal
+                  navigate("/productionInitial"); // Redirige
+                }}
+              >
+                Cerrar
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      }
+    </>
   );
 }
 
