@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useTire } from "../context/TireContext";
 import { StepBack } from "lucide-react";
-import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import { useState, useEffect } from "react";
 import PrintLabelComponent from "../components/ui/PrintLabelComponent";
 import AlertComponent from "../components/ui/AlertComponent";
@@ -14,6 +13,8 @@ import {
   Button,
   ModalFooter,
   useDisclosure,
+  Autocomplete,
+  AutocompleteItem,
 } from "@heroui/react";
 
 function EditFinalPage() {
@@ -32,6 +33,7 @@ function EditFinalPage() {
   const [alertData, setAlertData] = useState(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const navigate = useNavigate();
+  const [client, setClient] = useState();
 
   const onSubmit = handleSubmit(async (values) => {
     const updatedValues = Object.fromEntries(
@@ -76,10 +78,6 @@ function EditFinalPage() {
       });
     }
   };
-  // const handleStatusChange = async (status) => {
-  //   setValue("status", status);
-  //   await onSubmit({ ...tireData, status });
-  // };
 
   useEffect(() => {
     async function loadTire() {
@@ -91,6 +89,7 @@ function EditFinalPage() {
             setNumberOfTires(tire.workOrder.tires.length);
             setWorkOrderNumber(tire.workOrder.numero);
             setLinea(tire.linea);
+            setClient(tire.workOrder.client.companyName);
           }
         }
       } catch (error) {
@@ -531,7 +530,7 @@ function EditFinalPage() {
 
         <div className="border-2 border-slate-50 py-3 px-10 rounded-md shadow-lg w-full">
           <div className="text-center text-xl font-semibold mb-2">
-            <span>{tireData.itemCode}</span>
+            <span>{client}</span>
           </div>
           <div className="grid grid-cols-2 w-full">
             <div>
@@ -582,6 +581,9 @@ function EditFinalPage() {
                 </span>
               </p>
             </div>
+          </div>
+          <div className="text-center text-xl font-semibold mb-2">
+            <span>{tireData.itemCode}</span>
           </div>
         </div>
 
