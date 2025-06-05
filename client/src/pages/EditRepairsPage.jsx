@@ -2,11 +2,7 @@ import { useForm } from "react-hook-form";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useTire } from "../context/TireContext";
 import { StepBack } from "lucide-react";
-import {
-  Input,
-  Autocomplete,
-  AutocompleteItem,
-} from "@heroui/react";
+import { Input, Autocomplete, AutocompleteItem } from "@heroui/react";
 import React, { useState, useEffect } from "react";
 
 function EditRepairsPage() {
@@ -18,6 +14,7 @@ function EditRepairsPage() {
   const [numberOfTires, setNumberOfTires] = useState();
   const [workOrderNumber, setWorkOrderNumber] = useState();
   const [linea, setLinea] = useState();
+  const [client, setClient] = useState();
 
   useEffect(() => {
     async function loadTire() {
@@ -29,6 +26,7 @@ function EditRepairsPage() {
             setNumberOfTires(tire.workOrder.tires.length);
             setWorkOrderNumber(tire.workOrder.numero);
             setLinea(tire.linea);
+            setClient(tire.workOrder.client.companyName);
           }
         }
       } catch (error) {
@@ -323,7 +321,7 @@ function EditRepairsPage() {
 
       <div className="border-2 border-slate-50 py-3 px-10 rounded-md shadow-lg w-full">
         <div className="text-center text-xl font-semibold mb-2">
-          <span>{tireData.itemCode}</span>
+           <span>{client}</span>
         </div>
         <div className="grid grid-cols-2 w-full">
           <div>
@@ -372,6 +370,9 @@ function EditRepairsPage() {
               </span>
             </p>
           </div>
+        </div>
+        <div className="text-center text-xl font-semibold mb-2">
+          <span>{tireData.itemCode}</span>
         </div>
       </div>
 
