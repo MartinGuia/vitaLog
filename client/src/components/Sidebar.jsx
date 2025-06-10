@@ -35,7 +35,7 @@ export default function Sidebar({ children, additionalContent }) {
     <main className="flex">
       {/* Condicional para que el sidebar sea sticky solo cuando no esté expandido */}
       <aside
-        className={`sticky top-0 ${
+        className={`sticky top-0 z-50 ${
           expanded
             ? "w-48 md:w-52 h-screen" // No se mueve cuando está expandido
             : "sticky top-0 w-16 h-screen" // Se mueve con el scroll cuando está colapsado
@@ -106,7 +106,7 @@ export default function Sidebar({ children, additionalContent }) {
             )}
           </button>
           {notifications.length > 0 && (
-            <div className="absolute top-8 border-vbYellow border right-0 bg-white px-8 shadow-lg rounded-md">
+            <div className="absolute top-8 border-vbYellow border right-0 bg-white px-8 shadow-lg rounded-md z-50">
               {notifications.map((notif, index) => (
                 <div key={index} className="w-44 p-2">
                   <p>{notif.message}</p>
