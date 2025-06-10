@@ -98,11 +98,7 @@ function AppRoutes() {
     {
       path: "/add-tire",
       element: <AddTireToWO />,
-      roles: [
-        roleIds.master,
-        roleIds.ventas,
-        roleIds.administradorP,
-      ],
+      roles: [roleIds.master, roleIds.ventas, roleIds.administradorP],
     },
     {
       path: "/workorders",
@@ -112,18 +108,27 @@ function AppRoutes() {
     {
       path: "/workorder/:id",
       element: <ViewWorkOrder />,
-      roles: [roleIds.master, roleIds.administradorP, roleIds.administradorF, roleIds.ventas],
+      roles: [
+        roleIds.master,
+        roleIds.administradorP,
+        roleIds.administradorF,
+        roleIds.ventas,
+      ],
     },
     {
       path: "/profile/:id",
       element: <EditUserPage />,
-      roles: [roleIds.master],
+      roles: [roleIds.master,],
     },
-    { path: "/clients", element: <AllClientPage />, roles: [roleIds.master] },
+    {
+      path: "/clients",
+      element: <AllClientPage />,
+      roles: [roleIds.master, roleIds.administradorP],
+    },
     {
       path: "/add-client",
       element: <AddClientPage />,
-      roles: [roleIds.master],
+      roles: [roleIds.master, roleIds.administradorP],
     },
     {
       path: "/departments",
@@ -138,16 +143,12 @@ function AppRoutes() {
     {
       path: "/createWorkOrder",
       element: <CreateWorkOrderPage />,
-      roles: [
-        roleIds.master,
-        roleIds.ventas,
-        roleIds.administradorP,
-      ],
+      roles: [roleIds.master, roleIds.ventas, roleIds.administradorP],
     },
     {
       path: "/client/:id",
       element: <EditClientPage />,
-      roles: [roleIds.master],
+      roles: [roleIds.master, roleIds.administradorP],
     },
     {
       path: "/tire/:id",
@@ -187,7 +188,7 @@ function AppRoutes() {
     {
       path: "/deliveryOrders",
       element: <CreateDeliveryOrderPage />,
-      roles: [roleIds.master, roleIds.almacenista,],
+      roles: [roleIds.master, roleIds.almacenista],
     },
     {
       path: "/add-tires",

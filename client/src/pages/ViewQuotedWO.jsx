@@ -161,6 +161,7 @@ function ViewQuotedWO() {
                     <th className="py-3 px-6">Banda Requerida</th>
                     <th className="py-3 px-6">Quemado</th>
                     <th className="py-3 px-6">DOT</th>
+                    <th className="py-3 px-6">N.O de cotización</th>
                     <th className="py-3 px-6">Estatus</th>
                     <th className="py-3 px-6">
                       {user.role === roleAdminF ? "Cotizar" : null}
@@ -179,6 +180,7 @@ function ViewQuotedWO() {
                       <td className="py-3 px-6">{tire.requiredBand}</td>
                       <td className="py-3 px-6">{tire.serialNumber}</td>
                       <td className="py-3 px-6">{tire.antiquityDot}</td>
+                      <td className="py-3 px-6">{tire.quoteNumber || "-"}</td>
                       <td className=" text-center">
                         {tire.status === "Rechazo" ? (
                           <div className="flex justify-center">
@@ -195,40 +197,28 @@ function ViewQuotedWO() {
                         )}
                       </td>
                       <td className="py-3 px-6">
-                        {user.role === roleMaster ||
-                        user.role === roleAdminP ? (
+                        <div className="flex justify-between">
                           <Link to={`/tire/${tire._id}`}>
                             <button className="text-blue-600 hover:text-blue-800 ">
                               <UserRoundPen />
                             </button>
                           </Link>
-                        ) : user.role === roleAdminF ? (
-                          <div className="flex justify-between">
-                            <Link to={`/tire/${tire._id}`}>
-                              <button className="text-blue-600 hover:text-blue-800 ">
-                                <UserRoundPen />
-                              </button>
-                            </Link>
-                            <Checkbox
-                              color="warning"
-                              defaultSelected={tire.quoteTires === true}
-                              onChange={(e) => {
-                                const checked = e.target.checked;
-                                const tireId = tire._id;
-                                if (checked) {
-                                  setSelectedTireIds((prev) => [
-                                    ...prev,
-                                    tireId,
-                                  ]);
-                                } else {
-                                  setSelectedTireIds((prev) =>
-                                    prev.filter((id) => id !== tireId)
-                                  );
-                                }
-                              }}
-                            />
-                          </div>
-                        ) : null}
+                          <Checkbox
+                            color="warning"
+                            defaultSelected={tire.quoteTires === true}
+                            onChange={(e) => {
+                              const checked = e.target.checked;
+                              const tireId = tire._id;
+                              if (checked) {
+                                setSelectedTireIds((prev) => [...prev, tireId]);
+                              } else {
+                                setSelectedTireIds((prev) =>
+                                  prev.filter((id) => id !== tireId)
+                                );
+                              }
+                            }}
+                          />
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -309,7 +299,7 @@ function ViewQuotedWO() {
               onClick={() => quoteTires({ tireIds: selectedTireIds })}
               className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded"
             >
-              Enviar a cotización
+              Cotizar
             </button>
           </div>
         )}

@@ -3,6 +3,7 @@ import { useDeliveryOrder } from "../context/DeliveryOrderContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AlertComponent from "../components/ui/AlertComponent";
+import { Input } from "@heroui/react";
 
 function AddTiresPage() {
   const { getTiresByInspection, tires } = useTire();
@@ -10,6 +11,7 @@ function AddTiresPage() {
   const [selectedTires, setSelectedTires] = useState([]);
   const navigate = useNavigate();
   const [alertData, setAlertData] = useState(null); // Para controlar si mostrar el Alert
+  const [filterText, setFilterText] = useState("");
 
   useEffect(() => {
     getTiresByInspection();
@@ -67,6 +69,39 @@ function AddTiresPage() {
         </h1>
       </div>
       <div className="overflow-x-auto">
+        <div className="flex justify-end mb-4">
+          <Input
+            type="text"
+            placeholder="Buscar por número de orden..."
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+            
+            className="w-full max-w-sm"
+            classNames={{
+              label: "text-black/50 dark:text-white/90",
+              input: [
+                "bg-transparent",
+                "text-black/90 dark:text-white/90",
+                "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+              ],
+              innerWrapper: "bg-transparent",
+              inputWrapper: [
+                "shadow-lg",
+                "bg-default-200/50",
+                "dark:bg-default/60",
+                "backdrop-blur-xl",
+                "backdrop-saturate-200",
+                "hover:bg-default-200/70",
+                "dark:hover:bg-default/70",
+                "group-data-[focus=true]:bg-default-200/50",
+                "dark:group-data-[focus=true]:bg-default/60",
+                "!cursor-text",
+              ],
+            }}
+            label="Filtrar"
+            radius="lg"
+          />
+        </div>
         <table className="table-auto w-full border-collapse rounded-lg overflow-hidden">
           <thead className="bg-primary text-white">
             <tr className="text-sm">
@@ -81,33 +116,40 @@ function AddTiresPage() {
             </tr>
           </thead>
           <tbody className="bg-white">
-            {tires.map((tire, i) => (
-              <tr
-                key={i}
-                className={`hover:bg-blue-50 transition duration-150 text-sm ${
-                  i % 2 === 0 ? "bg-gray-50 text-sm" : ""
-                }`}
-              >
-                <td className="px-6 py-4 text-center">
-                  <input
-                    type="checkbox"
-                    value={tire._id}
-                    checked={selectedTires.includes(tire._id)}
-                    onChange={() => handleSelectTire(tire._id)}
-                    className="rounded focus:ring-2 focus:ring-blue-300"
-                  />
-                </td>
-                <td className="px-6">{tire.workOrder.numero}</td>
-                <td className="px-6">{tire.barCode}</td>
-                <td className="px-6">{tire.itemCode}</td>
-                <td className="px-6">{tire.helmetMeasurement}</td>
-                <td className="px-6">{tire.serialNumber}</td>
-                <td className="px-6">
-                  {tire.appliedBand || tire.appliedBandBandag}
-                </td>
-                <td className="px-6">{tire.brand}</td>
-              </tr>
-            ))}
+            {tires
+              .filter((tire) =>
+                tire.workOrder?.numero
+                  ?.toString()
+                  .toLowerCase()
+                  .includes(filterText.toLowerCase())
+              )
+              .map((tire, i) => (
+                <tr
+                  key={i}
+                  className={`hover:bg-blue-50 transition duration-150 text-sm ${
+                    i % 2 === 0 ? "bg-gray-50 text-sm" : ""
+                  }`}
+                >
+                  <td className="px-6 py-4 text-center">
+                    <input
+                      type="checkbox"
+                      value={tire._id}
+                      checked={selectedTires.includes(tire._id)}
+                      onChange={() => handleSelectTire(tire._id)}
+                      className="rounded focus:ring-2 focus:ring-blue-300"
+                    />
+                  </td>
+                  <td className="px-6">{tire.workOrder.numero}</td>
+                  <td className="px-6">{tire.barCode}</td>
+                  <td className="px-6">{tire.itemCode}</td>
+                  <td className="px-6">{tire.helmetMeasurement}</td>
+                  <td className="px-6">{tire.serialNumber}</td>
+                  <td className="px-6">
+                    {tire.appliedBand || tire.appliedBandBandag}
+                  </td>
+                  <td className="px-6">{tire.brand}</td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
