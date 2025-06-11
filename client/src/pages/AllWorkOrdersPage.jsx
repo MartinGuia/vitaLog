@@ -6,8 +6,8 @@ import { removeWorkOrder } from "../store/slices/workOrderSlice.js";
 import socket from "../socket";
 import AlertComponent from "../components/ui/AlertComponent";
 import ButtonMenu from "../components/ui/ButtonMenu.jsx";
-
-
+import { Input } from "@heroui/react";
+import CustomTable from "../components/ui/CustomTable.jsx";
 
 function AllWorkOrdersPage() {
   const { deleteWorkOrder, getWorkOrders, setAllWorkOrders } = useWorkOrder();
@@ -15,22 +15,59 @@ function AllWorkOrdersPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [workOrderToDelete, setWorkOrderToDelete] = useState(null);
   const [confirmationNumber, setConfirmationNumber] = useState("");
-  const itemsPerPage = 10;
+  const itemsPerPage = 8;
   const dispatch = useDispatch();
   const allWorkOrders = useSelector((state) => state.workOrders.list);
   const [alertData, setAlertData] = useState(null); // Para controlar si mostrar el Alert
+  const [searchTerm, setSearchTerm] = useState("");
+  const filteredOrders =
+    searchTerm.trim() === ""
+      ? allWorkOrders
+      : allWorkOrders.filter((order) =>
+          order.client.companyName
+            .toLowerCase()
+            .includes(searchTerm.trim().toLowerCase())
+        );
+
+  const columns = [
+    { key: "numero", label: "#" },
+    { key: "createdBy", label: "Nombre" },
+    { key: "tires", label: "Registros" },
+    { key: "client", label: "Cliente" },
+    { key: "direccion", label: "Dirección" },
+    { key: "formattedCreatedAt", label: "Recolección" },
+    { key: "acciones", label: "Acciones" },
+  ];
 
   useEffect(() => {
     getWorkOrders();
   }, []);
 
-  const totalPages = Math.ceil(allWorkOrders.length / itemsPerPage);
-
-  const currentOrders = allWorkOrders.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
+  const items = filteredOrders.map((order) => ({
+    id: order._id,
+    numero: order.numero,
+    createdBy: (
+      <Link to={`/workOrder/${order._id}`}>
+        <button>{order.createdBy.name}</button>
+      </Link>
+    ),
+    tires: order.tires.length,
+    client: order.client.companyName,
+    direccion: `${order.client.street}, ${
+      order.client.city || order.client.municipality
+    }, ${order.client.state}, ${order.client.zipCode}`,
+    formattedCreatedAt: order.formattedCreatedAt,
+    acciones: (
+      <ButtonMenu
+        description="Ver y editar Orden de Trabajo"
+        linkText="Ver Orden de Trabajo"
+        linkText2="Eliminar Orden"
+        description2="Eliminar del sistema"
+        to={`/workorder/${order._id}`}
+        onPress={() => handleDeleteClick(order)}
+      />
+    ),
+  }));
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -84,7 +121,7 @@ function AllWorkOrdersPage() {
   };
 
   return (
-    <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
+    <div className="px-4 lg:px-14 mx-auto select-none">
       <div className="text-center my-8">
         <h2 className="md:text-4xl text-2xl font-bold mb-2">
           Ordenes de Trabajo
@@ -99,115 +136,60 @@ function AllWorkOrdersPage() {
         />
       )}
       <section>
-        <div className="p-4 w-full">
+        <div className="p-2 w-full">
           {allWorkOrders.length === 0 ? (
             <div className="text-center text-gray-600 text-lg">
               No hay ordenes de trabajo registradas.
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-                <thead>
-                  <tr className="bg-gray-100 text-gray-600 text-sm text-center">
-                    <th className="py-2 px-2">#</th>
-                    <th className="py-2 px-2">Nombre</th>
-                    <th className="py-2 px-2">Registros</th>
-                    <th className="py-2 px-2">Cliente</th>
-                    <th className="py-2 px-3">Dirección</th>
-                    <th className="py-2 px-5">Recolección</th>
-                    <th className="">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentOrders.map((workOrder, index) => (
-                    <tr
-                      key={index}
-                      className="border-t border-gray-200 text-sm text-center"
-                    >
-                      <td className="py-2 px-2">{workOrder.numero}</td>
-                      <td className=" text-sm text-gray-900 py-2 px-2">
-                        <Link
-                          className="h-auto w-auto"
-                          to={`/workOrder/${workOrder._id}`}
-                        >
-                          <button>{workOrder.createdBy.name}</button>
-                        </Link>
-                      </td>
-                      <td className="py-2 px-2">{workOrder.tires.length}</td>
-                      <td className="py-2 px-2">
-                        {workOrder.client.companyName}
-                      </td>
-                      <td className=" text-xs px-3">
-                        {workOrder.client.street +
-                          ", " +
-                          workOrder.client.city ||
-                          workOrder.client.municipality}
-                        , <br />
-                        {workOrder.client.state +
-                          ", " +
-                          workOrder.client.zipCode}
-                      </td>
-                      <td className=" text-xs">
-                        {workOrder.formattedCreatedAt}
-                      </td>
-                      <td className="py-2">
-                        <ButtonMenu
-                          description="Ver y editar Orden de Trabajo"
-                          linkText="Ver Orden de Trabajo"
-                          linkText2="Eliminar Orden"
-                          description2="Eliminar del sistema"
-                          to={`/workorder/${workOrder._id}`}
-                          onPress={() => handleDeleteClick(workOrder)}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              {allWorkOrders.length >= itemsPerPage && (
-                <div className="flex justify-between items-center mt-4">
-                  <div className="text-sm text-gray-600">
-                    Página {currentPage} de {totalPages}
-                  </div>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className={`px-4 py-2 rounded-lg border ${
-                        currentPage === 1
-                          ? "text-gray-400 border-gray-200"
-                          : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                      }`}
-                    >
-                      Anterior
-                    </button>
-                    {Array.from({ length: totalPages }, (_, i) => (
-                      <button
-                        key={i + 1}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`px-4 py-2 rounded-lg border ${
-                          currentPage === i + 1
-                            ? "bg-blue-600 text-white"
-                            : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                        }`}
-                      >
-                        {i + 1}
-                      </button>
-                    ))}
-                    <button
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                      className={`px-4 py-2 rounded-lg border ${
-                        currentPage === totalPages
-                          ? "text-gray-400 border-gray-200"
-                          : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                      }`}
-                    >
-                      Siguiente
-                    </button>
-                  </div>
-                </div>
-              )}
+              <div className="flex justify-end mb-2 p-2">
+                <Input
+                  type="text"
+                  placeholder="Buscar por número de orden..."
+                  value={searchTerm}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setCurrentPage(1); // Reiniciar a página 1 al buscar
+                  }}
+                  className="w-full max-w-sm dark"
+                  classNames={{
+                    label: "text-black/50 dark:text-white/90",
+                    input: [
+                      "bg-transparent",
+                      "text-black/90 dark:text-white/90",
+                      "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                    ],
+                    innerWrapper: "bg-transparent",
+                    inputWrapper: [
+                      "shadow-lg",
+                      "bg-default-200/50",
+                      "dark:bg-default/60",
+                      "backdrop-blur-xl",
+                      "backdrop-saturate-200",
+                      "hover:bg-default-200/70",
+                      "dark:hover:bg-default/70",
+                      "group-data-[focus=true]:bg-default-200/50",
+                      "dark:group-data-[focus=true]:bg-default/60",
+                      "!cursor-text",
+                    ],
+                  }}
+                  label="Filtrar"
+                  radius="lg"
+                />
+              </div>
+
+              <div className="p-1">
+                <CustomTable
+                  columns={columns}
+                  items={items}
+                  isLoading={false}
+                  page={currentPage}
+                  totalItems={filteredOrders.length}
+                  rowsPerPage={itemsPerPage}
+                  onPageChange={handlePageChange}
+                />
+              </div>
             </div>
           )}
         </div>
