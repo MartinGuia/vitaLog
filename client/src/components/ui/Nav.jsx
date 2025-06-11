@@ -113,7 +113,7 @@ function Nav({ children }) {
       path: "/clients",
       icon: <Users size={20} color="white" />,
       text: "Clientes",
-      allowedRoles: [roleIds.master], 
+      allowedRoles: [roleIds.master, roleIds.administradorP], 
     },
     {
       path: "/production",
@@ -123,7 +123,6 @@ function Nav({ children }) {
     },
     {
       path: "/workorders",
-      
       icon: <FileStack size={20} color="white" />,
       text: "Ordenes de trabajo",
       allowedRoles: [
