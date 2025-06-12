@@ -7,6 +7,7 @@ import {
   updateTire,
   updateProductionTire,
   getTiresWithInspection,
+  deleteTire,
   getTireByBarcode,
   updateQuoteTires,
   getQuoteTires,
@@ -19,6 +20,7 @@ const router = Router();
 router.get("/tires", authRequired, getTires);
 router.get("/tires/:id", authRequired ,getTire);
 router.get("/tiresByInspection", authRequired , getTiresWithInspection);
+router.delete("/tire/:id", authRequired , deleteTire);
 router.put("/tire/:id", authRequired ,updateTire);
 router.put("/editTire/:id", authRequired , updateProductionTire);
 router.post("/tires", authRequired, createTire);

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useDeliveryOrder } from "../context/DeliveryOrderContext.jsx";
 import { useEffect, useState } from "react";
-import { Printer, UserRoundPen, Trash2 } from "lucide-react";
+import { Printer, Trash2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import socket from "../socket";
 import { removeDeliveryOrder } from "../store/slices/deliveryOrderSlice.js";
@@ -17,7 +17,7 @@ function AllDeliveryOrders() {
   const itemsPerPage = 10;
   const dispatch = useDispatch();
   const allDeliveryOrders = useSelector((state) => state.deliveryOrders.list);
-  const [alertData, setAlertData] = useState(null); // Para controlar si mostrar el Alert
+  const [alertData, setAlertData] = useState(null); 
 
   useEffect(() => {
     getDeliveryOrders();
@@ -209,7 +209,7 @@ function AllDeliveryOrders() {
       </section>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10">
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h3 className="text-lg font-bold mb-4">Confirmar eliminación</h3>
             <p>

@@ -13,7 +13,7 @@ export const getTiresByBandBandagRequest = () => axios.get(`/tiresByBandBandag`)
 
 export const createTireRequest = (tires) => axios.post("/tires", tires);
 
-export const deleteTireRequest = (id) => axios.delete(`/tires/${id}`);
+export const deleteTireRequest = (id) => axios.delete(`/tire/${id}`);
 
 export const updateTireRequest = (id, tire) => axios.put(`/tire/${id}`, tire);
 

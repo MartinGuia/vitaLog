@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { UserRoundPen, StepBack, Check, X } from "lucide-react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import WorkOrderPDF from "../components/PDF/WorkOrderPDF.jsx";
+import  QuotedWorkOrderPDF  from "../components/PDF/QuotedWorkOrderPDF.jsx";
 import { useAuth } from "../context/AuthContext";
 import { Checkbox } from "@heroui/react";
 import { useTire } from "../context/TireContext.jsx";
@@ -276,8 +276,8 @@ function ViewQuotedWO() {
           {/* Tu diseño actual */}
           {workOrder && (
             <PDFDownloadLink
-              document={<WorkOrderPDF workOrder={workOrder} />}
-              fileName={`OrdenTrabajo_${workOrder.numero}.pdf`}
+              document={<QuotedWorkOrderPDF workOrder={workOrder} />}
+              fileName={`OrdenTrabajoCotizada_${workOrder.numero}.pdf`}
             >
               {({ loading }) =>
                 loading ? (
