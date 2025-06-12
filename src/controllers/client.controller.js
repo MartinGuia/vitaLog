@@ -88,13 +88,6 @@ export const getClientById = async (req, res) => {
       municipality: clientFound.municipality,
       state: clientFound.state,
       eMail: clientFound.eMail,
-      // name: clientFound.name,
-      // alias: clientFound.alias,
-      // address1: clientFound.address1,
-      // city: clientFound.city,
-      // region: clientFound.region,
-      // zipCode: clientFound.zipCode,
-      // country: clientFound.country,
       // createdAt: clientFound.createdAt,
       // updatedAt: clientFound.updatedAt,
     });

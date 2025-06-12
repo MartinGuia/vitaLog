@@ -11,8 +11,8 @@ import * as images from "../../img";
 
 const styles = StyleSheet.create({
   page: {
-    padding: 30,
-    fontSize: 12,
+    padding: 20,
+    fontSize: 10,
     fontFamily: "Helvetica",
     backgroundColor: "#f7f7f7",
   },
@@ -20,9 +20,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 30,
-    paddingBottom: 10,
-    borderBottomWidth: 2,
+    marginBottom: 20,
+    paddingBottom: 5,
+    borderBottomWidth: 1,
     borderBottomColor: "#007BFF",
   },
   logo: {
@@ -85,7 +85,8 @@ const styles = StyleSheet.create({
   },
   tableRow: {
     flexDirection: "row",
-    padding: 7,
+    paddingVertical: 4,
+    paddingHorizontal: 2,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
   },
@@ -93,13 +94,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f9f9",
   },
   tableCell: {
-    flex: 1, // Tamaño estándar para las demás columnas
-    fontSize: 9,
+    flex: 1,
+    fontSize: 8,
     textAlign: "center",
   },
   tableCellWO: {
-    flex: 0.6, // Reducir espacio para la columna de Línea
-    fontSize: 9,
+    flex: 0.6,
+    fontSize: 8,
     textAlign: "center",
   },
   tableCellDO: {
@@ -129,130 +130,150 @@ const styles = StyleSheet.create({
 const WorkOrderPDF = ({ workOrder }) => {
   // if (!workOrder) return null; // Asegúrate de que workOrder no sea null
 
+  const chunkArray = (arr, size) => {
+    const result = [];
+    for (let i = 0; i < arr.length; i += size) {
+      result.push(arr.slice(i, i + size));
+    }
+    return result;
+  };
+
+  const tireChunks = chunkArray(workOrder.tires, 20);
+
   return (
     <Document>
-      <Page style={styles.page} orientation="landscape">
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.title}>
-              Orden de Trabajo: {workOrder.numero}
-            </Text>
-            <Text style={styles.sectionContent}>VITA-BAJIO S.A de C.V</Text>
-            <Text style={styles.sectionContent}>
-              Hidalgo 1500 San Juan de La Presa, Salamanca
-            </Text>
-          </View>
-          <Image src={images.logoVB} style={styles.logo} />
-        </View>
-        <View style={styles.section}>
-          <View>
-            <Text style={styles.sectionTitle}>Detalles de la Recolección</Text>
-            <Text style={styles.sectionContent}>
-              Recolector:{" "}
-              <Text style={styles.sectionBold}>
-                {workOrder.createdBy?.name}
-                {workOrder.createdBy?.lastName}
+      {tireChunks.map((tireGroup, pageIndex) => (
+        <Page key={pageIndex} style={styles.page}>
+          <View style={styles.header}>
+            <View>
+              <Text style={styles.title}>
+                Orden de Trabajo: {workOrder.numero}
               </Text>
-            </Text>
-            <Text style={styles.sectionContent}>
-              Fecha de entrega:{" "}
-              <Text style={styles.sectionBold}>
-                {workOrder.formattedCreatedAt}
+              <Text style={styles.sectionContent}>VITA-BAJIO S.A de C.V</Text>
+              <Text style={styles.sectionContent}>
+                Hidalgo 1500 San Juan de La Presa, Salamanca
               </Text>
-            </Text>
+            </View>
+            <Image src={images.logoVB} style={styles.logo} />
           </View>
-          <View>
-            <Text style={styles.sectionContent}>Para:</Text>
-            <Text style={styles.textClient}>
-              {workOrder.client.companyName}
-            </Text>
-            <Text style={styles.textAddress}>{workOrder.client.street}</Text>
-            <Text style={styles.textAddress}>{workOrder.client.state}</Text>
-            <Text style={styles.textAddress}>
-              {workOrder.client.city || workOrder.client.municipality}{" "}
-              {workOrder.client.zipCode}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.table}>
-          <View style={styles.tableHeader}>
-            {/* <Text style={styles.tableCellDO}></Text> */}
-            <Text style={styles.tableCellWO}>Linea</Text>
-            <Text style={styles.tableCell}>Código de Ítem</Text>
-            <Text style={styles.tableCell}>Código de Barras</Text>
-            <Text style={styles.tableCell}>Medida</Text>
-            <Text style={styles.tableCell}>Marca</Text>
-            <Text style={styles.tableCell}>Modelo</Text>
-            <Text style={styles.tableCell}>Banda Requerida</Text>
-            <Text style={styles.tableCell}>Quemado</Text>
-            <Text style={styles.tableCell}>DOT</Text>
-            <Text style={styles.tableCell}>Estatus</Text>
-          </View>
-          {workOrder.tires.map((tire, index) => (
-            <React.Fragment key={index}>
-              <View
-                style={[
-                  styles.tableRow,
-                  index % 2 === 1 ? styles.tableRowOdd : null,
-                ]}
-              >
-                {/* <Text style={styles.tableCellDO}>{tire.linea || "-"}</Text> */}
-                <Text style={styles.tableCellWO}>{tire.linea || "-"}</Text>
-                <Text style={styles.tableCell}>{tire.itemCode || "-"}</Text>
-                <Text style={styles.tableCell}>{tire.barCode || "-"}</Text>
-                <Text style={styles.tableCell}>
-                  {tire.helmetMeasurement || "-"}
+          <View style={styles.section}>
+            <View>
+              <Text style={styles.sectionTitle}>
+                Detalles de la Recolección
+              </Text>
+              <Text style={styles.sectionContent}>
+                Recolector:{" "}
+                <Text style={styles.sectionBold}>
+                  {workOrder.createdBy?.name}
+                  {workOrder.createdBy?.lastName}
                 </Text>
-                <Text style={styles.tableCell}>{tire.brand || "-"}</Text>
-                <Text style={styles.tableCell}>{tire.modelTire || "-"}</Text>
-                <Text style={styles.tableCell}>{tire.requiredBand || "-"}</Text>
-                <Text style={styles.tableCell}>{tire.serialNumber || "-"}</Text>
-                <Text style={styles.tableCell}>{tire.antiquityDot || "-"}</Text>
-                <Text style={styles.tableCell}>
-                  {tire.status === "Rechazo" ? (
-                    <Image src={images.x} style={styles.tableCell} />
-                  ) : tire.status === "Pasa" ? (
-                    <Image src={images.check} style={styles.tableCell} />
-                  ) : tire.status === "Sin Costo" ? (
-                    "Sin Costo"
-                  ) : (
-                    " Sin inspección"
-                  )}
+              </Text>
+              <Text style={styles.sectionContent}>
+                Fecha de entrega:{" "}
+                <Text style={styles.sectionBold}>
+                  {workOrder.formattedCreatedAt}
                 </Text>
-              </View>
-              {(tire.rejection ||
-                tire.patch ||
-                tire.patch2 ||
-                tire.patch3 ||
-                tire.patch4) && (
-                <View style={styles.rejectionRow}>
-                  {tire.rejection && (
-                    <Text style={styles.rejectionCell}>
-                      Razón del rechazo: {tire.rejection}
-                    </Text>
-                  )}
-                  {[
-                    { patch: tire.patch, quantity: tire.numberPatches },
-                    { patch: tire.patch2, quantity: tire.numberPatches2 },
-                    { patch: tire.patch3, quantity: tire.numberPatches3 },
-                    { patch: tire.patch4, quantity: tire.numberPatches4 },
-                  ]
-                    .filter(({ patch, quantity }) => patch || quantity)
-                    .map(({ patch, quantity }, patchIndex) => (
-                      <Text
-                        key={patchIndex}
-                        style={styles.rejectionCell}
-                      >{`Reparación ${patchIndex + 1}: ${
-                        patch || "-"
-                      } Cantidad: ${quantity || "-"}`}</Text>
-                    ))}
-                  <Text style={styles.emptyCell}></Text>
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.sectionContent}>Para:</Text>
+              <Text style={styles.textClient}>
+                {workOrder.client.companyName}
+              </Text>
+              <Text style={styles.textAddress}>{workOrder.client.street}</Text>
+              <Text style={styles.textAddress}>{workOrder.client.state}</Text>
+              <Text style={styles.textAddress}>
+                {workOrder.client.city || workOrder.client.municipality}{" "}
+                {workOrder.client.zipCode}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.table}>
+            <View style={styles.tableHeader}>
+              {/* <Text style={styles.tableCellDO}></Text> */}
+              <Text style={styles.tableCellWO}>Linea</Text>
+              <Text style={styles.tableCell}>Cód Ítem</Text>
+              <Text style={styles.tableCell}>Cód de Barras</Text>
+              <Text style={styles.tableCell}>Medida</Text>
+              <Text style={styles.tableCell}>Marca</Text>
+              <Text style={styles.tableCell}>Modelo</Text>
+              <Text style={styles.tableCell}>Banda Requerida</Text>
+              <Text style={styles.tableCell}>Quemado</Text>
+              <Text style={styles.tableCell}>DOT</Text>
+              <Text style={styles.tableCell}>Estatus</Text>
+            </View>
+            {tireGroup.map((tire, index) => (
+              <React.Fragment key={index}>
+                <View
+                  style={[
+                    styles.tableRow,
+                    index % 2 === 1 ? styles.tableRowOdd : null,
+                  ]}
+                >
+                  {/* <Text style={styles.tableCellDO}>{tire.linea || "-"}</Text> */}
+                  <Text style={styles.tableCellWO}>{tire.linea || "-"}</Text>
+                  <Text style={styles.tableCell}>{tire.itemCode || "-"}</Text>
+                  <Text style={styles.tableCell}>{tire.barCode || "-"}</Text>
+                  <Text style={styles.tableCell}>
+                    {tire.helmetMeasurement || "-"}
+                  </Text>
+                  <Text style={styles.tableCell}>{tire.brand || "-"}</Text>
+                  <Text style={styles.tableCell}>{tire.modelTire || "-"}</Text>
+                  <Text style={styles.tableCell}>
+                    {tire.requiredBand || "-"}
+                  </Text>
+                  <Text style={styles.tableCell}>
+                    {tire.serialNumber || "-"}
+                  </Text>
+                  <Text style={styles.tableCell}>
+                    {tire.antiquityDot || "-"}
+                  </Text>
+                  <Text style={styles.tableCell}>
+                    {tire.status === "Rechazo" ? (
+                      <Image src={images.x} style={styles.tableCell} />
+                    ) : tire.status === "Pasa" ? (
+                      <Image src={images.check} style={styles.tableCell} />
+                    ) : tire.status === "Sin Costo" ? (
+                      "Sin Costo"
+                    ) : (
+                      " Sin inspección"
+                    )}
+                  </Text>
                 </View>
-              )}
-            </React.Fragment>
-          ))}
-        </View>
-      </Page>
+                {(tire.rejection ||
+                  tire.patch ||
+                  tire.patch2 ||
+                  tire.patch3 ||
+                  tire.patch4) && (
+                  <View style={styles.rejectionRow}>
+                    {tire.rejection && (
+                      <Text style={styles.rejectionCell}>
+                        Razón del rechazo: {tire.rejection}
+                      </Text>
+                    )}
+                    {[
+                      { patch: tire.patch, quantity: tire.numberPatches },
+                      { patch: tire.patch2, quantity: tire.numberPatches2 },
+                      { patch: tire.patch3, quantity: tire.numberPatches3 },
+                      { patch: tire.patch4, quantity: tire.numberPatches4 },
+                    ]
+                      .filter(({ patch, quantity }) => patch || quantity)
+                      .map(({ patch, quantity }, patchIndex) => (
+                        <Text
+                          key={patchIndex}
+                          style={styles.rejectionCell}
+                        >{`Reparación ${patchIndex + 1}: ${
+                          patch || "-"
+                        } Cantidad: ${quantity || "-"}`}</Text>
+                      ))}
+                    <Text style={styles.emptyCell}></Text>
+                  </View>
+                )}
+              </React.Fragment>
+            ))}
+          </View>
+        </Page>
+      ))}
     </Document>
   );
 };
