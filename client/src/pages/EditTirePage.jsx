@@ -74,7 +74,7 @@ function EditTirePage() {
     <>
       <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
         <div className="flex items-center gap-3 mb-6">
-          <Link to={`/workOrder/${workOrder}`}>
+          <Link to={`/quotingWorkOrders/${workOrder}`}>
             <button className="bg-buttonPrimaryHover hover:bg-buttonPrimary shadow-md rounded-md px-4 py-1 duration-500 hover:duration-500">
               <StepBack color="white" />
             </button>

@@ -35,7 +35,7 @@ export default function Sidebar({ children, additionalContent }) {
     <main className="flex">
       {/* Condicional para que el sidebar sea sticky solo cuando no esté expandido */}
       <aside
-        className={`sticky top-0 z-50 ${
+        className={`sticky top-0 z-10 ${
           expanded
             ? "w-48 md:w-52 h-screen" // No se mueve cuando está expandido
             : "sticky top-0 w-16 h-screen" // Se mueve con el scroll cuando está colapsado

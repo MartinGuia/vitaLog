@@ -198,6 +198,41 @@ export const getTiresWithInspection = async (req, res) => {
   }
 };
 
+export const deleteTire = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Buscar la llanta
+    const tire = await Tire.findById(id);
+    if (!tire) return res.status(404).json(["Llanta no encontrada"]);
+
+    // Obtener la orden de trabajo asociada
+    const workOrderId = tire.workOrder;
+    if (!workOrderId) {
+      return res.status(400).json(["La llanta no tiene una orden asociada"]);
+    }
+
+    // Eliminar la llanta
+    await Tire.findByIdAndDelete(id);
+
+    // Actualizar la orden de trabajo eliminando la referencia a la llanta
+    await WorkOrder.findByIdAndUpdate(
+      workOrderId,
+      { $pull: { tires: id } },
+      { new: true }
+    );
+
+    res.json(["Llanta eliminada correctamente y orden actualizada"]);
+  } catch (error) {
+    console.error("Error al eliminar el registro:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error interno del servidor",
+    });
+  }
+};
+
+
 export const updateQuoteTires = async (req, res) => {
   try {
     const { tireIds } = req.body; // arreglo de IDs de llantas

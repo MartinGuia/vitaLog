@@ -2,15 +2,17 @@ import * as images from "../img";
 import { useWorkOrder } from "../context/WorkOrderContext.jsx";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { UserRoundPen, StepBack, Check, X } from "lucide-react";
+import { UserRoundPen, StepBack, Trash2, Check, X } from "lucide-react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import WorkOrderPDF from "../components/PDF/WorkOrderPDF.jsx";
 import { useAuth } from "../context/AuthContext";
+import { useTire } from "../context/TireContext.jsx";
 
 function ViewWorkOrder() {
   const { getWorkOrderById } = useWorkOrder();
   const params = useParams();
   const { getRoles, user } = useAuth();
+  const { deleteTire } = useTire();
 
   const [workOrder, setWorkOrder] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,6 +20,11 @@ function ViewWorkOrder() {
   const [roleMaster, setRoleMaster] = useState();
   const [roleAdminP, setRoleAdminP] = useState();
   const [roleAdminF, setRoleAdminF] = useState();
+  const [roleSeller, setRoleSeller] = useState();
+
+  const [showModal, setShowModal] = useState(false);
+  const [tireToDelete, setTireToDelete] = useState(null);
+  const [confirmationText, setConfirmationText] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,10 +38,10 @@ function ViewWorkOrder() {
             setRoleAdminP(role._id);
           } else if (role.name === "AdministradorF") {
             setRoleAdminF(role._id);
+          } else if (role.name === "Vendedor") {
+            setRoleSeller(role._id);
           }
-          //  else if (role.name === "Vendedor") {
-          //   setRoleSeller(role._id);
-          // } else if (role.name === "Almacenista") {
+          // else if (role.name === "Almacenista") {
           //   setRoleA(role._id);
           // }
         }
@@ -64,6 +71,26 @@ function ViewWorkOrder() {
     currentPage * itemsPerPage
   );
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+  const openDeleteModal = (tireId) => {
+    setTireToDelete(tireId);
+    setShowModal(true);
+    setConfirmationText("");
+  };
+
+  const handleConfirmDelete = async () => {
+    if (confirmationText.toLowerCase() === "si" && tireToDelete) {
+      await deleteTire(tireToDelete);
+      setShowModal(false);
+      setTireToDelete(null);
+
+      // Refrescar orden de trabajo
+      const updatedWorkOrder = await getWorkOrderById(params.id);
+      setWorkOrder(updatedWorkOrder);
+    } else {
+      alert("Escribe 'si' para confirmar.");
+    }
+  };
 
   if (!workOrder)
     return <h1 className="text-center mt-10">Cargando orden de trabajo...</h1>;
@@ -201,11 +228,35 @@ function ViewWorkOrder() {
                       <td className="py-3 px-6">
                         {user.role === roleMaster ||
                         user.role === roleAdminP ? (
-                          <Link to={`/editTireAdminPage/${tire._id}`}>
-                            <button className="text-blue-600 hover:text-blue-800 ">
-                              <UserRoundPen />
+                          <>
+                            <Link to={`/editTireAdminPage/${tire._id}`}>
+                              <button className="text-blue-600 hover:text-blue-800 mr-2">
+                                <UserRoundPen />
+                              </button>
+                            </Link>
+
+                            <button
+                              onClick={() => openDeleteModal(tire._id)}
+                              className="text-red-600 hover:text-red-800 ml-2"
+                            >
+                              <Trash2 />
                             </button>
-                          </Link>
+                          </>
+                        ) : user.role === roleSeller ? (
+                          <>
+                            <Link to={`/editTireSeller/${tire._id}`}>
+                              <button className="text-blue-600 hover:text-blue-800 mr-2">
+                                <UserRoundPen />
+                              </button>
+                            </Link>
+
+                            <button
+                              onClick={() => openDeleteModal(tire._id)}
+                              className="text-red-600 hover:text-red-800 ml-2"
+                            >
+                              <Trash2 />
+                            </button>
+                          </>
                         ) : null}
                       </td>
                     </tr>
@@ -282,6 +333,40 @@ function ViewWorkOrder() {
           )}
         </div>
       </main>
+
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Confirmar eliminación</h2>
+            <p className="mb-2">
+              ¿Estás seguro de que deseas eliminar esta llanta?
+            </p>
+            <p className="mb-2 text-sm ">
+              Escribe <span className="font-bold">si</span> para confirmar:
+            </p>
+            <input
+              type="text"
+              value={confirmationText}
+              onChange={(e) => setConfirmationText(e.target.value)}
+              className="w-full border px-3 py-2 rounded mb-4"
+            />
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={() => setShowModal(false)}
+                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleConfirmDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                Confirmar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

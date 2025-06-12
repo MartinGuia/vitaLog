@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import {
   createTireRequest,
   getTiresRequest,
-  // deleteTireRequest,
+  deleteTireRequest,
   getTireRequest,
   updateTireRequest,
   getTireByBarcodeRequest,
@@ -92,6 +92,16 @@ export function TiresProvider({ children }) {
     }
   };
 
+  const deleteTire = async (id) => {
+    try {
+      const res = await deleteTireRequest(id);
+      console.log(res.data);
+      // setClients(clients.filter((client) => client._id!== id));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const getTire = async (id) => {
     try {
       const res = await getTireRequest(id);
@@ -133,7 +143,7 @@ export function TiresProvider({ children }) {
   const printLabel = async (text) => {
     try {
       await printLabelRequest({ text });
-      console.log("Etiqueta enviada a la impresora")
+      console.log("Etiqueta enviada a la impresora");
     } catch (error) {
       console.error("Error al imprimir:", error);
       alert("Hubo un error al imprimir");
@@ -182,6 +192,7 @@ export function TiresProvider({ children }) {
         quoteTires,
         getQuoteTires,
         bandContinental,
+        deleteTire,
         bandBandag,
         getTiresByBandBandag,
         loading,

@@ -31,7 +31,7 @@ function AllWorkOrdersPage() {
 
   const columns = [
     { key: "numero", label: "#" },
-    { key: "createdBy", label: "Nombre" },
+    { key: "createdBy", label: "Recolector" },
     { key: "tires", label: "Registros" },
     { key: "client", label: "Cliente" },
     { key: "direccion", label: "Dirección" },
