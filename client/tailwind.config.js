@@ -18,7 +18,6 @@ module.exports = {
         buttonTertiary: "#FF5722",
         buttonTertiaryHover: "#E64A19",
         buttonSubmitted: "#00CED1",
-        
         secondary: "#16325B",
         third:"#533483",
         vbYellow:"#FFDC7F"

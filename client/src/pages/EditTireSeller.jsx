@@ -460,6 +460,7 @@ function EditTireSeller() {
     { value: "195R15", label: "195R15" },
     { value: "245/70R17", label: "245/70R17" },
     { value: "235/85R16", label: "235/85R16" },
+    { value: "295/60R19.5", label: "295/60R19.5" },
     { value: "245/75R17", label: "245/75R17" },
     { value: "255/70R22.5", label: "255/70R22.5" },
     { value: "275/80R17", label: "275/80R17" },
