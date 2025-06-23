@@ -459,6 +459,7 @@ function AddTireToWO() {
     { value: "275/80R24.5", label: "275/80R24.5" },
     { value: "285/75R24.5", label: "285/75R24.5" },
     { value: "225/95-17", label: "225/95-17" },
+    { value: "295/60R19.5", label: "295/60R19.5" },
     { value: "750-17", label: "750-17" },
     { value: "215/75R17.5", label: "215/75R17.5" },
     { value: "205/75R16", label: "205/75R16" },
@@ -564,14 +565,14 @@ function AddTireToWO() {
           <div>
             <div className="w-[100%] pt-8 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative w-[50%] md:w-[40%] ">
-                  <label className="block mb-2 text-sm font-medium">
-                    Servicio
-                  </label>
+                <div className="relative w-[75%] md:w-[40%]">
                   <Select
-                    className="shadow-md rounded-xl"
-                    label="Servicio"
-                    placeholder="Servicios..."
+                    classNames={{
+                      label: "text-lg",
+                    }}
+                    className="shadow-md rounded-xl mt-2"
+                    label="Servicio..."
+                    // placeholder="Servicios..."
                     items={services}
                     {...register("itemCode", {
                       required: "Debe seleccionar un Servicio.",
@@ -589,8 +590,8 @@ function AddTireToWO() {
                     </p>
                   )}
                 </div>
-                <div className="relative md:w-5/12 w-auto mt-5 sm:mt-0 md:flex sm:justify-between">
-                  <div className="sm:w-[85%]">
+                <div className="relative md:w-5/12 w-[75%] mt-5 sm:mt-0 md:flex sm:justify-between">
+                  <div className="sm:w-[75%]">
                     <Input
                       type="text"
                       label="Escanea o escribe el código..."
@@ -659,8 +660,11 @@ function AddTireToWO() {
             </div>
             <div className="w-[100%] pt-6 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative w-[60%] md:w-[40%]">
+                <div className="relative w-[75%] md:w-[40%]">
                   <Select
+                    classNames={{
+                      label: "text-lg",
+                    }}
                     className="shadow-md rounded-xl"
                     label="Medidas"
                     id="helmetMeasurement"
@@ -681,15 +685,15 @@ function AddTireToWO() {
                     </p>
                   )}
                 </div>
-                <div className="relative w-[60%] md:w-[40%] mt-5 sm:mt-0">
+                <div className="relative w-[75%] md:w-[40%] mt-5 sm:mt-0">
                   <Autocomplete
-                    className="shadow-md rounded-xl "
                     defaultItems={brandOfTire}
                     label="Marcas"
+                    className="shadow-md rounded-xl "
                     listboxProps={{
                       emptyContent: "Marca no encontrada",
                     }}
-                    {...register("brand",)}
+                    {...register("brand")}
                   >
                     {(item) => (
                       <AutocompleteItem key={item.value} value={item.value}>
@@ -715,11 +719,14 @@ function AddTireToWO() {
             </div>
             <div className="w-[100%] pt-6 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative w-[50%] md:w-[40%] mt-5 sm:mt-0">
+                <div className="relative w-[75%] md:w-[40%] mt-5 sm:mt-0">
                   <Input
+                    classNames={{
+                      label: "text-lg",
+                    }}
                     label="Modelo"
                     variant={"underlined"}
-                    {...register("modelTire", )}
+                    {...register("modelTire")}
                   />
                   {errors.modelTire && (
                     <p className="text-red-500 text-xs">
@@ -727,7 +734,7 @@ function AddTireToWO() {
                     </p>
                   )}
                 </div>
-                <div className="relative w-[60%] md:w-[40%] mt-5 sm:mt-0">
+                <div className="relative w-[75%] md:w-[40%] mt-5 sm:mt-0">
                   <Autocomplete
                     className="shadow-md rounded-xl "
                     defaultItems={allContinental}
@@ -736,7 +743,7 @@ function AddTireToWO() {
                     listboxProps={{
                       emptyContent: "Banda no encontrada",
                     }}
-                    {...register("requiredBand",)}
+                    {...register("requiredBand")}
                   >
                     {(item) => (
                       <AutocompleteItem key={item.value} value={item.value}>
@@ -763,8 +770,11 @@ function AddTireToWO() {
             </div>
             <div className="w-[100%] pt-6 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative md:w-5/12 w-auto">
+                <div className="relative md:w-5/12 w-[75%]">
                   <Input
+                    classNames={{
+                      label: "text-lg",
+                    }}
                     label="DOT"
                     id="antiquityDot"
                     type="text"
@@ -777,8 +787,11 @@ function AddTireToWO() {
                     </p>
                   )}
                 </div>
-                <div className="relative w-[50%] md:w-[40%] mt-5 sm:mt-0">
+                <div className="relative w-[75%] md:w-[40%] mt-5 sm:mt-0">
                   <Input
+                    classNames={{
+                      label: "text-lg",
+                    }}
                     label="Quemado"
                     type="text"
                     variant={"underlined"}
@@ -802,8 +815,11 @@ function AddTireToWO() {
             </div>
             <div className="w-[100%] pt-6 text-xl">
               <div className="flex items-center flex-col sm:w-auto sm:flex-row sm:justify-between">
-                <div className="relative w-[60%] md:w-[40%]">
+                <div className="relative w-[75%] md:w-[40%]">
                   <Input
+                    classNames={{
+                      label: "text-lg",
+                    }}
                     label="Milimetraje"
                     variant={"underlined"}
                     {...register("millimeterFootage")}
