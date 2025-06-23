@@ -1,21 +1,34 @@
 import React, { useEffect } from "react";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { useTire } from "../../context/TireContext";
 
 const CHART_COLORS = [
-  "#A3C4F3", "#B5EAD7", "#FFDAC1",
-  "#FF9AA2", "#C7CEEA", "#E2F0CB",
+  "#A3C4F3",
+  "#B5EAD7",
+  "#FFDAC1",
+  "#FF9AA2",
+  "#C7CEEA",
+  "#E2F0CB",
+  "#FFB7B2",
+  "#B5EAD7",
+  "#FF9AA2",
+  "#C7CEEA",
+  "#E2F0CB",
+  "#FDCB82",
 ];
 
 const RADIAN = Math.PI / 180;
-const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+
+const renderLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+}) => {
+  // Aumentamos el "empuje" del radio para acercarlo más al borde
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.8;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
@@ -23,10 +36,10 @@ const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) =>
     <text
       x={x}
       y={y}
-      fill="#ffffff"
+      fill="#00000" // Color negro
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
-      className="text-xs md:text-sm"
+      className="text-xs"
     >
       {`${(percent * 100).toFixed(0)}%`}
     </text>
@@ -41,14 +54,21 @@ const ReportByBandag = () => {
   }, []);
 
   const renderLegend = () => (
-    <div className="flex flex-col md:flex-col gap-2">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-3 max-h-48 overflow-y-auto p-2">
       {bandBandag.map((entry, index) => (
-        <div key={index} className="flex items-center gap-2 text-sm text-white">
+        <div
+          key={index}
+          className="flex items-center gap-2 text-sm text-white bg-white/5 p-2 rounded-md"
+        >
           <div
-            className="w-3 h-3 rounded-full"
-            style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }}
+            className="w-4 h-4 rounded-full"
+            style={{
+              backgroundColor: CHART_COLORS[index % CHART_COLORS.length],
+            }}
           />
-          <span>{entry.name} ({entry.ventas})</span>
+          <span className="whitespace-nowrap">
+            {entry.name} <span className="text-gray-300">({entry.ventas})</span>
+          </span>
         </div>
       ))}
     </div>
@@ -64,9 +84,9 @@ const ReportByBandag = () => {
     }
 
     return (
-      <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
-        {/* Gráfico */}
-        <div className="w-full md:w-2/3 h-60">
+      <div className="flex flex-col items-center">
+        {/* Gráfico centrado y más grande */}
+        <div className="w-full h-[400px]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Tooltip
@@ -83,7 +103,7 @@ const ReportByBandag = () => {
                 nameKey="name"
                 cx="50%"
                 cy="50%"
-                outerRadius={90}
+                outerRadius={130}
                 labelLine={false}
                 label={renderLabel}
               >
@@ -98,8 +118,11 @@ const ReportByBandag = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* Leyenda personalizada */}
-        <div className="w-full md:w-1/3">
+        {/* Leyenda debajo */}
+        <div className="w-full p-2">
+          <h3 className="text-center text-white font-medium mb-2">
+            Bandas utilizadas y cantidad
+          </h3>
           {renderLegend()}
         </div>
       </div>
@@ -107,8 +130,8 @@ const ReportByBandag = () => {
   };
 
   return (
-    <section className="bg-colorPrimary text-white p-4 md:p-6 rounded-2xl shadow-md w-full max-w-5xl mx-auto">
-      <h2 className="text-lg md:text-xl font-semibold mb-4 text-center md:text-left">
+    <section className="bg-colorPrimary text-white rounded-2xl shadow-md w-full max-w-8xl mx-auto">
+      <h2 className="text-lg md:text-xl font-semibold mt-4 text-center">
         Diseños de Banda Bandag Más Usados
       </h2>
       {renderContent()}
@@ -117,4 +140,3 @@ const ReportByBandag = () => {
 };
 
 export default ReportByBandag;
-

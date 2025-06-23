@@ -432,6 +432,7 @@ function EditTirePoductionPage() {
     { value: "225/95-17", label: "225/95-17" },
     { value: "750-17", label: "750-17" },
     { value: "215/75R17.5", label: "215/75R17.5" },
+    { value: "295/60R19.5", label: "295/60R19.5" },
     { value: "205/75R16", label: "205/75R16" },
     { value: "215/85R16", label: "215/85R16" },
     { value: "215/65R16", label: "215/65R16" },
