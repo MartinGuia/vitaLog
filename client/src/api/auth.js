@@ -17,4 +17,6 @@ export const deleteUserRequest = (id) => axios.delete(`/deleteUser/${id}`);
 
 export const getRolesRequest = () => axios.get("/get-roles");
 
+export const getReportRequest = (data) => axios.post(`/reportAnnual`, data);
+
 

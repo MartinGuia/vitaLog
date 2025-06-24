@@ -1,12 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useClient } from "../context/ClientContext";
-import { DateInput } from "@heroui/react";
+import { DateInput, Autocomplete, AutocompleteItem } from "@heroui/react";
 import { CalendarDate } from "@internationalized/date";
 import CardComponent from "../components/ui/CardComponent";
 import AlertComponent from "../components/ui/AlertComponent";
-import PaginatedTable from "../components/ui/PaginatedTable";
 import { Link } from "react-router-dom";
 import { StepBack } from "lucide-react";
+import ClientReportDetails from "../components/Reports/ClientReportDetails";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import ClientReportPDF from "../components/PDF/ClientReportPDF";
+import html2canvas from "html2canvas";
 
 const CalendarIcon = (props) => (
   <svg
@@ -35,31 +38,55 @@ const CalendarIcon = (props) => (
 const ReportByClientPage = () => {
   const { getClientReport, allClients, getClients } = useClient();
   const [formState, setFormState] = useState({
-    clientId: "",
+    client: null,
     startDate: null,
     endDate: null,
   });
+
   const [reportData, setReportData] = useState(null);
   const [alertData, setAlertData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 8; // 8 llantas por página como solicitaste
+  const rowsPerPage = 8;
+
+  const [chartImage, setChartImage] = useState(null);
+  const [rejectionImage, setRejectionImage] = useState(null);
+
+  const generateReportImages = async () => {
+    const chartElement = document.getElementById("chart-capture-area");
+    const rejectionElement = document.getElementById("rejection-chart-capture");
+
+    if (chartElement) {
+      const canvas1 = await html2canvas(chartElement, {
+        scale: 2,
+        useCORS: true,
+      });
+      setChartImage(canvas1.toDataURL("image/png"));
+    }
+
+    if (rejectionElement) {
+      const canvas2 = await html2canvas(rejectionElement, {
+        scale: 2,
+        useCORS: true,
+      });
+      setRejectionImage(canvas2.toDataURL("image/png"));
+    }
+  };
 
   useEffect(() => {
     getClients();
   }, []);
 
   const formatDate = (calendarDate) => {
-    if (!calendarDate) return "";
     return `${calendarDate.year}-${String(calendarDate.month).padStart(
       2,
       "0"
-    )}-${String(calendarDate.day).padStart(2, "0")}`;
+    )}-${String(calendarDate.day).padStart(2, "0")}T00:00:00-06:00`; // hora local forzada
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formState.clientId || !formState.startDate || !formState.endDate) {
+    if (!formState.client || !formState.startDate || !formState.endDate) {
       setAlertData({
         title: "¡Error!",
         description: "Debes completar todos los campos obligatorios.",
@@ -73,12 +100,13 @@ const ReportByClientPage = () => {
 
     try {
       const report = await getClientReport({
-        clientId: formState.clientId,
+        clientId: formState.client._id,
         startDate: formattedStart,
         endDate: formattedEnd,
       });
+
       setReportData(report);
-      setCurrentPage(1); // Resetear a la primera página al cargar nuevos datos
+      setCurrentPage(1);
     } catch (error) {
       setAlertData({
         title: "Error",
@@ -87,19 +115,6 @@ const ReportByClientPage = () => {
       });
     }
   };
-
-  const tableColumns = [
-    { key: "orderNumber", label: "O.T." },
-    { key: "barCode", label: "Código de Barras" },
-    { key: "serialNumber", label: "Quemado" },
-    { key: "appliedBand", label: "Banda aplicada" },
-    { key: "brand", label: "Marca" },
-    { key: "helmetMeasurement", label: "Medida" },
-    { key: "patch", label: "Reparaciones" },
-    { key: "antiquityDot", label: "DOT" },
-    { key: "status", label: "Estado" },
-    { key: "rejection", label: "Rechazo" },
-  ];
 
   return (
     <div className="md:px-8 px-3 py-10 max-w-screen-2xl mx-auto select-none">
@@ -127,21 +142,21 @@ const ReportByClientPage = () => {
               <label className="block text-sm font-medium mb-1">
                 Cliente *
               </label>
-              <select
-                value={formState.clientId}
-                onChange={(e) =>
-                  setFormState({ ...formState, clientId: e.target.value })
-                }
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              <Autocomplete
+                selectedKey={formState.client?._id}
+                onSelectionChange={(key) => {
+                  const selectedClient = allClients.find((c) => c._id === key);
+                  setFormState({ ...formState, client: selectedClient });
+                }}
+                className="dark rounded-md"
                 required
               >
-                <option value="">Selecciona un cliente</option>
                 {allClients?.map((client) => (
-                  <option key={client._id} value={client._id}>
+                  <AutocompleteItem key={client._id}>
                     {client.companyName}
-                  </option>
+                  </AutocompleteItem>
                 ))}
-              </select>
+              </Autocomplete>
             </div>
 
             <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -186,41 +201,43 @@ const ReportByClientPage = () => {
       </CardComponent>
 
       {reportData && (
-        <div className="mt-6 space-y-6">
-           <header className="mb-6">
-            <h2 className="text-xl font-semibold text-gray-800">{reportData.clientName}</h2>
-            <div className="mt-2 text-sm sm:flex sm:justify-between">
-              <p>
-                Total de órdenes:{" "}
-                <span className="font-medium">
-                  {reportData.totalOrders}
-                </span>
-              </p>
-              <p>
-                Total de llantas:{" "}
-                <span className="font-medium">{reportData.totalTires}</span>
-              </p>
-              <p>
-                Total de rechazos:{" "}
-                <span className="font-medium">
-                  {reportData.totalRejections}
-                </span>
-              </p>
-            </div>
-          </header>
-
-          {reportData?.tires?.length > 0 && (
-            <PaginatedTable
-              columns={tableColumns}
-              items={reportData.tires}
-              totalItems={reportData.tires.length}
-              isLoading={false}
-              page={currentPage}
-              rowsPerPage={rowsPerPage}
-              onPageChange={setCurrentPage}
-            />
-          )}
+        <div>
+          <ClientReportDetails
+            reportData={reportData}
+            currentPage={currentPage}
+            rowsPerPage={rowsPerPage}
+            onPageChange={setCurrentPage}
+          />
         </div>
+      )}
+
+      {reportData && (
+        <>
+          <button
+            onClick={generateReportImages}
+            className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-md"
+          >
+            Capturar reporte para PDF
+          </button>
+
+          {chartImage && rejectionImage && (
+            <PDFDownloadLink
+              document={
+                <ClientReportPDF
+                  report={reportData}
+                  chartImage={chartImage}
+                  rejectionImage={rejectionImage}
+                />
+              }
+              fileName={`Reporte_${reportData.clientName}.pdf`}
+              className="btn-download"
+            >
+              {({ loading }) =>
+                loading ? "Generando PDF..." : "Descargar PDF"
+              }
+            </PDFDownloadLink>
+          )}
+        </>
       )}
     </div>
   );
