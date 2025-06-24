@@ -150,8 +150,8 @@ const DeliveryOrderPDF = ({ deliveryOrder }) => {
             <Text style={styles.sectionContent}>
               Recolector:{" "}
               <Text style={styles.sectionBold}>
-                {deliveryOrder.createdBy?.name}
-                {deliveryOrder.createdBy?.lastName}
+                {deliveryOrder.tires?.[0]?.user?.name}{" "}
+                {deliveryOrder.tires?.[0]?.user?.lastName}
               </Text>
             </Text>
             <Text style={styles.sectionContent}>

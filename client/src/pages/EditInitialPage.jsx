@@ -107,14 +107,14 @@ function EditInitialPage() {
     }
   };
 
-  const rejections = [
+ const rejections = [
     {
       value: "Corte de ceja",
       label: "Corte de ceja",
     },
     {
-      value: "Ceja - Miseláneos",
-      label: "Ceja - Miseláneos",
+      value: "Ceja - Miselaneos",
+      label: "Ceja - Miselaneos",
     },
     {
       value: "Corte del costado",
@@ -125,8 +125,8 @@ function EditInitialPage() {
       label: "Cortes en corona/penetraciones y rasgusras en el costado",
     },
     {
-      value: "Rodada a baja presón",
-      label: "Rodada a baja presón",
+      value: "Rodada a baja presion",
+      label: "Rodada a baja presion",
     },
     {
       value: "Impacto en la banda de rodamiento",
@@ -149,8 +149,8 @@ function EditInitialPage() {
       label: "Sobrecarga/sobre inflado",
     },
     {
-      value: "Separación en ceja inducido por rebordes",
-      label: "Separación en ceja inducido por rebordes",
+      value: "Separacion en ceja inducido por rebordes",
+      label: "Separacion en ceja inducido por rebordes",
     },
     {
       value:
@@ -159,8 +159,8 @@ function EditInitialPage() {
         "       Desgarre o desprendimiento de orilla de banda de rodamiento inducido por arrastre",
     },
     {
-      value: "Incorrcta aplicación de llanta/reencauche",
-      label: "Incorrcta aplicación de llanta/reencauche",
+      value: "Incorrcta aplicacion de llanta/reencauche",
+      label: "Incorrcta aplicacion de llanta/reencauche",
     },
     {
       value: "Ceja quemada",
@@ -179,8 +179,8 @@ function EditInitialPage() {
       label: "Desgastado",
     },
     {
-      value: "Reparación inapropiada",
-      label: "Reparación inapropiada",
+      value: "Reparacion inapropiada",
+      label: "Reparacion inapropiada",
     },
     {
       value: "Redibujado muy profundo",
@@ -199,12 +199,12 @@ function EditInitialPage() {
       label: "Agrietamiento de hombro/Costado",
     },
     {
-      value: "Separación entre cinturón y el casco",
-      label: "Separación entre cinturón y el casco",
+      value: "Separacion entre cinturón y el casco",
+      label: "Separacion entre cinturón y el casco",
     },
     {
-      value: "Separación de ceja",
-      label: "Separación de ceja",
+      value: "Separacion de ceja",
+      label: "Separacion de ceja",
     },
     {
       value: "Defectos del liner",
@@ -231,56 +231,56 @@ function EditInitialPage() {
       label: "Los años del casco exceden las especificaciones de la flota ",
     },
     {
-      value: "Fallo en reparción - Sección",
-      label: "Fallo en reparción - Sección",
+      value: "Fallo en reparcion - Seccion",
+      label: "Fallo en reparcion - Seccion",
     },
     {
-      value: "Fallo en reparación - Hoyo de clavo",
-      label: "Fallo en reparación - Hoyo de clavo",
+      value: "Fallo en reparacion - Hoyo de clavo",
+      label: "Fallo en reparacion - Hoyo de clavo",
     },
     {
-      value: "Falla en reparción - No bandag",
-      label: "Falla en reparción - No bandag",
+      value: "Falla en reparcion - No bandag",
+      label: "Falla en reparcion - No bandag",
     },
     {
-      value: "Fallo en reparación - Puntual",
-      label: "Fallo en reparación - Puntual",
+      value: "Fallo en reparacion - Puntual",
+      label: "Fallo en reparacion - Puntual",
     },
     {
-      value: "Fallo en reparción - Ceja",
-      label: "Fallo en reparción - Ceja",
+      value: "Fallo en reparcion - Ceja",
+      label: "Fallo en reparcion - Ceja",
     },
     {
-      value: "Falla en reparación - Reparaciones muy grande",
-      label: "Falla en reparación - Reparaciones muy grande",
+      value: "Falla en reparacion - Reparaciones muy grande",
+      label: "Falla en reparacion - Reparaciones muy grande",
     },
     {
-      value: "Falla en reparación - Reparaciones muy cercanas",
-      label: "Falla en reparación - Reparaciones muy cercanas",
+      value: "Falla en reparacion - Reparaciones muy cercanas",
+      label: "Falla en reparacion - Reparaciones muy cercanas",
     },
     {
-      value: "Falla en reparación Muchas reparaciones",
-      label: "Falla en reparación Muchas reparaciones",
+      value: "Falla en reparacion Muchas reparaciones",
+      label: "Falla en reparacion Muchas reparaciones",
     },
     {
-      value: "Perforación no detectada",
-      label: "Perforación no detectada ",
+      value: "Perforacion no detectada",
+      label: "Perforacion no detectada ",
     },
     {
       value: "Vulcanizado inapropiado",
       label: "Vulcanizado inapropiado",
     },
     {
-      value: "No se encontro la separación",
-      label: "No se encontro la separación",
+      value: "No se encontro la separacion",
+      label: "No se encontro la separacion",
     },
     {
       value: "Capas dañadas en raspado",
       label: "Capas dañadas en raspado",
     },
     {
-      value: "Contaminación del caucho",
-      label: "Contaminación del caucho",
+      value: "Contaminacion del caucho",
+      label: "Contaminacion del caucho",
     },
     {
       value: "Sin daño notado",
@@ -299,24 +299,24 @@ function EditInitialPage() {
       label: "Agrietamiento de liner",
     },
     {
-      value: "Separación de inner liner",
-      label: "Separación de inner liner",
+      value: "Separacion de inner liner",
+      label: "Separacion de inner liner",
     },
     {
-      value: "Separación de costado",
-      label: "Separación de costado",
+      value: "Separacion de costado",
+      label: "Separacion de costado",
     },
     {
-      value: "Separación entre cinturones",
-      label: "Separación entre cinturones",
+      value: "Separacion entre cinturones",
+      label: "Separacion entre cinturones",
     },
     {
       value: "Desgaste excesivo",
       label: "Desgaste excesivo",
     },
     {
-      value: "Cinturón/Oxidado",
-      label: "Cinturón/Oxidado",
+      value: "Cinturon/Oxidado",
+      label: "Cinturon/Oxidado",
     },
   ];
 
