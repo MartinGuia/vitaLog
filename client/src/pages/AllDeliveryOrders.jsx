@@ -123,25 +123,25 @@ function AllDeliveryOrders() {
                       key={index}
                       className="border-t border-gray-200 text-sm"
                     >
-                      <td className="px-6">{deliveryOrders.numero}</td>
+                      <td className="px-6">{deliveryOrders.numero || "-"}</td>
                       <td className="px-6 text-sm text-gray-900">
-                        <button>{deliveryOrders.createdBy.name}</button>
+                        <button>{deliveryOrders.createdBy.name || "-"}</button>
                       </td>
-                      <td className="px-6">{deliveryOrders.tires.length}</td>
+                      <td className="px-6">{deliveryOrders.tires.length || "-"}</td>
                       <td className="py-2 px-2">
-                        {deliveryOrders.client.companyName}
+                        {deliveryOrders.client.companyName || "-"}
                       </td>
                       <td className=" text-xs px-3">
-                        {deliveryOrders.client.street +
+                        {deliveryOrders.client.street || "-" +
                           ", " +
                           deliveryOrders.client.city ||
-                          deliveryOrders.client.municipality}
+                          deliveryOrders.client.municipality || "-"}
                         , <br />
                         {deliveryOrders.client.state +
                           ", " +
                           deliveryOrders.client.zipCode}
                       </td>
-                      <td>{deliveryOrders.formattedCreatedAT}</td>
+                      <td>{deliveryOrders.formattedCreatedAT || "-"}</td>
                       <td className="flex flex-col items-center sm:flex-row sm:justify-around">
                         <Link to={`/viewDeliveryOrder/${deliveryOrders._id}`}>
                           <button className="hover:text-slate-500 mt-1">
