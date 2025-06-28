@@ -9,6 +9,7 @@ import {
   updateUserRequest,
   getRolesRequest,
   getWorkOrderByUserRequest,
+  getReportRequest,
 } from "../api/auth.js";
 import Cookies from "js-cookie";
 
@@ -82,7 +83,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await getWorkOrderByUserRequest(id);
       console.log(res.data);
-      
+
       return res.data;
     } catch (error) {
       console.error(error);
@@ -120,6 +121,20 @@ export const AuthProvider = ({ children }) => {
       return res.data;
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const getReport = async (year, setErrors) => {
+    try {
+      const res = await getReportRequest({ year });
+      console.log("Reporte:", res.data.report)
+      return res.data.report;
+    } catch (error) {
+      console.error("Error al obtener el reporte:", error);
+      if (setErrors) {
+        setErrors([error.response?.data?.message || "Error desconocido"]);
+      }
+      return null;
     }
   };
 
@@ -187,6 +202,7 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated,
         errors,
         getWorkOrderByUser,
+        getReport,
       }}
     >
       {children}

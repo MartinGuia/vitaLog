@@ -193,8 +193,8 @@ export const getDeliveryOrderById = async (req, res) => {
       .populate({
         path: "tires",
         populate: {
-          path: "workOrder",
-          select: "numero",
+          path: "workOrder user",
+          select: "numero name lastName",
         },
       })
       .populate({ path: "createdBy", select: "name lastName userName" })

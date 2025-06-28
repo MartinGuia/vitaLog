@@ -11,6 +11,8 @@ function ViewDeliveryOrderPage() {
   const { id } = useParams();
 
   const [deliveryOrder, setDeliveryOrder] = useState(null);
+  const [userName, setUser] = useState();
+  const [userLastName, setUserLastName] = useState();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -18,18 +20,22 @@ function ViewDeliveryOrderPage() {
     async function loadDeliveryOrder() {
       try {
         if (id) {
-          const order = await getDeliveryOrder(id);
-          if (order) setDeliveryOrder(order);
+          const order = await getDeliveryOrder(id); // no uses order.data porque el objeto ya viene directo
+          console.log("Orden recibida:", order); // Para verificar
+          setDeliveryOrder(order);
+          setUser(order.tires?.[0]?.user?.name);
+          setUserLastName(order.tires?.[0]?.user?.lastName);
         }
       } catch (error) {
-        console.error(error);
+        console.error("Error al cargar la orden de entrega:", error);
       }
     }
 
     loadDeliveryOrder();
   }, [id]);
 
-  if (!deliveryOrder) return <h1 className="text-center mt-10">Cargando orden...</h1>;
+  if (!deliveryOrder)
+    return <h1 className="text-center mt-10">Cargando orden...</h1>;
 
   const tires = deliveryOrder.tires || [];
   const totalPages = Math.ceil(tires.length / itemsPerPage);
@@ -85,10 +91,10 @@ function ViewDeliveryOrderPage() {
               </h2>
               <div>
                 <p>
-                  Conductor:{" "}
+                  Recolector:{" "}
                   <span className="font-medium">
-                    {deliveryOrder.createdBy.name}{" "}
-                    {deliveryOrder.createdBy.lastName}
+                    {userName + " " + userLastName}
+                    {/* {deliveryOrder.createdBy.lastName} */}
                   </span>
                 </p>
                 <p>
@@ -220,24 +226,24 @@ function ViewDeliveryOrderPage() {
             )}
           </div>
         </section>
-         <div>
-             {deliveryOrder && (
-           <PDFDownloadLink
-             document={<DeliveryOrderPDF deliveryOrder={deliveryOrder} />}
-             fileName={`OrdenEntrega_${deliveryOrder.numero}.pdf`}
-           >
-             {({ loading }) =>
-               loading ? (
-                 "Generando PDF..."
-               ) : (
-                 <button className="flex mt-2 sm:mt-0 shadow p-2 text-sm sm:text-base sm:p-3 bg-red-400 rounded-lg text-white cursor-pointer hover:bg-red-600 duration-500 hover:duration-500">
-                   Descargar PDF
-                 </button>
-               )
-             }
-           </PDFDownloadLink>
-         )}
-       </div> 
+        <div>
+          {deliveryOrder && (
+            <PDFDownloadLink
+              document={<DeliveryOrderPDF deliveryOrder={deliveryOrder} />}
+              fileName={`OrdenEntrega_${deliveryOrder.numero}.pdf`}
+            >
+              {({ loading }) =>
+                loading ? (
+                  "Generando PDF..."
+                ) : (
+                  <button className="flex mt-2 sm:mt-0 shadow p-2 text-sm sm:text-base sm:p-3 bg-red-400 rounded-lg text-white cursor-pointer hover:bg-red-600 duration-500 hover:duration-500">
+                    Descargar PDF
+                  </button>
+                )
+              }
+            </PDFDownloadLink>
+          )}
+        </div>
       </main>
     </div>
   );

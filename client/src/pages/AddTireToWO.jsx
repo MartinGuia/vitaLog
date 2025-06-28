@@ -359,6 +359,7 @@ function AddTireToWO() {
     { value: "UNIROYAL", label: "UNIROYAL" },
     { value: "VALIANT", label: "VALIANT" },
     { value: "VIGOURIUS", label: "VIGOURIUS" },
+    { value: "VITOUR", label: "VITOUR" },
     { value: "VIKRAN TYRES", label: "VIKRAN TYRES" },
     { value: "WANLI", label: "WANLI" },
     { value: "WARRIOR", label: "WARRIOR" },
