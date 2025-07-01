@@ -68,7 +68,7 @@ const AnnualTireRenewalChart = ({ monthlySummary }) => {
 
   const chartData = monthlySummary.map((month) => ({
     name: monthNames[month.month],
-    count: month.totalTires,
+    count: month.totalTires - month.totalRejections,
   }));
 
   const totalTiresYear = chartData.reduce((sum, m) => sum + m.count, 0);

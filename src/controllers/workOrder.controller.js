@@ -6,49 +6,46 @@ import { format } from "date-fns";
 export const createOrOpenWorkOrder = async (req, res) => {
   try {
     const { client } = req.body;
-
     const userId = req.user._id || req.user.id;
 
-    // Buscar si ya hay una orden abierta del mismo usuario
-    let workOrder = await WorkOrder.findOne({
+    // Verificar si ya existe una orden abierta del mismo usuario
+    const existingOpenOrder = await WorkOrder.findOne({
       isOpen: true,
       createdBy: userId,
-    }).populate("tires");
+    });
 
-    if (!workOrder) {
-      const ultimaOrdenDeTrabajo = await WorkOrder.findOne().sort({
-        numero: -1,
+    // Si ya hay una orden abierta, no permitir crear otra
+    if (existingOpenOrder) {
+      return res.status(400).json({
+        message: [
+          "Ya tienes una orden de trabajo abierta. Debes cerrarla antes de crear una nueva.",
+        ],
+        workOrder: existingOpenOrder,
       });
-      const nuevoNumero = ultimaOrdenDeTrabajo?.numero
-        ? ultimaOrdenDeTrabajo.numero + 1
-        : 1;
-
-      // Crear nueva orden
-      workOrder = await WorkOrder.create({
-        numero: nuevoNumero,
-        isOpen: true,
-        createdBy: userId,
-        client: client,
-      });
-
-      console.log("Orden creada con ID:", workOrder._id);
-
-      // Asociar la orden al usuario
-      const updatedUser = await User.findByIdAndUpdate(
-        userId,
-        { $push: { workOrders: workOrder._id } },
-        { new: true }
-      );
-
-      console.log("Usuario actualizado:", updatedUser);
-    } else {
-      if (client && !workOrder.client) {
-        workOrder.client = client;
-        await workOrder.save();
-      }
     }
 
-    res.json({ success: true, workOrder });
+    // Obtener el número consecutivo para la nueva orden
+    const ultimaOrdenDeTrabajo = await WorkOrder.findOne().sort({ numero: -1 });
+    const nuevoNumero = ultimaOrdenDeTrabajo?.numero
+      ? ultimaOrdenDeTrabajo.numero + 1
+      : 1;
+
+    // Crear la nueva orden
+    const newWorkOrder = await WorkOrder.create({
+      numero: nuevoNumero,
+      isOpen: true,
+      createdBy: userId,
+      client: client,
+    });
+
+    // Asociar la orden al usuario
+    await User.findByIdAndUpdate(
+      userId,
+      { $push: { workOrders: newWorkOrder._id } },
+      { new: true }
+    );
+
+    res.json({ success: true, workOrder: newWorkOrder });
   } catch (error) {
     console.error("Error al crear/abrir orden de trabajo:", error);
     res
@@ -256,5 +253,28 @@ export const getQuotedWorkOrders = async (req, res) => {
     return res.status(500).json({
       message: "Error del servidor al recuperar las órdenes de trabajo",
     });
+  }
+};
+
+export const reopenWorkOrder = async (req, res) => {
+  try {
+    const { workOrderId } = req.body;
+
+    const order = await WorkOrder.findById(workOrderId);
+    if (!order) {
+      return res.status(404).json({ message: "Orden no encontrada" });
+    }
+
+    if (order.isOpen) {
+      return res.status(400).json({ message: "La orden ya está abierta" });
+    }
+
+    order.isOpen = true;
+    await order.save();
+
+    res.json({ message: "Orden reabierta correctamente", workOrder: order });
+  } catch (error) {
+    console.error("Error al reabrir la orden:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
   }
 };

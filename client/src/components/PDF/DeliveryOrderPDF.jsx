@@ -164,15 +164,15 @@ const DeliveryOrderPDF = ({ deliveryOrder }) => {
           <View>
             <Text style={styles.sectionContent}>Envíe a:</Text>
             <Text style={styles.textClient}>
-              {deliveryOrder.client.companyName}
+              {deliveryOrder.client?.companyName}
             </Text>
             <Text style={styles.textAddress}>
-              {deliveryOrder.client.street}
+              {deliveryOrder.client?.street}
             </Text>
-            <Text style={styles.textAddress}>{deliveryOrder.client.state}</Text>
+            <Text style={styles.textAddress}>{deliveryOrder.client?.state}</Text>
             <Text style={styles.textAddress}>
-              {deliveryOrder.client.city || deliveryOrder.client.municipality}{" "}
-              {deliveryOrder.client.zipCode}
+              {deliveryOrder.client?.city || deliveryOrder.client?.municipality}{" "}
+              {deliveryOrder.client?.zipCode}
             </Text>
           </View>
         </View>

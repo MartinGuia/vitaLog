@@ -71,8 +71,9 @@ function EditTirePoductionPage() {
     }
   });
 
-  const brandOfTire = [
+ const brandOfTire = [
     { value: "ADVANCE", label: "ADVANCE" },
+    { value: "ADVANTA", label: "ADVANTA" },
     { value: "ADVENTUR", label: "ADVENTUR" },
     { value: "AEMSTRONG", label: "AEMSTRONG" },
     { value: "AEOLUS", label: "AEOLUS" },
@@ -83,6 +84,7 @@ function EditTirePoductionPage() {
     { value: "AMERICUS", label: "AMERICUS" },
     { value: "AMERI STEEL", label: "AMERI STEEL" },
     { value: "AMORSTEEL", label: "AMORSTEEL" },
+    { value: "AMULET", label: "AMULET" },
     { value: "ANNAITE", label: "ANNAITE" },
     { value: "ANTYRE", label: "ANTYRE" },
     { value: "APLUS", label: "APLUS" },
@@ -148,6 +150,7 @@ function EditTirePoductionPage() {
     { value: "DOUBLE  STAR", label: "DOUBLE  STAR" },
     { value: "DOUBLE COIN", label: "DOUBLE COIN" },
     { value: "DRIVEMASTER", label: "DRIVEMASTER" },
+    { value: "DRC", label: "DRC" },
     { value: "DUNLOP", label: "DUNLOP" },
     { value: "DURATION", label: "DURATION" },
     { value: "DURATURN", label: "DURATURN" },
@@ -236,6 +239,7 @@ function EditTirePoductionPage() {
     { value: "MEXTROAD", label: "MEXTROAD" },
     { value: "MICHELIN", label: "MICHELIN" },
     { value: "MILE PRO ", label: "MILE PRO " },
+    { value: "MILEVER", label: "MILEVER" },
     { value: "MILERSTONE", label: "MILERSTONE" },
     { value: "MIRAGE", label: "MIRAGE" },
     { value: "MMEWAY", label: "MMEWAY" },
@@ -303,6 +307,7 @@ function EditTirePoductionPage() {
     { value: "SYNERGY", label: "SYNERGY" },
     { value: "TAITONG", label: "TAITONG" },
     { value: "TBB TIRES", label: "TBB TIRES" },
+    { value: "TECHSHIELD", label: "TECHSHIELD" },
     { value: "TERAFLEX", label: "TERAFLEX" },
     { value: "TERRA KING", label: "TERRA KING" },
     { value: "THREE-A", label: "THREE-A" },
@@ -310,6 +315,7 @@ function EditTirePoductionPage() {
     { value: "TOLEDO", label: "TOLEDO" },
     { value: "TORCH", label: "TORCH" },
     { value: "TORNEL", label: "TORNEL" },
+    { value: "TORNADO", label: "TORNADO" },
     { value: "TORQUE TYRES", label: "TORQUE TYRES" },
     { value: "TOYO", label: "TOYO" },
     { value: "TRAN MON", label: "TRAN MON" },
@@ -888,7 +894,7 @@ function EditTirePoductionPage() {
     { value: "TR4.1 - 240", label: " TR4.1 - 240" },
     { value: "UAP - 210  ", label: " UAP - 210" },
     { value: "UAP - 230  ", label: " UAP - 230" },
-    { value: "UAP - 210  ", label: " UAP - 210" },
+    { value: "UAP - 240  ", label: " UAP - 240" },
     { value: "UAP - 220  ", label: " UAP - 220" },
     { value: "UAP - 260  ", label: " UAP - 260" },
     { value: "UAP - 250  ", label: " UAP - 250" },

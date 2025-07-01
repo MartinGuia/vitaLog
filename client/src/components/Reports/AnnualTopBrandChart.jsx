@@ -26,7 +26,7 @@ const renderPercentageLabel = (props) => {
       x={textX}
       y={textY}
       fill="#000"
-      fontSize={12}
+      fontSize={16}
       dominantBaseline="middle"
       className="font-semibold"
     >
@@ -53,18 +53,18 @@ const AnnualTopBrandChart = ({ data }) => {
       </h2>
 
       <div className="flex flex-col items-center pb-4">
-        <div className="w-full h-[400px]">
+        <div className="w-full h-[800px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={sortedData}
               layout="vertical"
-              margin={{ top: 10, right: 10, left: 40, bottom: 10 }}
+              margin={{ top: 10, right: 10, left: 30, bottom: 10 }}
             >
               <XAxis type="number" hide />
               <YAxis
                 dataKey="_id"
                 type="category"
-                tick={{ fontSize: 12, fill: "#000" }}
+                tick={{ fontSize: 16, fill: "#000" }}
                 axisLine={{ stroke: "#000" }}
                 width={140}
               />

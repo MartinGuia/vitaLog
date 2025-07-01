@@ -33,7 +33,7 @@ const renderPercentageLabel = (props) => {
       x={textX}
       y={textY}
       fill="#000"
-      fontSize={12}
+      fontSize={16}
       dominantBaseline="middle"
       className="font-semibold"
     >
@@ -59,7 +59,7 @@ const ClientBandUsage = ({ title, data }) => {
       </h2>
 
       <div className="flex flex-col items-center pb-4">
-        <div className="w-full h-[400px]">
+        <div className="w-full h-[800px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={top10Data}
@@ -70,7 +70,7 @@ const ClientBandUsage = ({ title, data }) => {
               <YAxis
                 dataKey="_id"
                 type="category"
-                tick={{ fontSize: 12, fill: "#000" }}
+                tick={{ fontSize: 16, fill: "#000" }}
                 axisLine={{ stroke: "#000" }}
                 width={90} // Menor ancho para mejor uso del espacio
               />

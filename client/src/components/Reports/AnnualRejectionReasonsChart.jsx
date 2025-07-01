@@ -21,7 +21,7 @@ const CHART_COLORS = [
   "#C0F2F2",
   "#FFC0CB",
   "#D1C4E9",
-  "#AED581"
+  "#AED581",
 ];
 
 // Mostrar porcentaje dentro de cada barra
@@ -61,12 +61,12 @@ const AnnualRejectionReasonsChart = ({ data }) => {
       </h2>
 
       <div className="flex flex-col items-center pb-4">
-        <div className="w-full h-[1000px]">
+        <div className="w-full h-[1800px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={sortedData}
               layout="vertical"
-              margin={{ top: 10, right: 10, left: 20, bottom: 10 }}
+              margin={{ top: 10, right: 10, left: 40, bottom: 10 }}
             >
               <XAxis type="number" hide />
               <YAxis
@@ -74,7 +74,7 @@ const AnnualRejectionReasonsChart = ({ data }) => {
                 type="category"
                 tick={{ fontSize: 18, fill: "#000" }}
                 axisLine={{ stroke: "#000" }}
-                width={180} // espacio para etiquetas largas
+                width={240}
               />
               <Tooltip
                 formatter={(value) => [`${value} rechazos`, "Cantidad"]}

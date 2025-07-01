@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useAuth } from "../context/AuthContext";
+
 import { useNavigate } from "react-router-dom";
 import { useWorkOrder } from "../context/WorkOrderContext";
 import { useEffect, useState } from "react";
@@ -11,9 +11,9 @@ function CreateWorkOrderPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { errors: registerErrors } = useAuth();
+
   const navigate = useNavigate();
-  const { openWorkOrder } = useWorkOrder();
+  const { openWorkOrder, errors: workOrderErrors } = useWorkOrder();
   const { getClients, allClients } = useClient();
   const [selectedClientId, setSelectedClientId] = useState(null);
 
@@ -23,7 +23,7 @@ function CreateWorkOrderPage() {
     getClients(); // Cargar los clientes
   }, []);
 
-  const onSubmit = handleSubmit((values) => {
+  const onSubmit = handleSubmit(async (values) => {
     if (!selectedClientId) {
       alert("Debe seleccionar un cliente.");
       return;
@@ -31,13 +31,15 @@ function CreateWorkOrderPage() {
 
     const formData = {
       ...values,
-      client: selectedClientId, // lo agregas aquí manualmente
+      client: selectedClientId,
     };
 
-    openWorkOrder(formData);
-    navigate("/add-tire");
+    const result = await openWorkOrder(formData);
+
+    if (result.success) {
+      navigate("/add-tire"); // Solo navega si la creación fue exitosa
+    }
   });
- 
 
   return (
     <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
@@ -45,15 +47,10 @@ function CreateWorkOrderPage() {
         <h1 className="md:text-4xl flex justify-center font-bold mb-3 text-2xl">
           Crear Orden de Trabajo
         </h1>
-        {registerErrors.length > 0 && (
-          <div className="flex top-10 absolute w-full">
-            {registerErrors.map((error, i) => (
-              <div
-                className="bg-red-500 py-2 text-white w-full flex justify-center"
-                key={i}
-              >
-                {error}
-              </div>
+        {workOrderErrors.length > 0 && (
+          <div className="mb-4 p-3 text-sm text-center text-red-500 bg-red-100 rounded-md">
+            {workOrderErrors.map((error, i) => (
+              <p key={i}>{error}</p>
             ))}
           </div>
         )}
@@ -85,7 +82,7 @@ function CreateWorkOrderPage() {
                 </AutocompleteItem>
               )}
             </Autocomplete>
-         
+
             {errors.client && (
               <p className="text-red-500 text-base">{errors.client.message}</p>
             )}
