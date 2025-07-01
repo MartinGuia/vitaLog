@@ -50,34 +50,6 @@ const clientSchema = new Schema(
       type: String,
       required: false,
     },
-    // name: {
-    //   type: String,
-    //   required: true,
-    // },
-    // alias: {
-    //   type: String,
-    //   required: true,
-    // },
-    // address1: {
-    //   type: String,
-    //   required: true,
-    // },
-    // city: {
-    //   type: String,
-    //   required: true,
-    // },
-    // region: {
-    //   type: String,
-    //   required: true,
-    // },
-    // zipCode: {
-    //   type: String,
-    //   required: true,
-    // },
-    // country: {
-    //   type: String,
-    //   required: true,
-    // },
   },
   {
     versionKey: false,

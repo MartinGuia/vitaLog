@@ -56,6 +56,12 @@ const ClientReportDetails = ({
             Total de rechazos:{" "}
             <span className="font-medium">{reportData.totalRejections}</span>
           </p>
+          <p>
+            Llantas procesadas con éxito:{" "}
+            <span className="font-medium">
+              {reportData.totalTires - reportData.totalRejections}
+            </span>
+          </p>
         </div>
       </header>
 
@@ -97,7 +103,6 @@ const ClientReportDetails = ({
             data={reportData.mostUsedModels}
           />
         </div>
-
       </div>
 
       <div className="w-full" id="rejection-chart-capture">

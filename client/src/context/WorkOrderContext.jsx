@@ -6,7 +6,8 @@ import {
   openWorkOrderRequest,
   deleteWorkOrderRequest,
   quoteWorkOrderRequest,
-  getQuoteWorkOrderRequest
+  getQuoteWorkOrderRequest,
+  reOpenWorkOrderRequest,
 } from "../api/workOrders.js";
 import { useDispatch } from "react-redux";
 import {
@@ -29,11 +30,22 @@ export function WorkOrderProvider({ children }) {
   const [allWorkOrders, setAllWorkOrders] = useState([]);
   const [allQuotingWorkOrders, setAllQuotingWorkOrders] = useState([]);
   const dispatch = useDispatch();
+  const [errors, setErrors] = useState([]);
 
-  const openWorkOrder = (values) => {
-    openWorkOrderRequest(values);
-    console.log("work order open");
+  const openWorkOrder = async (values) => {
+    try {
+      const res = await openWorkOrderRequest(values);
+      return { success: true, data: res.data }; // Devuelve respuesta si fue exitosa
+    } catch (error) {
+      setErrors([error.response?.data?.message || "Error desconocido"]);
+      return { success: false }; // Devuelve false si falló
+    }
   };
+
+  const reOpenWorkOrder = async (data) => {
+  const res = await reOpenWorkOrderRequest(data);
+  return res.data;
+};
 
   const closeWorkOrder = (data) => {
     closeWorkOrderRequest(data);
@@ -71,22 +83,33 @@ export function WorkOrderProvider({ children }) {
 
   const quoteWorkOrder = async (data) => {
     try {
-      await quoteWorkOrderRequest(data)
-      console.log("Ordenes de trabajo enviadas a cotización")
+      await quoteWorkOrderRequest(data);
+      console.log("Ordenes de trabajo enviadas a cotización");
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
-  
-   const getQuoteWorkOrder = async () => {
-      try {
-        const res = await getQuoteWorkOrderRequest();
-        console.log(res);
-        setAllQuotingWorkOrders(res.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  };
+
+  const getQuoteWorkOrder = async () => {
+    try {
+      const res = await getQuoteWorkOrderRequest();
+      console.log(res);
+      setAllQuotingWorkOrders(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (errors.length > 0) {
+      const timer = setTimeout(() => {
+        setErrors([]);
+      }, 5000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [errors]);
 
   useEffect(() => {
     socket.on("workOrderDeleted", ({ id }) => {
@@ -112,6 +135,8 @@ export function WorkOrderProvider({ children }) {
         quoteWorkOrder,
         getQuoteWorkOrder,
         allQuotingWorkOrders,
+        errors,
+        reOpenWorkOrder
       }}
     >
       {children}

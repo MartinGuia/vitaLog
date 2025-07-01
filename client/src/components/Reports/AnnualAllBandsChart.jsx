@@ -26,7 +26,7 @@ const renderPercentageLabel = (props) => {
       x={textX}
       y={textY}
       fill="#000"
-      fontSize={12}
+      fontSize={16}
       dominantBaseline="middle"
       className="font-semibold"
     >
@@ -57,7 +57,7 @@ const BandChartSection = ({ title, data, height = 400 }) => {
             <YAxis
               dataKey="_id"
               type="category"
-              tick={{ fontSize: 12, fill: "#000" }}
+              tick={{ fontSize: 16, fill: "#000" }}
               axisLine={{ stroke: "#000" }}
               width={160}
             />
@@ -100,8 +100,8 @@ const AnnualAllBandsChart = ({ continentalBands, bandagBands }) => {
         Bandas más usadas (Continental y Bandag)
       </h2>
 
-      <BandChartSection title="Bandas Continental" data={continentalBands} />
-      <BandChartSection title="Bandas Bandag" data={bandagBands} height={1000} />
+      <BandChartSection title="Bandas Continental" data={continentalBands} height={700} />
+      <BandChartSection title="Bandas Bandag" data={bandagBands} height={1500} />
     </section>
   );
 };

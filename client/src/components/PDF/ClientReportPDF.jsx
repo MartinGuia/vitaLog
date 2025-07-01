@@ -69,25 +69,22 @@ const styles = StyleSheet.create({
 
   summary: {
     marginBottom: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: "row", // una fila
+    justifyContent: "space-between", // separación uniforme
+    alignItems: "stretch",
     width: "100%",
-    backgroundColor: "#f7f5f6",
-    padding: 10,
-    borderRadius: 6,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    gap: 6,
+    gap: 8,
   },
 
   summaryCard: {
     backgroundColor: "#ffffff",
-    padding: 8,
+    padding: 6,
     borderRadius: 4,
     borderWidth: 1,
     borderColor: "#ddd",
-    minWidth: "30%",
+    width: "24%", // 4 tarjetas por fila (4 * 24% + 3 * gap = 100%)
     textAlign: "center",
+    justifyContent: "center",
   },
   image: {
     width: "100%",
@@ -175,16 +172,29 @@ const ClientReportPDF = ({ report, chartImage, rejectionImage }) => {
         <Text style={styles.sectionTitle}>Resumen de Actividad</Text>
         <View style={styles.summary}>
           <View style={styles.summaryCard}>
-            <Text>Total de órdenes</Text>
-            <Text>{report.totalOrders ?? "-"}</Text>
+            <Text style={{ fontSize: 9 }}>Total de órdenes</Text>
+            <Text style={{ fontSize: 12, fontWeight: "bold" }}>
+              {report.totalOrders ?? "-"}
+            </Text>
           </View>
           <View style={styles.summaryCard}>
-            <Text>Total de llantas</Text>
-            <Text>{report.totalTires ?? tires.length}</Text>
+            <Text style={{ fontSize: 9 }}>Total de llantas</Text>
+            <Text style={{ fontSize: 12, fontWeight: "bold" }}>
+              {report.totalTires ?? tires.length}
+            </Text>
           </View>
           <View style={styles.summaryCard}>
-            <Text>Total de rechazos</Text>
-            <Text>{report.totalRejections ?? "-"}</Text>
+            <Text style={{ fontSize: 9 }}>Total de rechazos</Text>
+            <Text style={{ fontSize: 12, fontWeight: "bold" }}>
+              {report.totalRejections ?? "-"}
+            </Text>
+          </View>
+          <View style={styles.summaryCard}>
+            <Text style={{ fontSize: 9 }}>Llantas procesadas</Text>
+            <Text style={{ fontSize: 12, fontWeight: "bold" }}>
+              {(report.totalTires ?? tires.length) -
+                (report.totalRejections ?? 0)}
+            </Text>
           </View>
         </View>
         {/* Página con TODAS las gráficas excepto rechazo */}
@@ -225,7 +235,7 @@ const ClientReportPDF = ({ report, chartImage, rejectionImage }) => {
                 <Text style={styles.cell}>{tire.orderNumber || "-"}</Text>
                 <Text style={styles.cell}>{tire.barCode || "-"}</Text>
                 <Text style={styles.cell}>{tire.serialNumber || "-"}</Text>
-                <Text style={styles.cell}>{tire.appliedBand || "-"}</Text>
+                <Text style={styles.cell}>{tire.appliedBand || tire.appliedBandBandag || "-"}</Text>
                 <Text style={styles.cell}>{tire.brand || "-"}</Text>
                 <Text style={styles.cell}>{tire.model || "-"}</Text>
                 <Text style={styles.cell}>{tire.helmetMeasurement || "-"}</Text>
