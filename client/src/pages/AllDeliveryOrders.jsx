@@ -129,17 +129,17 @@ function AllDeliveryOrders() {
                       </td>
                       <td className="px-6">{deliveryOrders.tires.length || "-"}</td>
                       <td className="py-2 px-2">
-                        {deliveryOrders.client.companyName || "-"}
+                        {deliveryOrders.client?.companyName || "-"}
                       </td>
                       <td className=" text-xs px-3">
-                        {deliveryOrders.client.street || "-" +
+                        {deliveryOrders.client?.street || "-" +
                           ", " +
-                          deliveryOrders.client.city ||
-                          deliveryOrders.client.municipality || "-"}
+                          deliveryOrders.client?.city ||
+                          deliveryOrders.client?.municipality || "-"}
                         , <br />
-                        {deliveryOrders.client.state +
+                        {deliveryOrders.client?.state +
                           ", " +
-                          deliveryOrders.client.zipCode}
+                          deliveryOrders.client?.zipCode}
                       </td>
                       <td>{deliveryOrders.formattedCreatedAT || "-"}</td>
                       <td className="flex flex-col items-center sm:flex-row sm:justify-around">

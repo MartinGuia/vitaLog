@@ -1,15 +1,15 @@
-import * as images from "../img";
 import { useWorkOrder } from "../context/WorkOrderContext.jsx";
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { UserRoundPen, StepBack, Trash2, Check, X } from "lucide-react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import WorkOrderPDF from "../components/PDF/WorkOrderPDF.jsx";
 import { useAuth } from "../context/AuthContext";
 import { useTire } from "../context/TireContext.jsx";
+import socket from "../socket";
 
 function ViewWorkOrder() {
-  const { getWorkOrderById } = useWorkOrder();
+  const { getWorkOrderById, closeWorkOrder, reOpenWorkOrder } = useWorkOrder();
   const params = useParams();
   const { getRoles, user } = useAuth();
   const { deleteTire } = useTire();
@@ -25,6 +25,8 @@ function ViewWorkOrder() {
   const [showModal, setShowModal] = useState(false);
   const [tireToDelete, setTireToDelete] = useState(null);
   const [confirmationText, setConfirmationText] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,7 +64,7 @@ function ViewWorkOrder() {
       }
     }
     loadWorkOrder();
-  }, [params.id]);
+  }, [params.id, getWorkOrderById]);
 
   const tires = workOrder?.tires || [];
   const totalPages = Math.ceil(tires.length / itemsPerPage);
@@ -89,6 +91,35 @@ function ViewWorkOrder() {
       setWorkOrder(updatedWorkOrder);
     } else {
       alert("Escribe 'si' para confirmar.");
+    }
+  };
+
+  const handleOpenWorkOrder = async () => {
+    try {
+      await reOpenWorkOrder({ workOrderId: workOrder._id });
+      navigate("/add-tire");
+    } catch (error) {
+      console.error("Error al reabrir la orden:", error.message);
+    }
+  };
+
+  const handleClick = async () => {
+    try {
+      if (!user || !user.name) {
+        console.error("No se encontró el usuario");
+        return;
+      }
+
+      await closeWorkOrder({
+        socketId: socket.id,
+        username: user.name,
+      });
+
+      console.log(`Orden de trabajo cerrada por: ${user.name}`);
+
+      navigate(-1); // 👈 Ir una página atrás
+    } catch (error) {
+      console.error("Error al cerrar la orden de trabajo:", error.message);
     }
   };
 
@@ -120,26 +151,37 @@ function ViewWorkOrder() {
         <h1 className="text-2xl md:text-4xl font-bold">Imprimir Orden</h1>
       </div>
 
-      <header className="w-full mt-3 flex justify-center">
-        <div className="w-full p-2 flex justify-between border-b-2 border-blue-600">
-          <section>
-            <h1 className="font-bold text-xl text-blue-700">
-              Orden de Trabajo: <span>{numero}</span>
-            </h1>
-            <p className="font-medium">VITA-BAJIO S.A de C.V</p>
-            <p className="font-medium text-sm">
-              Hidalgo 1500 San Juan de La Presa, Salamanca
-            </p>
-          </section>
-          <section className="flex justify-end mr-2">
-            <img
-              src={images.logoVB}
-              className="w-auto size-20 sm:w-[45%]"
-              alt=""
-            />
-          </section>
-        </div>
-      </header>
+      {user.role === roleMaster ||
+      user.role === roleAdminP ||
+      user.role === roleSeller ? (
+        <>
+          {workOrder?.isOpen ? (
+            <div className="flex justify-end flex-col md:flex-row my-4">
+              <button
+                className="bg-buttonTertiary hover:bg-buttonTertiaryHover text-white mt-2 sm:mt-0 sm:ml-4 font-medium py-2 px-5 rounded-md shadow-md duration-500 hover:duration-500"
+                onClick={handleClick}
+              >
+                Cerrar orden
+              </button>
+
+              <Link to={`/add-tire`}>
+                <button className="bg-buttonSecondary text-white cursor-pointer hover:bg-buttonSecondaryHover transition mt-2 sm:mt-0 sm:ml-4 font-medium py-2 px-5 rounded-md shadow-md duration-500 hover:duration-500">
+                  Agregar llantas
+                </button>
+              </Link>
+            </div>
+          ) : (
+            <div className="flex justify-end my-4">
+              <button
+                className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-5 rounded-md shadow-md duration-500"
+                onClick={handleOpenWorkOrder}
+              >
+                Abrir orden
+              </button>
+            </div>
+          )}
+        </>
+      ) : null}
 
       <main>
         <section className="mt-4">
@@ -149,6 +191,9 @@ function ViewWorkOrder() {
                 Detalles de la Recolección
               </h2>
               <div>
+                <p className="font-semibold text-xl text-blue-700">
+                  Orden de Trabajo: <span className="font-bold">{numero}</span>
+                </p>
                 <p>
                   Recolector:{" "}
                   <span className="font-medium">
@@ -230,14 +275,14 @@ function ViewWorkOrder() {
                         user.role === roleAdminP ? (
                           <>
                             <Link to={`/editTireAdminPage/${tire._id}`}>
-                              <button className="text-blue-600 hover:text-blue-800 mr-2">
+                              <button className="text-blue-600 hover:text-blue-800 md:mr-2">
                                 <UserRoundPen />
                               </button>
                             </Link>
 
                             <button
                               onClick={() => openDeleteModal(tire._id)}
-                              className="text-red-600 hover:text-red-800 ml-2"
+                              className="text-red-600 hover:text-red-800 md:ml-2"
                             >
                               <Trash2 />
                             </button>
@@ -245,14 +290,14 @@ function ViewWorkOrder() {
                         ) : user.role === roleSeller ? (
                           <>
                             <Link to={`/editTireSeller/${tire._id}`}>
-                              <button className="text-blue-600 hover:text-blue-800 mr-2">
+                              <button className="text-blue-600 hover:text-blue-800 md:mr-2">
                                 <UserRoundPen />
                               </button>
                             </Link>
 
                             <button
                               onClick={() => openDeleteModal(tire._id)}
-                              className="text-red-600 hover:text-red-800 ml-2"
+                              className="text-red-600 hover:text-red-800 md:ml-2"
                             >
                               <Trash2 />
                             </button>

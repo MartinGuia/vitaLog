@@ -116,13 +116,13 @@ function ViewWOBySeller() {
                         </Link>
                       </td>
                       <td className="px-6">{workOrder.tires.length}</td>
-                      <td className="px-6">{workOrder.client.companyName}</td>
+                      <td className="px-6">{workOrder.client?.companyName || "-"}</td>
                       <td className="px-6 text-xs">
-                         {workOrder.client.street + ", " + workOrder.client.city || workOrder.client.municipality}
+                         {workOrder.client?.street + ", " + workOrder.client?.city || workOrder.client?.municipality}
                         , <br />
-                        {workOrder.client.state +
+                        {workOrder.client?.state +
                           ", " +
-                          workOrder.client.zipCode}
+                          workOrder.client?.zipCode}
                       </td>
                       <td>{workOrder.formattedCreatedAt}</td>
                       <td className="py-2">

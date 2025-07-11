@@ -178,13 +178,13 @@ const WorkOrderPDF = ({ workOrder }) => {
             <View>
               <Text style={styles.sectionContent}>Para:</Text>
               <Text style={styles.textClient}>
-                {workOrder.client.companyName}
+                {workOrder.client?.companyName}
               </Text>
-              <Text style={styles.textAddress}>{workOrder.client.street}</Text>
-              <Text style={styles.textAddress}>{workOrder.client.state}</Text>
+              <Text style={styles.textAddress}>{workOrder.client?.street}</Text>
+              <Text style={styles.textAddress}>{workOrder.client?.state}</Text>
               <Text style={styles.textAddress}>
-                {workOrder.client.city || workOrder.client.municipality}{" "}
-                {workOrder.client.zipCode}
+                {workOrder.client?.city || workOrder.client?.municipality}{" "}
+                {workOrder.client?.zipCode}
               </Text>
             </View>
           </View>

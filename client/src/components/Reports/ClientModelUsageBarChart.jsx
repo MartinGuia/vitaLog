@@ -33,7 +33,7 @@ const renderPercentageLabel = (props) => {
       x={textX}
       y={textY}
       fill="#000"
-      fontSize={12}
+      fontSize={16}
       dominantBaseline="middle"
       className="font-semibold"
     >
@@ -57,18 +57,18 @@ const ClientModelUsageBarChart = ({ title = "Modelos más usados", data }) => {
       </h2>
 
       <div className="flex flex-col items-center pb-4">
-        <div className="w-full h-[400px]">
+        <div className="w-full h-[600px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={top10Data}
               layout="vertical"
-              margin={{ top: 10, right: 10, left: 10, bottom: 10 }} // Igual que el otro componente
+              margin={{ top: 10, right: 10, left: 20, bottom: 10 }} // Igual que el otro componente
             >
               <XAxis type="number" hide />
               <YAxis
                 dataKey="_id"
                 type="category"
-                tick={{ fontSize: 12, fill: "#000" }}
+                tick={{ fontSize: 16, fill: "#000" }}
                 axisLine={{ stroke: "#000" }}
                 width={90} // Igual que el componente de marcas
               />

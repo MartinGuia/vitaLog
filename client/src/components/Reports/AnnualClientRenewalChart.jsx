@@ -83,7 +83,7 @@ const AnnualClientRenewalChart = ({ monthlySummary }) => {
       </h2>
 
       <div className="flex flex-col items-center pb-4">
-        <div className="w-full h-[1000px]">
+        <div className="w-full h-[1800px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={clientTotals}
@@ -96,7 +96,7 @@ const AnnualClientRenewalChart = ({ monthlySummary }) => {
                 type="category"
                 tick={{ fontSize: 16, fill: "#000" }}
                 axisLine={{ stroke: "#000" }}
-                width={80} // ← menor ancho para el nombre del cliente
+                width={240} // ← menor ancho para el nombre del cliente
               />
               <Tooltip
                 formatter={(value) => [`${value} llantas`, "Cantidad"]}

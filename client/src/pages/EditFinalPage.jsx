@@ -18,12 +18,7 @@ import {
 } from "@heroui/react";
 
 function EditFinalPage() {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    // reset,
-  } = useForm();
+  const { register, handleSubmit, setValue, watch } = useForm();
   const { updateProductionTire, getTire } = useTire();
   const params = useParams();
   const [workOrderNumber, setWorkOrderNumber] = useState();
@@ -34,6 +29,11 @@ function EditFinalPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const navigate = useNavigate();
   const [client, setClient] = useState();
+
+  const appliedBand = watch("appliedBand");
+  const appliedBandBandag = watch("appliedBandBandag");
+
+  const isPassEnabled = appliedBand || appliedBandBandag;
 
   const onSubmit = handleSubmit(async (values) => {
     const updatedValues = Object.fromEntries(
@@ -488,7 +488,7 @@ function EditFinalPage() {
     { value: "TR4.1 - 240", label: " TR4.1 - 240" },
     { value: "UAP - 210  ", label: " UAP - 210" },
     { value: "UAP - 230  ", label: " UAP - 230" },
-    { value: "UAP - 210  ", label: " UAP - 210" },
+    { value: "UAP - 240  ", label: " UAP - 240" },
     { value: "UAP - 220  ", label: " UAP - 220" },
     { value: "UAP - 260  ", label: " UAP - 260" },
     { value: "UAP - 250  ", label: " UAP - 250" },
@@ -590,6 +590,11 @@ function EditFinalPage() {
         <form className="mt-8" onSubmit={onSubmit}>
           {/* Banda requerida, Parches usados, ancho */}
 
+          {/* <p className="text-sm text-gray-600 mt-4">
+            Banda Continental: {appliedBand || "N/A"} <br />
+            Banda Bandag: {appliedBandBandag || "N/A"}
+          </p> */}
+
           <div>
             <div className="mt-10">
               <h2 className="text-lg md:text-2xl font-semibold mb-3 text-sky-900">
@@ -627,14 +632,14 @@ function EditFinalPage() {
                 </div>
                 <div className="relative w-[90%] sm:w-[40%] mt-10 sm:mt-0">
                   <Autocomplete
-                    className="shadow-md rounded-xl "
+                    className="shadow-md rounded-xl"
                     defaultItems={bandContinental}
                     label="Banda continental"
                     placeholder="Selecciona una banda"
                     listboxProps={{
                       emptyContent: "Banda no encontrada",
                     }}
-                    {...register("appliedBand", { required: false })}
+                    onSelectionChange={(key) => setValue("appliedBand", key)}
                   >
                     {(bandConti) => (
                       <AutocompleteItem
@@ -645,6 +650,7 @@ function EditFinalPage() {
                       </AutocompleteItem>
                     )}
                   </Autocomplete>
+
                   <Autocomplete
                     className="shadow-md rounded-xl mt-10"
                     defaultItems={bandBandag}
@@ -653,7 +659,9 @@ function EditFinalPage() {
                     listboxProps={{
                       emptyContent: "Banda no encontrada",
                     }}
-                    {...register("appliedBandBandag", { required: false })}
+                    onSelectionChange={(key) =>
+                      setValue("appliedBandBandag", key)
+                    }
                   >
                     {(bandB) => (
                       <AutocompleteItem key={bandB.value} value={bandB.value}>
@@ -671,8 +679,13 @@ function EditFinalPage() {
               <div>
                 <button
                   type="button"
-                  className="text-white font-medium bg-buttonSecondary py-3 px-9 rounded-md shadow-md hover:bg-buttonSecondaryHover duration-500 hover:duration-500"
+                  className={`text-white font-medium py-3 px-9 rounded-md shadow-md duration-500 ${
+                    isPassEnabled
+                      ? "bg-buttonSecondary hover:bg-buttonSecondaryHover"
+                      : "bg-gray-400 cursor-not-allowed"
+                  }`}
                   onClick={() => handleStatusChange("Pasa")}
+                  disabled={!isPassEnabled}
                 >
                   PASA
                 </button>

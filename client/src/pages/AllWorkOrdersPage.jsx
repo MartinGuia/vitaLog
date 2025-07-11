@@ -52,10 +52,10 @@ function AllWorkOrdersPage() {
       </Link>
     ),
     tires: order.tires.length,
-    client: order.client.companyName,
-    direccion: `${order.client.street}, ${
-      order.client.city || order.client.municipality
-    }, ${order.client.state}, ${order.client.zipCode}`,
+    client: order.client?.companyName,
+    direccion: `${order.client?.street}, ${
+      order.client?.city || order.client?.municipality
+    }, ${order.client?.state}, ${order.client?.zipCode}`,
     formattedCreatedAt: order.formattedCreatedAt,
     acciones: (
       <ButtonMenu
