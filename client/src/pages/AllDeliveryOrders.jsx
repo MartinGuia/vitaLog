@@ -17,7 +17,7 @@ function AllDeliveryOrders() {
   const itemsPerPage = 10;
   const dispatch = useDispatch();
   const allDeliveryOrders = useSelector((state) => state.deliveryOrders.list);
-  const [alertData, setAlertData] = useState(null); 
+  const [alertData, setAlertData] = useState(null);
 
   useEffect(() => {
     getDeliveryOrders();
@@ -125,17 +125,19 @@ function AllDeliveryOrders() {
                     >
                       <td className="px-6">{deliveryOrders.numero || "-"}</td>
                       <td className="px-6 text-sm text-gray-900">
-                        <button>{deliveryOrders.createdBy.name || "-"}</button>
+                        {deliveryOrders.createdBy.name || "-"}
                       </td>
-                      <td className="px-6">{deliveryOrders.tires.length || "-"}</td>
+                      <td className="px-6">
+                        {deliveryOrders.tires.length || "-"}
+                      </td>
                       <td className="py-2 px-2">
                         {deliveryOrders.client?.companyName || "-"}
                       </td>
                       <td className=" text-xs px-3">
-                        {deliveryOrders.client?.street || "-" +
-                          ", " +
-                          deliveryOrders.client?.city ||
-                          deliveryOrders.client?.municipality || "-"}
+                        {deliveryOrders.client?.street ||
+                          "-" + ", " + deliveryOrders.client?.city ||
+                          deliveryOrders.client?.municipality ||
+                          "-"}
                         , <br />
                         {deliveryOrders.client?.state +
                           ", " +

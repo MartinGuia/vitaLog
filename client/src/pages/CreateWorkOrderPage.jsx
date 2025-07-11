@@ -37,7 +37,7 @@ function CreateWorkOrderPage() {
     const result = await openWorkOrder(formData);
 
     if (result.success) {
-      navigate("/add-tire"); // Solo navega si la creación fue exitosa
+      navigate("/add-tire");
     }
   });
 

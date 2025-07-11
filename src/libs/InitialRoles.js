@@ -20,15 +20,6 @@ export const createRoles = async () => {
 
     const roleAdmin = await Role.find({ name: "Master" });
 
-    // const countDep = await Department.estimatedDocumentCount();
-    // if (countDep > 0) return;
-
-    // const deps = await Promise.all([
-    //   new Department({ name: "Administracion" }).save(),
-    // ]);
-
-    // const depAdministracion = await Department.find({ name: "Administracion" });
-
     const countUsers = await User.estimatedDocumentCount();
     if (countUsers > 0) return;
 

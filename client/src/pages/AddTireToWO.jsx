@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useTire } from "../context/TireContext";
 import { useWorkOrder } from "../context/WorkOrderContext";
 import { useState } from "react";
-import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import socket from "../socket";
 import {
   Input,
@@ -15,6 +14,7 @@ import {
   Button,
 } from "@heroui/react";
 import AlertComponent from "../components/ui/AlertComponent";
+import ScannerCode from "../components/ui/ScannerCode";
 
 export const CameraIcon = ({
   fill = "currentColor",
@@ -49,6 +49,7 @@ function AddTireToWO() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -601,9 +602,12 @@ function AddTireToWO() {
                       type="text"
                       label="Escanea o escribe el código..."
                       value={scannedCode}
-                      variant={"underlined"}
+                      variant="underlined"
                       {...register("barCode", { required: true })}
-                      onChange={(e) => setScannedCode(e.target.value)}
+                      onChange={(e) => {
+                        setScannedCode(e.target.value);
+                        setValue("barCode", e.target.value);
+                      }}
                     />
                   </div>
                   {errors.barCode && (
@@ -625,27 +629,21 @@ function AddTireToWO() {
                 </div>
                 {isScannerOpen && (
                   <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-                    <div className="bg-white p-6 rounded-md shadow-lg z-[100]">
-                      <h1 className="text-xl font-bold mb-4">
+                    <div className="bg-white p-6 rounded-md shadow-lg z-[100] w-[95%] md:w-[720px]">
+                      <h1 className="text-xl font-bold mb-4 text-center">
                         Escanea el código
                       </h1>
-                      <BarcodeScannerComponent
-                        width={600}
-                        delay={600}
-                        videoConstraints={{
-                          facingMode: "environment",
-                          width: { ideal: 1280 },
-                          height: { ideal: 720 },
+
+                      <ScannerCode
+                        onDetected={(text) => {
+                          setScannedCode(text);
+                          setValue("barCode", text);
                         }}
-                        onUpdate={(err, result) => {
-                          if (result) {
-                            setScannedCode(result.text);
-                            handleScannerClose();
-                          }
-                        }}
+                        onClose={handleScannerClose}
                       />
+
                       <button
-                        className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md"
+                        className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md w-full"
                         onClick={handleScannerClose}
                       >
                         Cerrar

@@ -33,7 +33,8 @@ function EditFinalPage() {
   const appliedBand = watch("appliedBand");
   const appliedBandBandag = watch("appliedBandBandag");
 
-  const isPassEnabled = appliedBand || appliedBandBandag;
+ const isPassEnabled =
+  appliedBand || appliedBandBandag || tireData.itemCode === "Reparación";
 
   const onSubmit = handleSubmit(async (values) => {
     const updatedValues = Object.fromEntries(

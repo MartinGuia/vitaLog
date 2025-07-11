@@ -111,7 +111,7 @@ function EditClientPage() {
               </div>
               <div className="flex-col flex items-center w-[100%] sm:flex sm:w-[50%] sm:flex-row justify-between">
                 <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
-                  <InputField {...register("clientCode", { required: true })} />
+                  <InputField {...register("clientCode", { required: false })} />
                   {errors.clientCode && (
                     <p className="text-red-500 text-xs">
                       Este campo es requerido
@@ -119,7 +119,7 @@ function EditClientPage() {
                   )}
                 </div>
                 <div className="relative w-5/6 sm:w-5/12 mt-4 sm:mt-0">
-                  <InputField {...register("Rfc", { required: true })} />
+                  <InputField {...register("Rfc", { required: false })} />
                   {errors.Rfc && (
                     <p className="text-red-500 text-xs">
                       Este campo es opcional

@@ -1,7 +1,14 @@
 import { useWorkOrder } from "../context/WorkOrderContext.jsx";
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { UserRoundPen, StepBack, Trash2, Check, X } from "lucide-react";
+import {
+  UserRoundPen,
+  StepBack,
+  Trash2,
+  Check,
+  X,
+  SquarePen,
+} from "lucide-react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import WorkOrderPDF from "../components/PDF/WorkOrderPDF.jsx";
 import { useAuth } from "../context/AuthContext";
@@ -199,6 +206,16 @@ function ViewWorkOrder() {
                   <span className="font-medium">
                     {createdBy?.name} {createdBy?.lastName}
                   </span>
+                 {user.role === roleAdminP || user.role === roleMaster ? (
+                   <Link to={`/editWorkOrder/${workOrder._id}`}>
+                    <button className="md:ml-2 bg-buttonSecondary hover:bg-buttonSecondaryHover duration-500 hover:duration-500 rounded-lg text-white">
+                      <p className="flex items-center justify-around px-1 font-semibold">
+                        Editar usuario{" "}
+                        <UserRoundPen size={15} className="ml-2" strokeWidth={3} />
+                      </p>
+                    </button>
+                  </Link>
+                 ): null}
                 </p>
                 <p>
                   Fecha:{" "}
@@ -276,7 +293,7 @@ function ViewWorkOrder() {
                           <>
                             <Link to={`/editTireAdminPage/${tire._id}`}>
                               <button className="text-blue-600 hover:text-blue-800 md:mr-2">
-                                <UserRoundPen />
+                                <SquarePen />
                               </button>
                             </Link>
 
