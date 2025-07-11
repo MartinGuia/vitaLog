@@ -17,10 +17,6 @@ export const registerClient = async (req, res) => {
   } = req.body;
 
   try {
-    const clientFound = await Client.findOne({ clientCode });
-    if (clientFound)
-      return res.status(409).json({ message: "Client already exists" });
-
     const newClient = new Client({
       clientCode,
       companyName,
@@ -40,7 +36,7 @@ export const registerClient = async (req, res) => {
 
     return res
       .status(200)
-      .json({ message: "El cliente se creo correctamente" });
+      .json({ message: "El cliente se creó correctamente" });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
