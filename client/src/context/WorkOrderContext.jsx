@@ -7,6 +7,7 @@ import {
   deleteWorkOrderRequest,
   quoteWorkOrderRequest,
   getQuoteWorkOrderRequest,
+  editWorkOrderRequest,
   reOpenWorkOrderRequest,
 } from "../api/workOrders.js";
 import { useDispatch } from "react-redux";
@@ -61,6 +62,15 @@ export function WorkOrderProvider({ children }) {
       console.error(error);
     }
   };
+
+    const editWorkOrder = async (id, data) => {
+      try {
+        await editWorkOrderRequest(id, data);
+        // console.log("exito")
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
   const getWorkOrderById = async (id) => {
     try {
@@ -136,7 +146,8 @@ export function WorkOrderProvider({ children }) {
         getQuoteWorkOrder,
         allQuotingWorkOrders,
         errors,
-        reOpenWorkOrder
+        reOpenWorkOrder,
+        editWorkOrder,
       }}
     >
       {children}
