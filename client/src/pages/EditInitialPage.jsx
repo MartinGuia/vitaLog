@@ -72,19 +72,6 @@ function EditInitialPage() {
       });
     }
   });
-  // const onSubmit = handleSubmit(async (values) => {
-  //   const updatedValues = Object.fromEntries(
-  //     Object.entries(values).filter(([key, value]) => value !== "")
-  //   );
-
-  //   try {
-  //     await updateProductionTire(params.id, updatedValues);
-  //     navigate("/productionInitial");
-  //   } catch (error) {
-  //     console.error(error);
-  //     alert("Error al actualizar el registro");
-  //   }
-  // });
 
   const handleStatusChange = async (status) => {
     setValue("status", status);

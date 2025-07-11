@@ -7,4 +7,5 @@ export const getWorkOrdersRequest = () => axios.get("/workorders");
 export const getWorkOrderRequest = (id) => axios.get(`/workorder/${id}`);
 export const deleteWorkOrderRequest = (id) => axios.delete(`/deleteWorkorder/${id}`);
 export const quoteWorkOrderRequest = (data) => axios.put(`/quoteWorkOrder`, data);
+export const editWorkOrderRequest = (id, data) => axios.put(`/workorder/${id}`, data);
 export const getQuoteWorkOrderRequest = () => axios.get(`/quoteWorkOrder`);

@@ -39,7 +39,7 @@ function GeneralReport() {
   };
 
   const generateReportImage = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 500)); // esperar 500ms
+    await new Promise((resolve) => setTimeout(resolve, 500)); 
 
     const renewalElement = document.getElementById("annual-renewal-chart");
     const summaryElement = document.getElementById("annual-summary-report");
@@ -51,10 +51,9 @@ function GeneralReport() {
 
     if (renewalElement) {
       const canvasRenewal = await html2canvas(renewalElement, {
-        scale: 3, // aumenta la resolución
+        scale: 3,
         useCORS: true,
       });
-      // const canvasRenewal = await html2canvas(renewalElement, { scale: 2, useCORS: true });
       setRenewalImage(canvasRenewal.toDataURL("image/png"));
     }
 

@@ -46,10 +46,7 @@ function PrintLabelComponent({ tire, disabled }) {
 ^FO20,380^A0N,50,40^FD${tireData.workOrder.client.companyName}^FS
 
 ; **Número de orden (izquierda, debajo del cliente)**
-^FO20,470^A0N,50,40^FDWO# ${tireData.workOrder.numero}^FS
-
-; **Número de registro**
-^FO120,470^A0N,50,40^FD (${tireData.linea}/${
+^FO20,470^A0N,50,40^FDWO# ${tireData.workOrder.numero}(${tireData.linea}/${
       tireData.workOrder.tires.length
     })^FS
 
@@ -101,6 +98,11 @@ ${
 
     `;
   };
+
+//   ; **Número de registro**
+// ^FO120,470^A0N,50,40^FD (${tireData.linea}/${
+//       tireData.workOrder.tires.length
+//     })^FS
 
   const handlePrint = () => {
     if (!tireData) {

@@ -235,13 +235,24 @@ export const deleteDeliveryOrder = async (req, res) => {
         .json({ success: false, message: "Orden de entrega no encontrada." });
     }
 
+    // 1. Revertir inDeliveryNote en todas las llantas asociadas
+    if (deliveryOrder.tires && deliveryOrder.tires.length > 0) {
+      await Tire.updateMany(
+        { _id: { $in: deliveryOrder.tires } },
+        { $set: { inDeliveryNote: false } }
+      );
+    }
+
+    // 2. Eliminar la orden
     await DeliveryOrder.findByIdAndDelete(id);
 
+    // 3. Emitir evento si corresponde
     const io = req.app.get("io");
     if (io) {
       io.emit("deliveryOrderDeleted", { id });
     }
 
+    // 4. Responder
     res.status(200).json({
       success: true,
       message: "Orden de entrega eliminada exitosamente.",
