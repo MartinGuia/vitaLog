@@ -4,11 +4,10 @@ import bcryptjs from "bcryptjs";
 import { createAccessToken } from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
 import config from "../config.js";
-// import { TOKEN_SECRET } from "../config.js";
 import Role from "../models/roles.model.js";
 import { validationResult } from "express-validator";
 import sanitizeInput from "../middlewares/sanitize.js";
-import { format } from 'date-fns'; 
+import { format } from "date-fns";
 
 export const register = async (req, res) => {
   const { name, lastName, userName, password, department, role } = req.body;
@@ -113,8 +112,18 @@ export const login = async (req, res) => {
 
 export const getUsers = async (req, res) => {
   try {
-    // Obtiene todos los usuarios, excluyendo la contraseña y populando los datos relacionados
-    const users = await User.find({}, "-password") // Carga solo el nombre del departamento
+    // Buscar el rol "Master" para obtener su _id
+    const masterRole = await Role.findOne({ name: "Master" });
+
+    if (!masterRole) {
+      return res.status(404).json({ message: "Rol Master no encontrado" });
+    }
+
+    // Buscar usuarios cuyo rol sea distinto al de Master
+    const users = await User.find(
+      { role: { $ne: masterRole._id } }, // $ne significa "not equal"
+      "-password" // Excluir el campo password
+    ).populate("role", "name");
 
     res.status(200).json(users);
   } catch (error) {
@@ -261,13 +270,13 @@ export const getWorkOrdersById = async (req, res) => {
 
   try {
     const userFound = await User.findById(id).populate({
-      path: 'workOrders',
+      path: "workOrders",
       options: { sort: { createdAt: -1 } }, // Orden descendente
       populate: [
-        { path: 'client' },
-        { path: 'tires' },
-        { path: 'createdBy', select: "name lastName" },
-      ]
+        { path: "client" },
+        { path: "tires" },
+        { path: "createdBy", select: "name lastName" },
+      ],
     });
 
     if (!userFound) {
@@ -275,9 +284,9 @@ export const getWorkOrdersById = async (req, res) => {
     }
 
     // Formatear las fechas de cada orden de trabajo
-    const formattedOrders = userFound.workOrders.map(order => ({
+    const formattedOrders = userFound.workOrders.map((order) => ({
       ...order.toObject(),
-      formattedCreatedAt: format(new Date(order.createdAt), "dd/MM/yyyy")
+      formattedCreatedAt: format(new Date(order.createdAt), "dd/MM/yyyy"),
     }));
 
     res.json({

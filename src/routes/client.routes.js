@@ -11,9 +11,9 @@ import verifyRoleAdmin from "../middlewares/verifyRoleAdmin.js";
 
 const router = Router();
 
-router.post("/addClient", verifyRoleAdmin, registerClient);
+router.post("/addClient", authRequired, registerClient);
 
-router.delete("/deleteClient/:id", authRequired, verifyRoleAdmin, deleteClient);
+router.delete("/deleteClient/:id", authRequired, deleteClient);
 router.get("/getClients", authRequired, getClients);
 router.get("/getClient/:id", authRequired, getClientById);
 router.put("/editClient/:id", authRequired, editClient);

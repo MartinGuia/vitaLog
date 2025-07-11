@@ -20,8 +20,8 @@ function ViewDeliveryOrderPage() {
     async function loadDeliveryOrder() {
       try {
         if (id) {
-          const order = await getDeliveryOrder(id); // no uses order.data porque el objeto ya viene directo
-          console.log("Orden recibida:", order); // Para verificar
+          const order = await getDeliveryOrder(id);
+          console.log("Orden recibida:", order);
           setDeliveryOrder(order);
           setUser(order.tires?.[0]?.user?.name);
           setUserLastName(order.tires?.[0]?.user?.lastName);
@@ -94,7 +94,6 @@ function ViewDeliveryOrderPage() {
                   Recolector:{" "}
                   <span className="font-medium">
                     {userName + " " + userLastName}
-                    {/* {deliveryOrder.createdBy.lastName} */}
                   </span>
                 </p>
                 <p>
@@ -110,16 +109,16 @@ function ViewDeliveryOrderPage() {
                 <h2>Envíe a:</h2>
                 <div>
                   <p className="font-bold">
-                    {deliveryOrder.client.companyName}
+                    {deliveryOrder.client?.companyName}
                   </p>
                   <div className="text-xs">
-                    <p>{deliveryOrder.client.street}</p>
+                    <p>{deliveryOrder.client?.street}</p>
                     <p>
-                      {deliveryOrder.client.state},{" "}
-                      {deliveryOrder.client.city ||
-                        deliveryOrder.client.municipality}
+                      {deliveryOrder.client?.state},{" "}
+                      {deliveryOrder.client?.city ||
+                        deliveryOrder.client?.municipality}
                     </p>
-                    <p>{deliveryOrder.client.zipCode}</p>
+                    <p>{deliveryOrder.client?.zipCode}</p>
                   </div>
                 </div>
               </div>

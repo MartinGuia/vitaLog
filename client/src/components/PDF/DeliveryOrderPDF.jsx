@@ -131,7 +131,7 @@ const DeliveryOrderPDF = ({ deliveryOrder }) => {
 
   return (
     <Document>
-      <Page style={styles.page} orientation="landscape">
+      <Page style={styles.page}>
         <View style={styles.header}>
           <View>
             <Text style={styles.title}>
@@ -185,6 +185,7 @@ const DeliveryOrderPDF = ({ deliveryOrder }) => {
             <Text style={styles.tableCell}>Medida</Text>
             <Text style={styles.tableCell}>Marca</Text>
             <Text style={styles.tableCell}>Banda Aplicada</Text>
+            <Text style={styles.tableCell}>Quemado</Text>
             <Text style={styles.tableCell}>DOT</Text>
             <Text style={styles.tableCell}>status</Text>
           </View>
@@ -207,6 +208,7 @@ const DeliveryOrderPDF = ({ deliveryOrder }) => {
                 </Text>
                 <Text style={styles.tableCell}>{tire.brand || "-"}</Text>
                 <Text style={styles.tableCell}>{tire.appliedBand || tire.appliedBandBandag || "-"}</Text>
+                <Text style={styles.tableCell}>{tire.serialNumber || "-"}</Text>
                 <Text style={styles.tableCell}>{tire.antiquityDot || "-"}</Text>
                 <Text style={styles.tableCell}>
                   <Text style={styles.tableCell}>

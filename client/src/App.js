@@ -45,6 +45,7 @@ import ViewQuotedWO from "./pages/ViewQuotedWO";
 import EditTireAdminPage from "./pages/EditTireAdminPage";
 import EditTireSeller from "./pages/EditTireSeller";
 import GeneralReport from "./pages/GeneralReport";
+import EditWorkOrder from "./pages/EditWorkOrder";
 
 function AppRoutes() {
   const { role, getRoles } = useAuth(); // Ahora sí está dentro de AuthProvider
@@ -256,6 +257,11 @@ function AppRoutes() {
       path: "/generalReport",
       element: <GeneralReport />,
       roles: [roleIds.master],
+    },
+    {
+      path: "/editWorkOrder/:id",
+      element: <EditWorkOrder />,
+      roles: [roleIds.master, roleIds.administradorP],
     },
   ];
 

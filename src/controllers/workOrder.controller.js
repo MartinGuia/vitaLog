@@ -103,6 +103,48 @@ export const closeWorkOrder = async (req, res) => {
   }
 };
 
+export const updateWorkOrder = async (req, res) => {
+  try {
+    const { createdBy, client } = req.body;
+
+    const workOrder = await WorkOrder.findById(req.params.id);
+    if (!workOrder) {
+      return res
+        .status(404)
+        .json({ message: "Orden de trabajo no encontrada." });
+    }
+
+    // 1. Eliminar la referencia en el usuario anterior
+    if (workOrder.createdBy && workOrder.createdBy.toString() !== createdBy) {
+      await User.findByIdAndUpdate(workOrder.createdBy, {
+        $pull: { workOrders: workOrder._id },
+      });
+    }
+
+    // 2. Agregar la referencia en el nuevo usuario
+    if (createdBy) {
+      await User.findByIdAndUpdate(createdBy, {
+        $addToSet: { workOrders: workOrder._id },
+      });
+    }
+
+    // 3. Actualizar los campos en la orden
+    workOrder.createdBy = createdBy;
+    workOrder.client = client;
+    await workOrder.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Orden actualizada correctamente.",
+      workOrder,
+    });
+  } catch (error) {
+    console.error("Error al actualizar la orden:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Error interno del servidor." });
+  }
+};
 export const getWorkOrderById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -176,9 +218,20 @@ export const deleteWorkOrder = async (req, res) => {
         .json({ success: false, message: "Orden no encontrada" });
     }
 
+    // ❗ Quitar la referencia en el usuario
+    if (workOrder.createdBy) {
+      await User.findByIdAndUpdate(workOrder.createdBy, {
+        $pull: { workOrders: workOrder._id },
+      });
+    }
+
+    // ❗ Eliminar las llantas relacionadas
     await Tire.deleteMany({ _id: { $in: workOrder.tires } });
+
+    // ❗ Eliminar la orden
     await WorkOrder.findByIdAndDelete(id);
 
+    // ❗ Emitir evento por Socket.io (si aplica)
     const io = req.app.get("io");
     if (io) {
       io.emit("workOrderDeleted", { id });
