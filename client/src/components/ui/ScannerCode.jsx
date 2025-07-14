@@ -23,10 +23,19 @@ function ScannerCode({ onDetected, onClose }) {
 
     Html5Qrcode.getCameras()
       .then((devices) => {
+        console.log("Cámaras disponibles:", devices);
         if (devices && devices.length) {
-          const backCamera = devices.find((d) =>
-            d.label.toLowerCase().includes("back")
-          );
+          // Buscar cámara trasera con distintos posibles nombres
+          const backCamera = devices.find((device) => {
+            const label = device.label.toLowerCase();
+            return (
+              label.includes("back") ||
+              label.includes("rear") ||
+              label.includes("trasera") ||
+              label.includes("environment")
+            );
+          });
+
           const cameraId = backCamera?.id || devices[0].id;
 
           html5QrCode
@@ -39,19 +48,15 @@ function ScannerCode({ onDetected, onClose }) {
 
                 html5QrCode
                   .stop()
-                  .then(() => {
-                    return html5QrCode.clear();
-                  })
-                  .then(() => {
-                    onClose(); // desmonta después de que el escáner está 100% detenido y limpio
-                  })
+                  .then(() => html5QrCode.clear())
+                  .then(() => onClose())
                   .catch((err) => {
                     console.warn("Error al detener el escáner:", err);
-                    onClose(); // igual cerramos si algo falla
+                    onClose();
                   });
               },
               (errorMessage) => {
-                // ignorar errores de lectura
+                // puedes ignorar errores de lectura
               }
             )
             .catch((err) => {
@@ -100,4 +105,3 @@ function ScannerCode({ onDetected, onClose }) {
 }
 
 export default ScannerCode;
-
