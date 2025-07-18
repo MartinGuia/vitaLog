@@ -74,27 +74,30 @@ function EditInitialPage() {
   });
 
   const handleStatusChange = async (status) => {
-    setValue("status", status);
-    try {
-      await onSubmit({ ...tireData, status });
+  setValue("status", status);
+  try {
+    await onSubmit({ ...tireData, status });
 
-      // Recargar datos después de la actualización
-      const updatedTire = await getTire(params.id);
-      setTireData(updatedTire);
+    // Recargar datos después de la actualización
+    const updatedTire = await getTire(params.id);
+    setTireData(updatedTire);
 
-      // Mostrar la modal
+    if (status === "Rechazo" || status === "Sin Costo") {
       onOpen();
-    } catch (error) {
-      console.error(error);
-      setAlertData({
-        title: "¡Error!",
-        description: "Error al actualizar estado.",
-        color: "danger",
-      });
+    } else if (status === "Pasa") {
+      navigate("/productionInitial");
     }
-  };
+  } catch (error) {
+    console.error(error);
+    setAlertData({
+      title: "¡Error!",
+      description: "Error al actualizar estado.",
+      color: "danger",
+    });
+  }
+};
 
- const rejections = [
+  const rejections = [
     {
       value: "Corte de ceja",
       label: "Corte de ceja",
