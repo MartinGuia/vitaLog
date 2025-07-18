@@ -133,6 +133,12 @@ export const updateWorkOrder = async (req, res) => {
     workOrder.client = client;
     await workOrder.save();
 
+    // 4. Actualizar el campo 'user' de las llantas asociadas a esta orden
+    await Tire.updateMany(
+      { workOrder: workOrder._id },
+      { $set: { user: createdBy } }
+    );
+
     res.status(200).json({
       success: true,
       message: "Orden actualizada correctamente.",
@@ -145,6 +151,7 @@ export const updateWorkOrder = async (req, res) => {
       .json({ success: false, message: "Error interno del servidor." });
   }
 };
+
 export const getWorkOrderById = async (req, res) => {
   try {
     const { id } = req.params;

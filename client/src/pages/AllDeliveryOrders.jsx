@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import socket from "../socket";
 import { removeDeliveryOrder } from "../store/slices/deliveryOrderSlice.js";
 import AlertComponent from "../components/ui/AlertComponent";
+import CustomTable from "../components/ui/CustomTable.jsx";
+import { Input } from "@heroui/react";
 
 function AllDeliveryOrders() {
   const { getDeliveryOrders, setAllDeliveryOrders, deleteDeliveryOrder } =
@@ -14,6 +16,7 @@ function AllDeliveryOrders() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deliveryOrderToDelete, setDeliveryOrderToDelete] = useState(null);
   const [confirmationNumber, setConfirmationNumber] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const itemsPerPage = 10;
   const dispatch = useDispatch();
   const allDeliveryOrders = useSelector((state) => state.deliveryOrders.list);
@@ -22,22 +25,6 @@ function AllDeliveryOrders() {
   useEffect(() => {
     getDeliveryOrders();
   }, []);
-
-  const totalPages = Math.ceil(allDeliveryOrders.length / itemsPerPage);
-
-  const currentOrders = allDeliveryOrders.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const handleDeleteClick = (deliveryOrder) => {
-    setDeliveryOrderToDelete(deliveryOrder);
-    setIsModalOpen(true);
-  };
 
   useEffect(() => {
     socket.on("deliveryOrderDeleted", ({ id }) => {
@@ -49,12 +36,21 @@ function AllDeliveryOrders() {
     };
   }, [dispatch]);
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleDeleteClick = (deliveryOrder) => {
+    setDeliveryOrderToDelete(deliveryOrder);
+    setIsModalOpen(true);
+  };
+
   const confirmDelete = async () => {
     if (confirmationNumber === String(deliveryOrderToDelete.numero)) {
       try {
         await deleteDeliveryOrder(deliveryOrderToDelete._id);
         setAlertData({
-          title: "¡Exito!",
+          title: "¡Éxito!",
           description: "Nota de entrega dada de baja",
           color: "success",
         });
@@ -82,129 +78,125 @@ function AllDeliveryOrders() {
     }
   };
 
+  const filteredOrders =
+    searchTerm.trim() === ""
+      ? allDeliveryOrders
+      : allDeliveryOrders.filter((order) =>
+          String(order.numero).includes(searchTerm.trim()) ||
+          order.client?.companyName
+            .toLowerCase()
+            .includes(searchTerm.trim().toLowerCase())
+        );
+
+  const columns = [
+    { key: "numero", label: "#" },
+    { key: "createdBy", label: "Recolector" },
+    { key: "tires", label: "Registros" },
+    { key: "client", label: "Cliente" },
+    { key: "direccion", label: "Dirección" },
+    { key: "formattedCreatedAT", label: "Recolección" },
+    { key: "acciones", label: "Acciones" },
+  ];
+
+  const items = filteredOrders.map((order) => ({
+    id: order._id,
+    numero: order.numero,
+    createdBy: order.createdBy.name,
+    tires: order.tires.length,
+    client: order.client?.companyName,
+    direccion: `${order.client?.street}, ${
+      order.client?.city || order.client?.municipality
+    }, ${order.client?.state}, ${order.client?.zipCode}`,
+    formattedCreatedAT: order.formattedCreatedAT,
+    acciones: (
+      <div className="flex gap-2 justify-center">
+        <Link to={`/viewDeliveryOrder/${order._id}`}>
+          <button className="hover:text-slate-500">
+            <Printer />
+          </button>
+        </Link>
+        <button
+          className="text-red-600 hover:text-red-800"
+          onClick={() => handleDeleteClick(order)}
+        >
+          <Trash2 />
+        </button>
+      </div>
+    ),
+  }));
+
   return (
-    <div className="px-4 lg:px-14 max-w-screen-2xl mx-auto select-none">
+    <div className="px-4 lg:px-14 mx-auto select-none">
       <div className="text-center my-8">
         <h2 className="md:text-4xl text-2xl font-bold mb-2">
-          Ordenes de Entrega
+          Notas de Entrega
         </h2>
       </div>
+
       {alertData && (
         <AlertComponent
           title={alertData.title}
           description={alertData.description}
           color={alertData.color}
-          onClose={() => setAlertData(null)} // Esta es la función que se ejecutará después de 3 segundos
+          onClose={() => setAlertData(null)}
         />
       )}
+
       <section>
         <div className="p-4 w-full">
           {allDeliveryOrders.length === 0 ? (
             <div className="text-center text-gray-600 text-lg">
-              No hay ordenes de entrega registradas
+              No hay órdenes de entrega registradas
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-                <thead>
-                  <tr className="bg-gray-100 text-gray-600 text-sm text-left">
-                    <th className="py-2 px-6"> # </th>
-                    <th className="py-2 px-6"> Nombre </th>
-                    <th className="py-2 px-6"> Registros </th>
-                    <th className="py-2 px-6"> Cliente </th>
-                    <th className="py-2 px-6"> Dirección </th>
-                    <th className="py-2 px-6"> Recolección </th>
-                    <th className="py-2 px-6"> Acciones </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentOrders.map((deliveryOrders, index) => (
-                    <tr
-                      key={index}
-                      className="border-t border-gray-200 text-sm"
-                    >
-                      <td className="px-6">{deliveryOrders.numero || "-"}</td>
-                      <td className="px-6 text-sm text-gray-900">
-                        {deliveryOrders.createdBy.name || "-"}
-                      </td>
-                      <td className="px-6">
-                        {deliveryOrders.tires.length || "-"}
-                      </td>
-                      <td className="py-2 px-2">
-                        {deliveryOrders.client?.companyName || "-"}
-                      </td>
-                      <td className=" text-xs px-3">
-                        {deliveryOrders.client?.street ||
-                          "-" + ", " + deliveryOrders.client?.city ||
-                          deliveryOrders.client?.municipality ||
-                          "-"}
-                        , <br />
-                        {deliveryOrders.client?.state +
-                          ", " +
-                          deliveryOrders.client?.zipCode}
-                      </td>
-                      <td>{deliveryOrders.formattedCreatedAT || "-"}</td>
-                      <td className="flex flex-col items-center sm:flex-row sm:justify-around">
-                        <Link to={`/viewDeliveryOrder/${deliveryOrders._id}`}>
-                          <button className="hover:text-slate-500 mt-1">
-                            <Printer />
-                          </button>
-                        </Link>
-                        <button
-                          className="text-red-600 hover:text-red-800 mt-2 sm:mt-0"
-                          onClick={() => handleDeleteClick(deliveryOrders)}
-                        >
-                          <Trash2 />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              {allDeliveryOrders.length >= itemsPerPage && (
-                <div className="flex justify-between items-center mt-4">
-                  <div className="text-sm text-gray-600">
-                    Página {currentPage} de {totalPages}
-                  </div>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className={`px-4 py-2 rounded-lg border ${
-                        currentPage === 1
-                          ? "text-gray-400 border-gray-200"
-                          : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                      }`}
-                    >
-                      Anterior
-                    </button>
-                    {Array.from({ length: totalPages }, (_, i) => (
-                      <button
-                        key={i + 1}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`px-4 py-2 rounded-lg border ${
-                          currentPage === i + 1
-                            ? "bg-blue-600 text-white"
-                            : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                        }`}
-                      >
-                        {i + 1}
-                      </button>
-                    ))}
-                    <button
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                      className={`px-4 py-2 rounded-lg border ${
-                        currentPage === totalPages
-                          ? "text-gray-400 border-gray-200"
-                          : "text-blue-600 border-blue-600 hover:bg-blue-50"
-                      }`}
-                    >
-                      Siguiente
-                    </button>
-                  </div>
-                </div>
-              )}
+              <div className="flex justify-end mb-2 p-2">
+                <Input
+                  type="text"
+                  placeholder="Buscar por número o cliente..."
+                  value={searchTerm}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="w-full max-w-sm dark"
+                  classNames={{
+                    label: "text-black/50 dark:text-white/90",
+                    input: [
+                      "bg-transparent",
+                      "text-black/90 dark:text-white/90",
+                      "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                    ],
+                    innerWrapper: "bg-transparent",
+                    inputWrapper: [
+                      "shadow-lg",
+                      "bg-default-200/50",
+                      "dark:bg-default/60",
+                      "backdrop-blur-xl",
+                      "backdrop-saturate-200",
+                      "hover:bg-default-200/70",
+                      "dark:hover:bg-default/70",
+                      "group-data-[focus=true]:bg-default-200/50",
+                      "dark:group-data-[focus=true]:bg-default/60",
+                      "!cursor-text",
+                    ],
+                  }}
+                  label="Filtrar"
+                  radius="lg"
+                />
+              </div>
+
+              <div className="p-1">
+                <CustomTable
+                  columns={columns}
+                  items={items}
+                  isLoading={false}
+                  page={currentPage}
+                  totalItems={filteredOrders.length}
+                  rowsPerPage={itemsPerPage}
+                  onPageChange={handlePageChange}
+                />
+              </div>
             </div>
           )}
         </div>

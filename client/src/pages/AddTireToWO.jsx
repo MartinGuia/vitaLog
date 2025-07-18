@@ -50,6 +50,7 @@ function AddTireToWO() {
     handleSubmit,
     formState: { errors },
     setValue,
+    reset
   } = useForm();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -83,6 +84,12 @@ function AddTireToWO() {
       // Si no es un número, puedes optar por resetear el campo o mantenerlo
       setScannedCode("");
     }
+
+    reset({
+      barCode: scannedCode, // mantener el código
+      antiquityDot: "",
+      serialNumber: "",
+    });
   });
 
   const handleScannerOpen = () => setIsScannerOpen(true);
@@ -307,6 +314,7 @@ function AddTireToWO() {
     { value: "ROAD LUX", label: "ROAD LUX" },
     { value: "ROADMASTER  ", label: "ROADMASTER  " },
     { value: "ROAD ONE", label: "ROAD ONE" },
+    { value: "ROADX", label: "ROADX" },
     { value: "ROADSHINE ", label: "ROADSHINE " },
     { value: "ROUTE WAY", label: "ROUTE WAY" },
     { value: "ROYAL BLACK", label: "ROYAL BLACK" },
@@ -344,6 +352,7 @@ function AddTireToWO() {
     { value: "TECHSHIELD", label: "TECHSHIELD" },
     { value: "TERAFLEX", label: "TERAFLEX" },
     { value: "TERRA KING", label: "TERRA KING" },
+    { value: "TERRUS", label: "TERRUS" },
     { value: "THREE-A", label: "THREE-A" },
     { value: "THUNDERE", label: "THUNDERE" },
     { value: "TOLEDO", label: "TOLEDO" },
